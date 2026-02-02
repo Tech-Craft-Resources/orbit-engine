@@ -107,6 +107,299 @@ bun run generate-client
 
 Always commit the generated client files to git.
 
+## How the API Client Works
+
+The frontend uses a **type-safe auto-generated API client** created from the backend's OpenAPI specification. This ensures that frontend and backend are always in sync.
+
+### Architecture:
+
+```
+Backend (FastAPI)
+    ↓ exposes
+OpenAPI Schema (JSON)
+    ↓ generates
+TypeScript Client (src/client/)
+    ↓ used by
+React Components + TanStack Query
+```
+
+### Generated Files Structure:
+
+```
+src/client/
+├── index.ts           # Main exports
+├── types.gen.ts       # TypeScript types from Pydantic schemas
+├── schemas.gen.ts     # Zod schemas for validation
+├── sdk.gen.ts         # API service methods
+└── core/              # HTTP client internals
+    ├── OpenAPI.ts
+    ├── request.ts
+    └── ...
+```
+
+### Using the API Client:
+
+#### 1. Import Services
+
+Each API router in the backend generates a corresponding service:
+
+```typescript
+import { UsersService, ItemsService, LoginService } from "@/client"
+```
+
+#### 2. Available Services:
+
+Based on your backend structure:
+- `LoginService` - Authentication endpoints
+- `UsersService` - User management (CRUD)
+- `UtilsService` - Utility endpoints (health check, etc.)
+
+#### 3. Making API Calls with TanStack Query:
+
+**Fetch data (Query):**
+
+```typescript
+import { useQuery } from "@tanstack/react-query"
+import { UsersService } from "@/client"
+
+function UsersList() {
+  const { data, isLoading, error } = useQuery({
+    queryKey: ["users"], // Cache key
+    queryFn: () => UsersService.readUsers(), // API call
+  })
+
+  if (isLoading) return <div>Loading...</div>
+  if (error) return <div>Error: {error.message}</div>
+
+  return (
+    <ul>
+      {data?.data.map((user) => (
+        <li key={user.id}>{user.email}</li>
+      ))}
+    </ul>
+  )
+}
+```
+
+**Create/Update data (Mutation):**
+
+```typescript
+import { useMutation, useQueryClient } from "@tanstack/react-query"
+import { UsersService, type UserCreate } from "@/client"
+
+function CreateUserForm() {
+  const queryClient = useQueryClient()
+
+  const mutation = useMutation({
+    // API call to create user
+    mutationFn: (data: UserCreate) => 
+      UsersService.createUser({ requestBody: data }),
+    
+    // On success: invalidate cache and refetch
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["users"] })
+      showToast("User created successfully")
+    },
+    
+    // On error: show error message
+    onError: (error) => {
+      showToast(`Error: ${error.message}`)
+    },
+  })
+
+  const handleSubmit = (formData: UserCreate) => {
+    mutation.mutate(formData)
+  }
+
+  return (
+    <form onSubmit={handleSubmit}>
+      {/* form fields */}
+      <button type="submit" disabled={mutation.isPending}>
+        {mutation.isPending ? "Creating..." : "Create User"}
+      </button>
+    </form>
+  )
+}
+```
+
+**Update with optimistic UI:**
+
+```typescript
+const updateMutation = useMutation({
+  mutationFn: (data: { id: string; body: UserUpdate }) =>
+    UsersService.updateUser({ 
+      userId: data.id, 
+      requestBody: data.body 
+    }),
+  
+  onSuccess: () => {
+    queryClient.invalidateQueries({ queryKey: ["users"] })
+  },
+})
+```
+
+**Delete:**
+
+```typescript
+const deleteMutation = useMutation({
+  mutationFn: (userId: string) => 
+    UsersService.deleteUser({ userId }),
+  
+  onSuccess: () => {
+    queryClient.invalidateQueries({ queryKey: ["users"] })
+  },
+})
+```
+
+#### 4. TypeScript Types:
+
+All Pydantic models from the backend are available as TypeScript types:
+
+```typescript
+import type { 
+  UserPublic,      // Response type
+  UserCreate,      // Create request
+  UserUpdate,      // Update request
+  UsersPublic,     // Paginated list response
+} from "@/client"
+
+// Use in component props
+interface UserCardProps {
+  user: UserPublic
+}
+
+// Use in forms
+const [formData, setFormData] = useState<UserCreate>({
+  email: "",
+  password: "",
+  full_name: "",
+})
+```
+
+#### 5. Error Handling:
+
+```typescript
+import { ApiError } from "@/client"
+
+try {
+  const result = await UsersService.createUser({ requestBody: data })
+} catch (error) {
+  if (error instanceof ApiError) {
+    console.error("API Error:", error.status, error.body)
+    // error.status: HTTP status code (400, 404, 500, etc.)
+    // error.body: Error response from backend
+  }
+}
+```
+
+Or with TanStack Query:
+
+```typescript
+const { error } = useQuery({
+  queryKey: ["users"],
+  queryFn: () => UsersService.readUsers(),
+  onError: (error) => {
+    if (error instanceof ApiError) {
+      // Handle specific status codes
+      if (error.status === 401) {
+        // Redirect to login
+      }
+    }
+  },
+})
+```
+
+#### 6. Authentication:
+
+The client automatically includes authentication tokens from cookies/localStorage:
+
+```typescript
+// Login sets the token
+const { data } = await LoginService.loginAccessToken({
+  formData: { username, password }
+})
+
+// Subsequent requests automatically include the token
+const users = await UsersService.readUsers() // Token included automatically
+```
+
+The token is stored and managed by the `useAuth` hook in `src/hooks/useAuth.ts`.
+
+#### 7. Query Keys Convention:
+
+Use consistent query keys for cache management:
+
+```typescript
+// List queries
+["users"]
+["items"]
+["items", { skip: 0, limit: 50 }] // with params
+
+// Detail queries
+["users", userId]
+["items", itemId]
+
+// Nested/related queries
+["users", userId, "items"]
+```
+
+#### 8. Common Patterns:
+
+**Paginated Lists:**
+
+```typescript
+const { data } = useQuery({
+  queryKey: ["items", { skip, limit }],
+  queryFn: () => ItemsService.readItems({ skip, limit }),
+})
+
+// data.data: array of items
+// data.count: total count
+```
+
+**Dependent Queries:**
+
+```typescript
+// Only fetch user's items after user is loaded
+const { data: user } = useQuery({
+  queryKey: ["users", userId],
+  queryFn: () => UsersService.readUser({ userId }),
+})
+
+const { data: items } = useQuery({
+  queryKey: ["users", userId, "items"],
+  queryFn: () => ItemsService.readItems({ ownerId: userId }),
+  enabled: !!user, // Only run if user exists
+})
+```
+
+### Best Practices:
+
+1. ✅ **Always use TanStack Query** for API calls (not raw fetch/axios)
+2. ✅ **Invalidate queries** after mutations to refresh data
+3. ✅ **Use TypeScript types** from the client for type safety
+4. ✅ **Regenerate client** after backend changes
+5. ✅ **Commit generated client** files to git
+6. ❌ **Never edit** files in `src/client/` manually
+7. ❌ **Never use** different HTTP clients (fetch, axios) alongside the generated client
+
+### Troubleshooting:
+
+**Type errors after backend changes:**
+```bash
+# Regenerate the client
+bun run generate-client
+```
+
+**404 errors on API calls:**
+- Check backend is running: http://localhost:8000/docs
+- Verify `VITE_API_URL` in `.env`
+- Check backend logs: `docker compose logs -f backend`
+
+**CORS errors:**
+- Ensure `BACKEND_CORS_ORIGINS` in `.env` includes `http://localhost:5173`
+- Restart backend after changing CORS settings
+
 ## Code Structure
 
 ```

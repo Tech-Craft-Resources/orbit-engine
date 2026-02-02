@@ -145,7 +145,11 @@ cp .env.example .env
 3. **Iniciar con Docker Compose**
 
 ```bash
-docker compose watch
+# Primera vez o después de cambiar Dockerfiles
+docker compose build
+
+# Iniciar los servicios
+docker compose up -d
 ```
 
 Esto iniciará:
@@ -156,7 +160,7 @@ Esto iniciará:
 - Mailcatcher (email testing) en `http://localhost:1080`
 - Traefik dashboard en `http://localhost:8090`
 
-**Nota:** El backend usa volúmenes para hot-reload automático. Solo necesitas reiniciar el contenedor si instalas/actualizas/eliminas librerías.
+**Nota:** El backend usa volúmenes configurados en `compose.override.yml` para hot-reload automático. Los cambios en el código Python se reflejan inmediatamente sin reiniciar. Solo necesitas reiniciar el contenedor si instalas/actualizas/eliminas dependencias.
 
 4. **Acceder a la aplicación**
 
@@ -172,14 +176,21 @@ Esto iniciará:
 
 ### Backend
 
-El backend corre dentro de Docker con hot-reload automático gracias a los volúmenes configurados en `compose.override.yml`.
+El backend corre dentro de Docker con **hot-reload automático** gracias a:
+- Volúmenes configurados en `compose.override.yml` que sincronizan el código
+- Comando `fastapi run --reload` que detecta cambios automáticamente
 
 **¿Cuándo reiniciar el contenedor backend?**
 - ✅ **NO reiniciar** cuando cambies código Python (hot-reload automático)
-- ⚠️ **SÍ reiniciar** cuando instales/actualices/elimines dependencias:
+- ⚠️ **SÍ reiniciar** cuando instales/actualices/elimines dependencias con `uv`:
   ```bash
   docker compose restart backend
   ```
+
+**Ver logs en tiempo real:**
+```bash
+docker compose logs -f backend
+```
 
 **Ejecutar migraciones:**
 ```bash
@@ -293,6 +304,19 @@ SMTP_PORT=1025
 SMTP_TLS=false
 EMAILS_FROM_EMAIL=noreply@example.com
 
+# Redis (to be implemented)
+# REDIS_URL=redis://redis:6379/0
+
+# Celery (to be implemented)
+# CELERY_BROKER_URL=redis://redis:6379/1
+# CELERY_RESULT_BACKEND=redis://redis:6379/2
+
+# AWS (to be configured for production)
+# AWS_ACCESS_KEY_ID=
+# AWS_SECRET_ACCESS_KEY=
+# AWS_REGION=us-east-1
+# S3_BUCKET_NAME=
+
 # Docker Images
 DOCKER_IMAGE_BACKEND=backend
 DOCKER_IMAGE_FRONTEND=frontend
@@ -306,6 +330,15 @@ ENVIRONMENT=development
 ## 🤖 IA/ML - Predicción de Demanda
 
 El sistema utilizará **Prophet** (Meta) para forecasting de demanda. Esta funcionalidad será implementada en fases posteriores del proyecto.
+
+### Características planeadas:
+
+- Predicción de demanda basada en histórico de ventas
+- Alertas automáticas de reabastecimiento
+- Análisis de tendencias y estacionalidad
+- Optimización de inventario
+
+Las predicciones se generarán automáticamente usando **Celery Beat** (scheduler) ejecutándose en background.
 
 Para más detalles sobre los algoritmos de IA planeados, ver [`docs/planteamiento/IA.md`](./docs/planteamiento/IA.md)
 
@@ -343,11 +376,26 @@ bun run test:ui
 
 ## 🚢 Deployment
 
-Deployment a producción será configurado en fases posteriores del proyecto usando AWS:
+El deployment a producción será configurado en fases posteriores usando AWS:
 
-- Backend en **ECS/EC2**
-- Frontend en **S3 + CloudFront**
-- Base de datos en **RDS PostgreSQL**
+### Infraestructura planeada:
+
+**Backend:**
+- ECS/EC2 para servicios FastAPI
+- Celery Workers para tareas asíncronas
+- Celery Beat para tareas programadas
+
+**Frontend:**
+- S3 para hosting estático
+- CloudFront como CDN global
+
+**Database & Cache:**
+- RDS PostgreSQL (instancia gestionada)
+- ElastiCache Redis para cache y Celery
+
+**CI/CD:**
+- GitHub Actions para deployment automático
+- Environments: staging y production
 
 Ver documentación completa en [`docs/planteamiento/06-arquitectura-tecnica.md`](./docs/planteamiento/06-arquitectura-tecnica.md)
 

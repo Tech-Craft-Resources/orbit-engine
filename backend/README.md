@@ -10,10 +10,18 @@
 Start the full stack with Docker Compose from the project root:
 
 ```bash
-docker compose watch
+# First time or after changing Dockerfiles
+docker compose build
+
+# Start services
+docker compose up -d
 ```
 
-The backend runs with **automatic hot-reload** thanks to volume mounting configured in `compose.override.yml`. Changes to Python files are detected automatically and the server reloads.
+The backend runs with **automatic hot-reload** thanks to:
+- Volume mounting configured in `compose.override.yml` (syncs `./backend` to container)
+- Command override: `fastapi run --reload app/main.py`
+
+Changes to Python files are detected automatically and the server reloads instantly.
 
 ### When to restart the backend container:
 
@@ -22,6 +30,12 @@ The backend runs with **automatic hot-reload** thanks to volume mounting configu
   ```bash
   docker compose restart backend
   ```
+
+### View logs in real-time:
+
+```bash
+docker compose logs -f backend
+```
 
 ### Accessing the backend container:
 
