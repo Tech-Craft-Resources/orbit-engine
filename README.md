@@ -123,7 +123,8 @@ pecesaurio/
 
 - **Docker** y **Docker Compose** instalados
 - **Git** para clonar el repositorio
-- (Opcional) **Python 3.11+** y **Node.js 18+** para desarrollo sin Docker
+- **Bun** instalado (para desarrollo de frontend)
+- (Opcional) **Python 3.11+** y **uv** para desarrollo de backend sin Docker
 
 ### Instalación
 
@@ -137,100 +138,101 @@ cd pecesaurio
 2. **Configurar variables de entorno**
 
 ```bash
-# Backend
-cp backend/.env.example backend/.env
-# Editar backend/.env con tus configuraciones
-
-# Frontend
-cp frontend/.env.example frontend/.env
-# Editar frontend/.env con tus configuraciones
+cp .env.example .env
+# Editar .env con tus configuraciones
 ```
 
 3. **Iniciar con Docker Compose**
 
 ```bash
-docker-compose up -d
+docker compose watch
 ```
 
 Esto iniciará:
 - PostgreSQL en `localhost:5432`
-- Redis en `localhost:6379`
+- Adminer (DB admin) en `http://localhost:8080`
 - Backend (FastAPI) en `http://localhost:8000`
 - Frontend (React) en `http://localhost:5173`
-- Celery Worker
-- Celery Beat (scheduler)
+- Mailcatcher (email testing) en `http://localhost:1080`
+- Traefik dashboard en `http://localhost:8090`
 
-4. **Ejecutar migraciones**
+**Nota:** El backend usa volúmenes para hot-reload automático. Solo necesitas reiniciar el contenedor si instalas/actualizas/eliminas librerías.
 
-```bash
-docker-compose exec backend alembic upgrade head
-```
-
-5. **Crear usuario admin inicial (opcional)**
-
-```bash
-docker-compose exec backend python -m app.scripts.create_admin
-```
-
-6. **Acceder a la aplicación**
+4. **Acceder a la aplicación**
 
 - Frontend: http://localhost:5173
 - Backend API Docs: http://localhost:8000/docs
 - Backend ReDoc: http://localhost:8000/redoc
+- Adminer (DB): http://localhost:8080
+- Mailcatcher: http://localhost:1080
 
 ---
 
 ## 💻 Desarrollo Local
 
-### Backend (sin Docker)
+### Backend
 
+El backend corre dentro de Docker con hot-reload automático gracias a los volúmenes configurados en `compose.override.yml`.
+
+**¿Cuándo reiniciar el contenedor backend?**
+- ✅ **NO reiniciar** cuando cambies código Python (hot-reload automático)
+- ⚠️ **SÍ reiniciar** cuando instales/actualices/elimines dependencias:
+  ```bash
+  docker compose restart backend
+  ```
+
+**Ejecutar migraciones:**
 ```bash
-cd backend
-
-# Crear virtual environment
-python -m venv venv
-source venv/bin/activate  # En Windows: venv\Scripts\activate
-
-# Instalar dependencias
-pip install -r requirements.txt
-pip install -r requirements-dev.txt
-
-# Ejecutar migraciones
-alembic upgrade head
-
-# Iniciar servidor de desarrollo
-uvicorn app.main:app --reload --host 0.0.0.0 --port 8000
+docker compose exec backend alembic revision --autogenerate -m "description"
+docker compose exec backend alembic upgrade head
 ```
 
-### Frontend (sin Docker)
+**Acceder al contenedor:**
+```bash
+docker compose exec backend bash
+```
+
+### Frontend
+
+Para desarrollo de frontend, es recomendable **detener el contenedor de Docker** y ejecutar Bun localmente para mejor experiencia de desarrollo:
 
 ```bash
+# Detener el contenedor de frontend
+docker compose stop frontend
+
+# Ir al directorio frontend
 cd frontend
 
-# Instalar dependencias
-npm install
-# o con pnpm
-pnpm install
+# Instalar dependencias (primera vez)
+bun install
 
 # Iniciar servidor de desarrollo
-npm run dev
-# o
-pnpm dev
+bun run dev
 ```
+
+Esto te dará:
+- ⚡ Hot-reload instantáneo
+- 🔥 Mejor rendimiento
+- 🐛 Mejor debugging
+
+El frontend seguirá usando el backend que corre en Docker (`http://localhost:8000`).
 
 ### Ejecutar Tests
 
 ```bash
-# Backend
+# Backend (desde la raíz del proyecto)
+docker compose exec backend bash scripts/test.sh
+
+# O con uv localmente
 cd backend
-pytest
+uv run bash scripts/test.sh
 
-# Con coverage
-pytest --cov=app tests/
-
-# Frontend
+# Frontend (con Playwright)
 cd frontend
-npm run test
+bun run test
+
+# Frontend con UI
+bun run test:ui
 ```
 
 ---
@@ -240,77 +242,72 @@ npm run test
 ### Crear nueva migración
 
 ```bash
-docker-compose exec backend alembic revision --autogenerate -m "Descripción del cambio"
+docker compose exec backend alembic revision --autogenerate -m "Descripción del cambio"
 ```
 
 ### Aplicar migraciones
 
 ```bash
-docker-compose exec backend alembic upgrade head
+docker compose exec backend alembic upgrade head
 ```
 
 ### Rollback
 
 ```bash
-docker-compose exec backend alembic downgrade -1
+docker compose exec backend alembic downgrade -1
 ```
 
 ---
 
 ## 📝 Variables de Entorno
 
-### Backend (`backend/.env`)
+### Backend (`.env`)
 
 ```env
+# Project
+PROJECT_NAME=Pecesaurio
+STACK_NAME=pecesaurio-stack
+DOMAIN=localhost
+
+# Backend
+BACKEND_CORS_ORIGINS=["http://localhost:5173","http://localhost"]
+SECRET_KEY=your-secret-key-here-change-in-production
+
+# Frontend
+FRONTEND_HOST=http://localhost:5173
+
 # Database
-DATABASE_URL=postgresql://postgres:postgres@postgres:5432/pecesaurio
+POSTGRES_SERVER=db
+POSTGRES_PORT=5432
+POSTGRES_USER=postgres
+POSTGRES_PASSWORD=changethis
+POSTGRES_DB=app
 
-# Redis
-REDIS_URL=redis://redis:6379/0
+# First Superuser
+FIRST_SUPERUSER=admin@example.com
+FIRST_SUPERUSER_PASSWORD=changethis
 
-# Security
-SECRET_KEY=your-secret-key-here
-ALGORITHM=HS256
-ACCESS_TOKEN_EXPIRE_MINUTES=1440
+# Email (using mailcatcher in development)
+SMTP_HOST=mailcatcher
+SMTP_PORT=1025
+SMTP_TLS=false
+EMAILS_FROM_EMAIL=noreply@example.com
 
-# AWS (opcional para desarrollo local)
-AWS_ACCESS_KEY_ID=
-AWS_SECRET_ACCESS_KEY=
-AWS_REGION=us-east-1
-S3_BUCKET_NAME=
-
-# Celery
-CELERY_BROKER_URL=redis://redis:6379/1
-CELERY_RESULT_BACKEND=redis://redis:6379/2
+# Docker Images
+DOCKER_IMAGE_BACKEND=backend
+DOCKER_IMAGE_FRONTEND=frontend
 
 # Environment
 ENVIRONMENT=development
-```
-
-### Frontend (`frontend/.env`)
-
-```env
-VITE_API_URL=http://localhost:8000
-VITE_APP_NAME=Pecesaurio
 ```
 
 ---
 
 ## 🤖 IA/ML - Predicción de Demanda
 
-El sistema utiliza **Prophet** (Meta) para forecasting de demanda. Las predicciones se generan automáticamente cada 24 horas mediante Celery Beat.
+El sistema utilizará **Prophet** (Meta) para forecasting de demanda. Esta funcionalidad será implementada en fases posteriores del proyecto.
 
-### Entrenar modelo manualmente
-
-```bash
-docker-compose exec backend python -m app.ml.trainer --tenant-id=<uuid> --product-id=<uuid>
-```
-
-### Generar predicciones
-
-```bash
-docker-compose exec backend python -m app.ml.predictor --tenant-id=<uuid> --product-id=<uuid> --days=30
-```
+Para más detalles sobre los algoritmos de IA planeados, ver [`docs/planteamiento/IA.md`](./docs/planteamiento/IA.md)
 
 ---
 
@@ -319,47 +316,54 @@ docker-compose exec backend python -m app.ml.predictor --tenant-id=<uuid> --prod
 ### Estrategia de Testing
 
 - **Backend:** Tests unitarios y de integración con pytest
-- **Frontend:** Tests de componentes con Vitest + Testing Library
-- **E2E:** (Futuro) Playwright o Cypress
+- **Frontend:** Tests E2E con Playwright
 
-### Ejecutar todos los tests
+### Ejecutar tests
 
 ```bash
-# Backend
-docker-compose exec backend pytest --cov=app
+# Backend - todos los tests con coverage
+cd backend
+uv run bash scripts/test.sh
 
-# Frontend
-docker-compose exec frontend npm run test
+# Backend - test específico
+uv run pytest tests/api/routes/test_users.py -v
+
+# Backend - dentro de Docker
+docker compose exec backend bash scripts/test.sh
+
+# Frontend - E2E con Playwright
+cd frontend
+bun run test
+
+# Frontend - con UI interactiva
+bun run test:ui
 ```
 
 ---
 
 ## 🚢 Deployment
 
-### Producción en AWS
+Deployment a producción será configurado en fases posteriores del proyecto usando AWS:
 
-El deployment a AWS se realiza automáticamente mediante GitHub Actions cuando se hace push a `main`.
+- Backend en **ECS/EC2**
+- Frontend en **S3 + CloudFront**
+- Base de datos en **RDS PostgreSQL**
 
-1. Backend se despliega en **ECS/EC2**
-2. Frontend se construye y sube a **S3 + CloudFront**
-3. Base de datos en **RDS PostgreSQL**
-4. Cache en **ElastiCache Redis**
-
-Ver documentación completa en [`docs/06-arquitectura-tecnica.md`](./docs/06-arquitectura-tecnica.md)
+Ver documentación completa en [`docs/planteamiento/06-arquitectura-tecnica.md`](./docs/planteamiento/06-arquitectura-tecnica.md)
 
 ---
 
 ## 📚 Documentación
 
-La documentación académica completa del proyecto se encuentra en la carpeta [`docs/`](./docs/):
+La documentación académica completa del proyecto se encuentra en la carpeta [`docs/planteamiento/`](./docs/planteamiento/):
 
-- **[Propuesta del Proyecto](./docs/propuesta.md)** - Planteamiento del problema y objetivos
-- **[Alcance y MVP](./docs/01-alcance-mvp.md)** - Definición del alcance y métricas de éxito
-- **[Requisitos](./docs/02-requisitos.md)** - Historias de usuario y requisitos funcionales
-- **[Cronograma](./docs/03-cronograma.md)** - Planificación temporal (6 meses)
-- **[Stack Tecnológico](./docs/04-stack-tecnologico.md)** - Decisiones técnicas justificadas
-- **[Base de Datos](./docs/05-base-de-datos.md)** - Modelo de datos completo
-- **[Arquitectura Técnica](./docs/06-arquitectura-tecnica.md)** - Diseño arquitectónico del sistema
+- **[Alcance y MVP](./docs/planteamiento/01-alcance-mvp.md)** - Definición del alcance y métricas de éxito
+- **[Requisitos (SRS)](./docs/planteamiento/SRS.md)** - Requisitos funcionales y no funcionales
+- **[Cronograma](./docs/planteamiento/03-cronograma.md)** - Planificación temporal (6 meses)
+- **[Stack Tecnológico](./docs/planteamiento/04-stack-tecnologico.md)** - Decisiones técnicas justificadas
+- **[Base de Datos](./docs/planteamiento/05-base-de-datos.md)** - Modelo de datos completo
+- **[Arquitectura Técnica](./docs/planteamiento/06-arquitectura-tecnica.md)** - Diseño arquitectónico del sistema
+- **[IA/ML](./docs/planteamiento/IA.md)** - Algoritmos de predicción de demanda
 
 ---
 
@@ -442,7 +446,7 @@ git push origin feature/nombre-feature
 
 ## 📄 Licencia
 
-Este proyecto está bajo la Licencia MIT - ver el archivo [LICENSE](LICENSE) para más detalles.
+Este proyecto es académico y forma parte de un Proyecto de Grado.
 
 ---
 
