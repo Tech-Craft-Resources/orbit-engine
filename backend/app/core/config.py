@@ -94,6 +94,22 @@ class Settings(BaseSettings):
     FIRST_SUPERUSER: EmailStr
     FIRST_SUPERUSER_PASSWORD: str
 
+    # S3 / Object Storage (S3-compatible)
+    S3_ENDPOINT_URL: str | None = (
+        None  # Set for MinIO/non-AWS S3, leave empty for AWS S3
+    )
+    S3_ACCESS_KEY_ID: str | None = None
+    S3_SECRET_ACCESS_KEY: str | None = None
+    S3_BUCKET_NAME: str | None = None
+    S3_REGION: str = "us-east-1"
+
+    @computed_field  # type: ignore[prop-decorator]
+    @property
+    def s3_enabled(self) -> bool:
+        return bool(
+            self.S3_ACCESS_KEY_ID and self.S3_SECRET_ACCESS_KEY and self.S3_BUCKET_NAME
+        )
+
     def _check_default_secret(self, var_name: str, value: str | None) -> None:
         if value == "changethis":
             message = (
