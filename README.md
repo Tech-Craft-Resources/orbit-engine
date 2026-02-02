@@ -51,10 +51,10 @@ Pecesaurio es una plataforma SaaS diseñada para digitalizar y optimizar los pro
 - **Tasks:** Celery + Redis
 - **Testing:** pytest
 
-### Database
+### Database & Storage
 - **Primary:** PostgreSQL 15+
-- **Cache:** Redis 7+
-- **Storage:** AWS S3
+- **Cache:** Redis 7+ (to be implemented)
+- **Storage:** MinIO (development) / AWS S3 (production)
 
 ### Machine Learning
 - **Libraries:** scikit-learn, Prophet, pandas, numpy
@@ -154,9 +154,12 @@ docker compose up -d
 
 Esto iniciará:
 - PostgreSQL en `localhost:5432`
-- Adminer (DB admin) en `http://localhost:8080`
-- Backend (FastAPI) en `http://localhost:8000`
-- Frontend (React) en `http://localhost:5173`
+- Adminer (DB admin) en `http://adminer.localhost`
+- Backend (FastAPI) en `http://api.localhost`
+- Frontend (React) en `http://localhost`
+- MinIO (S3-compatible storage) en:
+  - API: `http://minio.localhost`
+  - Console: `http://minio-console.localhost`
 - Mailcatcher (email testing) en `http://localhost:1080`
 - Traefik dashboard en `http://localhost:8090`
 
@@ -164,11 +167,14 @@ Esto iniciará:
 
 4. **Acceder a la aplicación**
 
-- Frontend: http://localhost:5173
-- Backend API Docs: http://localhost:8000/docs
-- Backend ReDoc: http://localhost:8000/redoc
-- Adminer (DB): http://localhost:8080
+- Frontend: http://localhost
+- Backend API Docs: http://api.localhost/docs
+- Backend ReDoc: http://api.localhost/redoc
+- Adminer (DB): http://adminer.localhost
+- MinIO Console: http://minio-console.localhost (user: `minioadmin`, pass: `minioadmin`)
 - Mailcatcher: http://localhost:1080
+
+**Nota sobre MinIO:** MinIO es un servidor de almacenamiento de objetos compatible con S3 para desarrollo local. Para usar AWS S3 en producción, simplemente cambia las variables de entorno (ver [`docs/varios/s3-storage.md`](./docs/varios/s3-storage.md)).
 
 ---
 
@@ -311,11 +317,17 @@ EMAILS_FROM_EMAIL=noreply@example.com
 # CELERY_BROKER_URL=redis://redis:6379/1
 # CELERY_RESULT_BACKEND=redis://redis:6379/2
 
-# AWS (to be configured for production)
-# AWS_ACCESS_KEY_ID=
-# AWS_SECRET_ACCESS_KEY=
-# AWS_REGION=us-east-1
-# S3_BUCKET_NAME=
+# S3 / Object Storage (S3-compatible)
+# For development with MinIO (default configuration)
+S3_ENDPOINT_URL=http://minio:9000
+S3_ACCESS_KEY_ID=minioadmin
+S3_SECRET_ACCESS_KEY=minioadmin
+S3_BUCKET_NAME=app-storage
+S3_REGION=us-east-1
+
+# MinIO (only for local development)
+MINIO_ROOT_USER=minioadmin
+MINIO_ROOT_PASSWORD=minioadmin
 
 # Docker Images
 DOCKER_IMAGE_BACKEND=backend
