@@ -91,6 +91,55 @@ services:
         - VITE_API_URL=http://localhost:8000
         - NODE_ENV=development
 
+  minio:
+    image: minio/minio:latest
+    restart: "no"
+    command: server /data --console-address ":9001"
+    networks:
+      - traefik-public
+      - default
+    volumes:
+      - minio-data:/data
+    ports:
+      - "9000:9000"
+      - "9001:9001"
+    env_file:
+      - .env
+    environment:
+      - MINIO_ROOT_USER=${MINIO_ROOT_USER?Variable not set}
+      - MINIO_ROOT_PASSWORD=${MINIO_ROOT_PASSWORD?Variable not set}
+    healthcheck:
+      test: ["CMD", "mc", "ready", "local"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    labels:
+      - traefik.enable=true
+      - traefik.docker.network=traefik-public
+      - traefik.constraint-label=traefik-public
+      # MinIO API
+      - traefik.http.routers.${STACK_NAME?Variable not set}-minio-http.rule=Host(`minio.${DOMAIN?Variable not set}`)
+      - traefik.http.routers.${STACK_NAME?Variable not set}-minio-http.entrypoints=http
+      - traefik.http.routers.${STACK_NAME?Variable not set}-minio-http.service=${STACK_NAME?Variable not set}-minio
+      - traefik.http.routers.${STACK_NAME?Variable not set}-minio-http.middlewares=https-redirect
+      - traefik.http.routers.${STACK_NAME?Variable not set}-minio-https.rule=Host(`minio.${DOMAIN?Variable not set}`)
+      - traefik.http.routers.${STACK_NAME?Variable not set}-minio-https.entrypoints=https
+      - traefik.http.routers.${STACK_NAME?Variable not set}-minio-https.tls=true
+      - traefik.http.routers.${STACK_NAME?Variable not set}-minio-https.tls.certresolver=le
+      - traefik.http.routers.${STACK_NAME?Variable not set}-minio-https.service=${STACK_NAME?Variable not set}-minio
+      - traefik.http.services.${STACK_NAME?Variable not set}-minio.loadbalancer.server.port=9000
+      # MinIO Console
+      - traefik.http.routers.${STACK_NAME?Variable not set}-minio-console-http.rule=Host(`minio-console.${DOMAIN?Variable not set}`)
+      - traefik.http.routers.${STACK_NAME?Variable not set}-minio-console-http.entrypoints=http
+      - traefik.http.routers.${STACK_NAME?Variable not set}-minio-console-http.service=${STACK_NAME?Variable not set}-minio-console
+      - traefik.http.routers.${STACK_NAME?Variable not set}-minio-console-http.middlewares=https-redirect
+      - traefik.http.routers.${STACK_NAME?Variable not set}-minio-console-https.rule=Host(`minio-console.${DOMAIN?Variable not set}`)
+      - traefik.http.routers.${STACK_NAME?Variable not set}-minio-console-https.entrypoints=https
+      - traefik.http.routers.${STACK_NAME?Variable not set}-minio-console-https.tls=true
+      - traefik.http.routers.${STACK_NAME?Variable not set}-minio-console-https.tls.certresolver=le
+      - traefik.http.routers.${STACK_NAME?Variable not set}-minio-console-https.service=${STACK_NAME?Variable not set}-minio-console
+      - traefik.http.services.${STACK_NAME?Variable not set}-minio-console.loadbalancer.server.port=9001
+
 # Service initially disabled, to be enabled later
 # playwright:
 #   build:
@@ -121,3 +170,6 @@ networks:
   traefik-public:
     # For local dev, don't expect an external Traefik network
     external: false
+
+volumes:
+  minio-data:
