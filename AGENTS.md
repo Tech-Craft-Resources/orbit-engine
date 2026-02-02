@@ -1,6 +1,8 @@
 # AGENTS.md - AI Coding Agent Instructions
 
-Full-stack FastAPI + React template with Python backend and TypeScript frontend.
+**Project:** Pecesaurio - SaaS platform for managing internal processes in SMEs using AI
+
+Full-stack FastAPI + React application with Python backend and TypeScript frontend.
 
 ## Project Structure
 
@@ -33,6 +35,7 @@ uv run bash scripts/test.sh                              # Run all tests with co
 uv run pytest tests/api/routes/test_users.py -v          # Single test file
 uv run pytest tests/api/routes/test_users.py::test_get_users_superuser_me -v  # Single test
 uv run pytest -k "test_create" -v                        # Tests matching pattern
+uv run coverage run -m pytest && coverage report         # Run with coverage report
 
 uv run bash scripts/lint.sh                              # Lint (mypy + ruff)
 uv run bash scripts/format.sh                            # Format code
@@ -106,6 +109,12 @@ def create_user(*, session: SessionDep, current_user: CurrentUser, user_in: User
     session.refresh(user)
     return user
 ```
+
+**CRUD Patterns:**
+- CRUD functions in `app/crud.py` take `session` as keyword-only argument
+- Use `model_validate()` for creating database objects from Pydantic models
+- Use `model_dump(exclude_unset=True)` for partial updates
+- Always commit and refresh after database modifications
 
 ### Frontend (TypeScript/React)
 
