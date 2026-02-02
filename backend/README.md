@@ -45,9 +45,9 @@ docker compose exec backend bash
 
 ### Available endpoints:
 
-- API Docs (Swagger): http://localhost:8000/docs
-- API Docs (ReDoc): http://localhost:8000/redoc
-- Health Check: http://localhost:8000/api/v1/utils/health-check/
+- API Docs (Swagger): http://api.localhost/docs
+- API Docs (ReDoc): http://api.localhost/redoc
+- Health Check: http://api.localhost/api/v1/utils/health-check/
 
 ## Local Development (without Docker)
 
@@ -220,6 +220,48 @@ SMTP_HOST=mailcatcher
 SMTP_PORT=1025
 SMTP_TLS=false
 EMAILS_FROM_EMAIL=noreply@example.com
+
+# S3 / Object Storage (MinIO for development, S3 for production)
+S3_ENDPOINT_URL=http://minio:9000  # Use MinIO locally
+S3_ACCESS_KEY_ID=minioadmin
+S3_SECRET_ACCESS_KEY=minioadmin
+S3_BUCKET_NAME=app-storage
+S3_REGION=us-east-1
 ```
 
 See `.env.example` in project root for complete list.
+
+## Object Storage (S3 / MinIO)
+
+The project uses S3-compatible object storage for file uploads:
+
+- **Development:** MinIO (S3-compatible server running in Docker)
+- **Production:** AWS S3 (or any S3-compatible service)
+
+### Using MinIO (Development)
+
+MinIO is automatically started with `docker compose up`. Access the console at http://minio-console.localhost with credentials `minioadmin/minioadmin`.
+
+**Important:** You must manually create the bucket before uploading files:
+
+```bash
+# Option 1: Via MinIO Console (web UI)
+# Go to http://minio-console.localhost → Buckets → Create Bucket → "app-storage"
+
+# Option 2: Via CLI
+docker compose exec minio mc mb local/app-storage
+```
+
+### Using AWS S3 (Production)
+
+To switch to AWS S3, simply update the environment variables in `.env`:
+
+```env
+S3_ENDPOINT_URL=              # Leave empty for AWS S3
+S3_ACCESS_KEY_ID=your-aws-key
+S3_SECRET_ACCESS_KEY=your-aws-secret
+S3_BUCKET_NAME=your-bucket
+S3_REGION=us-east-1
+```
+
+The same code works for both MinIO and AWS S3. See [`docs/varios/s3-storage.md`](../docs/varios/s3-storage.md) for detailed instructions.
