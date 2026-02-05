@@ -48,7 +48,7 @@ interface Organization {
   id: string
   name: string
   description?: string
-  domain: string  // Subdominio único: "tech-craft" -> tech-craft.orbitengine.com
+  slug: string  // Identificador único: "tech-craft", "mi-empresa", etc.
   logo_url?: string
   is_active: boolean
   created_at: string
@@ -56,12 +56,13 @@ interface Organization {
 }
 ```
 
-**Reglas de dominio:**
-- El campo `domain` debe ser único en todo el sistema
+**Reglas del identificador (slug):**
+- El campo `slug` debe ser único en todo el sistema
 - Formato: lowercase, solo letras, números y guiones, 3-50 caracteres
 - Validación: `^[a-z0-9-]{3,50}$`
 - Ejemplos válidos: `tech-craft`, `mi-empresa`, `store123`
-- El dominio completo se construye como: `{domain}.orbitengine.com`
+- Se usa como identificador interno, NO como subdominio
+- Todas las organizaciones acceden desde: `orbitengine.com`
 
 #### User & Authentication
 
@@ -70,11 +71,18 @@ interface User {
   id: string
   organization_id: string
   organization?: Organization  // Include en respuestas de login
+  role_id: number
+  role?: Role  // Include en respuestas
   email: string
-  full_name: string
-  role: Role
+  first_name: string
+  last_name: string
+  phone?: string
+  avatar_url?: string
   is_active: boolean
+  is_verified: boolean
+  last_login_at?: string
   created_at: string
+  updated_at: string
 }
 
 interface Role {
@@ -82,6 +90,7 @@ interface Role {
   name: "admin" | "seller" | "viewer"
   description: string
   permissions: string[]
+  created_at: string
 }
 
 interface LoginResponse {
@@ -91,11 +100,18 @@ interface LoginResponse {
 }
 ```
 
+**Notas sobre User:**
+- El campo `password_hash` existe en la base de datos pero NUNCA se incluye en las respuestas de la API
+- Los campos `first_name` y `last_name` se combinan en el frontend para mostrar el nombre completo
+- Los campos de seguridad (`failed_login_attempts`, `locked_until`) no se exponen en la API pública
+
 **Multi-tenancy:**
 - Todos los modelos principales (excepto Organization, Role, User) tendrán `organization_id`
 - Aislamiento de datos: las queries siempre filtran por `organization_id` del usuario autenticado
+- El `organization_id` se extrae del JWT token
 - Un usuario solo puede pertenecer a una organización
 - Los roles son globales, pero los permisos se aplican dentro de cada organización
+- Todas las organizaciones usan la misma URL: `orbitengine.com`
 
 #### Inventory Module
 
@@ -105,11 +121,20 @@ interface Category {
   organization_id: string
   name: string
   description?: string
+  parent_id?: string  // Categoría padre (para jerarquías)
+  parent?: Category  // Include opcional
   is_active: boolean
   created_at: string
   updated_at: string
 }
+```
 
+**Notas sobre Category:**
+- El campo `parent_id` permite crear jerarquías de categorías (ej: Electrónica > Computadoras > Laptops)
+- Si `parent_id` es NULL, es una categoría raíz
+- El campo `deleted_at` existe en BD pero no se expone en la API (soft delete)
+
+```typescript
 interface Product {
   id: string
   organization_id: string
@@ -130,7 +155,13 @@ interface Product {
   created_at: string
   updated_at: string
 }
+```
 
+**Notas sobre Product:**
+- El campo `deleted_at` existe en BD pero no se expone en la API (soft delete)
+- Los checks de validación en BD garantizan: `cost_price >= 0`, `sale_price >= 0`, `stock_quantity >= 0`
+
+```typescript
 interface InventoryMovement {
   id: string
   organization_id: string
@@ -138,16 +169,20 @@ interface InventoryMovement {
   product?: Product  // Include opcional
   user_id: string
   user?: User  // Include opcional
-  movement_type: "sale" | "adjustment" | "return"
+  movement_type: "sale" | "purchase" | "adjustment" | "return"
   quantity: number  // positivo = entrada, negativo = salida
   previous_stock: number
   new_stock: number
   reference_id?: string
-  reference_type?: string
+  reference_type?: string  // "sale", "purchase", "adjustment"
   reason?: string
   created_at: string
 }
 ```
+
+**Notas sobre InventoryMovement:**
+- `movement_type` debe coincidir con los valores definidos en BD: "sale", "purchase", "adjustment", "return"
+- `reference_id` y `reference_type` vinculan el movimiento con la transacción que lo originó
 
 #### Sales Module
 
@@ -159,19 +194,27 @@ interface Customer {
   document_number: string  // Único por organización
   first_name: string
   last_name: string
-  full_name: string  // Computed: first_name + last_name
   email?: string
   phone?: string
   address?: string
+  city?: string
+  country?: string
   notes?: string
-  total_purchases: number
-  purchases_count: number
+  total_purchases: number  // Campo desnormalizado
+  purchases_count: number  // Campo desnormalizado
   last_purchase_at?: string
   is_active: boolean
   created_at: string
   updated_at: string
 }
+```
 
+**Notas sobre Customer:**
+- Los campos `first_name` y `last_name` se combinan en el frontend para mostrar el nombre completo
+- Los campos `total_purchases`, `purchases_count`, y `last_purchase_at` son desnormalizados y se actualizan automáticamente mediante triggers
+- El campo `deleted_at` existe en BD pero no se expone en la API (soft delete)
+
+```typescript
 interface Sale {
   id: string
   organization_id: string
@@ -185,54 +228,39 @@ interface Sale {
   discount: number
   tax: number
   total: number
-  payment_method: "cash" | "card" | "transfer"
-  status: "completed" | "cancelled"
+  payment_method: "cash" | "card" | "transfer" | "other"
+  status: "completed" | "cancelled" | "pending"
   notes?: string
   cancelled_at?: string
-  cancelled_by?: string
+  cancelled_by?: string  // UUID del usuario
   cancellation_reason?: string
   items?: SaleItem[]  // Include en detalle
   created_at: string
   updated_at: string
 }
+```
 
+**Notas sobre Sale:**
+- Los checks de validación en BD garantizan: `subtotal >= 0`, `discount >= 0`, `tax >= 0`, `total >= 0`
+- El campo `cancelled_by` es una FK a `users.id` en la BD
+
+```typescript
 interface SaleItem {
   id: string
   sale_id: string
   product_id: string
-  product_name: string  // Snapshot
-  product_sku: string   // Snapshot
+  product_name: string  // Snapshot del nombre en el momento de la venta
+  product_sku: string   // Snapshot del SKU en el momento de la venta
   quantity: number
-  unit_price: number    // Snapshot
+  unit_price: number    // Snapshot del precio en el momento de la venta
   subtotal: number
   created_at: string
 }
 ```
-  tax: number
-  total: number
-  payment_method: "cash" | "card" | "transfer"
-  status: "completed" | "cancelled"
-  notes?: string
-  cancelled_at?: string
-  cancelled_by?: string
-  cancellation_reason?: string
-  items?: SaleItem[]  // Include en detalle
-  created_at: string
-  updated_at: string
-}
 
-interface SaleItem {
-  id: string
-  sale_id: string
-  product_id: string
-  product_name: string  // Snapshot
-  product_sku: string   // Snapshot
-  quantity: number
-  unit_price: number    // Snapshot
-  subtotal: number
-  created_at: string
-}
-```
+**Notas sobre SaleItem:**
+- Los campos snapshot (`product_name`, `product_sku`, `unit_price`) preservan el estado del producto al momento de la venta
+- El check de validación en BD garantiza: `quantity > 0`, `unit_price >= 0`, `subtotal >= 0`
 
 #### Dashboard
 
@@ -462,8 +490,8 @@ Desarrollar todas las interfaces de usuario y asegurar la integración con el ba
 - Hook `useAuth` actualizado con roles y organización
 - Componente `<RoleGuard>`
 - Navegación dinámica según rol
-- Página de signup de organización (formulario: nombre empresa, dominio, admin user)
-- Validación de dominio único en tiempo real
+- Página de signup de organización (formulario: nombre empresa, slug, admin user)
+- Validación de slug único en tiempo real
 - Regeneración de cliente API
 
 **Semana 2-3: Módulo de Inventario**

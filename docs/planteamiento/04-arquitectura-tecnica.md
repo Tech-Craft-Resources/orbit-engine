@@ -12,7 +12,7 @@
 1. [Visión General de la Arquitectura](#1-visión-general-de-la-arquitectura)
 2. [Arquitectura de Alto Nivel](#2-arquitectura-de-alto-nivel)
 3. [Arquitectura del Backend](#3-arquitectura-del-backend)
-4. [Arquitectura Multi-Tenant con Subdominios](#4-arquitectura-multi-tenant-con-subdominios)
+4. [Arquitectura Multi-Tenant por Aislamiento de Datos](#4-arquitectura-multi-tenant-por-aislamiento-de-datos)
 5. [Arquitectura del Frontend](#5-arquitectura-del-frontend)
 6. [Arquitectura del Frontend (Detalles Técnicos)](#6-arquitectura-del-frontend-detalles-técnicos)
 7. [Modelo de Datos y Persistencia](#7-modelo-de-datos-y-persistencia)
@@ -29,10 +29,9 @@
 
 ### 1.1 Tipo de Arquitectura
 
-**Arquitectura de N-Capas con Servicios REST y Multi-Tenant por Subdominios**
+**Arquitectura de N-Capas con Servicios REST y Multi-Tenant por Aislamiento de Datos**
 
-- **Presentación Principal:** Astro (Landing, Registro, Pricing) en orbitengine.com
-- **Aplicación Multi-Tenant:** React SPA en *.orbitengine.com (subdominio por organización)
+- **Presentación y Aplicación:** React SPA en orbitengine.com (única para todas las organizaciones)
 - **Lógica de Negocio:** FastAPI Backend
 - **Datos:** PostgreSQL + Redis
 - **IA/ML:** Módulo de Python independiente
@@ -42,7 +41,7 @@
 1. **Separación de Responsabilidades:** Frontend, Backend, Base de Datos, ML separados
 2. **Stateless:** Backend sin estado (escalable horizontalmente)
 3. **API First:** Contrato bien definido entre frontend y backend
-4. **Multi-tenancy con Subdominios:** Cada organización tiene su propio subdominio (*.orbitengine.com)
+4. **Multi-tenancy por Aislamiento de Datos:** Cada organización tiene datos aislados mediante Row-Level Security
 5. **Seguridad por Diseño:** Autenticación y autorización en todas las capas
 6. **Cloud Native:** Diseñado para ejecutarse en AWS
 
@@ -52,7 +51,7 @@
 |----------|-------------|---------------|
 | SPA (React) | Server-side rendering | Mejor UX, interactividad |
 | Astro para landing | Next.js, Gatsby | Rendimiento superior, SEO optimizado |
-| Multi-tenant por subdominio | Tenant ID en DB | Mejor aislamiento, escalabilidad, experiencia de usuario |
+| Multi-tenant por DB | Subdominios wildcard | Simplicidad, menor costo de infraestructura, más fácil de mantener |
 | REST API | GraphQL | Simplicidad, menos curva de aprendizaje |
 | PostgreSQL | NoSQL (MongoDB) | Datos relacionales, ACID |
 | JWT | Session-based | Stateless, escalable |
@@ -73,31 +72,27 @@
                     ┌──────────────────────────┐
                     │   Route 53 (DNS)         │
                     │   orbitengine.com        │
-                    │   *.orbitengine.com      │
                     └──────────┬───────────────┘
                                │
-              ┌────────────────┴─────────────────┐
-              │                                   │
-              ▼                                   ▼
-   ┌──────────────────────┐         ┌──────────────────────┐
-   │  CloudFront          │         │  CloudFront          │
-   │  (Landing/Main Site) │         │  (App Wildcard)      │
-   │  orbitengine.com     │         │  *.orbitengine.com   │
-   └──────────┬───────────┘         └──────────┬───────────┘
-              │                                 │
-              ▼                                 ▼
-   ┌──────────────────┐             ┌──────────────────────┐
-   │  S3              │             │  S3                  │
-   │  (Astro Static)  │             │  (React SPA)         │
-   │  Landing Page    │             │  Multi-tenant App    │
-   │  Pricing         │             └──────────┬───────────┘
-   │  Public Pages    │                        │
-   └──────────────────┘                        │ API calls
-                                                ▼
-                                     ┌──────────────────┐
-                                     │ ALB              │
-                                     │ (Load Balancer)  │
-                                     └────────┬─────────┘
+                               ▼
+                    ┌──────────────────────┐
+                    │  CloudFront          │
+                    │  (Application)       │
+                    │  orbitengine.com     │
+                    └──────────┬───────────┘
+                               │
+                               ▼
+                    ┌──────────────────────┐
+                    │  S3                  │
+                    │  (React SPA)         │
+                    │  Multi-tenant App    │
+                    └──────────┬───────────┘
+                               │ API calls
+                               ▼
+                    ┌──────────────────┐
+                    │ ALB              │
+                    │ (Load Balancer)  │
+                    └────────┬─────────┘
                                               │
                      ┌────────────────────────┴──────────────────┐
                      │                                            │
@@ -119,43 +114,55 @@
 
 ### 2.2 Flujo de Datos Simplificado
 
-#### Flujo de Usuario Nuevo (Landing Page)
+#### Flujo de Usuario Nuevo (Registro)
 ```
 Usuario → orbitengine.com
           ↓
-CloudFront → Astro Site (S3)
+CloudFront → React App (S3)
           ↓
-Usuario navega por landing page
-Visualiza pricing, características
-          ↓
-Click "Registrarse"
+Usuario ve landing page y hace clic en "Registrarse"
           ↓
 Form de registro → POST /api/v1/auth/register (Backend)
           ↓
 Backend crea organización y usuario
-Genera subdominio único (ej: empresa123.orbitengine.com)
+Genera identificador único para la organización
           ↓
-Redirect a {subdominio}.orbitengine.com
+Return con token JWT (incluye organization_id)
+          ↓
+Frontend guarda token y redirige a /dashboard
 ```
 
-#### Flujo de Usuario Existente (Aplicación)
+#### Flujo de Usuario Existente (Inicio de sesión)
 ```
-Usuario → {organization}.orbitengine.com
+Usuario → orbitengine.com/login
           ↓
-CloudFront (wildcard) → React App (S3)
+CloudFront → React App (S3)
           ↓
-Usuario interactúa con UI
+Usuario ingresa credenciales
           ↓
 React hace llamada API (Axios)
-Header: X-Tenant-Subdomain enviado automáticamente
+POST /api/v1/login/access-token
           ↓
 ALB distribuye request
           ↓
 FastAPI Backend recibe request
           ↓
-Middleware extrae subdomain del header
-Identifica organization_id
+Valida credenciales y genera JWT con organization_id
           ↓
+Return token JWT
+          ↓
+React guarda token y redirige a /dashboard
+
+#### Flujo de Uso de la Aplicación
+```
+Usuario autenticado usa la app
+          ↓
+React hace llamada API (Axios)
+Header: Authorization: Bearer {JWT_TOKEN}
+          ↓
+FastAPI Backend recibe request
+          ↓
+Middleware extrae organization_id del JWT
 Valida JWT y permisos
           ↓
 Ejecuta lógica de negocio
@@ -413,35 +420,34 @@ def require_role(required_role: str):
 
 ---
 
-## 4. Arquitectura Multi-Tenant con Subdominios
+## 4. Arquitectura Multi-Tenant por Aislamiento de Datos
 
 ### 4.1 Estrategia de Multi-Tenancy
 
-**Enfoque:** Subdominios dedicados por organización
+**Enfoque:** Aislamiento de datos a nivel de base de datos con una única aplicación
 
-Cada organización registrada obtiene su propio subdominio único:
-- `empresa1.orbitengine.com`
-- `tienda-abc.orbitengine.com`
-- `pyme123.orbitengine.com`
+Todas las organizaciones utilizan la misma aplicación en `app.orbitengine.com`. El aislamiento de datos se logra mediante:
+- Row-Level Security en PostgreSQL
+- Filtrado automático por `organization_id` en todas las queries
+- Validación en backend mediante JWT que incluye el `organization_id`
 
 **Ventajas:**
-- ✅ Mejor aislamiento percibido por el usuario
-- ✅ Branding personalizado por organización
-- ✅ Facilita futuras migraciones a infraestructura dedicada
-- ✅ URLs más limpias y memorables
-- ✅ Mejor SEO por organización
-- ✅ Facilita implementación de CORS y SSL wildcard
+- ✅ Simplicidad en infraestructura (una sola URL)
+- ✅ Menor costo de infraestructura (sin certificados wildcard)
+- ✅ Más fácil de mantener y desplegar
+- ✅ Aislamiento robusto mediante base de datos
+- ✅ Escalable horizontalmente sin configuración DNS adicional
+- ✅ Mejor para MVP y fase inicial
 
 ### 4.2 Identificación del Tenant
 
 ```typescript
-// Frontend: Axios interceptor detecta subdomain automáticamente
+// Frontend: Axios interceptor añade JWT con organization_id
 apiClient.interceptors.request.use((config) => {
-  const subdomain = window.location.hostname.split('.')[0];
+  const token = localStorage.getItem('token');
   
-  // Solo si no estamos en el dominio principal
-  if (subdomain !== 'orbitengine' && subdomain !== 'www') {
-    config.headers['X-Tenant-Subdomain'] = subdomain;
+  if (token) {
+    config.headers.Authorization = `Bearer ${token}`;
   }
   
   return config;
@@ -449,65 +455,65 @@ apiClient.interceptors.request.use((config) => {
 ```
 
 ```python
-# Backend: Middleware procesa subdomain
+# Backend: Middleware extrae organization_id del JWT
+from app.api.deps import get_current_user
+
 @app.middleware("http")
 async def tenant_identification_middleware(request: Request, call_next):
-    """Identify tenant from subdomain header"""
+    """Identify tenant from JWT token"""
     
     # Skip for public endpoints
-    if request.url.path.startswith(("/auth/register", "/health")):
+    if request.url.path.startswith(("/auth/register", "/auth/login", "/health", "/docs")):
         return await call_next(request)
     
-    subdomain = request.headers.get("X-Tenant-Subdomain")
-    
-    if not subdomain:
-        return JSONResponse(
-            {"detail": "Tenant subdomain required"}, 
-            status_code=400
-        )
-    
-    # Lookup organization by subdomain
-    organization = db.query(Organization).filter(
-        Organization.subdomain == subdomain,
-        Organization.is_active == True
-    ).first()
-    
-    if not organization:
-        return JSONResponse(
-            {"detail": "Organization not found"}, 
-            status_code=404
-        )
-    
-    # Set tenant context for request
-    request.state.organization_id = organization.id
-    request.state.organization = organization
+    # El organization_id se extrae del JWT en get_current_user
+    # y se valida automáticamente
     
     response = await call_next(request)
     return response
+
+# Dependencia que extrae el usuario del JWT
+async def get_current_user(
+    token: str = Depends(oauth2_scheme),
+    db: Session = Depends(get_db)
+) -> User:
+    """Get current authenticated user with organization"""
+    try:
+        payload = jwt.decode(
+            token, 
+            settings.SECRET_KEY, 
+            algorithms=[settings.ALGORITHM]
+        )
+        user_id: str = payload.get("sub")
+        if user_id is None:
+            raise credentials_exception
+    except JWTError:
+        raise credentials_exception
+    
+    user = db.query(User).filter(User.id == user_id).first()
+    if user is None:
+        raise credentials_exception
+    
+    # El usuario ya incluye organization_id
+    return user
 ```
 
 ### 4.3 DNS y Routing
 
 **Route 53 Configuration:**
 ```
-# Registro wildcard para todos los subdominios de tenant
-*.orbitengine.com → CNAME → CloudFront Distribution (App)
-
-# Registro para dominio principal
-orbitengine.com → CNAME → CloudFront Distribution (Landing)
-www.orbitengine.com → CNAME → CloudFront Distribution (Landing)
+# Dominio único para toda la aplicación
+orbitengine.com → CNAME → CloudFront Distribution
+www.orbitengine.com → CNAME → CloudFront Distribution (redirect a orbitengine.com)
 ```
 
-**CloudFront Distributions:**
-1. **Landing Site (orbitengine.com):**
-   - Origin: S3 bucket con Astro static site
-   - Rutas: `/`, `/pricing`, `/features`, `/about`, `/register`
+**CloudFront Distribution:**
+- **orbitengine.com:**
+  - Origin: S3 bucket con React SPA
+  - Comportamiento: SPA routing (todas las rutas → index.html)
+  - Incluye tanto landing pages como aplicación autenticada
 
-2. **App (*.orbitengine.com):**
-   - Origin: S3 bucket con React SPA
-   - Comportamiento: SPA routing (todas las rutas → index.html)
-
-### 4.4 Proceso de Registro y Asignación de Subdomain
+### 4.4 Proceso de Registro
 
 ```python
 # Flujo de registro desde landing page
@@ -517,25 +523,25 @@ async def register_organization(
     db: Session = Depends(get_db)
 ):
     """
-    Registra nueva organización y asigna subdomain único
+    Registra nueva organización y usuario admin
     """
     
-    # 1. Generar subdomain único basado en nombre de empresa
-    base_subdomain = slugify(registration.company_name)
-    subdomain = base_subdomain
+    # 1. Generar identificador único basado en nombre de empresa
+    base_identifier = slugify(registration.company_name)
+    identifier = base_identifier
     counter = 1
     
-    # Verificar disponibilidad
+    # Verificar disponibilidad del identificador
     while db.query(Organization).filter(
-        Organization.subdomain == subdomain
+        Organization.slug == identifier
     ).first():
-        subdomain = f"{base_subdomain}{counter}"
+        identifier = f"{base_identifier}{counter}"
         counter += 1
     
     # 2. Crear organización
     organization = Organization(
         name=registration.company_name,
-        subdomain=subdomain,
+        slug=identifier,  # Identificador único (no es un subdominio)
         is_active=True
     )
     db.add(organization)
@@ -554,19 +560,22 @@ async def register_organization(
     db.commit()
     db.refresh(organization)
     
-    # 4. Generar JWT token
-    token = create_access_token(admin_user.id)
+    # 4. Generar JWT token que incluye organization_id
+    token_data = {
+        "sub": str(admin_user.id),
+        "organization_id": str(organization.id)
+    }
+    token = create_access_token(token_data)
     
-    # 5. Return con subdomain asignado
+    # 5. Return con token y datos
     return RegisterResponse(
         organization_id=organization.id,
-        subdomain=subdomain,
-        app_url=f"https://{subdomain}.orbitengine.com",
+        organization_name=organization.name,
         token=token,
         user=admin_user
     )
 
-# Frontend Astro: Redirect después de registro exitoso
+# Frontend React: Después de registro exitoso
 async function handleRegister(formData) {
   const response = await fetch('/api/v1/auth/register', {
     method: 'POST',
@@ -578,25 +587,24 @@ async function handleRegister(formData) {
   // Guardar token en localStorage
   localStorage.setItem('token', data.token);
   
-  // Redirect al subdomain de la organización
-  window.location.href = data.app_url;
+  // Redirect al dashboard dentro de la misma aplicación
+  navigate('/dashboard');
 }
 ```
 
 ### 4.5 Aislamiento de Datos
 
-Todas las queries en el backend automáticamente filtran por `organization_id`:
+Todas las queries en el backend automáticamente filtran por `organization_id` del usuario autenticado:
 
 ```python
 # Ejemplo de query con tenant isolation
 @router.get("/products", response_model=List[ProductRead])
 async def list_products(
-    request: Request,
     db: Session = Depends(get_db),
     current_user: User = Depends(get_current_user)
 ):
-    # organization_id viene del middleware (request.state)
-    organization_id = request.state.organization_id
+    # organization_id viene del usuario autenticado
+    organization_id = current_user.organization_id
     
     # Query automáticamente filtrada
     products = db.query(Product).filter(
@@ -604,78 +612,56 @@ async def list_products(
     ).all()
     
     return products
+
+# Todos los CRUDs siguen el mismo patrón
+@router.post("/products", response_model=ProductRead)
+async def create_product(
+    product_in: ProductCreate,
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user)
+):
+    # Automáticamente asigna la organización del usuario
+    product = Product(
+        **product_in.dict(),
+        organization_id=current_user.organization_id
+    )
+    
+    db.add(product)
+    db.commit()
+    db.refresh(product)
+    
+    return product
+```
+
+### 4.6 Row-Level Security (Opcional)
+
+Para mayor seguridad, se puede implementar RLS en PostgreSQL:
+
+```sql
+-- Habilitar RLS en tablas sensibles
+ALTER TABLE products ENABLE ROW LEVEL SECURITY;
+
+-- Policy para garantizar aislamiento
+CREATE POLICY organization_isolation_policy ON products
+  FOR ALL
+  USING (organization_id = current_setting('app.current_organization_id')::UUID);
+
+-- El backend configura el organization_id al inicio de cada transacción
+-- SET app.current_organization_id = '{organization_id}';
 ```
 
 ---
 
 ## 5. Arquitectura del Frontend
 
-### 5.1 Dos Aplicaciones Frontend Separadas
+### 5.1 Aplicación React Única
 
-El proyecto cuenta con dos aplicaciones frontend independientes:
+El proyecto utiliza una única aplicación React SPA que incluye:
+- Landing pages públicas (home, features, pricing)
+- Páginas de autenticación (login, registro, recuperación de contraseña)
+- Aplicación autenticada (dashboard, inventario, ventas, clientes)
 
-#### **A) Landing Site (Astro) - orbitengine.com**
-
-**Propósito:** Marketing, captación de clientes, registro inicial
-
-**Tecnología:** Astro 4.x
-- Static Site Generation (SSG)
-- Componentes островной архитектуры
-- Cero JavaScript por defecto (hidratación selectiva)
-- SEO optimizado
-
-**Rutas Principales:**
-- `/` - Landing page principal
-- `/features` - Características del producto
-- `/pricing` - Planes y precios
-- `/about` - Sobre nosotros
-- `/register` - Formulario de registro de organización
-- `/login` - Redirect a app con subdomain
-
-**Características:**
-- ⚡ Extremadamente rápido (todo estático)
-- 🎨 Animaciones y marketing content
-- 📱 Responsive design
-- 🔍 SEO optimizado
-- 📊 Integración con analytics
-- 🎯 Lead capture forms
-
-**Estructura de Directorios:**
-```
-landing/                      # Nueva carpeta para Astro site
-├── public/
-│   ├── images/
-│   ├── fonts/
-│   └── favicon.ico
-├── src/
-│   ├── components/
-│   │   ├── Header.astro
-│   │   ├── Footer.astro
-│   │   ├── Hero.astro
-│   │   ├── Features.astro
-│   │   ├── Pricing.astro
-│   │   └── CallToAction.astro
-│   ├── layouts/
-│   │   └── MainLayout.astro
-│   ├── pages/
-│   │   ├── index.astro
-│   │   ├── features.astro
-│   │   ├── pricing.astro
-│   │   ├── about.astro
-│   │   └── register.astro
-│   ├── styles/
-│   │   └── global.css
-│   └── utils/
-│       └── api.ts
-├── astro.config.mjs
-├── package.json
-├── tailwind.config.js
-└── tsconfig.json
-```
-
-#### **B) Multi-Tenant App (React) - *.orbitengine.com**
-
-**Propósito:** Aplicación principal para gestión de negocios
+**Dominio:** orbitengine.com
 
 **Tecnología:** React + TypeScript + TanStack Router
 - Single Page Application (SPA)
@@ -683,41 +669,38 @@ landing/                      # Nueva carpeta para Astro site
 - State management con Zustand + React Query
 - UI components con shadcn/ui
 
+**Rutas Principales:**
+
+**Públicas (sin autenticación):**
+- `/` - Landing page principal
+- `/features` - Características del producto
+- `/pricing` - Planes y precios
+- `/about` - Sobre nosotros
+- `/login` - Inicio de sesión
+- `/signup` - Registro de organización
+
+**Privadas (requieren autenticación):**
+- `/dashboard` - Dashboard principal
+- `/products` - Gestión de inventario
+- `/sales` - Gestión de ventas
+- `/customers` - Gestión de clientes
+- `/reports` - Reportes y análisis
+- `/settings` - Configuración de usuario y organización
+
 **Características:**
-- 🔐 Autenticación requerida
-- 🏢 Multi-tenant por subdomain
+- 🔐 Rutas protegidas con autenticación
+- 🏢 Multi-tenant por aislamiento de datos
 - 📊 Dashboard interactivo
 - ⚙️ CRUD completo de recursos
 - 📈 Reportes y analytics
 - 🤖 Predicciones con IA
-
-(La estructura de directorios del React App se mantiene como se documentó previamente)
-
-### 5.2 Interacción Entre Aplicaciones
-
-```
-Landing (Astro)                    App (React)
-orbitengine.com                    *.orbitengine.com
-       │                                  │
-       │ Usuario se registra             │
-       ├──────────────────────────────────►
-       │ POST /api/auth/register          │
-       │ Response: { subdomain, token }   │
-       │                                  │
-       │ Redirect a {subdomain}.app       │
-       ├──────────────────────────────────►
-       │                                  │
-       │                          Usuario autenticado
-       │                          Comienza a usar app
-```
+- 🎨 Landing pages integradas en la misma aplicación
 
 ---
 
 ## 6. Arquitectura del Frontend (Detalles Técnicos)
 
-### 6.1 Arquitectura de la Aplicación React (*.orbitengine.com)
-
-### 6.1 Arquitectura de la Aplicación React (*.orbitengine.com)
+### 6.1 Arquitectura de la Aplicación React (orbitengine.com)
 
 ### 6.1.1 Estructura de Capas
 
@@ -1441,19 +1424,7 @@ services:
     depends_on:
       - redis
 
-  # Landing site (Astro)
-  landing:
-    build: ./landing
-    command: npm run dev -- --host
-    volumes:
-      - ./landing:/app
-      - /app/node_modules
-    ports:
-      - "4321:4321"  # Puerto por defecto de Astro
-    environment:
-      - VITE_API_URL=http://localhost:8000
-
-  # Multi-tenant app (React)
+  # Frontend único (React SPA)
   frontend:
     build: ./frontend
     command: npm run dev -- --host
@@ -1470,8 +1441,7 @@ volumes:
 ```
 
 **Notas para desarrollo local:**
-- Landing site: `http://localhost:4321`
-- App (simular subdomain): `http://localhost:5173?tenant=demo`
+- Aplicación completa: `http://localhost:5173`
 - Backend API: `http://localhost:8000`
 - API Docs: `http://localhost:8000/docs`
 
@@ -1541,12 +1511,6 @@ jobs:
           cd frontend
           npm ci
           npm run test
-      
-      - name: Test landing site
-        run: |
-          cd landing
-          npm ci
-          npm run build
 
   deploy:
     needs: test
@@ -1569,15 +1533,7 @@ jobs:
           docker tag orbitengine-backend:latest $ECR_REGISTRY/orbitengine-backend:latest
           docker push $ECR_REGISTRY/orbitengine-backend:latest
       
-      - name: Deploy landing site to S3
-        run: |
-          cd landing
-          npm ci
-          npm run build
-          aws s3 sync dist/ s3://orbitengine-landing --delete
-          aws cloudfront create-invalidation --distribution-id $CLOUDFRONT_LANDING_ID --paths "/*"
-      
-      - name: Deploy frontend app to S3
+      - name: Deploy frontend to S3
         run: |
           cd frontend
           npm ci
@@ -1590,13 +1546,11 @@ jobs:
           aws ecs update-service --cluster orbitengine-cluster --service backend --force-new-deployment
 ```
 
-**Configuración de S3 Buckets:**
-- `orbitengine-landing`: Para landing site (orbitengine.com)
-- `orbitengine-app`: Para multi-tenant app (*.orbitengine.com)
+**Configuración de S3 Bucket:**
+- `orbitengine-app`: Para la aplicación completa (orbitengine.com)
 
-**CloudFront Distributions:**
-- Distribution 1: orbitengine.com → S3 landing bucket
-- Distribution 2: *.orbitengine.com → S3 app bucket (wildcard certificate required)
+**CloudFront Distribution:**
+- orbitengine.com → S3 app bucket
 
 ---
 
@@ -1804,7 +1758,7 @@ async def list_products(
 Esta arquitectura proporciona:
 
 ✅ **Separación de responsabilidades** clara entre capas  
-✅ **Multi-tenancy robusto** mediante subdominios dedicados  
+✅ **Multi-tenancy robusto** mediante aislamiento de datos en base de datos  
 ✅ **Dos aplicaciones frontend** optimizadas para diferentes propósitos (marketing vs. aplicación)  
 ✅ **Escalabilidad** mediante diseño stateless y cacheo  
 ✅ **Seguridad** con autenticación JWT y aislamiento por tenant  
@@ -1812,13 +1766,13 @@ Esta arquitectura proporciona:
 ✅ **Testabilidad** con dependency injection  
 ✅ **Observabilidad** con logging y monitoreo  
 ✅ **SEO optimizado** con Astro para landing page  
-✅ **Experiencia de usuario mejorada** con subdominios personalizados  
+✅ **Simplicidad operacional** con una única URL de aplicación  
 
-El diseño es apropiado para el MVP y puede evolucionar hacia microservicios si el crecimiento lo requiere. La estrategia multi-tenant por subdominios permite escalar tanto técnicamente como en percepción de valor para los clientes.
+El diseño es apropiado para el MVP y puede evolucionar hacia microservicios si el crecimiento lo requiere. La estrategia multi-tenant por aislamiento de datos permite escalar de manera simple y económica.
 
 ---
 
 **Elaborado por:** Equipo OrbitEngine  
 **Fecha:** Octubre 2025  
-**Versión:** 1.1 - Actualizado con arquitectura multi-tenant y landing site Astro
+**Versión:** 1.2 - Actualizado con arquitectura multi-tenant por aislamiento de datos
 

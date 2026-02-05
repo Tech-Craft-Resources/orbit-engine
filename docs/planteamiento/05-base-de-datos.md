@@ -99,7 +99,7 @@
 |---------|------|---------------|-------------|
 | id | UUID | PK, NOT NULL, DEFAULT uuid_generate_v4() | Identificador único |
 | name | VARCHAR(255) | NOT NULL | Nombre de la organización |
-| domain | VARCHAR(100) | UNIQUE, NOT NULL | Dominio único (subdominio) |
+| slug | VARCHAR(100) | UNIQUE, NOT NULL | Identificador único (slug) |
 | description | TEXT | NULL | Descripción de la organización |
 | logo_url | VARCHAR(500) | NULL | URL del logo en S3 |
 | is_active | BOOLEAN | NOT NULL, DEFAULT TRUE | Organización activa |
@@ -107,7 +107,7 @@
 | updated_at | TIMESTAMP | NOT NULL, DEFAULT NOW() | Fecha de actualización |
 
 **Índices:**
-- `idx_organizations_domain` UNIQUE en `domain`
+- `idx_organizations_slug` UNIQUE en `slug`
 - `idx_organizations_is_active` en `is_active`
 
 ---
@@ -890,7 +890,7 @@ INSERT INTO roles (name, description, permissions) VALUES
   ('viewer', 'Solo lectura', '["reports.read", "dashboard.read"]');
 
 -- Organization de demostración (opcional)
-INSERT INTO organizations (id, name, domain, is_active)
+INSERT INTO organizations (id, name, slug, is_active)
 VALUES (
   'demo-organization-uuid',
   'Empresa Demo',
