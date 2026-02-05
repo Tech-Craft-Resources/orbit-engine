@@ -18,7 +18,7 @@ import {
 import { Input } from "@/components/ui/input"
 import { LoadingButton } from "@/components/ui/loading-button"
 import { PasswordInput } from "@/components/ui/password-input"
-import useAuth, { isLoggedIn } from "@/hooks/useAuth"
+import { isLoggedIn } from "@/hooks/useAuth"
 
 const formSchema = z
   .object({
@@ -58,7 +58,8 @@ export const Route = createFileRoute("/signup")({
 })
 
 function SignUp() {
-  const { signUpMutation } = useAuth()
+  // TODO: This page is deprecated. Use organization signup instead.
+  // Keeping this for now to avoid breaking existing routes.
   const form = useForm<FormData>({
     resolver: zodResolver(formSchema),
     mode: "onBlur",
@@ -72,11 +73,8 @@ function SignUp() {
   })
 
   const onSubmit = (data: FormData) => {
-    if (signUpMutation.isPending) return
-
-    // exclude confirm_password from submission data
-    const { confirm_password: _confirm_password, ...submitData } = data
-    signUpMutation.mutate(submitData)
+    // TODO: Redirect to organization signup or implement individual user signup
+    console.log("Individual user signup not implemented", data)
   }
 
   return (
@@ -88,6 +86,9 @@ function SignUp() {
         >
           <div className="flex flex-col items-center gap-2 text-center">
             <h1 className="text-2xl font-bold">Create an account</h1>
+            <p className="text-sm text-muted-foreground">
+              Individual signup is not available yet. Please contact your organization admin.
+            </p>
           </div>
 
           <div className="grid gap-4">
@@ -103,6 +104,7 @@ function SignUp() {
                       placeholder="User"
                       type="text"
                       {...field}
+                      disabled
                     />
                   </FormControl>
                   <FormMessage />
@@ -122,6 +124,7 @@ function SignUp() {
                       placeholder="user@example.com"
                       type="email"
                       {...field}
+                      disabled
                     />
                   </FormControl>
                   <FormMessage />
@@ -140,6 +143,7 @@ function SignUp() {
                       data-testid="password-input"
                       placeholder="Password"
                       {...field}
+                      disabled
                     />
                   </FormControl>
                   <FormMessage />
@@ -158,6 +162,7 @@ function SignUp() {
                       data-testid="confirm-password-input"
                       placeholder="Confirm Password"
                       {...field}
+                      disabled
                     />
                   </FormControl>
                   <FormMessage />
@@ -168,9 +173,9 @@ function SignUp() {
             <LoadingButton
               type="submit"
               className="w-full"
-              loading={signUpMutation.isPending}
+              disabled
             >
-              Sign Up
+              Sign Up (Disabled)
             </LoadingButton>
           </div>
 

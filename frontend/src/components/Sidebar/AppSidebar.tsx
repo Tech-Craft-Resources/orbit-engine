@@ -17,7 +17,8 @@ const baseItems: Item[] = [{ icon: Home, title: "Dashboard", path: "/" }]
 export function AppSidebar() {
   const { user: currentUser } = useAuth()
 
-  const items = currentUser?.is_superuser
+  // Show Admin link only for admin role (role_id === 1)
+  const items = currentUser?.role_id === 1
     ? [...baseItems, { icon: Users, title: "Admin", path: "/admin" }]
     : baseItems
 

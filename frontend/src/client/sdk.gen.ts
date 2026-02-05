@@ -3,15 +3,17 @@
 import type { CancelablePromise } from './core/CancelablePromise';
 import { OpenAPI } from './core/OpenAPI';
 import { request as __request } from './core/request';
-import type { LoginLoginAccessTokenData, LoginLoginAccessTokenResponse, LoginTestTokenResponse, LoginRecoverPasswordData, LoginRecoverPasswordResponse, LoginResetPasswordData, LoginResetPasswordResponse, LoginRecoverPasswordHtmlContentData, LoginRecoverPasswordHtmlContentResponse, PrivateCreateUserData, PrivateCreateUserResponse, UsersReadUsersData, UsersReadUsersResponse, UsersCreateUserData, UsersCreateUserResponse, UsersReadUserMeResponse, UsersDeleteUserMeResponse, UsersUpdateUserMeData, UsersUpdateUserMeResponse, UsersUpdatePasswordMeData, UsersUpdatePasswordMeResponse, UsersRegisterUserData, UsersRegisterUserResponse, UsersReadUserByIdData, UsersReadUserByIdResponse, UsersUpdateUserData, UsersUpdateUserResponse, UsersDeleteUserData, UsersDeleteUserResponse, UtilsTestEmailData, UtilsTestEmailResponse, UtilsHealthCheckResponse } from './types.gen';
+import type { LoginLoginAccessTokenData, LoginLoginAccessTokenResponse, LoginTestTokenResponse, LoginRecoverPasswordData, LoginRecoverPasswordResponse, LoginResetPasswordData, LoginResetPasswordResponse, LoginRecoverPasswordHtmlContentData, LoginRecoverPasswordHtmlContentResponse, OrganizationsSignupOrganizationData, OrganizationsSignupOrganizationResponse, OrganizationsGetMyOrganizationResponse, OrganizationsUpdateMyOrganizationData, OrganizationsUpdateMyOrganizationResponse, PrivateCreateUserData, PrivateCreateUserResponse, RolesListRolesResponse, UsersReadUsersData, UsersReadUsersResponse, UsersCreateUserData, UsersCreateUserResponse, UsersReadUserMeResponse, UsersDeleteUserMeResponse, UsersUpdateUserMeData, UsersUpdateUserMeResponse, UsersUpdatePasswordMeData, UsersUpdatePasswordMeResponse, UsersReadUserByIdData, UsersReadUserByIdResponse, UsersUpdateUserData, UsersUpdateUserResponse, UsersDeleteUserData, UsersDeleteUserResponse, UtilsTestEmailData, UtilsTestEmailResponse, UtilsHealthCheckResponse } from './types.gen';
 
 export class LoginService {
     /**
      * Login Access Token
-     * OAuth2 compatible token login, get an access token for future requests
+     * OAuth2 compatible token login, get an access token for future requests.
+     *
+     * Returns user data with organization and role information.
      * @param data The data for the request.
      * @param data.formData
-     * @returns Token Successful Response
+     * @returns LoginResponse Successful Response
      * @throws ApiError
      */
     public static loginAccessToken(data: LoginLoginAccessTokenData): CancelablePromise<LoginLoginAccessTokenResponse> {
@@ -83,6 +85,8 @@ export class LoginService {
     /**
      * Recover Password Html Content
      * HTML Content for Password Recovery
+     *
+     * Requires authentication (admin only in production, but any user for testing)
      * @param data The data for the request.
      * @param data.email
      * @returns string Successful Response
@@ -95,6 +99,69 @@ export class LoginService {
             path: {
                 email: data.email
             },
+            errors: {
+                422: 'Validation Error'
+            }
+        });
+    }
+}
+
+export class OrganizationsService {
+    /**
+     * Signup Organization
+     * Create a new organization with an admin user.
+     *
+     * This is the entry point for new organizations to sign up.
+     * It creates:
+     * 1. A new organization
+     * 2. An admin user for that organization
+     * 3. Returns a login token for the new admin user
+     * @param data The data for the request.
+     * @param data.requestBody
+     * @returns LoginResponse Successful Response
+     * @throws ApiError
+     */
+    public static signupOrganization(data: OrganizationsSignupOrganizationData): CancelablePromise<OrganizationsSignupOrganizationResponse> {
+        return __request(OpenAPI, {
+            method: 'POST',
+            url: '/api/v1/organizations/signup',
+            body: data.requestBody,
+            mediaType: 'application/json',
+            errors: {
+                422: 'Validation Error'
+            }
+        });
+    }
+    
+    /**
+     * Get My Organization
+     * Get current user's organization.
+     * @returns OrganizationPublic Successful Response
+     * @throws ApiError
+     */
+    public static getMyOrganization(): CancelablePromise<OrganizationsGetMyOrganizationResponse> {
+        return __request(OpenAPI, {
+            method: 'GET',
+            url: '/api/v1/organizations/me'
+        });
+    }
+    
+    /**
+     * Update My Organization
+     * Update current user's organization.
+     *
+     * Only admin users can update organization settings.
+     * @param data The data for the request.
+     * @param data.requestBody
+     * @returns OrganizationPublic Successful Response
+     * @throws ApiError
+     */
+    public static updateMyOrganization(data: OrganizationsUpdateMyOrganizationData): CancelablePromise<OrganizationsUpdateMyOrganizationResponse> {
+        return __request(OpenAPI, {
+            method: 'PATCH',
+            url: '/api/v1/organizations/me',
+            body: data.requestBody,
+            mediaType: 'application/json',
             errors: {
                 422: 'Validation Error'
             }
@@ -124,10 +191,29 @@ export class PrivateService {
     }
 }
 
+export class RolesService {
+    /**
+     * List Roles
+     * Get all available roles in the system.
+     *
+     * Any authenticated user can see the available roles.
+     * @returns RolesPublic Successful Response
+     * @throws ApiError
+     */
+    public static listRoles(): CancelablePromise<RolesListRolesResponse> {
+        return __request(OpenAPI, {
+            method: 'GET',
+            url: '/api/v1/roles/'
+        });
+    }
+}
+
 export class UsersService {
     /**
      * Read Users
-     * Retrieve users.
+     * Retrieve users in current organization.
+     *
+     * Only admin users can list all users.
      * @param data The data for the request.
      * @param data.skip
      * @param data.limit
@@ -150,7 +236,9 @@ export class UsersService {
     
     /**
      * Create User
-     * Create new user.
+     * Create new user in current organization.
+     *
+     * Only admin users can create users.
      * @param data The data for the request.
      * @param data.requestBody
      * @returns UserPublic Successful Response
@@ -183,7 +271,7 @@ export class UsersService {
     
     /**
      * Delete User Me
-     * Delete own user.
+     * Delete own user (soft delete).
      * @returns Message Successful Response
      * @throws ApiError
      */
@@ -235,28 +323,8 @@ export class UsersService {
     }
     
     /**
-     * Register User
-     * Create new user without the need to be logged in.
-     * @param data The data for the request.
-     * @param data.requestBody
-     * @returns UserPublic Successful Response
-     * @throws ApiError
-     */
-    public static registerUser(data: UsersRegisterUserData): CancelablePromise<UsersRegisterUserResponse> {
-        return __request(OpenAPI, {
-            method: 'POST',
-            url: '/api/v1/users/signup',
-            body: data.requestBody,
-            mediaType: 'application/json',
-            errors: {
-                422: 'Validation Error'
-            }
-        });
-    }
-    
-    /**
      * Read User By Id
-     * Get a specific user by id.
+     * Get a specific user by id in the current organization.
      * @param data The data for the request.
      * @param data.userId
      * @returns UserPublic Successful Response
@@ -278,6 +346,8 @@ export class UsersService {
     /**
      * Update User
      * Update a user.
+     *
+     * Only admin users can update other users.
      * @param data The data for the request.
      * @param data.userId
      * @param data.requestBody
@@ -301,7 +371,9 @@ export class UsersService {
     
     /**
      * Delete User
-     * Delete a user.
+     * Delete a user (soft delete).
+     *
+     * Only admin users can delete users.
      * @param data The data for the request.
      * @param data.userId
      * @returns Message Successful Response
@@ -325,6 +397,8 @@ export class UtilsService {
     /**
      * Test Email
      * Test emails.
+     *
+     * Only admin users can send test emails.
      * @param data The data for the request.
      * @param data.emailTo
      * @returns Message Successful Response

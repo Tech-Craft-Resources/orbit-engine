@@ -11,15 +11,15 @@ export type UserTableData = UserPublic & {
 
 export const columns: ColumnDef<UserTableData>[] = [
   {
-    accessorKey: "full_name",
-    header: "Full Name",
+    accessorKey: "first_name",
+    header: "Name",
     cell: ({ row }) => {
-      const fullName = row.original.full_name
+      const firstName = row.original.first_name
+      const lastName = row.original.last_name
+      const fullName = `${firstName} ${lastName}`.trim()
       return (
         <div className="flex items-center gap-2">
-          <span
-            className={cn("font-medium", !fullName && "text-muted-foreground")}
-          >
+          <span className={cn("font-medium")}>
             {fullName || "N/A"}
           </span>
           {row.original.isCurrentUser && (
@@ -39,13 +39,22 @@ export const columns: ColumnDef<UserTableData>[] = [
     ),
   },
   {
-    accessorKey: "is_superuser",
+    accessorKey: "role_id",
     header: "Role",
-    cell: ({ row }) => (
-      <Badge variant={row.original.is_superuser ? "default" : "secondary"}>
-        {row.original.is_superuser ? "Superuser" : "User"}
-      </Badge>
-    ),
+    cell: ({ row }) => {
+      const roleNames = {
+        1: "Admin",
+        2: "Seller",
+        3: "Viewer",
+      } as const
+      const roleId = row.original.role_id as 1 | 2 | 3
+      const roleName = roleNames[roleId] || "Unknown"
+      return (
+        <Badge variant={roleId === 1 ? "default" : "secondary"}>
+          {roleName}
+        </Badge>
+      )
+    },
   },
   {
     accessorKey: "is_active",

@@ -13,6 +13,15 @@ export type HTTPValidationError = {
     detail?: Array<ValidationError>;
 };
 
+/**
+ * Response after successful login with user data
+ */
+export type LoginResponse = {
+    access_token: string;
+    token_type?: string;
+    user: UserPublicWithRelations;
+};
+
 export type Message = {
     message: string;
 };
@@ -22,6 +31,38 @@ export type NewPassword = {
     new_password: string;
 };
 
+export type OrganizationPublic = {
+    name: string;
+    slug: string;
+    description?: (string | null);
+    logo_url?: (string | null);
+    is_active?: boolean;
+    id: string;
+    created_at: string;
+    updated_at: string;
+};
+
+/**
+ * Schema for creating a new organization with admin user
+ */
+export type OrganizationSignup = {
+    organization_name: string;
+    organization_slug: string;
+    organization_description?: (string | null);
+    admin_email: string;
+    admin_password: string;
+    admin_first_name: string;
+    admin_last_name: string;
+    admin_phone?: (string | null);
+};
+
+export type OrganizationUpdate = {
+    name?: (string | null);
+    description?: (string | null);
+    logo_url?: (string | null);
+    is_active?: (boolean | null);
+};
+
 export type PrivateUserCreate = {
     email: string;
     password: string;
@@ -29,9 +70,17 @@ export type PrivateUserCreate = {
     is_verified?: boolean;
 };
 
-export type Token = {
-    access_token: string;
-    token_type?: string;
+export type RolePublic = {
+    name: string;
+    description?: (string | null);
+    permissions?: Array<(string)>;
+    id: number;
+    created_at: string;
+};
+
+export type RolesPublic = {
+    data: Array<RolePublic>;
+    count: number;
 };
 
 export type UpdatePassword = {
@@ -41,25 +90,48 @@ export type UpdatePassword = {
 
 export type UserCreate = {
     email: string;
-    is_active?: boolean;
-    is_superuser?: boolean;
-    full_name?: (string | null);
     password: string;
+    first_name: string;
+    last_name: string;
+    phone?: (string | null);
+    role_id: number;
 };
 
 export type UserPublic = {
     email: string;
+    first_name: string;
+    last_name: string;
+    phone?: (string | null);
+    avatar_url?: (string | null);
     is_active?: boolean;
-    is_superuser?: boolean;
-    full_name?: (string | null);
+    is_verified?: boolean;
     id: string;
-    created_at?: (string | null);
+    organization_id: string;
+    role_id: number;
+    last_login_at?: (string | null);
+    created_at: string;
+    updated_at: string;
 };
 
-export type UserRegister = {
+/**
+ * User with organization and role included
+ */
+export type UserPublicWithRelations = {
     email: string;
-    password: string;
-    full_name?: (string | null);
+    first_name: string;
+    last_name: string;
+    phone?: (string | null);
+    avatar_url?: (string | null);
+    is_active?: boolean;
+    is_verified?: boolean;
+    id: string;
+    organization_id: string;
+    role_id: number;
+    last_login_at?: (string | null);
+    created_at: string;
+    updated_at: string;
+    organization: OrganizationPublic;
+    role: RolePublic;
 };
 
 export type UsersPublic = {
@@ -69,15 +141,19 @@ export type UsersPublic = {
 
 export type UserUpdate = {
     email?: (string | null);
-    is_active?: boolean;
-    is_superuser?: boolean;
-    full_name?: (string | null);
-    password?: (string | null);
+    first_name?: (string | null);
+    last_name?: (string | null);
+    phone?: (string | null);
+    avatar_url?: (string | null);
+    is_active?: (boolean | null);
+    role_id?: (number | null);
 };
 
 export type UserUpdateMe = {
-    full_name?: (string | null);
+    first_name?: (string | null);
+    last_name?: (string | null);
     email?: (string | null);
+    phone?: (string | null);
 };
 
 export type ValidationError = {
@@ -90,7 +166,7 @@ export type LoginLoginAccessTokenData = {
     formData: Body_login_login_access_token;
 };
 
-export type LoginLoginAccessTokenResponse = (Token);
+export type LoginLoginAccessTokenResponse = (LoginResponse);
 
 export type LoginTestTokenResponse = (UserPublic);
 
@@ -112,11 +188,27 @@ export type LoginRecoverPasswordHtmlContentData = {
 
 export type LoginRecoverPasswordHtmlContentResponse = (string);
 
+export type OrganizationsSignupOrganizationData = {
+    requestBody: OrganizationSignup;
+};
+
+export type OrganizationsSignupOrganizationResponse = (LoginResponse);
+
+export type OrganizationsGetMyOrganizationResponse = (OrganizationPublic);
+
+export type OrganizationsUpdateMyOrganizationData = {
+    requestBody: OrganizationUpdate;
+};
+
+export type OrganizationsUpdateMyOrganizationResponse = (OrganizationPublic);
+
 export type PrivateCreateUserData = {
     requestBody: PrivateUserCreate;
 };
 
 export type PrivateCreateUserResponse = (UserPublic);
+
+export type RolesListRolesResponse = (RolesPublic);
 
 export type UsersReadUsersData = {
     limit?: number;
@@ -146,12 +238,6 @@ export type UsersUpdatePasswordMeData = {
 };
 
 export type UsersUpdatePasswordMeResponse = (Message);
-
-export type UsersRegisterUserData = {
-    requestBody: UserRegister;
-};
-
-export type UsersRegisterUserResponse = (UserPublic);
 
 export type UsersReadUserByIdData = {
     userId: string;

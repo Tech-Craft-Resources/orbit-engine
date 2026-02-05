@@ -71,6 +71,27 @@ export const HTTPValidationErrorSchema = {
     title: 'HTTPValidationError'
 } as const;
 
+export const LoginResponseSchema = {
+    properties: {
+        access_token: {
+            type: 'string',
+            title: 'Access Token'
+        },
+        token_type: {
+            type: 'string',
+            title: 'Token Type',
+            default: 'bearer'
+        },
+        user: {
+            '$ref': '#/components/schemas/UserPublicWithRelations'
+        }
+    },
+    type: 'object',
+    required: ['access_token', 'user'],
+    title: 'LoginResponse',
+    description: 'Response after successful login with user data'
+} as const;
+
 export const MessageSchema = {
     properties: {
         message: {
@@ -101,6 +122,184 @@ export const NewPasswordSchema = {
     title: 'NewPassword'
 } as const;
 
+export const OrganizationPublicSchema = {
+    properties: {
+        name: {
+            type: 'string',
+            maxLength: 255,
+            title: 'Name'
+        },
+        slug: {
+            type: 'string',
+            maxLength: 100,
+            title: 'Slug'
+        },
+        description: {
+            anyOf: [
+                {
+                    type: 'string'
+                },
+                {
+                    type: 'null'
+                }
+            ],
+            title: 'Description'
+        },
+        logo_url: {
+            anyOf: [
+                {
+                    type: 'string',
+                    maxLength: 500
+                },
+                {
+                    type: 'null'
+                }
+            ],
+            title: 'Logo Url'
+        },
+        is_active: {
+            type: 'boolean',
+            title: 'Is Active',
+            default: true
+        },
+        id: {
+            type: 'string',
+            format: 'uuid',
+            title: 'Id'
+        },
+        created_at: {
+            type: 'string',
+            format: 'date-time',
+            title: 'Created At'
+        },
+        updated_at: {
+            type: 'string',
+            format: 'date-time',
+            title: 'Updated At'
+        }
+    },
+    type: 'object',
+    required: ['name', 'slug', 'id', 'created_at', 'updated_at'],
+    title: 'OrganizationPublic'
+} as const;
+
+export const OrganizationSignupSchema = {
+    properties: {
+        organization_name: {
+            type: 'string',
+            maxLength: 255,
+            title: 'Organization Name'
+        },
+        organization_slug: {
+            type: 'string',
+            maxLength: 100,
+            title: 'Organization Slug'
+        },
+        organization_description: {
+            anyOf: [
+                {
+                    type: 'string'
+                },
+                {
+                    type: 'null'
+                }
+            ],
+            title: 'Organization Description'
+        },
+        admin_email: {
+            type: 'string',
+            maxLength: 255,
+            format: 'email',
+            title: 'Admin Email'
+        },
+        admin_password: {
+            type: 'string',
+            maxLength: 128,
+            minLength: 8,
+            title: 'Admin Password'
+        },
+        admin_first_name: {
+            type: 'string',
+            maxLength: 100,
+            title: 'Admin First Name'
+        },
+        admin_last_name: {
+            type: 'string',
+            maxLength: 100,
+            title: 'Admin Last Name'
+        },
+        admin_phone: {
+            anyOf: [
+                {
+                    type: 'string',
+                    maxLength: 50
+                },
+                {
+                    type: 'null'
+                }
+            ],
+            title: 'Admin Phone'
+        }
+    },
+    type: 'object',
+    required: ['organization_name', 'organization_slug', 'admin_email', 'admin_password', 'admin_first_name', 'admin_last_name'],
+    title: 'OrganizationSignup',
+    description: 'Schema for creating a new organization with admin user'
+} as const;
+
+export const OrganizationUpdateSchema = {
+    properties: {
+        name: {
+            anyOf: [
+                {
+                    type: 'string',
+                    maxLength: 255
+                },
+                {
+                    type: 'null'
+                }
+            ],
+            title: 'Name'
+        },
+        description: {
+            anyOf: [
+                {
+                    type: 'string'
+                },
+                {
+                    type: 'null'
+                }
+            ],
+            title: 'Description'
+        },
+        logo_url: {
+            anyOf: [
+                {
+                    type: 'string',
+                    maxLength: 500
+                },
+                {
+                    type: 'null'
+                }
+            ],
+            title: 'Logo Url'
+        },
+        is_active: {
+            anyOf: [
+                {
+                    type: 'boolean'
+                },
+                {
+                    type: 'null'
+                }
+            ],
+            title: 'Is Active'
+        }
+    },
+    type: 'object',
+    title: 'OrganizationUpdate'
+} as const;
+
 export const PrivateUserCreateSchema = {
     properties: {
         email: {
@@ -126,21 +325,63 @@ export const PrivateUserCreateSchema = {
     title: 'PrivateUserCreate'
 } as const;
 
-export const TokenSchema = {
+export const RolePublicSchema = {
     properties: {
-        access_token: {
+        name: {
             type: 'string',
-            title: 'Access Token'
+            maxLength: 50,
+            title: 'Name'
         },
-        token_type: {
+        description: {
+            anyOf: [
+                {
+                    type: 'string'
+                },
+                {
+                    type: 'null'
+                }
+            ],
+            title: 'Description'
+        },
+        permissions: {
+            items: {
+                type: 'string'
+            },
+            type: 'array',
+            title: 'Permissions'
+        },
+        id: {
+            type: 'integer',
+            title: 'Id'
+        },
+        created_at: {
             type: 'string',
-            title: 'Token Type',
-            default: 'bearer'
+            format: 'date-time',
+            title: 'Created At'
         }
     },
     type: 'object',
-    required: ['access_token'],
-    title: 'Token'
+    required: ['name', 'id', 'created_at'],
+    title: 'RolePublic'
+} as const;
+
+export const RolesPublicSchema = {
+    properties: {
+        data: {
+            items: {
+                '$ref': '#/components/schemas/RolePublic'
+            },
+            type: 'array',
+            title: 'Data'
+        },
+        count: {
+            type: 'integer',
+            title: 'Count'
+        }
+    },
+    type: 'object',
+    required: ['data', 'count'],
+    title: 'RolesPublic'
 } as const;
 
 export const UpdatePasswordSchema = {
@@ -171,37 +412,41 @@ export const UserCreateSchema = {
             format: 'email',
             title: 'Email'
         },
-        is_active: {
-            type: 'boolean',
-            title: 'Is Active',
-            default: true
-        },
-        is_superuser: {
-            type: 'boolean',
-            title: 'Is Superuser',
-            default: false
-        },
-        full_name: {
-            anyOf: [
-                {
-                    type: 'string',
-                    maxLength: 255
-                },
-                {
-                    type: 'null'
-                }
-            ],
-            title: 'Full Name'
-        },
         password: {
             type: 'string',
             maxLength: 128,
             minLength: 8,
             title: 'Password'
+        },
+        first_name: {
+            type: 'string',
+            maxLength: 100,
+            title: 'First Name'
+        },
+        last_name: {
+            type: 'string',
+            maxLength: 100,
+            title: 'Last Name'
+        },
+        phone: {
+            anyOf: [
+                {
+                    type: 'string',
+                    maxLength: 50
+                },
+                {
+                    type: 'null'
+                }
+            ],
+            title: 'Phone'
+        },
+        role_id: {
+            type: 'integer',
+            title: 'Role Id'
         }
     },
     type: 'object',
-    required: ['email', 'password'],
+    required: ['email', 'password', 'first_name', 'last_name', 'role_id'],
     title: 'UserCreate'
 } as const;
 
@@ -213,34 +458,65 @@ export const UserPublicSchema = {
             format: 'email',
             title: 'Email'
         },
-        is_active: {
-            type: 'boolean',
-            title: 'Is Active',
-            default: true
+        first_name: {
+            type: 'string',
+            maxLength: 100,
+            title: 'First Name'
         },
-        is_superuser: {
-            type: 'boolean',
-            title: 'Is Superuser',
-            default: false
+        last_name: {
+            type: 'string',
+            maxLength: 100,
+            title: 'Last Name'
         },
-        full_name: {
+        phone: {
             anyOf: [
                 {
                     type: 'string',
-                    maxLength: 255
+                    maxLength: 50
                 },
                 {
                     type: 'null'
                 }
             ],
-            title: 'Full Name'
+            title: 'Phone'
+        },
+        avatar_url: {
+            anyOf: [
+                {
+                    type: 'string',
+                    maxLength: 500
+                },
+                {
+                    type: 'null'
+                }
+            ],
+            title: 'Avatar Url'
+        },
+        is_active: {
+            type: 'boolean',
+            title: 'Is Active',
+            default: true
+        },
+        is_verified: {
+            type: 'boolean',
+            title: 'Is Verified',
+            default: false
         },
         id: {
             type: 'string',
             format: 'uuid',
             title: 'Id'
         },
-        created_at: {
+        organization_id: {
+            type: 'string',
+            format: 'uuid',
+            title: 'Organization Id'
+        },
+        role_id: {
+            type: 'integer',
+            title: 'Role Id'
+        },
+        last_login_at: {
             anyOf: [
                 {
                     type: 'string',
@@ -250,15 +526,25 @@ export const UserPublicSchema = {
                     type: 'null'
                 }
             ],
+            title: 'Last Login At'
+        },
+        created_at: {
+            type: 'string',
+            format: 'date-time',
             title: 'Created At'
+        },
+        updated_at: {
+            type: 'string',
+            format: 'date-time',
+            title: 'Updated At'
         }
     },
     type: 'object',
-    required: ['email', 'id'],
+    required: ['email', 'first_name', 'last_name', 'id', 'organization_id', 'role_id', 'created_at', 'updated_at'],
     title: 'UserPublic'
 } as const;
 
-export const UserRegisterSchema = {
+export const UserPublicWithRelationsSchema = {
     properties: {
         email: {
             type: 'string',
@@ -266,28 +552,97 @@ export const UserRegisterSchema = {
             format: 'email',
             title: 'Email'
         },
-        password: {
+        first_name: {
             type: 'string',
-            maxLength: 128,
-            minLength: 8,
-            title: 'Password'
+            maxLength: 100,
+            title: 'First Name'
         },
-        full_name: {
+        last_name: {
+            type: 'string',
+            maxLength: 100,
+            title: 'Last Name'
+        },
+        phone: {
             anyOf: [
                 {
                     type: 'string',
-                    maxLength: 255
+                    maxLength: 50
                 },
                 {
                     type: 'null'
                 }
             ],
-            title: 'Full Name'
+            title: 'Phone'
+        },
+        avatar_url: {
+            anyOf: [
+                {
+                    type: 'string',
+                    maxLength: 500
+                },
+                {
+                    type: 'null'
+                }
+            ],
+            title: 'Avatar Url'
+        },
+        is_active: {
+            type: 'boolean',
+            title: 'Is Active',
+            default: true
+        },
+        is_verified: {
+            type: 'boolean',
+            title: 'Is Verified',
+            default: false
+        },
+        id: {
+            type: 'string',
+            format: 'uuid',
+            title: 'Id'
+        },
+        organization_id: {
+            type: 'string',
+            format: 'uuid',
+            title: 'Organization Id'
+        },
+        role_id: {
+            type: 'integer',
+            title: 'Role Id'
+        },
+        last_login_at: {
+            anyOf: [
+                {
+                    type: 'string',
+                    format: 'date-time'
+                },
+                {
+                    type: 'null'
+                }
+            ],
+            title: 'Last Login At'
+        },
+        created_at: {
+            type: 'string',
+            format: 'date-time',
+            title: 'Created At'
+        },
+        updated_at: {
+            type: 'string',
+            format: 'date-time',
+            title: 'Updated At'
+        },
+        organization: {
+            '$ref': '#/components/schemas/OrganizationPublic'
+        },
+        role: {
+            '$ref': '#/components/schemas/RolePublic'
         }
     },
     type: 'object',
-    required: ['email', 'password'],
-    title: 'UserRegister'
+    required: ['email', 'first_name', 'last_name', 'id', 'organization_id', 'role_id', 'created_at', 'updated_at', 'organization', 'role'],
+    title: 'UserPublicWithRelations',
+    description: 'User with organization and role included'
 } as const;
 
 export const UserUpdateSchema = {
@@ -305,40 +660,75 @@ export const UserUpdateSchema = {
             ],
             title: 'Email'
         },
+        first_name: {
+            anyOf: [
+                {
+                    type: 'string',
+                    maxLength: 100
+                },
+                {
+                    type: 'null'
+                }
+            ],
+            title: 'First Name'
+        },
+        last_name: {
+            anyOf: [
+                {
+                    type: 'string',
+                    maxLength: 100
+                },
+                {
+                    type: 'null'
+                }
+            ],
+            title: 'Last Name'
+        },
+        phone: {
+            anyOf: [
+                {
+                    type: 'string',
+                    maxLength: 50
+                },
+                {
+                    type: 'null'
+                }
+            ],
+            title: 'Phone'
+        },
+        avatar_url: {
+            anyOf: [
+                {
+                    type: 'string',
+                    maxLength: 500
+                },
+                {
+                    type: 'null'
+                }
+            ],
+            title: 'Avatar Url'
+        },
         is_active: {
-            type: 'boolean',
-            title: 'Is Active',
-            default: true
-        },
-        is_superuser: {
-            type: 'boolean',
-            title: 'Is Superuser',
-            default: false
-        },
-        full_name: {
             anyOf: [
                 {
-                    type: 'string',
-                    maxLength: 255
+                    type: 'boolean'
                 },
                 {
                     type: 'null'
                 }
             ],
-            title: 'Full Name'
+            title: 'Is Active'
         },
-        password: {
+        role_id: {
             anyOf: [
                 {
-                    type: 'string',
-                    maxLength: 128,
-                    minLength: 8
+                    type: 'integer'
                 },
                 {
                     type: 'null'
                 }
             ],
-            title: 'Password'
+            title: 'Role Id'
         }
     },
     type: 'object',
@@ -347,17 +737,29 @@ export const UserUpdateSchema = {
 
 export const UserUpdateMeSchema = {
     properties: {
-        full_name: {
+        first_name: {
             anyOf: [
                 {
                     type: 'string',
-                    maxLength: 255
+                    maxLength: 100
                 },
                 {
                     type: 'null'
                 }
             ],
-            title: 'Full Name'
+            title: 'First Name'
+        },
+        last_name: {
+            anyOf: [
+                {
+                    type: 'string',
+                    maxLength: 100
+                },
+                {
+                    type: 'null'
+                }
+            ],
+            title: 'Last Name'
         },
         email: {
             anyOf: [
@@ -371,6 +773,18 @@ export const UserUpdateMeSchema = {
                 }
             ],
             title: 'Email'
+        },
+        phone: {
+            anyOf: [
+                {
+                    type: 'string',
+                    maxLength: 50
+                },
+                {
+                    type: 'null'
+                }
+            ],
+            title: 'Phone'
         }
     },
     type: 'object',

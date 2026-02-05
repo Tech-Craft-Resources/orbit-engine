@@ -25,9 +25,9 @@ export const Route = createFileRoute("/_layout/settings")({
 
 function UserSettings() {
   const { user: currentUser } = useAuth()
-  const finalTabs = currentUser?.is_superuser
-    ? tabsConfig.slice(0, 3)
-    : tabsConfig
+  // Show all tabs (including danger zone) for all users
+  // In the future, we can restrict based on role_id if needed
+  const finalTabs = tabsConfig
 
   if (!currentUser) {
     return null

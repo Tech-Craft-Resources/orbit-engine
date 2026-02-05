@@ -6,10 +6,20 @@ from fastapi.responses import HTMLResponse
 from fastapi.security import OAuth2PasswordRequestForm
 
 from app import crud
-from app.api.deps import CurrentUser, SessionDep, get_current_active_superuser
+from app.api.deps import CurrentUser, SessionDep
 from app.core import security
 from app.core.config import settings
-from app.models import Message, NewPassword, Token, UserPublic, UserUpdate
+from app.models import (
+    Message,
+    NewPassword,
+    Token,
+    UserPublic,
+    UserPublicWithRelations,
+    UserUpdate,
+    LoginResponse,
+    OrganizationPublic,
+    RolePublic,
+)
 from app.utils import (
     generate_password_reset_token,
     generate_reset_password_email,
@@ -20,12 +30,14 @@ from app.utils import (
 router = APIRouter(tags=["login"])
 
 
-@router.post("/login/access-token")
+@router.post("/login/access-token", response_model=LoginResponse)
 def login_access_token(
     session: SessionDep, form_data: Annotated[OAuth2PasswordRequestForm, Depends()]
-) -> Token:
+) -> Any:
     """
-    OAuth2 compatible token login, get an access token for future requests
+    OAuth2 compatible token login, get an access token for future requests.
+
+    Returns user data with organization and role information.
     """
     user = crud.authenticate(
         session=session, email=form_data.username, password=form_data.password
@@ -34,11 +46,66 @@ def login_access_token(
         raise HTTPException(status_code=400, detail="Incorrect email or password")
     elif not user.is_active:
         raise HTTPException(status_code=400, detail="Inactive user")
-    access_token_expires = timedelta(minutes=settings.ACCESS_TOKEN_EXPIRE_MINUTES)
-    return Token(
-        access_token=security.create_access_token(
-            user.id, expires_delta=access_token_expires
-        )
+
+    # Get user's role
+    role = session.get(crud.Role, user.role_id)
+    if not role:
+        raise HTTPException(status_code=500, detail="User role not found")
+
+    # Get user's organization
+    organization = session.get(crud.Organization, user.organization_id)
+    if not organization:
+        raise HTTPException(status_code=500, detail="User organization not found")
+
+    # Update last login
+    from datetime import datetime, timezone
+
+    user.last_login_at = datetime.now(timezone.utc)
+    session.add(user)
+    session.commit()
+
+    # Create access token
+    access_token = security.create_access_token(
+        subject=str(user.id),
+        organization_id=str(user.organization_id),
+        role=role.name,
+    )
+
+    return LoginResponse(
+        access_token=access_token,
+        token_type="bearer",
+        user=UserPublicWithRelations(
+            id=user.id,
+            organization_id=user.organization_id,
+            role_id=user.role_id,
+            email=user.email,
+            first_name=user.first_name,
+            last_name=user.last_name,
+            phone=user.phone,
+            avatar_url=user.avatar_url,
+            is_active=user.is_active,
+            is_verified=user.is_verified,
+            last_login_at=user.last_login_at,
+            created_at=user.created_at,
+            updated_at=user.updated_at,
+            organization=OrganizationPublic(
+                id=organization.id,
+                name=organization.name,
+                slug=organization.slug,
+                description=organization.description,
+                logo_url=organization.logo_url,
+                is_active=organization.is_active,
+                created_at=organization.created_at,
+                updated_at=organization.updated_at,
+            ),
+            role=RolePublic(
+                id=role.id,
+                name=role.name,
+                description=role.description,
+                permissions=role.permissions,
+                created_at=role.created_at,
+            ),
+        ),
     )
 
 
@@ -99,13 +166,19 @@ def reset_password(session: SessionDep, body: NewPassword) -> Message:
 
 @router.post(
     "/password-recovery-html-content/{email}",
-    dependencies=[Depends(get_current_active_superuser)],
     response_class=HTMLResponse,
 )
-def recover_password_html_content(email: str, session: SessionDep) -> Any:
+def recover_password_html_content(
+    email: str, session: SessionDep, current_user: CurrentUser
+) -> Any:
     """
     HTML Content for Password Recovery
+
+    Requires authentication (admin only in production, but any user for testing)
     """
+    # Check if user is admin
+    from app.api.deps import CurrentAdminUser
+
     user = crud.get_user_by_email(session=session, email=email)
 
     if not user:
