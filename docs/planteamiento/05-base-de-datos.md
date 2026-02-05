@@ -27,7 +27,7 @@
 
 ### 1.2 Principios de Diseño
 
-- **Multi-tenancy:** Aislamiento de datos por empresa mediante `tenant_id`
+- **Multi-tenancy:** Aislamiento de datos por organización mediante `organization_id`
 - **Integridad Referencial:** Foreign keys con cascadas apropiadas
 - **Auditoría:** Campos `created_at`, `updated_at`, `deleted_at` (soft delete)
 - **Normalización:** 3NF (Tercera Forma Normal) con desnormalizaciones estratégicas
@@ -50,9 +50,9 @@
 ### 2.1 Diagrama ER Simplificado
 
 ```
-┌──────────────┐
-│   tenants    │
-└──────┬───────┘
+┌──────────────────┐
+│  organizations   │
+└──────┬───────────┘
        │
        │ 1:N
        │
@@ -92,29 +92,23 @@
 
 ## 3. Diccionario de Datos
 
-### 3.1 Tabla: `tenants`
-**Descripción:** Empresas que usan la plataforma (multi-tenancy)
+### 3.1 Tabla: `organizations`
+**Descripción:** Organizaciones que usan la plataforma (multi-tenancy)
 
 | Columna | Tipo | Restricciones | Descripción |
 |---------|------|---------------|-------------|
 | id | UUID | PK, NOT NULL, DEFAULT uuid_generate_v4() | Identificador único |
-| name | VARCHAR(255) | NOT NULL | Nombre de la empresa |
-| slug | VARCHAR(100) | UNIQUE, NOT NULL | Slug único para URLs |
-| email | VARCHAR(255) | NOT NULL | Email principal |
-| phone | VARCHAR(50) | NULL | Teléfono de contacto |
-| address | TEXT | NULL | Dirección física |
-| tax_id | VARCHAR(50) | NULL | RUC/NIT/Tax ID |
+| name | VARCHAR(255) | NOT NULL | Nombre de la organización |
+| domain | VARCHAR(100) | UNIQUE, NOT NULL | Dominio único (subdominio) |
+| description | TEXT | NULL | Descripción de la organización |
 | logo_url | VARCHAR(500) | NULL | URL del logo en S3 |
-| subscription_status | VARCHAR(50) | NOT NULL, DEFAULT 'trial' | trial, active, suspended, cancelled |
-| subscription_plan | VARCHAR(50) | NULL | Plan contratado |
-| settings | JSONB | DEFAULT '{}' | Configuraciones personalizadas |
+| is_active | BOOLEAN | NOT NULL, DEFAULT TRUE | Organización activa |
 | created_at | TIMESTAMP | NOT NULL, DEFAULT NOW() | Fecha de creación |
 | updated_at | TIMESTAMP | NOT NULL, DEFAULT NOW() | Fecha de actualización |
-| deleted_at | TIMESTAMP | NULL | Soft delete |
 
 **Índices:**
-- `idx_tenants_slug` en `slug`
-- `idx_tenants_deleted_at` en `deleted_at`
+- `idx_organizations_domain` UNIQUE en `domain`
+- `idx_organizations_is_active` en `is_active`
 
 ---
 
@@ -145,9 +139,9 @@ INSERT INTO roles (name, description, permissions) VALUES
 | Columna | Tipo | Restricciones | Descripción |
 |---------|------|---------------|-------------|
 | id | UUID | PK, NOT NULL, DEFAULT uuid_generate_v4() | Identificador único |
-| tenant_id | UUID | FK(tenants.id), NOT NULL | Empresa a la que pertenece |
+| organization_id | UUID | FK(organizations.id), NOT NULL | Organización a la que pertenece |
 | role_id | INTEGER | FK(roles.id), NOT NULL | Rol del usuario |
-| email | VARCHAR(255) | NOT NULL | Email (único por tenant) |
+| email | VARCHAR(255) | NOT NULL | Email (único por organización) |
 | password_hash | VARCHAR(255) | NOT NULL | Hash bcrypt de contraseña |
 | first_name | VARCHAR(100) | NOT NULL | Nombre |
 | last_name | VARCHAR(100) | NOT NULL | Apellido |
@@ -163,13 +157,13 @@ INSERT INTO roles (name, description, permissions) VALUES
 | deleted_at | TIMESTAMP | NULL | Soft delete |
 
 **Índices:**
-- `idx_users_tenant_email` UNIQUE en `(tenant_id, email)` WHERE deleted_at IS NULL
-- `idx_users_tenant_id` en `tenant_id`
+- `idx_users_organization_email` UNIQUE en `(organization_id, email)` WHERE deleted_at IS NULL
+- `idx_users_organization_id` en `organization_id`
 - `idx_users_role_id` en `role_id`
 - `idx_users_is_active` en `is_active`
 
 **Constraints:**
-- `fk_users_tenant` FOREIGN KEY (tenant_id) REFERENCES tenants(id) ON DELETE CASCADE
+- `fk_users_organization` FOREIGN KEY (organization_id) REFERENCES organizations(id) ON DELETE CASCADE
 - `fk_users_role` FOREIGN KEY (role_id) REFERENCES roles(id)
 
 ---
@@ -180,7 +174,7 @@ INSERT INTO roles (name, description, permissions) VALUES
 | Columna | Tipo | Restricciones | Descripción |
 |---------|------|---------------|-------------|
 | id | UUID | PK, NOT NULL, DEFAULT uuid_generate_v4() | Identificador único |
-| tenant_id | UUID | FK(tenants.id), NOT NULL | Empresa a la que pertenece |
+| organization_id | UUID | FK(organizations.id), NOT NULL | Organización a la que pertenece |
 | name | VARCHAR(100) | NOT NULL | Nombre de categoría |
 | description | TEXT | NULL | Descripción |
 | parent_id | UUID | FK(categories.id), NULL | Categoría padre (jerarquía) |
@@ -190,11 +184,11 @@ INSERT INTO roles (name, description, permissions) VALUES
 | deleted_at | TIMESTAMP | NULL | Soft delete |
 
 **Índices:**
-- `idx_categories_tenant_id` en `tenant_id`
+- `idx_categories_organization_id` en `organization_id`
 - `idx_categories_parent_id` en `parent_id`
 
 **Constraints:**
-- `fk_categories_tenant` FOREIGN KEY (tenant_id) REFERENCES tenants(id) ON DELETE CASCADE
+- `fk_categories_organization` FOREIGN KEY (organization_id) REFERENCES organizations(id) ON DELETE CASCADE
 - `fk_categories_parent` FOREIGN KEY (parent_id) REFERENCES categories(id) ON DELETE SET NULL
 
 ---
@@ -205,7 +199,7 @@ INSERT INTO roles (name, description, permissions) VALUES
 | Columna | Tipo | Restricciones | Descripción |
 |---------|------|---------------|-------------|
 | id | UUID | PK, NOT NULL, DEFAULT uuid_generate_v4() | Identificador único |
-| tenant_id | UUID | FK(tenants.id), NOT NULL | Empresa a la que pertenece |
+| organization_id | UUID | FK(organizations.id), NOT NULL | Organización a la que pertenece |
 | category_id | UUID | FK(categories.id), NULL | Categoría del producto |
 | sku | VARCHAR(100) | NOT NULL | Código SKU |
 | name | VARCHAR(255) | NOT NULL | Nombre del producto |
@@ -224,15 +218,15 @@ INSERT INTO roles (name, description, permissions) VALUES
 | deleted_at | TIMESTAMP | NULL | Soft delete |
 
 **Índices:**
-- `idx_products_tenant_sku` UNIQUE en `(tenant_id, sku)` WHERE deleted_at IS NULL
-- `idx_products_tenant_id` en `tenant_id`
+- `idx_products_organization_sku` UNIQUE en `(organization_id, sku)` WHERE deleted_at IS NULL
+- `idx_products_organization_id` en `organization_id`
 - `idx_products_category_id` en `category_id`
 - `idx_products_stock_quantity` en `stock_quantity` (para alertas)
 - `idx_products_is_active` en `is_active`
 - `idx_products_barcode` en `barcode`
 
 **Constraints:**
-- `fk_products_tenant` FOREIGN KEY (tenant_id) REFERENCES tenants(id) ON DELETE CASCADE
+- `fk_products_organization` FOREIGN KEY (organization_id) REFERENCES organizations(id) ON DELETE CASCADE
 - `fk_products_category` FOREIGN KEY (category_id) REFERENCES categories(id) ON DELETE SET NULL
 
 ---
@@ -243,7 +237,7 @@ INSERT INTO roles (name, description, permissions) VALUES
 | Columna | Tipo | Restricciones | Descripción |
 |---------|------|---------------|-------------|
 | id | UUID | PK, NOT NULL, DEFAULT uuid_generate_v4() | Identificador único |
-| tenant_id | UUID | FK(tenants.id), NOT NULL | Empresa a la que pertenece |
+| organization_id | UUID | FK(organizations.id), NOT NULL | Organización a la que pertenece |
 | product_id | UUID | FK(products.id), NOT NULL | Producto afectado |
 | user_id | UUID | FK(users.id), NOT NULL | Usuario responsable |
 | movement_type | VARCHAR(50) | NOT NULL | sale, purchase, adjustment, return |
@@ -256,13 +250,13 @@ INSERT INTO roles (name, description, permissions) VALUES
 | created_at | TIMESTAMP | NOT NULL, DEFAULT NOW() | Fecha del movimiento |
 
 **Índices:**
-- `idx_inventory_movements_tenant_id` en `tenant_id`
+- `idx_inventory_movements_organization_id` en `organization_id`
 - `idx_inventory_movements_product_id` en `product_id`
 - `idx_inventory_movements_created_at` en `created_at`
 - `idx_inventory_movements_reference` en `(reference_type, reference_id)`
 
 **Constraints:**
-- `fk_inventory_movements_tenant` FOREIGN KEY (tenant_id) REFERENCES tenants(id) ON DELETE CASCADE
+- `fk_inventory_movements_organization` FOREIGN KEY (organization_id) REFERENCES organizations(id) ON DELETE CASCADE
 - `fk_inventory_movements_product` FOREIGN KEY (product_id) REFERENCES products(id) ON DELETE CASCADE
 - `fk_inventory_movements_user` FOREIGN KEY (user_id) REFERENCES users(id)
 
@@ -274,7 +268,7 @@ INSERT INTO roles (name, description, permissions) VALUES
 | Columna | Tipo | Restricciones | Descripción |
 |---------|------|---------------|-------------|
 | id | UUID | PK, NOT NULL, DEFAULT uuid_generate_v4() | Identificador único |
-| tenant_id | UUID | FK(tenants.id), NOT NULL | Empresa a la que pertenece |
+| organization_id | UUID | FK(organizations.id), NOT NULL | Organización a la que pertenece |
 | document_type | VARCHAR(50) | NOT NULL | DNI, RUC, Passport, etc. |
 | document_number | VARCHAR(50) | NOT NULL | Número de documento |
 | first_name | VARCHAR(100) | NOT NULL | Nombre |
@@ -294,14 +288,14 @@ INSERT INTO roles (name, description, permissions) VALUES
 | deleted_at | TIMESTAMP | NULL | Soft delete |
 
 **Índices:**
-- `idx_customers_tenant_document` UNIQUE en `(tenant_id, document_number)` WHERE deleted_at IS NULL
-- `idx_customers_tenant_id` en `tenant_id`
+- `idx_customers_organization_document` UNIQUE en `(organization_id, document_number)` WHERE deleted_at IS NULL
+- `idx_customers_organization_id` en `organization_id`
 - `idx_customers_email` en `email`
 - `idx_customers_phone` en `phone`
 - `idx_customers_last_purchase_at` en `last_purchase_at`
 
 **Constraints:**
-- `fk_customers_tenant` FOREIGN KEY (tenant_id) REFERENCES tenants(id) ON DELETE CASCADE
+- `fk_customers_organization` FOREIGN KEY (organization_id) REFERENCES organizations(id) ON DELETE CASCADE
 
 **Nota:** `total_purchases` y `purchases_count` son campos desnormalizados por rendimiento, actualizados mediante triggers.
 
@@ -313,7 +307,7 @@ INSERT INTO roles (name, description, permissions) VALUES
 | Columna | Tipo | Restricciones | Descripción |
 |---------|------|---------------|-------------|
 | id | UUID | PK, NOT NULL, DEFAULT uuid_generate_v4() | Identificador único |
-| tenant_id | UUID | FK(tenants.id), NOT NULL | Empresa a la que pertenece |
+| organization_id | UUID | FK(organizations.id), NOT NULL | Organización a la que pertenece |
 | invoice_number | VARCHAR(50) | NOT NULL | Número de factura |
 | customer_id | UUID | FK(customers.id), NULL | Cliente (opcional) |
 | user_id | UUID | FK(users.id), NOT NULL | Vendedor |
@@ -332,8 +326,8 @@ INSERT INTO roles (name, description, permissions) VALUES
 | updated_at | TIMESTAMP | NOT NULL, DEFAULT NOW() | Fecha de actualización |
 
 **Índices:**
-- `idx_sales_tenant_invoice` UNIQUE en `(tenant_id, invoice_number)`
-- `idx_sales_tenant_id` en `tenant_id`
+- `idx_sales_organization_invoice` UNIQUE en `(organization_id, invoice_number)`
+- `idx_sales_organization_id` en `organization_id`
 - `idx_sales_customer_id` en `customer_id`
 - `idx_sales_user_id` en `user_id`
 - `idx_sales_sale_date` en `sale_date`
@@ -341,7 +335,7 @@ INSERT INTO roles (name, description, permissions) VALUES
 - `idx_sales_payment_method` en `payment_method`
 
 **Constraints:**
-- `fk_sales_tenant` FOREIGN KEY (tenant_id) REFERENCES tenants(id) ON DELETE CASCADE
+- `fk_sales_organization` FOREIGN KEY (organization_id) REFERENCES organizations(id) ON DELETE CASCADE
 - `fk_sales_customer` FOREIGN KEY (customer_id) REFERENCES customers(id) ON DELETE SET NULL
 - `fk_sales_user` FOREIGN KEY (user_id) REFERENCES users(id)
 - `fk_sales_cancelled_by` FOREIGN KEY (cancelled_by) REFERENCES users(id)
@@ -381,7 +375,7 @@ INSERT INTO roles (name, description, permissions) VALUES
 | Columna | Tipo | Restricciones | Descripción |
 |---------|------|---------------|-------------|
 | id | UUID | PK, NOT NULL, DEFAULT uuid_generate_v4() | Identificador único |
-| tenant_id | UUID | FK(tenants.id), NOT NULL | Empresa a la que pertenece |
+| organization_id | UUID | FK(organizations.id), NOT NULL | Organización a la que pertenece |
 | product_id | UUID | FK(products.id), NOT NULL | Producto predicho |
 | prediction_date | DATE | NOT NULL | Fecha para la que se predice |
 | predicted_quantity | DECIMAL(10,2) | NOT NULL | Cantidad predicha |
@@ -392,13 +386,13 @@ INSERT INTO roles (name, description, permissions) VALUES
 | created_at | TIMESTAMP | NOT NULL, DEFAULT NOW() | Fecha de creación |
 
 **Índices:**
-- `idx_predictions_tenant_product_date` UNIQUE en `(tenant_id, product_id, prediction_date)`
-- `idx_predictions_tenant_id` en `tenant_id`
+- `idx_predictions_organization_product_date` UNIQUE en `(organization_id, product_id, prediction_date)`
+- `idx_predictions_organization_id` en `organization_id`
 - `idx_predictions_product_id` en `product_id`
 - `idx_predictions_prediction_date` en `prediction_date`
 
 **Constraints:**
-- `fk_predictions_tenant` FOREIGN KEY (tenant_id) REFERENCES tenants(id) ON DELETE CASCADE
+- `fk_predictions_organization` FOREIGN KEY (organization_id) REFERENCES organizations(id) ON DELETE CASCADE
 - `fk_predictions_product` FOREIGN KEY (product_id) REFERENCES products(id) ON DELETE CASCADE
 
 ---
@@ -409,7 +403,7 @@ INSERT INTO roles (name, description, permissions) VALUES
 | Columna | Tipo | Restricciones | Descripción |
 |---------|------|---------------|-------------|
 | id | UUID | PK, NOT NULL, DEFAULT uuid_generate_v4() | Identificador único |
-| tenant_id | UUID | FK(tenants.id), NOT NULL | Empresa a la que pertenece |
+| organization_id | UUID | FK(organizations.id), NOT NULL | Organización a la que pertenece |
 | user_id | UUID | FK(users.id), NULL | Usuario que realizó la acción |
 | action | VARCHAR(100) | NOT NULL | create, update, delete, login, etc. |
 | entity_type | VARCHAR(100) | NOT NULL | product, sale, user, etc. |
@@ -421,14 +415,14 @@ INSERT INTO roles (name, description, permissions) VALUES
 | created_at | TIMESTAMP | NOT NULL, DEFAULT NOW() | Fecha de la acción |
 
 **Índices:**
-- `idx_audit_logs_tenant_id` en `tenant_id`
+- `idx_audit_logs_organization_id` en `organization_id`
 - `idx_audit_logs_user_id` en `user_id`
 - `idx_audit_logs_action` en `action`
 - `idx_audit_logs_entity` en `(entity_type, entity_id)`
 - `idx_audit_logs_created_at` en `created_at`
 
 **Constraints:**
-- `fk_audit_logs_tenant` FOREIGN KEY (tenant_id) REFERENCES tenants(id) ON DELETE CASCADE
+- `fk_audit_logs_organization` FOREIGN KEY (organization_id) REFERENCES organizations(id) ON DELETE CASCADE
 - `fk_audit_logs_user` FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE SET NULL
 
 **Particionado (Opcional para el futuro):**
@@ -443,36 +437,36 @@ INSERT INTO roles (name, description, permissions) VALUES
 #### Índices Compuestos Críticos
 
 ```sql
--- Usuarios únicos por tenant
-CREATE UNIQUE INDEX idx_users_tenant_email 
-ON users(tenant_id, email) 
+-- Usuarios únicos por organización
+CREATE UNIQUE INDEX idx_users_organization_email 
+ON users(organization_id, email) 
 WHERE deleted_at IS NULL;
 
--- Productos únicos por tenant
-CREATE UNIQUE INDEX idx_products_tenant_sku 
-ON products(tenant_id, sku) 
+-- Productos únicos por organización
+CREATE UNIQUE INDEX idx_products_organization_sku 
+ON products(organization_id, sku) 
 WHERE deleted_at IS NULL;
 
--- Clientes únicos por tenant
-CREATE UNIQUE INDEX idx_customers_tenant_document 
-ON customers(tenant_id, document_number) 
+-- Clientes únicos por organización
+CREATE UNIQUE INDEX idx_customers_organization_document 
+ON customers(organization_id, document_number) 
 WHERE deleted_at IS NULL;
 
--- Factura única por tenant
-CREATE UNIQUE INDEX idx_sales_tenant_invoice 
-ON sales(tenant_id, invoice_number);
+-- Factura única por organización
+CREATE UNIQUE INDEX idx_sales_organization_invoice 
+ON sales(organization_id, invoice_number);
 ```
 
 #### Índices de Rango para Reportes
 
 ```sql
 -- Ventas por fecha (reportes)
-CREATE INDEX idx_sales_tenant_date 
-ON sales(tenant_id, sale_date DESC);
+CREATE INDEX idx_sales_organization_date 
+ON sales(organization_id, sale_date DESC);
 
 -- Movimientos de inventario por fecha
-CREATE INDEX idx_inventory_movements_tenant_date 
-ON inventory_movements(tenant_id, created_at DESC);
+CREATE INDEX idx_inventory_movements_organization_date 
+ON inventory_movements(organization_id, created_at DESC);
 ```
 
 #### Índices para Queries Frecuentes
@@ -480,12 +474,12 @@ ON inventory_movements(tenant_id, created_at DESC);
 ```sql
 -- Productos con stock bajo
 CREATE INDEX idx_products_low_stock 
-ON products(tenant_id, stock_quantity) 
+ON products(organization_id, stock_quantity) 
 WHERE is_active = TRUE AND stock_quantity < stock_min;
 
 -- Clientes activos recientes
 CREATE INDEX idx_customers_recent_active 
-ON customers(tenant_id, last_purchase_at DESC) 
+ON customers(organization_id, last_purchase_at DESC) 
 WHERE is_active = TRUE AND deleted_at IS NULL;
 ```
 
@@ -495,7 +489,7 @@ WHERE is_active = TRUE AND deleted_at IS NULL;
 
 | Tabla | Registros/Año | Tamaño Estimado |
 |-------|---------------|-----------------|
-| tenants | 1 | < 1 KB |
+| organizations | 1 | < 1 KB |
 | users | 5 | < 10 KB |
 | categories | 20 | < 5 KB |
 | products | 500 | ~200 KB |
@@ -525,10 +519,10 @@ WHERE is_active = TRUE AND deleted_at IS NULL;
 
 #### Implementación:
 
-**1. Tenant ID en Todas las Tablas**
+**1. Organization ID en Todas las Tablas**
 ```sql
--- Todas las tablas de datos tienen tenant_id
-ALTER TABLE products ADD COLUMN tenant_id UUID NOT NULL;
+-- Todas las tablas de datos tienen organization_id
+ALTER TABLE products ADD COLUMN organization_id UUID NOT NULL;
 ```
 
 **2. Row-Level Security (RLS) en PostgreSQL**
@@ -537,32 +531,32 @@ ALTER TABLE products ADD COLUMN tenant_id UUID NOT NULL;
 ALTER TABLE products ENABLE ROW LEVEL SECURITY;
 
 -- Policy para SELECT
-CREATE POLICY tenant_isolation_policy ON products
+CREATE POLICY organization_isolation_policy ON products
   FOR ALL
-  USING (tenant_id = current_setting('app.current_tenant')::UUID);
+  USING (organization_id = current_setting('app.current_organization')::UUID);
 ```
 
-**3. Set Tenant en Sesión**
+**3. Set Organization en Sesión**
 ```python
 # En el backend, después de autenticación
-async def set_tenant_context(tenant_id: UUID):
-    await db.execute(f"SET app.current_tenant = '{tenant_id}'")
+async def set_organization_context(organization_id: UUID):
+    await db.execute(f"SET app.current_organization = '{organization_id}'")
 ```
 
 **4. Validación en ORM**
 ```python
 # SQLAlchemy filter automático
-class TenantMixin:
-    tenant_id = Column(UUID, nullable=False)
+class OrganizationMixin:
+    organization_id = Column(UUID, nullable=False)
     
     @declared_attr
     def __table_args__(cls):
         return (
-            Index(f'idx_{cls.__tablename__}_tenant_id', 'tenant_id'),
+            Index(f'idx_{cls.__tablename__}_organization_id', 'organization_id'),
         )
 
 # Uso
-query = db.query(Product).filter(Product.tenant_id == current_tenant_id)
+query = db.query(Product).filter(Product.organization_id == current_organization_id)
 ```
 
 ### 5.2 Seguridad de Datos
@@ -663,7 +657,7 @@ CREATE TABLE audit_logs_2025_01 PARTITION OF audit_logs
 ```sql
 EXPLAIN ANALYZE
 SELECT * FROM sales 
-WHERE tenant_id = '...' 
+WHERE organization_id = '...' 
   AND sale_date BETWEEN '2026-01-01' AND '2026-01-31';
 ```
 
@@ -672,24 +666,24 @@ WHERE tenant_id = '...'
 -- Vista materializada para dashboard
 CREATE MATERIALIZED VIEW mv_sales_summary AS
 SELECT 
-    tenant_id,
+    organization_id,
     DATE(sale_date) as date,
     COUNT(*) as total_sales,
     SUM(total) as total_amount
 FROM sales
 WHERE status = 'completed'
-GROUP BY tenant_id, DATE(sale_date);
+GROUP BY organization_id, DATE(sale_date);
 
 -- Refresh diario
-CREATE INDEX ON mv_sales_summary(tenant_id, date);
+CREATE INDEX ON mv_sales_summary(organization_id, date);
 ```
 
 #### Cacheo con Redis
 ```python
 # Cache de productos frecuentes
 @cache(expire=3600)  # 1 hora
-async def get_products(tenant_id: UUID):
-    return await db.query(Product).filter_by(tenant_id=tenant_id).all()
+async def get_products(organization_id: UUID):
+    return await db.query(Product).filter_by(organization_id=organization_id).all()
 ```
 
 ### 7.3 Monitoreo de Performance
@@ -724,10 +718,10 @@ BEGIN
     
     -- Registrar movimiento de inventario
     INSERT INTO inventory_movements (
-        tenant_id, product_id, user_id, movement_type,
+        organization_id, product_id, user_id, movement_type,
         quantity, previous_stock, new_stock, reference_id, reference_type
     ) VALUES (
-        (SELECT tenant_id FROM products WHERE id = NEW.product_id),
+        (SELECT organization_id FROM products WHERE id = NEW.product_id),
         NEW.product_id,
         (SELECT user_id FROM sales WHERE id = NEW.sale_id),
         'sale',
@@ -807,7 +801,7 @@ SELECT
     SUM(total) as total_amount,
     AVG(total) as average_ticket
 FROM sales
-WHERE tenant_id = :tenant_id
+WHERE organization_id = :organization_id
   AND DATE(sale_date) = CURRENT_DATE
   AND status = 'completed';
 ```
@@ -824,7 +818,7 @@ SELECT
     c.name as category_name
 FROM products p
 LEFT JOIN categories c ON p.category_id = c.id
-WHERE p.tenant_id = :tenant_id
+WHERE p.organization_id = :organization_id
   AND p.is_active = TRUE
   AND p.stock_quantity <= p.stock_min
   AND p.deleted_at IS NULL
@@ -843,7 +837,7 @@ SELECT
 FROM products p
 INNER JOIN sale_items si ON p.id = si.product_id
 INNER JOIN sales s ON si.sale_id = s.id
-WHERE s.tenant_id = :tenant_id
+WHERE s.organization_id = :organization_id
   AND s.sale_date >= :start_date
   AND s.sale_date < :end_date
   AND s.status = 'completed'
@@ -895,14 +889,13 @@ INSERT INTO roles (name, description, permissions) VALUES
   ('seller', 'Vendedor', '["sales.*", "inventory.read", "customers.*"]'),
   ('viewer', 'Solo lectura', '["reports.read", "dashboard.read"]');
 
--- Tenant de demostración (opcional)
-INSERT INTO tenants (id, name, slug, email, subscription_status)
+-- Organization de demostración (opcional)
+INSERT INTO organizations (id, name, domain, is_active)
 VALUES (
-  'demo-tenant-uuid',
+  'demo-organization-uuid',
   'Empresa Demo',
   'demo',
-  'demo@orbitengine.com',
-  'trial'
+  true
 );
 ```
 

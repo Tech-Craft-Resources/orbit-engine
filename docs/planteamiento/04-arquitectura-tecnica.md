@@ -12,14 +12,16 @@
 1. [Visión General de la Arquitectura](#1-visión-general-de-la-arquitectura)
 2. [Arquitectura de Alto Nivel](#2-arquitectura-de-alto-nivel)
 3. [Arquitectura del Backend](#3-arquitectura-del-backend)
-4. [Arquitectura del Frontend](#4-arquitectura-del-frontend)
-5. [Modelo de Datos y Persistencia](#5-modelo-de-datos-y-persistencia)
-6. [Seguridad y Autenticación](#6-seguridad-y-autenticación)
-7. [Sistema de IA/ML](#7-sistema-de-iaml)
-8. [Estrategia de Despliegue](#8-estrategia-de-despliegue)
-9. [Flujos Principales](#9-flujos-principales)
-10. [Patrones y Principios Arquitectónicos](#10-patrones-y-principios-arquitectónicos)
-11. [Consideraciones de Escalabilidad](#11-consideraciones-de-escalabilidad)
+4. [Arquitectura Multi-Tenant con Subdominios](#4-arquitectura-multi-tenant-con-subdominios)
+5. [Arquitectura del Frontend](#5-arquitectura-del-frontend)
+6. [Arquitectura del Frontend (Detalles Técnicos)](#6-arquitectura-del-frontend-detalles-técnicos)
+7. [Modelo de Datos y Persistencia](#7-modelo-de-datos-y-persistencia)
+8. [Seguridad y Autenticación](#8-seguridad-y-autenticación)
+9. [Sistema de IA/ML](#9-sistema-de-iaml)
+10. [Estrategia de Despliegue](#10-estrategia-de-despliegue)
+11. [Flujos Principales](#11-flujos-principales)
+12. [Patrones y Principios Arquitectónicos](#12-patrones-y-principios-arquitectónicos)
+13. [Consideraciones de Escalabilidad](#13-consideraciones-de-escalabilidad)
 
 ---
 
@@ -27,9 +29,10 @@
 
 ### 1.1 Tipo de Arquitectura
 
-**Arquitectura de N-Capas con Servicios REST**
+**Arquitectura de N-Capas con Servicios REST y Multi-Tenant por Subdominios**
 
-- **Presentación:** React SPA
+- **Presentación Principal:** Astro (Landing, Registro, Pricing) en orbitengine.com
+- **Aplicación Multi-Tenant:** React SPA en *.orbitengine.com (subdominio por organización)
 - **Lógica de Negocio:** FastAPI Backend
 - **Datos:** PostgreSQL + Redis
 - **IA/ML:** Módulo de Python independiente
@@ -39,7 +42,7 @@
 1. **Separación de Responsabilidades:** Frontend, Backend, Base de Datos, ML separados
 2. **Stateless:** Backend sin estado (escalable horizontalmente)
 3. **API First:** Contrato bien definido entre frontend y backend
-4. **Multi-tenancy:** Aislamiento de datos por empresa
+4. **Multi-tenancy con Subdominios:** Cada organización tiene su propio subdominio (*.orbitengine.com)
 5. **Seguridad por Diseño:** Autenticación y autorización en todas las capas
 6. **Cloud Native:** Diseñado para ejecutarse en AWS
 
@@ -48,6 +51,8 @@
 | Decisión | Alternativa | Justificación |
 |----------|-------------|---------------|
 | SPA (React) | Server-side rendering | Mejor UX, interactividad |
+| Astro para landing | Next.js, Gatsby | Rendimiento superior, SEO optimizado |
+| Multi-tenant por subdominio | Tenant ID en DB | Mejor aislamiento, escalabilidad, experiencia de usuario |
 | REST API | GraphQL | Simplicidad, menos curva de aprendizaje |
 | PostgreSQL | NoSQL (MongoDB) | Datos relacionales, ACID |
 | JWT | Session-based | Stateless, escalable |
@@ -67,33 +72,45 @@
                                    ▼
                     ┌──────────────────────────┐
                     │   Route 53 (DNS)         │
+                    │   orbitengine.com        │
+                    │   *.orbitengine.com      │
                     └──────────┬───────────────┘
                                │
-                               ▼
-                    ┌──────────────────────────┐
-                    │  CloudFront (CDN)        │
-                    └──────┬──────────┬────────┘
-                           │          │
-                  Static   │          │ API
-                  Assets   │          │
-                           ▼          ▼
-                    ┌──────────┐  ┌──────────────────┐
-                    │ S3       │  │ ALB              │
-                    │ (React)  │  │ (Load Balancer)  │
-                    └──────────┘  └────────┬─────────┘
-                                           │
-                    ┌──────────────────────┴──────────────────┐
-                    │                                          │
-                    ▼                                          ▼
-         ┌────────────────────┐                   ┌────────────────────┐
-         │  Backend App       │                   │  Celery Worker     │
-         │  (FastAPI)         │                   │  (Tasks + ML)      │
-         │  ECS/EC2           │                   │  ECS/EC2           │
-         └────────┬───────────┘                   └──────────┬─────────┘
-                  │                                          │
-    ┌─────────────┼────────────────────┬────────────────────┤
-    │             │                    │                    │
-    ▼             ▼                    ▼                    ▼
+              ┌────────────────┴─────────────────┐
+              │                                   │
+              ▼                                   ▼
+   ┌──────────────────────┐         ┌──────────────────────┐
+   │  CloudFront          │         │  CloudFront          │
+   │  (Landing/Main Site) │         │  (App Wildcard)      │
+   │  orbitengine.com     │         │  *.orbitengine.com   │
+   └──────────┬───────────┘         └──────────┬───────────┘
+              │                                 │
+              ▼                                 ▼
+   ┌──────────────────┐             ┌──────────────────────┐
+   │  S3              │             │  S3                  │
+   │  (Astro Static)  │             │  (React SPA)         │
+   │  Landing Page    │             │  Multi-tenant App    │
+   │  Pricing         │             └──────────┬───────────┘
+   │  Public Pages    │                        │
+   └──────────────────┘                        │ API calls
+                                                ▼
+                                     ┌──────────────────┐
+                                     │ ALB              │
+                                     │ (Load Balancer)  │
+                                     └────────┬─────────┘
+                                              │
+                     ┌────────────────────────┴──────────────────┐
+                     │                                            │
+                     ▼                                            ▼
+          ┌────────────────────┐                   ┌────────────────────┐
+          │  Backend App       │                   │  Celery Worker     │
+          │  (FastAPI)         │                   │  (Tasks + ML)      │
+          │  ECS/EC2           │                   │  ECS/EC2           │
+          └────────┬───────────┘                   └──────────┬─────────┘
+                   │                                          │
+     ┌─────────────┼────────────────────┬────────────────────┤
+     │             │                    │                    │
+     ▼             ▼                    ▼                    ▼
 ┌────────┐  ┌──────────┐         ┌─────────┐         ┌──────────┐
 │  RDS   │  │ Redis    │         │   S3    │         │CloudWatch│
 │(Postgres)│ │(Cache)  │         │(Storage)│         │(Logging) │
@@ -102,28 +119,55 @@
 
 ### 2.2 Flujo de Datos Simplificado
 
+#### Flujo de Usuario Nuevo (Landing Page)
 ```
-Usuario → CloudFront → React App (S3)
+Usuario → orbitengine.com
           ↓
-          Usuario interactúa con UI
+CloudFront → Astro Site (S3)
           ↓
-          React hace llamada API (Axios)
+Usuario navega por landing page
+Visualiza pricing, características
           ↓
-          ALB distribuye request
+Click "Registrarse"
           ↓
-          FastAPI Backend recibe request
+Form de registro → POST /api/v1/auth/register (Backend)
           ↓
-          Valida JWT y permisos
+Backend crea organización y usuario
+Genera subdominio único (ej: empresa123.orbitengine.com)
           ↓
-          Ejecuta lógica de negocio
+Redirect a {subdominio}.orbitengine.com
+```
+
+#### Flujo de Usuario Existente (Aplicación)
+```
+Usuario → {organization}.orbitengine.com
           ↓
-          Consulta/Modifica PostgreSQL
+CloudFront (wildcard) → React App (S3)
           ↓
-          (Opcional) Consulta cache Redis
+Usuario interactúa con UI
           ↓
-          Retorna respuesta JSON
+React hace llamada API (Axios)
+Header: X-Tenant-Subdomain enviado automáticamente
           ↓
-          React actualiza UI
+ALB distribuye request
+          ↓
+FastAPI Backend recibe request
+          ↓
+Middleware extrae subdomain del header
+Identifica organization_id
+          ↓
+Valida JWT y permisos
+          ↓
+Ejecuta lógica de negocio
+          ↓
+Consulta/Modifica PostgreSQL
+(Todas las queries filtradas por organization_id)
+          ↓
+(Opcional) Consulta cache Redis
+          ↓
+Retorna respuesta JSON
+          ↓
+React actualiza UI
 ```
 
 ---
@@ -181,7 +225,7 @@ backend/
 │   │
 │   ├── models/                 # SQLAlchemy Models
 │   │   ├── __init__.py
-│   │   ├── tenant.py
+│   │   ├── organization.py
 │   │   ├── user.py
 │   │   ├── product.py
 │   │   ├── category.py
@@ -235,7 +279,7 @@ backend/
 │   │
 │   ├── middleware/             # Middlewares
 │   │   ├── __init__.py
-│   │   ├── tenant_middleware.py
+│   │   ├── organization_middleware.py
 │   │   └── logging_middleware.py
 │   │
 │   ├── tests/                  # Tests
@@ -275,7 +319,7 @@ async def create_product(
     return await product_service.create_product(
         db, 
         product, 
-        current_user.tenant_id
+        current_user.organization_id
     )
 
 # Service Layer
@@ -284,12 +328,12 @@ class ProductService:
         self, 
         db: Session, 
         product_data: ProductCreate,
-        tenant_id: UUID
+        organization_id: UUID
     ) -> Product:
         # 5. Lógica de negocio
         # Validar SKU único
         existing = db.query(Product).filter_by(
-            tenant_id=tenant_id,
+            organization_id=organization_id,
             sku=product_data.sku
         ).first()
         
@@ -299,7 +343,7 @@ class ProductService:
         # 6. Crear modelo
         product = Product(
             **product_data.dict(),
-            tenant_id=tenant_id
+            organization_id=organization_id
         )
         
         # 7. Guardar en BD
@@ -369,9 +413,313 @@ def require_role(required_role: str):
 
 ---
 
-## 4. Arquitectura del Frontend
+## 4. Arquitectura Multi-Tenant con Subdominios
 
-### 4.1 Estructura de Capas
+### 4.1 Estrategia de Multi-Tenancy
+
+**Enfoque:** Subdominios dedicados por organización
+
+Cada organización registrada obtiene su propio subdominio único:
+- `empresa1.orbitengine.com`
+- `tienda-abc.orbitengine.com`
+- `pyme123.orbitengine.com`
+
+**Ventajas:**
+- ✅ Mejor aislamiento percibido por el usuario
+- ✅ Branding personalizado por organización
+- ✅ Facilita futuras migraciones a infraestructura dedicada
+- ✅ URLs más limpias y memorables
+- ✅ Mejor SEO por organización
+- ✅ Facilita implementación de CORS y SSL wildcard
+
+### 4.2 Identificación del Tenant
+
+```typescript
+// Frontend: Axios interceptor detecta subdomain automáticamente
+apiClient.interceptors.request.use((config) => {
+  const subdomain = window.location.hostname.split('.')[0];
+  
+  // Solo si no estamos en el dominio principal
+  if (subdomain !== 'orbitengine' && subdomain !== 'www') {
+    config.headers['X-Tenant-Subdomain'] = subdomain;
+  }
+  
+  return config;
+});
+```
+
+```python
+# Backend: Middleware procesa subdomain
+@app.middleware("http")
+async def tenant_identification_middleware(request: Request, call_next):
+    """Identify tenant from subdomain header"""
+    
+    # Skip for public endpoints
+    if request.url.path.startswith(("/auth/register", "/health")):
+        return await call_next(request)
+    
+    subdomain = request.headers.get("X-Tenant-Subdomain")
+    
+    if not subdomain:
+        return JSONResponse(
+            {"detail": "Tenant subdomain required"}, 
+            status_code=400
+        )
+    
+    # Lookup organization by subdomain
+    organization = db.query(Organization).filter(
+        Organization.subdomain == subdomain,
+        Organization.is_active == True
+    ).first()
+    
+    if not organization:
+        return JSONResponse(
+            {"detail": "Organization not found"}, 
+            status_code=404
+        )
+    
+    # Set tenant context for request
+    request.state.organization_id = organization.id
+    request.state.organization = organization
+    
+    response = await call_next(request)
+    return response
+```
+
+### 4.3 DNS y Routing
+
+**Route 53 Configuration:**
+```
+# Registro wildcard para todos los subdominios de tenant
+*.orbitengine.com → CNAME → CloudFront Distribution (App)
+
+# Registro para dominio principal
+orbitengine.com → CNAME → CloudFront Distribution (Landing)
+www.orbitengine.com → CNAME → CloudFront Distribution (Landing)
+```
+
+**CloudFront Distributions:**
+1. **Landing Site (orbitengine.com):**
+   - Origin: S3 bucket con Astro static site
+   - Rutas: `/`, `/pricing`, `/features`, `/about`, `/register`
+
+2. **App (*.orbitengine.com):**
+   - Origin: S3 bucket con React SPA
+   - Comportamiento: SPA routing (todas las rutas → index.html)
+
+### 4.4 Proceso de Registro y Asignación de Subdomain
+
+```python
+# Flujo de registro desde landing page
+@router.post("/auth/register", response_model=RegisterResponse)
+async def register_organization(
+    registration: OrganizationRegistration,
+    db: Session = Depends(get_db)
+):
+    """
+    Registra nueva organización y asigna subdomain único
+    """
+    
+    # 1. Generar subdomain único basado en nombre de empresa
+    base_subdomain = slugify(registration.company_name)
+    subdomain = base_subdomain
+    counter = 1
+    
+    # Verificar disponibilidad
+    while db.query(Organization).filter(
+        Organization.subdomain == subdomain
+    ).first():
+        subdomain = f"{base_subdomain}{counter}"
+        counter += 1
+    
+    # 2. Crear organización
+    organization = Organization(
+        name=registration.company_name,
+        subdomain=subdomain,
+        is_active=True
+    )
+    db.add(organization)
+    
+    # 3. Crear usuario admin
+    hashed_password = get_password_hash(registration.password)
+    admin_user = User(
+        email=registration.email,
+        hashed_password=hashed_password,
+        full_name=registration.full_name,
+        organization_id=organization.id,
+        role="admin"
+    )
+    db.add(admin_user)
+    
+    db.commit()
+    db.refresh(organization)
+    
+    # 4. Generar JWT token
+    token = create_access_token(admin_user.id)
+    
+    # 5. Return con subdomain asignado
+    return RegisterResponse(
+        organization_id=organization.id,
+        subdomain=subdomain,
+        app_url=f"https://{subdomain}.orbitengine.com",
+        token=token,
+        user=admin_user
+    )
+
+# Frontend Astro: Redirect después de registro exitoso
+async function handleRegister(formData) {
+  const response = await fetch('/api/v1/auth/register', {
+    method: 'POST',
+    body: JSON.stringify(formData)
+  });
+  
+  const data = await response.json();
+  
+  // Guardar token en localStorage
+  localStorage.setItem('token', data.token);
+  
+  // Redirect al subdomain de la organización
+  window.location.href = data.app_url;
+}
+```
+
+### 4.5 Aislamiento de Datos
+
+Todas las queries en el backend automáticamente filtran por `organization_id`:
+
+```python
+# Ejemplo de query con tenant isolation
+@router.get("/products", response_model=List[ProductRead])
+async def list_products(
+    request: Request,
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user)
+):
+    # organization_id viene del middleware (request.state)
+    organization_id = request.state.organization_id
+    
+    # Query automáticamente filtrada
+    products = db.query(Product).filter(
+        Product.organization_id == organization_id
+    ).all()
+    
+    return products
+```
+
+---
+
+## 5. Arquitectura del Frontend
+
+### 5.1 Dos Aplicaciones Frontend Separadas
+
+El proyecto cuenta con dos aplicaciones frontend independientes:
+
+#### **A) Landing Site (Astro) - orbitengine.com**
+
+**Propósito:** Marketing, captación de clientes, registro inicial
+
+**Tecnología:** Astro 4.x
+- Static Site Generation (SSG)
+- Componentes островной архитектуры
+- Cero JavaScript por defecto (hidratación selectiva)
+- SEO optimizado
+
+**Rutas Principales:**
+- `/` - Landing page principal
+- `/features` - Características del producto
+- `/pricing` - Planes y precios
+- `/about` - Sobre nosotros
+- `/register` - Formulario de registro de organización
+- `/login` - Redirect a app con subdomain
+
+**Características:**
+- ⚡ Extremadamente rápido (todo estático)
+- 🎨 Animaciones y marketing content
+- 📱 Responsive design
+- 🔍 SEO optimizado
+- 📊 Integración con analytics
+- 🎯 Lead capture forms
+
+**Estructura de Directorios:**
+```
+landing/                      # Nueva carpeta para Astro site
+├── public/
+│   ├── images/
+│   ├── fonts/
+│   └── favicon.ico
+├── src/
+│   ├── components/
+│   │   ├── Header.astro
+│   │   ├── Footer.astro
+│   │   ├── Hero.astro
+│   │   ├── Features.astro
+│   │   ├── Pricing.astro
+│   │   └── CallToAction.astro
+│   ├── layouts/
+│   │   └── MainLayout.astro
+│   ├── pages/
+│   │   ├── index.astro
+│   │   ├── features.astro
+│   │   ├── pricing.astro
+│   │   ├── about.astro
+│   │   └── register.astro
+│   ├── styles/
+│   │   └── global.css
+│   └── utils/
+│       └── api.ts
+├── astro.config.mjs
+├── package.json
+├── tailwind.config.js
+└── tsconfig.json
+```
+
+#### **B) Multi-Tenant App (React) - *.orbitengine.com**
+
+**Propósito:** Aplicación principal para gestión de negocios
+
+**Tecnología:** React + TypeScript + TanStack Router
+- Single Page Application (SPA)
+- Client-side routing
+- State management con Zustand + React Query
+- UI components con shadcn/ui
+
+**Características:**
+- 🔐 Autenticación requerida
+- 🏢 Multi-tenant por subdomain
+- 📊 Dashboard interactivo
+- ⚙️ CRUD completo de recursos
+- 📈 Reportes y analytics
+- 🤖 Predicciones con IA
+
+(La estructura de directorios del React App se mantiene como se documentó previamente)
+
+### 5.2 Interacción Entre Aplicaciones
+
+```
+Landing (Astro)                    App (React)
+orbitengine.com                    *.orbitengine.com
+       │                                  │
+       │ Usuario se registra             │
+       ├──────────────────────────────────►
+       │ POST /api/auth/register          │
+       │ Response: { subdomain, token }   │
+       │                                  │
+       │ Redirect a {subdomain}.app       │
+       ├──────────────────────────────────►
+       │                                  │
+       │                          Usuario autenticado
+       │                          Comienza a usar app
+```
+
+---
+
+## 6. Arquitectura del Frontend (Detalles Técnicos)
+
+### 6.1 Arquitectura de la Aplicación React (*.orbitengine.com)
+
+### 6.1 Arquitectura de la Aplicación React (*.orbitengine.com)
+
+### 6.1.1 Estructura de Capas
 
 ```
 ┌─────────────────────────────────────────────────────────┐
@@ -393,7 +741,7 @@ def require_role(required_role: str):
                   Backend API
 ```
 
-### 4.2 Estructura de Directorios Detallada
+### 6.2 Estructura de Directorios Detallada
 
 ```
 frontend/
@@ -526,7 +874,7 @@ frontend/
 └── README.md
 ```
 
-### 4.3 Flujo de Estado
+### 6.3 Flujo de Estado
 
 ```typescript
 // 1. Usuario interactúa con UI
@@ -567,7 +915,7 @@ apiClient.interceptors.request.use((config) => {
 });
 ```
 
-### 4.4 Gestión de Autenticación
+### 6.4 Gestión de Autenticación
 
 ```typescript
 // stores/authStore.ts
@@ -613,9 +961,9 @@ export const useAuthStore = create<AuthState>((set, get) => ({
 
 ---
 
-## 5. Modelo de Datos y Persistencia
+## 7. Modelo de Datos y Persistencia
 
-### 5.1 Estrategia de Persistencia
+### 7.1 Estrategia de Persistencia
 
 ```
 ┌───────────────────────────────────────────────────────┐
@@ -648,7 +996,7 @@ export const useAuthStore = create<AuthState>((set, get) => ({
 - Reportes generados
 - Backups
 
-### 5.2 Patrón Repository (Opcional)
+### 7.2 Patrón Repository (Opcional)
 
 ```python
 # repositories/product_repository.py
@@ -656,20 +1004,20 @@ class ProductRepository:
     def __init__(self, db: Session):
         self.db = db
     
-    def get_by_id(self, product_id: UUID, tenant_id: UUID) -> Product:
+    def get_by_id(self, product_id: UUID, organization_id: UUID) -> Product:
         return self.db.query(Product).filter(
             Product.id == product_id,
-            Product.tenant_id == tenant_id
+            Product.organization_id == organization_id
         ).first()
     
     def get_all(
         self, 
-        tenant_id: UUID, 
+        organization_id: UUID, 
         skip: int = 0, 
         limit: int = 100
     ) -> List[Product]:
         return self.db.query(Product).filter(
-            Product.tenant_id == tenant_id
+            Product.organization_id == organization_id
         ).offset(skip).limit(limit).all()
     
     def create(self, product: Product) -> Product:
@@ -681,9 +1029,9 @@ class ProductRepository:
 
 ---
 
-## 6. Seguridad y Autenticación
+## 8. Seguridad y Autenticación
 
-### 6.1 Flujo de Autenticación JWT
+### 8.1 Flujo de Autenticación JWT
 
 ```
 ┌──────────┐                                ┌──────────┐
@@ -718,35 +1066,67 @@ class ProductRepository:
      │                                           │
 ```
 
-### 6.2 Middleware de Seguridad
+### 8.2 Middleware de Seguridad
 
 ```python
-# middleware/tenant_middleware.py
+# middleware/tenant_identification_middleware.py
 
 @app.middleware("http")
-async def tenant_isolation_middleware(request: Request, call_next):
-    """Ensure all requests are scoped to tenant"""
+async def tenant_identification_middleware(request: Request, call_next):
+    """
+    Middleware para identificar tenant desde subdomain y asegurar aislamiento.
+    Integra tanto identificación del tenant como verificación de autenticación.
+    """
     
-    # Skip for auth endpoints
-    if request.url.path.startswith("/auth"):
+    # Skip para endpoints públicos
+    if request.url.path.startswith(("/auth/register", "/auth/login", "/health", "/docs")):
         return await call_next(request)
     
-    # Get current user from token
+    # 1. Extraer subdomain del header
+    subdomain = request.headers.get("X-Tenant-Subdomain")
+    
+    if not subdomain:
+        return JSONResponse(
+            {"detail": "Tenant subdomain required"}, 
+            status_code=400
+        )
+    
+    # 2. Buscar organización por subdomain
+    organization = db.query(Organization).filter(
+        Organization.subdomain == subdomain,
+        Organization.is_active == True
+    ).first()
+    
+    if not organization:
+        return JSONResponse(
+            {"detail": "Organization not found"}, 
+            status_code=404
+        )
+    
+    # 3. Verificar autenticación
     token = request.headers.get("Authorization", "").replace("Bearer ", "")
     user = await get_user_from_token(token)
     
     if not user:
         return JSONResponse({"detail": "Unauthorized"}, status_code=401)
     
-    # Set tenant context
-    request.state.tenant_id = user.tenant_id
+    # 4. Verificar que el usuario pertenezca a la organización del subdomain
+    if user.organization_id != organization.id:
+        return JSONResponse(
+            {"detail": "User does not belong to this organization"}, 
+            status_code=403
+        )
+    
+    # 5. Setear contexto de la organización en el request
+    request.state.organization_id = organization.id
+    request.state.organization = organization
     request.state.user = user
     
     response = await call_next(request)
     return response
 ```
 
-### 6.3 Control de Acceso Basado en Roles (RBAC)
+### 8.3 Control de Acceso Basado en Roles (RBAC)
 
 ```python
 # Decorador para verificar permisos
@@ -778,9 +1158,9 @@ async def delete_product(
 
 ---
 
-## 7. Sistema de IA/ML
+## 9. Sistema de IA/ML
 
-### 7.1 Arquitectura del Módulo de IA
+### 9.1 Arquitectura del Módulo de IA
 
 ```
 ┌─────────────────────────────────────────────────────┐
@@ -813,7 +1193,7 @@ async def delete_product(
         └────────────────────────┘
 ```
 
-### 7.2 Pipeline de Entrenamiento
+### 9.2 Pipeline de Entrenamiento
 
 ```python
 # ml/trainer.py
@@ -822,12 +1202,12 @@ class DemandForecastTrainer:
     def __init__(self):
         self.model = None
     
-    async def train(self, tenant_id: UUID, product_id: UUID):
+    async def train(self, organization_id: UUID, product_id: UUID):
         """Train demand forecast model for a product"""
         
         # 1. Fetch historical data
         sales_data = await self._fetch_sales_history(
-            tenant_id, 
+            organization_id, 
             product_id
         )
         
@@ -852,7 +1232,7 @@ class DemandForecastTrainer:
         # 6. Save model
         model_path = self._save_model(
             model, 
-            tenant_id, 
+            organization_id, 
             product_id
         )
         
@@ -869,7 +1249,7 @@ class DemandForecastTrainer:
         return df[["ds", "y"]]
 ```
 
-### 7.3 Pipeline de Predicción
+### 9.3 Pipeline de Predicción
 
 ```python
 # ml/predictor.py
@@ -880,20 +1260,20 @@ class DemandPredictor:
     
     async def predict(
         self, 
-        tenant_id: UUID, 
+        organization_id: UUID, 
         product_id: UUID,
         periods: int = 30
     ):
         """Generate demand forecast"""
         
         # 1. Load model (with caching)
-        model = self._load_model(tenant_id, product_id)
+        model = self._load_model(organization_id, product_id)
         
         if not model:
             # Train if not exists
             trainer = DemandForecastTrainer()
-            await trainer.train(tenant_id, product_id)
-            model = self._load_model(tenant_id, product_id)
+            await trainer.train(organization_id, product_id)
+            model = self._load_model(organization_id, product_id)
         
         # 2. Generate future dates
         future = model.make_future_dataframe(periods=periods)
@@ -922,7 +1302,7 @@ class DemandPredictor:
         return results
 ```
 
-### 7.4 Tarea Celery para Predicciones Periódicas
+### 9.4 Tarea Celery para Predicciones Periódicas
 
 ```python
 # tasks/ml_tasks.py
@@ -934,22 +1314,22 @@ def generate_daily_predictions():
     Runs daily at midnight
     """
     
-    # Get all tenants
-    tenants = db.query(Tenant).filter(
-        Tenant.subscription_status == 'active'
+    # Get all organizations
+    organizations = db.query(Organization).filter(
+        Organization.is_active == True
     ).all()
     
-    for tenant in tenants:
+    for organization in organizations:
         # Get products with sufficient history
         products = db.query(Product).filter(
-            Product.tenant_id == tenant.id,
+            Product.organization_id == organization.id,
             Product.is_active == True
         ).all()
         
         for product in products:
             # Check if has enough data (30+ days)
             sales_count = db.query(func.count(Sale.id)).filter(
-                Sale.tenant_id == tenant.id,
+                Sale.organization_id == organization.id,
                 # Join with sale_items for product
             ).scalar()
             
@@ -957,7 +1337,7 @@ def generate_daily_predictions():
                 # Generate predictions
                 predictor = DemandPredictor()
                 predictions = await predictor.predict(
-                    tenant.id,
+                    organization.id,
                     product.id,
                     periods=7  # Next 7 days
                 )
@@ -965,7 +1345,7 @@ def generate_daily_predictions():
                 # Save to database
                 for pred in predictions:
                     db.add(Prediction(
-                        tenant_id=tenant.id,
+                        organization_id=organization.id,
                         product_id=product.id,
                         **pred
                     ))
@@ -977,9 +1357,9 @@ def generate_daily_predictions():
 
 ---
 
-## 8. Estrategia de Despliegue
+## 10. Estrategia de Despliegue
 
-### 8.1 Ambientes
+### 10.1 Ambientes
 
 ```
 ┌─────────────────────────────────────────────────────┐
@@ -1003,7 +1383,7 @@ def generate_daily_predictions():
 └─────────────────────────────────────────────────────┘
 ```
 
-### 8.2 Docker Compose para Desarrollo Local
+### 10.2 Docker Compose para Desarrollo Local
 
 ```yaml
 # docker-compose.yml
@@ -1061,6 +1441,19 @@ services:
     depends_on:
       - redis
 
+  # Landing site (Astro)
+  landing:
+    build: ./landing
+    command: npm run dev -- --host
+    volumes:
+      - ./landing:/app
+      - /app/node_modules
+    ports:
+      - "4321:4321"  # Puerto por defecto de Astro
+    environment:
+      - VITE_API_URL=http://localhost:8000
+
+  # Multi-tenant app (React)
   frontend:
     build: ./frontend
     command: npm run dev -- --host
@@ -1068,7 +1461,7 @@ services:
       - ./frontend:/app
       - /app/node_modules
     ports:
-      - "5173:5173"
+      - "5173:5173"  # Puerto de Vite
     environment:
       - VITE_API_URL=http://localhost:8000
 
@@ -1076,7 +1469,13 @@ volumes:
   postgres_data:
 ```
 
-### 8.3 Dockerfile Backend
+**Notas para desarrollo local:**
+- Landing site: `http://localhost:4321`
+- App (simular subdomain): `http://localhost:5173?tenant=demo`
+- Backend API: `http://localhost:8000`
+- API Docs: `http://localhost:8000/docs`
+
+### 10.3 Dockerfile Backend
 
 ```dockerfile
 # backend/Dockerfile
@@ -1099,7 +1498,7 @@ EXPOSE 8000
 CMD ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8000"]
 ```
 
-### 8.4 CI/CD Pipeline (GitHub Actions)
+### 10.4 CI/CD Pipeline (GitHub Actions)
 
 ```yaml
 # .github/workflows/deploy.yml
@@ -1137,11 +1536,17 @@ jobs:
         with:
           node-version: 18
       
-      - name: Test frontend
+      - name: Test frontend app
         run: |
           cd frontend
           npm ci
           npm run test
+      
+      - name: Test landing site
+        run: |
+          cd landing
+          npm ci
+          npm run build
 
   deploy:
     needs: test
@@ -1164,24 +1569,40 @@ jobs:
           docker tag orbitengine-backend:latest $ECR_REGISTRY/orbitengine-backend:latest
           docker push $ECR_REGISTRY/orbitengine-backend:latest
       
-      - name: Deploy frontend to S3
+      - name: Deploy landing site to S3
+        run: |
+          cd landing
+          npm ci
+          npm run build
+          aws s3 sync dist/ s3://orbitengine-landing --delete
+          aws cloudfront create-invalidation --distribution-id $CLOUDFRONT_LANDING_ID --paths "/*"
+      
+      - name: Deploy frontend app to S3
         run: |
           cd frontend
           npm ci
           npm run build
-          aws s3 sync dist/ s3://orbitengine-frontend --delete
-          aws cloudfront create-invalidation --distribution-id $CLOUDFRONT_ID --paths "/*"
+          aws s3 sync dist/ s3://orbitengine-app --delete
+          aws cloudfront create-invalidation --distribution-id $CLOUDFRONT_APP_ID --paths "/*"
       
       - name: Update ECS service
         run: |
           aws ecs update-service --cluster orbitengine-cluster --service backend --force-new-deployment
 ```
 
+**Configuración de S3 Buckets:**
+- `orbitengine-landing`: Para landing site (orbitengine.com)
+- `orbitengine-app`: Para multi-tenant app (*.orbitengine.com)
+
+**CloudFront Distributions:**
+- Distribution 1: orbitengine.com → S3 landing bucket
+- Distribution 2: *.orbitengine.com → S3 app bucket (wildcard certificate required)
+
 ---
 
-## 9. Flujos Principales
+## 11. Flujos Principales
 
-### 9.1 Flujo: Crear una Venta
+### 11.1 Flujo: Crear una Venta
 
 ```
 [Usuario] → [Frontend: SaleForm]
@@ -1222,14 +1643,14 @@ jobs:
     Navegar a detalle de venta
 ```
 
-### 9.2 Flujo: Generar Predicción de Demanda
+### 11.2 Flujo: Generar Predicción de Demanda
 
 ```
 [Celery Beat] → Trigger diario a medianoche
               ↓
 [Task: generate_daily_predictions]
               ↓
-    Para cada tenant activo:
+    Para cada organización activa:
       Para cada producto con histórico:
               ↓
 [DemandPredictor.predict()]
@@ -1253,9 +1674,9 @@ jobs:
 
 ---
 
-## 10. Patrones y Principios Arquitectónicos
+## 12. Patrones y Principios Arquitectónicos
 
-### 10.1 Principios SOLID
+### 12.1 Principios SOLID
 
 - **S - Single Responsibility:** Cada clase/módulo tiene una responsabilidad
 - **O - Open/Closed:** Extendible sin modificar código existente
@@ -1263,7 +1684,7 @@ jobs:
 - **I - Interface Segregation:** Interfaces específicas, no genéricas
 - **D - Dependency Inversion:** Depender de abstracciones, no concreciones
 
-### 10.2 Patrones Implementados
+### 12.2 Patrones Implementados
 
 #### Repository Pattern
 ```python
@@ -1297,7 +1718,7 @@ async def get_product_service(
     return ProductService(repo)
 ```
 
-### 10.3 Principios Adicionales
+### 12.3 Principios Adicionales
 
 #### DRY (Don't Repeat Yourself)
 - Utilidades compartidas en `utils/`
@@ -1313,9 +1734,9 @@ async def get_product_service(
 
 ---
 
-## 11. Consideraciones de Escalabilidad
+## 13. Consideraciones de Escalabilidad
 
-### 11.1 Escalamiento Horizontal vs Vertical
+### 13.1 Escalamiento Horizontal vs Vertical
 
 **Vertical (Corto plazo):**
 - Aumentar CPU/RAM de instancias
@@ -1326,14 +1747,14 @@ async def get_product_service(
 - Load balancer distribuyendo carga
 - Read replicas de BD
 
-### 11.2 Optimizaciones de Performance
+### 13.2 Optimizaciones de Performance
 
 #### Cacheo Estratégico
 ```python
 # Cache en Redis
 @cache(expire=3600, key_prefix="products")
-async def get_products_cached(tenant_id: UUID):
-    return await get_products(tenant_id)
+async def get_products_cached(organization_id: UUID):
+    return await get_products(organization_id)
 ```
 
 #### Queries Optimizadas
@@ -1341,7 +1762,7 @@ async def get_products_cached(tenant_id: UUID):
 # Eager loading para evitar N+1
 products = db.query(Product).options(
     joinedload(Product.category),
-    joinedload(Product.tenant)
+    joinedload(Product.organization)
 ).all()
 ```
 
@@ -1362,7 +1783,7 @@ async def list_products(
 - CloudFront para frontend
 - Imágenes servidas desde S3 + CloudFront
 
-### 11.3 Monitoreo y Alertas
+### 13.3 Monitoreo y Alertas
 
 **Métricas Clave:**
 - Latencia de endpoints (p50, p95, p99)
@@ -1383,17 +1804,21 @@ async def list_products(
 Esta arquitectura proporciona:
 
 ✅ **Separación de responsabilidades** clara entre capas  
+✅ **Multi-tenancy robusto** mediante subdominios dedicados  
+✅ **Dos aplicaciones frontend** optimizadas para diferentes propósitos (marketing vs. aplicación)  
 ✅ **Escalabilidad** mediante diseño stateless y cacheo  
-✅ **Seguridad** con autenticación JWT y multi-tenancy  
+✅ **Seguridad** con autenticación JWT y aislamiento por tenant  
 ✅ **Mantenibilidad** con estructura modular y documentada  
 ✅ **Testabilidad** con dependency injection  
 ✅ **Observabilidad** con logging y monitoreo  
+✅ **SEO optimizado** con Astro para landing page  
+✅ **Experiencia de usuario mejorada** con subdominios personalizados  
 
-El diseño es apropiado para el MVP y puede evolucionar hacia microservicios si el crecimiento lo requiere.
+El diseño es apropiado para el MVP y puede evolucionar hacia microservicios si el crecimiento lo requiere. La estrategia multi-tenant por subdominios permite escalar tanto técnicamente como en percepción de valor para los clientes.
 
 ---
 
 **Elaborado por:** Equipo OrbitEngine  
 **Fecha:** Octubre 2025  
-**Versión:** 1.0
+**Versión:** 1.1 - Actualizado con arquitectura multi-tenant y landing site Astro
 
