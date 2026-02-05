@@ -1,9 +1,9 @@
 # Arquitectura Técnica del Sistema
-## Pecesaurio - Plataforma SaaS para Gestión de Pymes
+## OrbitEngine - Plataforma SaaS para Gestión de Pymes
 
 **Proyecto de Grado**  
 **Versión:** 1.0  
-**Fecha:** Octubre 2024
+**Fecha:** Octubre 2025
 
 ---
 
@@ -1014,7 +1014,7 @@ services:
   postgres:
     image: postgres:15
     environment:
-      POSTGRES_DB: pecesaurio
+      POSTGRES_DB: orbitengine
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
     ports:
@@ -1160,21 +1160,21 @@ jobs:
       - name: Build and push Docker image
         run: |
           aws ecr get-login-password | docker login --username AWS --password-stdin $ECR_REGISTRY
-          docker build -t pecesaurio-backend ./backend
-          docker tag pecesaurio-backend:latest $ECR_REGISTRY/pecesaurio-backend:latest
-          docker push $ECR_REGISTRY/pecesaurio-backend:latest
+          docker build -t orbitengine-backend ./backend
+          docker tag orbitengine-backend:latest $ECR_REGISTRY/orbitengine-backend:latest
+          docker push $ECR_REGISTRY/orbitengine-backend:latest
       
       - name: Deploy frontend to S3
         run: |
           cd frontend
           npm ci
           npm run build
-          aws s3 sync dist/ s3://pecesaurio-frontend --delete
+          aws s3 sync dist/ s3://orbitengine-frontend --delete
           aws cloudfront create-invalidation --distribution-id $CLOUDFRONT_ID --paths "/*"
       
       - name: Update ECS service
         run: |
-          aws ecs update-service --cluster pecesaurio-cluster --service backend --force-new-deployment
+          aws ecs update-service --cluster orbitengine-cluster --service backend --force-new-deployment
 ```
 
 ---
@@ -1393,7 +1393,7 @@ El diseño es apropiado para el MVP y puede evolucionar hacia microservicios si 
 
 ---
 
-**Elaborado por:** Equipo Pecesaurio  
-**Fecha:** Octubre 2024  
+**Elaborado por:** Equipo OrbitEngine  
+**Fecha:** Octubre 2025  
 **Versión:** 1.0
 

@@ -1,9 +1,9 @@
 # Historias de Usuario y Requisitos del Sistema
-## Pecesaurio - Plataforma SaaS para Gestión de Pymes
+## OrbitEngine - Plataforma SaaS para Gestión de Pymes
 
 **Proyecto de Grado**  
 **Versión:** 1.0  
-**Fecha:** Octubre 2024
+**Fecha:** Octubre 2025
 
 ---
 
@@ -726,7 +726,7 @@
 
 ## Conclusión
 
-Este documento establece las bases funcionales del sistema Pecesaurio mediante historias de usuario concretas, requisitos funcionales y no funcionales detallados. La priorización presentada permite un desarrollo incremental enfocado en el MVP, con claridad sobre qué construir primero y qué métricas cumplir.
+Este documento establece las bases funcionales del sistema OrbitEngine mediante historias de usuario concretas, requisitos funcionales y no funcionales detallados. La priorización presentada permite un desarrollo incremental enfocado en el MVP, con claridad sobre qué construir primero y qué métricas cumplir.
 
 **Próximos pasos:**
 1. Revisión y aprobación del equipo
@@ -735,7 +735,7 @@ Este documento establece las bases funcionales del sistema Pecesaurio mediante h
 
 ---
 
-**Fecha de elaboración:** Octubre 2024  
+**Fecha de elaboración:** Octubre 2025  
 **Versión:** 1.0  
-**Elaborado por:** Equipo Pecesaurio
+**Elaborado por:** Equipo OrbitEngine
 

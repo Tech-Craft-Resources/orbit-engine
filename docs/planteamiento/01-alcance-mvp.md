@@ -1,16 +1,16 @@
 # Documento de Alcance del Proyecto
-## Pecesaurio - Plataforma SaaS para Gestión de Pymes
+## OrbitEngine - Plataforma SaaS para Gestión de Pymes
 
 **Proyecto de Grado**  
 **Equipo:** 3 Integrantes  
-**Fecha de inicio:** Noviembre 2024  
-**Fecha de entrega:** Abril 2025  
+**Fecha de inicio:** Noviembre 2025  
+**Fecha de entrega:** Abril 2026  
 
 ---
 
 ## 1. Resumen Ejecutivo
 
-Pecesaurio es una plataforma SaaS diseñada para digitalizar y optimizar los procesos internos de pequeñas y medianas empresas (pymes). El proyecto busca ofrecer una solución accesible, modular y potenciada con Inteligencia Artificial que permita a las pymes gestionar sus operaciones de manera centralizada, mejorando su eficiencia operativa y competitividad.
+OrbitEngine es una plataforma SaaS diseñada para digitalizar y optimizar los procesos internos de pequeñas y medianas empresas (pymes). El proyecto busca ofrecer una solución accesible, modular y potenciada con Inteligencia Artificial que permita a las pymes gestionar sus operaciones de manera centralizada, mejorando su eficiencia operativa y competitividad.
 
 ---
 
@@ -329,33 +329,33 @@ El MVP se considerará completo cuando:
 
 ## 9. Fases del Proyecto
 
-### Fase 1: Investigación y Diseño (Noviembre 2024)
+### Fase 1: Investigación y Diseño (Noviembre 2025)
 - Revisión de literatura y estado del arte
 - Levantamiento de requisitos
 - Diseño de arquitectura
 - Diseño de base de datos
 - Selección de stack tecnológico
 
-### Fase 2: Desarrollo Core (Diciembre 2024 - Enero 2025)
+### Fase 2: Desarrollo Core (Diciembre 2025 - Enero 2026)
 - Setup de infraestructura
 - Módulo de autenticación
 - Módulo de inventario
 - Módulo de ventas
 - Módulo de clientes
 
-### Fase 3: Desarrollo Avanzado (Febrero 2025)
+### Fase 3: Desarrollo Avanzado (Febrero 2026)
 - Módulo de reportes
 - Integración de IA para predicción
 - Dashboard y visualizaciones
 - Testing y debugging
 
-### Fase 4: Validación y Refinamiento (Marzo 2025)
+### Fase 4: Validación y Refinamiento (Marzo 2026)
 - Despliegue en producción
 - Pruebas con usuarios reales
 - Recolección de métricas
 - Ajustes y mejoras
 
-### Fase 5: Documentación y Cierre (Abril 2025)
+### Fase 5: Documentación y Cierre (Abril 2026)
 - Documentación final
 - Análisis de resultados
 - Preparación de presentación
@@ -390,8 +390,8 @@ El MVP se considerará completo cuando:
 
 ## Conclusión
 
-Este documento establece un alcance realista y alcanzable para el proyecto Pecesaurio, considerando un equipo de 3 personas y un timeline de 6 meses. El enfoque en el MVP asegura que se entregará un producto funcional que valide las hipótesis planteadas, con una base sólida para futuras expansiones.
+Este documento establece un alcance realista y alcanzable para el proyecto OrbitEngine, considerando un equipo de 3 personas y un timeline de 6 meses. El enfoque en el MVP asegura que se entregará un producto funcional que valide las hipótesis planteadas, con una base sólida para futuras expansiones.
 
-**Fecha de elaboración:** Octubre 2024  
+**Fecha de elaboración:** Octubre 2025  
 **Versión:** 1.0
 

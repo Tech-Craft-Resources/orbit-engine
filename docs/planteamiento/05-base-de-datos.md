@@ -1,9 +1,9 @@
 # Propuesta de Base de Datos
-## Pecesaurio - Plataforma SaaS para Gestión de Pymes
+## OrbitEngine - Plataforma SaaS para Gestión de Pymes
 
 **Proyecto de Grado**  
 **Versión:** 1.0  
-**Fecha:** Octubre 2024
+**Fecha:** Octubre 2025
 
 ---
 
@@ -654,7 +654,7 @@ CREATE TABLE audit_logs (
 ) PARTITION BY RANGE (created_at);
 
 CREATE TABLE audit_logs_2025_01 PARTITION OF audit_logs
-    FOR VALUES FROM ('2025-01-01') TO ('2025-02-01');
+    FOR VALUES FROM ('2026-01-01') TO ('2026-02-01');
 ```
 
 ### 7.2 Optimizaciones de Queries
@@ -664,7 +664,7 @@ CREATE TABLE audit_logs_2025_01 PARTITION OF audit_logs
 EXPLAIN ANALYZE
 SELECT * FROM sales 
 WHERE tenant_id = '...' 
-  AND sale_date BETWEEN '2025-01-01' AND '2025-01-31';
+  AND sale_date BETWEEN '2026-01-01' AND '2026-01-31';
 ```
 
 #### Materialized Views para Reportes
@@ -901,7 +901,7 @@ VALUES (
   'demo-tenant-uuid',
   'Empresa Demo',
   'demo',
-  'demo@pecesaurio.com',
+  'demo@orbitengine.com',
   'trial'
 );
 ```
@@ -923,7 +923,7 @@ El modelo es apropiado para el alcance del MVP y puede evolucionar según las ne
 
 ---
 
-**Elaborado por:** Equipo Pecesaurio  
-**Fecha:** Octubre 2024  
+**Elaborado por:** Equipo OrbitEngine  
+**Fecha:** Octubre 2025  
 **Versión:** 1.0
 

@@ -1,4 +1,4 @@
-# Pecesaurio 🦕
+# OrbitEngine 🚀
 
 > Plataforma SaaS para la gestión integral de procesos internos en pequeñas y medianas empresas utilizando Inteligencia Artificial
 
@@ -12,10 +12,10 @@
 
 ## 📋 Descripción
 
-Pecesaurio es una plataforma SaaS diseñada para digitalizar y optimizar los procesos internos de pequeñas y medianas empresas (pymes). Proporciona herramientas para gestionar inventario, ventas, clientes y reportes, incorporando Inteligencia Artificial para predicción de demanda y análisis predictivo.
+OrbitEngine es una plataforma SaaS diseñada para digitalizar y optimizar los procesos internos de pequeñas y medianas empresas (pymes). Proporciona herramientas para gestionar inventario, ventas, clientes y reportes, incorporando Inteligencia Artificial para predicción de demanda y análisis predictivo.
 
 **Estado del Proyecto:** 🚧 En desarrollo (Proyecto de Grado)  
-**Período:** Noviembre 2024 - Abril 2025
+**Período:** Noviembre 2025 - Abril 2026
 
 ---
 
@@ -71,7 +71,7 @@ Pecesaurio es una plataforma SaaS diseñada para digitalizar y optimizar los pro
 ## 📁 Estructura del Proyecto
 
 ```
-pecesaurio/
+orbitengine/
 ├── backend/                 # FastAPI Backend
 │   ├── alembic/            # Database migrations
 │   ├── app/
@@ -131,8 +131,8 @@ pecesaurio/
 1. **Clonar el repositorio**
 
 ```bash
-git clone https://github.com/tu-usuario/pecesaurio.git
-cd pecesaurio
+git clone https://github.com/tu-usuario/orbitengine.git
+cd orbitengine
 ```
 
 2. **Configurar variables de entorno**
@@ -282,8 +282,8 @@ docker compose exec backend alembic downgrade -1
 
 ```env
 # Project
-PROJECT_NAME=Pecesaurio
-STACK_NAME=pecesaurio-stack
+PROJECT_NAME=OrbitEngine
+STACK_NAME=orbitengine-stack
 DOMAIN=localhost
 
 # Backend
@@ -429,34 +429,34 @@ La documentación académica completa del proyecto se encuentra en la carpeta [`
 
 ## 🗺️ Roadmap
 
-### ✅ Fase 1: Investigación y Planificación (Noviembre 2024)
+### ✅ Fase 1: Investigación y Planificación (Noviembre 2025)
 - [x] Definición de requisitos
 - [x] Diseño de arquitectura
 - [x] Selección de stack tecnológico
 - [x] Documentación inicial
 
-### 🚧 Fase 2: Diseño y Setup (Noviembre-Diciembre 2024)
+### 🚧 Fase 2: Diseño y Setup (Noviembre-Diciembre 2025)
 - [ ] Setup de repositorios
 - [ ] Configuración de infraestructura AWS
 - [ ] Diseño de UI/UX (Figma)
 - [ ] Setup de CI/CD
 
-### 📅 Fase 3: Desarrollo Core (Diciembre 2024 - Febrero 2025)
+### 📅 Fase 3: Desarrollo Core (Diciembre 2025 - Febrero 2026)
 - [ ] Sprint 1: Autenticación y usuarios
 - [ ] Sprint 2-3: Gestión de inventario
 - [ ] Sprint 4: Gestión de ventas
 - [ ] Sprint 5: Gestión de clientes
 
-### 📅 Fase 4: Desarrollo Avanzado (Febrero - Marzo 2025)
+### 📅 Fase 4: Desarrollo Avanzado (Febrero - Marzo 2026)
 - [ ] Sprint 6: Dashboard y reportes
 - [ ] Sprint 7: Integración de IA/ML
 
-### 📅 Fase 5: Testing y Validación (Marzo - Abril 2025)
+### 📅 Fase 5: Testing y Validación (Marzo - Abril 2026)
 - [ ] Pruebas con usuarios reales
 - [ ] Recolección de métricas
 - [ ] Ajustes y mejoras
 
-### 📅 Fase 6: Documentación y Defensa (Abril 2025)
+### 📅 Fase 6: Documentación y Defensa (Abril 2026)
 - [ ] Documentación final
 - [ ] Presentación del proyecto
 - [ ] Defensa de proyecto de grado
@@ -528,12 +528,12 @@ Para consultas sobre el proyecto:
 
 ---
 
-**Última actualización:** Octubre 2024  
+**Última actualización:** Noviembre 2025  
 **Versión:** 0.1.0-alpha
 
 ---
 
 <p align="center">
-  <strong>Hecho con ❤️ por el equipo Pecesaurio</strong>
+  <strong>Hecho con ❤️ por el equipo OrbitEngine</strong>
 </p>
 

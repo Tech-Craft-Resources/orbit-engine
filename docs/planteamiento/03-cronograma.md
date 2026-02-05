@@ -1,24 +1,24 @@
 # Cronograma de Desarrollo
 
-## Pecesaurio - Plataforma SaaS para Gestión de Pymes
+## OrbitEngine - Plataforma SaaS para Gestión de Pymes
 
 **Proyecto de Grado**  
 **Equipo:** 3 Integrantes  
-**Duración:** 6 meses (Noviembre 2024 - Abril 2025)  
+**Duración:** 6 meses (Noviembre 2025 - Abril 2026)  
 **Versión:** 1.0
 
 ---
 
 ## 1. Resumen Ejecutivo
 
-Este cronograma establece la planificación completa del proyecto Pecesaurio desde su concepción hasta la entrega final. El proyecto se estructura en **6 fases principales** y **12 sprints de desarrollo** de 2 semanas cada uno, con un enfoque ágil que permite iteración y adaptación.
+Este cronograma establece la planificación completa del proyecto OrbitEngine desde su concepción hasta la entrega final. El proyecto se estructura en **6 fases principales** y **12 sprints de desarrollo** de 2 semanas cada uno, con un enfoque ágil que permite iteración y adaptación.
 
 ### Fechas Clave
 
-- **Inicio del Proyecto:** 1 de Noviembre de 2024
-- **Finalización de Desarrollo:** 31 de Marzo de 2025
-- **Entrega Final:** 30 de Abril de 2025
-- **Defensa del Proyecto:** Primera quincena de Mayo de 2025
+- **Inicio del Proyecto:** 1 de Noviembre de 2025
+- **Finalización de Desarrollo:** 31 de Marzo de 2026
+- **Entrega Final:** 30 de Abril de 2026
+- **Defensa del Proyecto:** Primera quincena de Mayo de 2026
 
 ---
 
@@ -157,7 +157,7 @@ Este cronograma establece la planificación completa del proyecto Pecesaurio des
 
 ## FASE 2: DISEÑO Y ARQUITECTURA
 
-### Semanas: 4-5 (25 Nov - 6 Dic 2024)
+### Semanas: 4-5 (25 Nov - 6 Dic 2025)
 
 #### Semana 4 (25-29 Nov)
 
@@ -195,11 +195,11 @@ Este cronograma establece la planificación completa del proyecto Pecesaurio des
 
 ## FASE 3: DESARROLLO CORE (MVP)
 
-### Semanas: 6-15 (9 Dic 2024 - 21 Feb 2025)
+### Semanas: 6-15 (9 Dic 2025 - 21 Feb 2026)
 
 ### Sprint 1: Autenticación y Setup Base
 
-**Duración:** 9-20 Diciembre 2024  
+**Duración:** 9-20 Diciembre 2025  
 **Story Points:** 18
 
 | Historia de Usuario         | Responsable   | SP  | Tareas Técnicas                                    |
@@ -220,7 +220,7 @@ Este cronograma establece la planificación completa del proyecto Pecesaurio des
 
 ### Sprint 2: Inventario Core - CRUD Productos
 
-**Duración:** 6-17 Enero 2025 (post-vacaciones)  
+**Duración:** 6-17 Enero 2026 (post-vacaciones)  
 **Story Points:** 17
 
 | Historia de Usuario         | Responsable        | SP  | Tareas Técnicas                               |
@@ -241,7 +241,7 @@ Este cronograma establece la planificación completa del proyecto Pecesaurio des
 
 ### Sprint 3: Inventario Avanzado
 
-**Duración:** 20-31 Enero 2025  
+**Duración:** 20-31 Enero 2026  
 **Story Points:** 16
 
 | Historia de Usuario              | Responsable        | SP  | Tareas Técnicas                        |
@@ -261,7 +261,7 @@ Este cronograma establece la planificación completa del proyecto Pecesaurio des
 
 ### Sprint 4: Ventas Core
 
-**Duración:** 3-14 Febrero 2025  
+**Duración:** 3-14 Febrero 2026  
 **Story Points:** 20
 
 | Historia de Usuario          | Responsable        | SP  | Tareas Técnicas                                      |
@@ -281,7 +281,7 @@ Este cronograma establece la planificación completa del proyecto Pecesaurio des
 
 ### Sprint 5: Clientes
 
-**Duración:** 17-28 Febrero 2025  
+**Duración:** 17-28 Febrero 2026  
 **Story Points:** 15
 
 | Historia de Usuario         | Responsable        | SP  | Tareas Técnicas                             |
@@ -306,7 +306,7 @@ Este cronograma establece la planificación completa del proyecto Pecesaurio des
 
 ### Sprint 6: Reportes y Dashboard
 
-**Duración:** 3-14 Marzo 2025  
+**Duración:** 3-14 Marzo 2026  
 **Story Points:** 18
 
 | Historia de Usuario           | Responsable        | SP  | Tareas Técnicas                       |
@@ -326,7 +326,7 @@ Este cronograma establece la planificación completa del proyecto Pecesaurio des
 
 ### Sprint 7: Inteligencia Artificial - Predicción
 
-**Duración:** 17-28 Marzo 2025  
+**Duración:** 17-28 Marzo 2026  
 **Story Points:** 21
 
 | Historia de Usuario                      | Responsable   | SP  | Tareas Técnicas                               |
@@ -418,7 +418,7 @@ Este cronograma establece la planificación completa del proyecto Pecesaurio des
 
 ## FASE 6: DOCUMENTACIÓN FINAL Y PREPARACIÓN DE DEFENSA
 
-### Semanas: 24-25 (21-30 Abril 2025)
+### Semanas: 24-25 (21-30 Abril 2026)
 
 #### Semana 24 (21-25 Abr)
 
@@ -457,7 +457,7 @@ Este cronograma establece la planificación completa del proyecto Pecesaurio des
 
 ## 6. Calendario Visual
 
-### Noviembre 2024
+### Noviembre 2025
 
 ```
 Sem 1: [====Investigación====]
@@ -466,7 +466,7 @@ Sem 3: [====Planificación====]
 Sem 4: [====Diseño====]
 ```
 
-### Diciembre 2024
+### Diciembre 2025
 
 ```
 Sem 1: [====Diseño====]
@@ -475,7 +475,7 @@ Sem 3: [Sprint 1: Auth]
 Sem 4: VACACIONES
 ```
 
-### Enero 2025
+### Enero 2026
 
 ```
 Sem 1: VACACIONES
@@ -485,7 +485,7 @@ Sem 4: [Sprint 3: Inv Avanzado]
 Sem 5: [Sprint 3: Inv Avanzado]
 ```
 
-### Febrero 2025
+### Febrero 2026
 
 ```
 Sem 1: [Sprint 4: Ventas]
@@ -494,7 +494,7 @@ Sem 3: [Sprint 5: Clientes]
 Sem 4: [Sprint 5: Clientes]
 ```
 
-### Marzo 2025
+### Marzo 2026
 
 ```
 Sem 1: [Sprint 6: Reportes]
@@ -504,7 +504,7 @@ Sem 4: [Sprint 7: IA]
 Sem 5: [====Testing====]
 ```
 
-### Abril 2025
+### Abril 2026
 
 ```
 Sem 1: [====Validación====]
@@ -520,14 +520,14 @@ Sem 5: [====Entrega====]
 
 | #   | Hito                    | Fecha       | Criterio de Éxito                |
 | --- | ----------------------- | ----------- | -------------------------------- |
-| M1  | Propuesta Aprobada      | 22 Nov 2024 | Aprobación del asesor            |
+| M1  | Propuesta Aprobada      | 22 Nov 2025 | Aprobación del asesor            |
 | M2  | Diseño Completado       | 6 Dic 2024  | Mockups y arquitectura aprobados |
 | M3  | Autenticación Funcional | 20 Dic 2024 | Login/registro operativo         |
 | M4  | MVP Core Completado     | 21 Feb 2025 | Inventario + Ventas + Clientes   |
 | M5  | IA Integrada            | 28 Mar 2025 | Predicciones funcionando         |
 | M6  | Validación Completada   | 18 Abr 2025 | Pruebas con usuarios finalizadas |
 | M7  | Entrega Final           | 30 Abr 2025 | Documentos entregados            |
-| M8  | Defensa                 | Mayo 2025   | Presentación exitosa             |
+| M8  | Defensa                 | Mayo 2026   | Presentación exitosa             |
 
 ---
 
@@ -624,36 +624,36 @@ Sem 5: [====Entrega====]
 
 ## 12. Entregables por Mes
 
-### Noviembre 2024
+### Noviembre 2025
 
 - ✅ Propuesta aprobada
 - ✅ Requisitos definidos
 - ✅ Stack tecnológico seleccionado
 
-### Diciembre 2024
+### Diciembre 2025
 
 - ✅ Diseño completo
 - ✅ Infraestructura configurada
 - ✅ Autenticación funcional
 
-### Enero 2025
+### Enero 2026
 
 - ✅ Módulo de inventario completo
 - ✅ Deploy inicial en AWS
 
-### Febrero 2025
+### Febrero 2026
 
 - ✅ Módulo de ventas funcional
 - ✅ Módulo de clientes funcional
 - ✅ MVP Core completado
 
-### Marzo 2025
+### Marzo 2026
 
 - ✅ Reportes y dashboard
 - ✅ IA de predicción integrada
 - ✅ Testing completo
 
-### Abril 2025
+### Abril 2026
 
 - ✅ Validación con usuarios
 - ✅ Documentación final
@@ -726,7 +726,7 @@ El éxito del proyecto dependerá de:
 
 ---
 
-**Elaborado por:** Equipo Pecesaurio  
-**Fecha:** Octubre 2025  
+**Elaborado por:** Equipo OrbitEngine  
+**Fecha:** Octubre 2026  
 **Versión:** 1.0  
 **Próxima Revisión:** Fin de cada sprint

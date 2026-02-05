@@ -1,8 +1,8 @@
 # Algoritmos de Inteligencia Artificial
-## Pecesaurio - Plataforma SaaS para Gestión de Pymes
+## OrbitEngine - Plataforma SaaS para Gestión de Pymes
 
 **Versión:** 1.0  
-**Fecha:** Octubre 2024  
+**Fecha:** Octubre 2025  
 **Estado:** Documento Técnico
 
 ---
@@ -23,9 +23,9 @@
 
 ## 1. Introducción
 
-Este documento detalla los algoritmos de Inteligencia Artificial y Machine Learning que serán utilizados en el proyecto Pecesaurio para proporcionar funcionalidades de predicción de demanda, análisis de tendencias y recomendaciones inteligentes.
+Este documento detalla los algoritmos de Inteligencia Artificial y Machine Learning que serán utilizados en el proyecto OrbitEngine para proporcionar funcionalidades de predicción de demanda, análisis de tendencias y recomendaciones inteligentes.
 
-### 1.1 Objetivos de IA en Pecesaurio
+### 1.1 Objetivos de IA en OrbitEngine
 
 - **Predicción de Demanda:** Forecasting de ventas futuras por producto
 - **Recomendaciones de Reabastecimiento:** Sugerencias automáticas de cuándo y cuánto comprar
@@ -59,9 +59,9 @@ Este documento detalla los algoritmos de Inteligencia Artificial y Machine Learn
 ### 2.1 Prophet (Meta/Facebook) - Algoritmo Principal
 
 **Descripción:**  
-Prophet es un algoritmo de forecasting desarrollado por Meta, diseñado específicamente para series de tiempo de negocio. Es el algoritmo principal para predicción de demanda en Pecesaurio.
+Prophet es un algoritmo de forecasting desarrollado por Meta, diseñado específicamente para series de tiempo de negocio. Es el algoritmo principal para predicción de demanda en OrbitEngine.
 
-**Uso en Pecesaurio:**
+**Uso en OrbitEngine:**
 - Predicción de ventas futuras (7, 15, 30 días)
 - Generación de intervalos de confianza
 - Identificación automática de tendencias y estacionalidad
@@ -340,7 +340,7 @@ class ModelManager:
 **Descripción:**  
 Algoritmo simple de regresión para predicciones básicas cuando Prophet no es adecuado o como baseline de comparación.
 
-**Uso en Pecesaurio:**
+**Uso en OrbitEngine:**
 - Backup si Prophet falla o es muy lento
 - Productos con tendencia muy linear
 - Validación de resultados de Prophet
@@ -462,7 +462,7 @@ def predict_ema(data, span=7, periods=7):
     return np.full(periods, last_ema)
 ```
 
-**Uso en Pecesaurio:**
+**Uso en OrbitEngine:**
 - Suavizado de series temporales para visualización
 - Baseline simple de predicción
 - Cálculo de "demanda promedio"
@@ -705,7 +705,7 @@ def calculate_mae(y_true, y_pred):
 **Características:**
 - Fácil de interpretar (mismas unidades que datos)
 - No penaliza outliers excesivamente
-- **Objetivo Pecesaurio:** MAE < 5 unidades
+- **Objetivo OrbitEngine:** MAE < 5 unidades
 
 ### 4.2 Root Mean Squared Error (RMSE)
 
@@ -723,7 +723,7 @@ def calculate_rmse(y_true, y_pred):
 **Características:**
 - Penaliza errores grandes
 - Más sensible a outliers
-- **Objetivo Pecesaurio:** RMSE < 8 unidades
+- **Objetivo OrbitEngine:** RMSE < 8 unidades
 
 ### 4.3 Mean Absolute Percentage Error (MAPE)
 
@@ -743,7 +743,7 @@ def calculate_mape(y_true, y_pred):
 **Características:**
 - Fácil de entender (porcentaje)
 - Independiente de escala
-- **Objetivo Pecesaurio:** MAPE < 30%
+- **Objetivo OrbitEngine:** MAPE < 30%
 
 ### 4.4 Nivel de Confianza
 
@@ -769,7 +769,7 @@ def calculate_confidence_score(forecast):
     return max(0, min(100, confidence))
 ```
 
-**Objetivo Pecesaurio:** Confianza > 60%
+**Objetivo OrbitEngine:** Confianza > 60%
 
 ### 4.5 R² (Coeficiente de Determinación)
 
@@ -789,7 +789,7 @@ def calculate_r2(y_true, y_pred):
 - R² = 0: Modelo no mejor que predecir el promedio
 - R² < 0: Modelo peor que predecir el promedio
 
-**Objetivo Pecesaurio:** R² > 0.5
+**Objetivo OrbitEngine:** R² > 0.5
 
 ---
 
@@ -888,7 +888,7 @@ def calculate_r2(y_true, y_pred):
 from celery import Celery
 from celery.schedules import crontab
 
-celery_app = Celery('pecesaurio')
+celery_app = Celery('orbitengine')
 
 @celery_app.task
 def generate_daily_predictions():
@@ -1192,14 +1192,14 @@ CMD ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8000"]
 ```python
 # Ventas diarias de Coca-Cola 2L (últimos 60 días)
 sales_history = [
-    {'date': '2024-09-01', 'quantity': 22},
-    {'date': '2024-09-02', 'quantity': 25},
-    {'date': '2024-09-03', 'quantity': 28},
-    {'date': '2024-09-04', 'quantity': 24},
-    {'date': '2024-09-05', 'quantity': 26},
-    {'date': '2024-09-06', 'quantity': 20},
-    {'date': '2024-09-07', 'quantity': 32},  # Sábado
-    {'date': '2024-09-08', 'quantity': 35},  # Domingo
+    {'date': '2025-09-01', 'quantity': 22},
+    {'date': '2025-09-02', 'quantity': 25},
+    {'date': '2025-09-03', 'quantity': 28},
+    {'date': '2025-09-04', 'quantity': 24},
+    {'date': '2025-09-05', 'quantity': 26},
+    {'date': '2025-09-06', 'quantity': 20},
+    {'date': '2025-09-07', 'quantity': 32},  # Sábado
+    {'date': '2025-09-08', 'quantity': 35},  # Domingo
     # ... más días ...
     {'date': '2024-10-30', 'quantity': 30},
 ]
@@ -1574,7 +1574,7 @@ const { data: prediction, isLoading } = useQuery({
 
 ## Conclusión
 
-Este documento establece una estrategia completa y pragmática de IA/ML para Pecesaurio:
+Este documento establece una estrategia completa y pragmática de IA/ML para OrbitEngine:
 
 ✅ **Algoritmo Principal:** Prophet - Balance perfecto entre potencia y simplicidad  
 ✅ **Fallbacks:** Regresión Lineal, Moving Averages  
@@ -1592,7 +1592,7 @@ El sistema de IA propuesto es:
 
 ---
 
-**Elaborado por:** Equipo Pecesaurio  
-**Fecha:** Octubre 2024  
+**Elaborado por:** Equipo OrbitEngine  
+**Fecha:** Octubre 2025  
 **Versión:** 1.0
 

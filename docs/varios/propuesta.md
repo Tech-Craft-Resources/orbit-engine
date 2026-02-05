@@ -1,6 +1,6 @@
 ## **Propuesta de Proyecto de Grado #1**
 
-**Título Tentativo: Proyecto Pecesaurio**
+**Título Tentativo: Proyecto OrbitEngine**
 
 *“Plataforma para la gestión integral de procesos internos en pequeñas y medianas empresas utilizando Inteligencia Artificial”*
 

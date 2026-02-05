@@ -1,8 +1,8 @@
 # Software Requirements Specification (SRS)
-## Pecesaurio - Plataforma SaaS para Gestión de Pymes
+## OrbitEngine - Plataforma SaaS para Gestión de Pymes
 
 **Versión:** 1.0  
-**Fecha:** Octubre 2024  
+**Fecha:** Octubre 2025  
 **Estado:** Borrador  
 
 ---
@@ -11,7 +11,7 @@
 
 | Versión | Fecha | Autor | Descripción |
 |---------|-------|-------|-------------|
-| 1.0 | Oct 2024 | Equipo Pecesaurio | Versión inicial del SRS |
+| 1.0 | Oct 2025 | Equipo OrbitEngine | Versión inicial del SRS |
 
 ---
 
@@ -32,7 +32,7 @@
 
 ### 1.1 Propósito
 
-Este documento especifica los requisitos de software para **Pecesaurio**, una plataforma SaaS diseñada para la gestión integral de procesos internos en pequeñas y medianas empresas (pymes). Este SRS está dirigido a:
+Este documento especifica los requisitos de software para **OrbitEngine**, una plataforma SaaS diseñada para la gestión integral de procesos internos en pequeñas y medianas empresas (pymes). Este SRS está dirigido a:
 
 - Equipo de desarrollo
 - Asesor académico del proyecto
@@ -41,7 +41,7 @@ Este documento especifica los requisitos de software para **Pecesaurio**, una pl
 
 ### 1.2 Alcance
 
-**Pecesaurio** es una aplicación web que permite a las pymes:
+**OrbitEngine** es una aplicación web que permite a las pymes:
 
 - **Gestionar inventario:** CRUD de productos, control de stock, alertas de niveles bajos
 - **Registrar ventas:** Captura de transacciones, generación de facturas, historial
@@ -84,7 +84,7 @@ Este documento especifica los requisitos de software para **Pecesaurio**, una pl
 ### 1.4 Referencias
 
 1. IEEE Std 830-1998 - IEEE Recommended Practice for Software Requirements Specifications
-2. Propuesta de Proyecto de Grado - Pecesaurio (Octubre 2024)
+2. Propuesta de Proyecto de Grado - OrbitEngine (Octubre 2025)
 3. Documentación de FastAPI: https://fastapi.tiangolo.com/
 4. Documentación de React: https://react.dev/
 5. Prophet Documentation: https://facebook.github.io/prophet/
@@ -107,7 +107,7 @@ Este documento está organizado de la siguiente manera:
 
 ### 2.1 Perspectiva del Producto
 
-Pecesaurio es un sistema independiente de tipo SaaS (Software as a Service) que opera completamente en la nube. El sistema consta de:
+OrbitEngine es un sistema independiente de tipo SaaS (Software as a Service) que opera completamente en la nube. El sistema consta de:
 
 ```
 ┌─────────────────────────────────────────────────────┐
@@ -2285,8 +2285,8 @@ Ver documento "06-arquitectura-tecnica.md"
 
 ---
 
-**Elaborado por:** Equipo Pecesaurio  
-**Fecha:** Octubre 2024  
+**Elaborado por:** Equipo OrbitEngine  
+**Fecha:** Octubre 2025  
 **Versión:** 1.0  
 **Estado:** Borrador para Revisión
 

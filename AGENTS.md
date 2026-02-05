@@ -1,6 +1,6 @@
 # AGENTS.md - AI Coding Agent Instructions
 
-**Project:** Pecesaurio - SaaS platform for managing internal processes in SMEs using AI
+**Project:** OrbitEngine - SaaS platform for managing internal processes in SMEs using AI
 
 Full-stack FastAPI + React application with Python backend and TypeScript frontend.
 

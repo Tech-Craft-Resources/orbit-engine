@@ -1,9 +1,9 @@
 # Propuesta de Stack Tecnológico
-## Pecesaurio - Plataforma SaaS para Gestión de Pymes
+## OrbitEngine - Plataforma SaaS para Gestión de Pymes
 
 **Proyecto de Grado**  
 **Versión:** 1.0  
-**Fecha:** Octubre 2024
+**Fecha:** Octubre 2025
 
 ---
 
@@ -541,9 +541,9 @@ backend/
 - Integración con CloudFront
 
 **Buckets:**
-- `pecesaurio-uploads`: Imágenes de productos
-- `pecesaurio-documents`: PDFs, reportes
-- `pecesaurio-backups`: Backups de BD
+- `orbitengine-uploads`: Imágenes de productos
+- `orbitengine-documents`: PDFs, reportes
+- `orbitengine-backups`: Backups de BD
 
 ### 6.5 CDN
 
@@ -1021,7 +1021,7 @@ Este stack permitirá al equipo enfocarse en construir el producto sin perder ti
 
 ---
 
-**Elaborado por:** Equipo Pecesaurio  
-**Fecha:** Octubre 2024  
+**Elaborado por:** Equipo OrbitEngine  
+**Fecha:** Octubre 2025  
 **Versión:** 1.0
 

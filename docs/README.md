@@ -1,9 +1,9 @@
-# Documentación del Proyecto Pecesaurio
+# Documentación del Proyecto OrbitEngine
 ## Plataforma SaaS para Gestión de Pymes
 
 **Proyecto de Grado**  
 **Equipo:** 3 Integrantes  
-**Período:** Noviembre 2024 - Abril 2025
+**Período:** Noviembre 2025 - Abril 2026
 
 ---
 
@@ -87,7 +87,7 @@ Diseño arquitectónico completo del sistema con diagramas y patrones.
 
 ## 🎯 Resumen Ejecutivo del Proyecto
 
-### ¿Qué es Pecesaurio?
+### ¿Qué es OrbitEngine?
 
 Una plataforma SaaS accesible y modular que permite a las pequeñas y medianas empresas (pymes) gestionar de manera centralizada sus procesos internos de **inventario, ventas, clientes y reportes**, incorporando **Inteligencia Artificial** para predicción de demanda y análisis predictivo.
 
@@ -129,10 +129,10 @@ IA/ML:     Prophet + scikit-learn
 
 ### Timeline
 
-- **Inicio:** Noviembre 2024
+- **Inicio:** Noviembre 2025
 - **Desarrollo:** 16 semanas (8 sprints)
 - **Validación:** 4 semanas con pymes reales
-- **Entrega:** Abril 2025
+- **Entrega:** Abril 2026
 
 ### Equipo
 
@@ -193,19 +193,19 @@ IA/ML:     Prophet + scikit-learn
 
 | Versión | Fecha | Descripción |
 |---------|-------|-------------|
-| 1.0 | Oct 2024 | Versión inicial completa de documentación |
+| 1.0 | Nov 2025 | Versión inicial completa de documentación |
 
 ---
 
 ## 👥 Contacto
 
-**Proyecto:** Pecesaurio  
+**Proyecto:** OrbitEngine  
 **Universidad:** [Tu Universidad]  
 **Asesor:** [Nombre del asesor]  
 **Equipo:** [Nombres de los integrantes]
 
 ---
 
-**Fecha de Elaboración:** Octubre 2024  
-**Última Actualización:** Octubre 2024
+**Fecha de Elaboración:** Noviembre 2025  
+**Última Actualización:** Noviembre 2025
 
