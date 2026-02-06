@@ -18,9 +18,10 @@ export function AppSidebar() {
   const { user: currentUser } = useAuth()
 
   // Show Admin link only for admin role (role_id === 1)
-  const items = currentUser?.role_id === 1
-    ? [...baseItems, { icon: Users, title: "Admin", path: "/admin" }]
-    : baseItems
+  const items =
+    currentUser?.role_id === 1
+      ? [...baseItems, { icon: Users, title: "Admin", path: "/admin" }]
+      : baseItems
 
   return (
     <Sidebar collapsible="icon">
