@@ -180,10 +180,12 @@ const UserInformation = () => {
               ) : (
                 <FormItem>
                   <FormLabel>Phone</FormLabel>
-                  <p className={cn(
+                  <p
+                    className={cn(
                       "py-2 truncate max-w-sm",
                       !field.value && "text-muted-foreground",
-                    )}>
+                    )}
+                  >
                     {field.value || "N/A"}
                   </p>
                 </FormItem>
