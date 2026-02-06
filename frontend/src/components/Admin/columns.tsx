@@ -19,9 +19,7 @@ export const columns: ColumnDef<UserTableData>[] = [
       const fullName = `${firstName} ${lastName}`.trim()
       return (
         <div className="flex items-center gap-2">
-          <span className={cn("font-medium")}>
-            {fullName || "N/A"}
-          </span>
+          <span className={cn("font-medium")}>{fullName || "N/A"}</span>
           {row.original.isCurrentUser && (
             <Badge variant="outline" className="text-xs">
               You

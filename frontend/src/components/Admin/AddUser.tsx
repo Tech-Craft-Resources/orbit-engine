@@ -5,7 +5,7 @@ import { useState } from "react"
 import { useForm } from "react-hook-form"
 import { z } from "zod"
 
-import { type UserCreate, UsersService, RolesService } from "@/client"
+import { RolesService, type UserCreate, UsersService } from "@/client"
 import { Button } from "@/components/ui/button"
 import { Checkbox } from "@/components/ui/checkbox"
 import {
@@ -27,6 +27,7 @@ import {
   FormMessage,
 } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
+import { LoadingButton } from "@/components/ui/loading-button"
 import {
   Select,
   SelectContent,
@@ -34,7 +35,6 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select"
-import { LoadingButton } from "@/components/ui/loading-button"
 import useCustomToast from "@/hooks/useCustomToast"
 import { handleError } from "@/utils"
 
@@ -155,7 +155,12 @@ const AddUser = () => {
                       First Name <span className="text-destructive">*</span>
                     </FormLabel>
                     <FormControl>
-                      <Input placeholder="First name" type="text" {...field} required />
+                      <Input
+                        placeholder="First name"
+                        type="text"
+                        {...field}
+                        required
+                      />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -171,7 +176,12 @@ const AddUser = () => {
                       Last Name <span className="text-destructive">*</span>
                     </FormLabel>
                     <FormControl>
-                      <Input placeholder="Last name" type="text" {...field} required />
+                      <Input
+                        placeholder="Last name"
+                        type="text"
+                        {...field}
+                        required
+                      />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -244,7 +254,9 @@ const AddUser = () => {
                       Role <span className="text-destructive">*</span>
                     </FormLabel>
                     <Select
-                      onValueChange={(value) => field.onChange(parseInt(value))}
+                      onValueChange={(value) =>
+                        field.onChange(parseInt(value, 10))
+                      }
                       defaultValue={field.value?.toString()}
                     >
                       <FormControl>
@@ -255,7 +267,8 @@ const AddUser = () => {
                       <SelectContent>
                         {rolesData?.data.map((role) => (
                           <SelectItem key={role.id} value={role.id.toString()}>
-                            {role.name.charAt(0).toUpperCase() + role.name.slice(1)}
+                            {role.name.charAt(0).toUpperCase() +
+                              role.name.slice(1)}
                           </SelectItem>
                         ))}
                       </SelectContent>
