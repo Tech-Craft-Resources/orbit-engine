@@ -87,7 +87,8 @@ function SignUp() {
           <div className="flex flex-col items-center gap-2 text-center">
             <h1 className="text-2xl font-bold">Create an account</h1>
             <p className="text-sm text-muted-foreground">
-              Individual signup is not available yet. Please contact your organization admin.
+              Individual signup is not available yet. Please contact your
+              organization admin.
             </p>
           </div>
 
@@ -170,11 +171,7 @@ function SignUp() {
               )}
             />
 
-            <LoadingButton
-              type="submit"
-              className="w-full"
-              disabled
-            >
+            <LoadingButton type="submit" className="w-full" disabled>
               Sign Up (Disabled)
             </LoadingButton>
           </div>
