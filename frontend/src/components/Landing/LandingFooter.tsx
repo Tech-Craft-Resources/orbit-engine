@@ -1,17 +1,17 @@
-import { Link as RouterLink } from "@tanstack/react-router"
-import { FaGithub } from "react-icons/fa"
+import { Link as RouterLink } from "@tanstack/react-router";
+import { FaGithub } from "react-icons/fa";
 
-import { Separator } from "@/components/ui/separator"
+import { Separator } from "@/components/ui/separator";
 
 interface FooterLink {
-  label: string
-  href: string
-  external?: boolean
+  label: string;
+  href: string;
+  external?: boolean;
 }
 
 interface FooterSection {
-  title: string
-  links: FooterLink[]
+  title: string;
+  links: FooterLink[];
 }
 
 const footerSections: FooterSection[] = [
@@ -66,7 +66,7 @@ const footerSections: FooterSection[] = [
       },
     ],
   },
-]
+];
 
 const legalLinks: FooterLink[] = [
   {
@@ -84,7 +84,7 @@ const legalLinks: FooterLink[] = [
     href: "https://github.com/Tech-Craft-Resources/orbit-engine/issues",
     external: true,
   },
-]
+];
 
 export function LandingFooter() {
   return (
@@ -97,7 +97,12 @@ export function LandingFooter() {
               <img
                 src="/assets/images/orbit-engine-logo.png"
                 alt="OrbitEngine"
-                className="h-8"
+                className="h-8 dark:hidden"
+              />
+              <img
+                src="/assets/images/orbit-engine-logo-dark.png"
+                alt="OrbitEngine"
+                className="h-8 hidden dark:block"
               />
               <span className="text-xl font-semibold">
                 <span className="font-bold">Orbit</span>Engine
@@ -183,5 +188,5 @@ export function LandingFooter() {
         </div>
       </div>
     </footer>
-  )
+  );
 }

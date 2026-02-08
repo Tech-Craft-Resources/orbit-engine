@@ -1,26 +1,26 @@
-import { Home, Users } from "lucide-react";
+import { Home, Users } from "lucide-react"
 
-import { SidebarAppearance } from "@/components/Common/Appearance";
+import { SidebarAppearance } from "@/components/Common/Appearance"
 import {
   Sidebar,
   SidebarContent,
   SidebarFooter,
   SidebarHeader,
-} from "@/components/ui/sidebar";
-import useAuth from "@/hooks/useAuth";
-import { type Item, Main } from "./Main";
-import { User } from "./User";
+} from "@/components/ui/sidebar"
+import useAuth from "@/hooks/useAuth"
+import { type Item, Main } from "./Main"
+import { User } from "./User"
 
-const baseItems: Item[] = [{ icon: Home, title: "Dashboard", path: "/" }];
+const baseItems: Item[] = [{ icon: Home, title: "Dashboard", path: "/" }]
 
 export function AppSidebar() {
-  const { user: currentUser } = useAuth();
+  const { user: currentUser } = useAuth()
 
   // Show Admin link only for admin role (role_id === 1)
   const items =
     currentUser?.role_id === 1
       ? [...baseItems, { icon: Users, title: "Admin", path: "/admin" }]
-      : baseItems;
+      : baseItems
 
   return (
     <Sidebar collapsible="icon">
@@ -39,7 +39,7 @@ export function AppSidebar() {
         <User user={currentUser} />
       </SidebarFooter>
     </Sidebar>
-  );
+  )
 }
 
-export default AppSidebar;
+export default AppSidebar
