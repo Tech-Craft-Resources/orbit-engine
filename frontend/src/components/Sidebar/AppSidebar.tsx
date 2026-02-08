@@ -1,32 +1,35 @@
-import { Home, Users } from "lucide-react"
+import { Home, Users } from "lucide-react";
 
-import { SidebarAppearance } from "@/components/Common/Appearance"
-import { Logo } from "@/components/Common/Logo"
+import { SidebarAppearance } from "@/components/Common/Appearance";
 import {
   Sidebar,
   SidebarContent,
   SidebarFooter,
   SidebarHeader,
-} from "@/components/ui/sidebar"
-import useAuth from "@/hooks/useAuth"
-import { type Item, Main } from "./Main"
-import { User } from "./User"
+} from "@/components/ui/sidebar";
+import useAuth from "@/hooks/useAuth";
+import { type Item, Main } from "./Main";
+import { User } from "./User";
 
-const baseItems: Item[] = [{ icon: Home, title: "Dashboard", path: "/" }]
+const baseItems: Item[] = [{ icon: Home, title: "Dashboard", path: "/" }];
 
 export function AppSidebar() {
-  const { user: currentUser } = useAuth()
+  const { user: currentUser } = useAuth();
 
   // Show Admin link only for admin role (role_id === 1)
   const items =
     currentUser?.role_id === 1
       ? [...baseItems, { icon: Users, title: "Admin", path: "/admin" }]
-      : baseItems
+      : baseItems;
 
   return (
     <Sidebar collapsible="icon">
       <SidebarHeader className="px-4 py-6 group-data-[collapsible=icon]:px-0 group-data-[collapsible=icon]:items-center">
-        <Logo variant="responsive" />
+        <img
+          src="/assets/images/assets/images/orbit-engine-logo.png"
+          alt="OrbitEngine"
+          className="h-6 w-auto"
+        />
       </SidebarHeader>
       <SidebarContent>
         <Main items={items} />
@@ -36,7 +39,7 @@ export function AppSidebar() {
         <User user={currentUser} />
       </SidebarFooter>
     </Sidebar>
-  )
+  );
 }
 
-export default AppSidebar
+export default AppSidebar;
