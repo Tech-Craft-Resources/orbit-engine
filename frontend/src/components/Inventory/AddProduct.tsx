@@ -1,16 +1,16 @@
-import { zodResolver } from "@hookform/resolvers/zod"
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
-import { Plus } from "lucide-react"
-import { useState } from "react"
-import { useForm } from "react-hook-form"
-import { z } from "zod"
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { Plus } from "lucide-react";
+import { useState } from "react";
+import { useForm } from "react-hook-form";
+import { z } from "zod";
 
 import {
   CategoriesService,
   type ProductCreate,
   ProductsService,
-} from "@/client"
-import { Button } from "@/components/ui/button"
+} from "@/client";
+import { Button } from "@/components/ui/button";
 import {
   Dialog,
   DialogClose,
@@ -20,7 +20,7 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from "@/components/ui/dialog"
+} from "@/components/ui/dialog";
 import {
   Form,
   FormControl,
@@ -28,18 +28,18 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "@/components/ui/form"
-import { Input } from "@/components/ui/input"
-import { LoadingButton } from "@/components/ui/loading-button"
+} from "@/components/ui/form";
+import { Input } from "@/components/ui/input";
+import { LoadingButton } from "@/components/ui/loading-button";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select"
-import useCustomToast from "@/hooks/useCustomToast"
-import { handleError } from "@/utils"
+} from "@/components/ui/select";
+import useCustomToast from "@/hooks/useCustomToast";
+import { handleError } from "@/utils";
 
 const formSchema = z.object({
   name: z.string().min(1, { message: "Name is required" }),
@@ -53,19 +53,19 @@ const formSchema = z.object({
   stock_max: z.string().optional(),
   unit: z.string().optional(),
   barcode: z.string().optional(),
-})
+});
 
-type FormData = z.infer<typeof formSchema>
+type FormData = z.infer<typeof formSchema>;
 
 const AddProduct = () => {
-  const [isOpen, setIsOpen] = useState(false)
-  const queryClient = useQueryClient()
-  const { showSuccessToast, showErrorToast } = useCustomToast()
+  const [isOpen, setIsOpen] = useState(false);
+  const queryClient = useQueryClient();
+  const { showSuccessToast, showErrorToast } = useCustomToast();
 
   const { data: categoriesData } = useQuery({
     queryKey: ["categories"],
     queryFn: () => CategoriesService.readCategories({ skip: 0, limit: 100 }),
-  })
+  });
 
   const form = useForm<FormData>({
     resolver: zodResolver(formSchema),
@@ -84,21 +84,21 @@ const AddProduct = () => {
       unit: "",
       barcode: "",
     },
-  })
+  });
 
   const mutation = useMutation({
     mutationFn: (data: ProductCreate) =>
       ProductsService.createProduct({ requestBody: data }),
     onSuccess: () => {
-      showSuccessToast("Product created successfully")
-      form.reset()
-      setIsOpen(false)
+      showSuccessToast("Product created successfully");
+      form.reset();
+      setIsOpen(false);
     },
     onError: handleError.bind(showErrorToast),
     onSettled: () => {
-      queryClient.invalidateQueries({ queryKey: ["products"] })
+      queryClient.invalidateQueries({ queryKey: ["products"] });
     },
-  })
+  });
 
   const onSubmit = (data: FormData) => {
     const requestBody: ProductCreate = {
@@ -115,14 +115,14 @@ const AddProduct = () => {
       stock_max: data.stock_max ? Number(data.stock_max) : undefined,
       unit: data.unit || undefined,
       barcode: data.barcode || undefined,
-    }
-    mutation.mutate(requestBody)
-  }
+    };
+    mutation.mutate(requestBody);
+  };
 
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
       <DialogTrigger asChild>
-        <Button className="my-4">
+        <Button className="my-0">
           <Plus className="mr-2" />
           Add Product
         </Button>
@@ -359,7 +359,7 @@ const AddProduct = () => {
         </Form>
       </DialogContent>
     </Dialog>
-  )
-}
+  );
+};
 
-export default AddProduct
+export default AddProduct;

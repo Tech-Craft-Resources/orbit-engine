@@ -1,31 +1,31 @@
-import { useSuspenseQuery } from "@tanstack/react-query"
-import { createFileRoute, redirect } from "@tanstack/react-router"
-import { Suspense, useMemo } from "react"
+import { useSuspenseQuery } from "@tanstack/react-query";
+import { createFileRoute, redirect } from "@tanstack/react-router";
+import { Suspense, useMemo } from "react";
 
-import { CategoriesService, ProductsService, UsersService } from "@/client"
-import { DataTable } from "@/components/Common/DataTable"
-import AddCategory from "@/components/Inventory/AddCategory"
-import AddProduct from "@/components/Inventory/AddProduct"
-import { categoryColumns } from "@/components/Inventory/categoryColumns"
-import { buildProductColumns } from "@/components/Inventory/columns"
-import PendingCategories from "@/components/Inventory/PendingCategories"
-import PendingProducts from "@/components/Inventory/PendingProducts"
-import { Badge } from "@/components/ui/badge"
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { hasRole } from "@/hooks/useAuth"
+import { CategoriesService, ProductsService, UsersService } from "@/client";
+import { DataTable } from "@/components/Common/DataTable";
+import AddCategory from "@/components/Inventory/AddCategory";
+import AddProduct from "@/components/Inventory/AddProduct";
+import { categoryColumns } from "@/components/Inventory/categoryColumns";
+import { buildProductColumns } from "@/components/Inventory/columns";
+import PendingCategories from "@/components/Inventory/PendingCategories";
+import PendingProducts from "@/components/Inventory/PendingProducts";
+import { Badge } from "@/components/ui/badge";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { hasRole } from "@/hooks/useAuth";
 
 function getProductsQueryOptions() {
   return {
     queryFn: () => ProductsService.readProducts({ skip: 0, limit: 100 }),
     queryKey: ["products"],
-  }
+  };
 }
 
 function getCategoriesQueryOptions() {
   return {
     queryFn: () => CategoriesService.readCategories({ skip: 0, limit: 100 }),
     queryKey: ["categories"],
-  }
+  };
 }
 
 function getLowStockQueryOptions() {
@@ -33,17 +33,17 @@ function getLowStockQueryOptions() {
     queryFn: () =>
       ProductsService.readLowStockProducts({ skip: 0, limit: 100 }),
     queryKey: ["low-stock-products"],
-  }
+  };
 }
 
 export const Route = createFileRoute("/dashboard/inventory")({
   component: Inventory,
   beforeLoad: async () => {
-    const user = await UsersService.readUserMe()
+    const user = await UsersService.readUserMe();
     if (!hasRole(user, ["admin", "seller"])) {
       throw redirect({
         to: "/",
-      })
+      });
     }
   },
   head: () => ({
@@ -53,18 +53,18 @@ export const Route = createFileRoute("/dashboard/inventory")({
       },
     ],
   }),
-})
+});
 
 function ProductsTableContent() {
-  const { data: products } = useSuspenseQuery(getProductsQueryOptions())
-  const { data: categories } = useSuspenseQuery(getCategoriesQueryOptions())
+  const { data: products } = useSuspenseQuery(getProductsQueryOptions());
+  const { data: categories } = useSuspenseQuery(getCategoriesQueryOptions());
 
   const columns = useMemo(
     () => buildProductColumns(categories.data),
     [categories.data],
-  )
+  );
 
-  return <DataTable columns={columns} data={products.data} />
+  return <DataTable columns={columns} data={products.data} />;
 }
 
 function ProductsTable() {
@@ -72,12 +72,12 @@ function ProductsTable() {
     <Suspense fallback={<PendingProducts />}>
       <ProductsTableContent />
     </Suspense>
-  )
+  );
 }
 
 function CategoriesTableContent() {
-  const { data: categories } = useSuspenseQuery(getCategoriesQueryOptions())
-  return <DataTable columns={categoryColumns} data={categories.data} />
+  const { data: categories } = useSuspenseQuery(getCategoriesQueryOptions());
+  return <DataTable columns={categoryColumns} data={categories.data} />;
 }
 
 function CategoriesTable() {
@@ -85,19 +85,19 @@ function CategoriesTable() {
     <Suspense fallback={<PendingCategories />}>
       <CategoriesTableContent />
     </Suspense>
-  )
+  );
 }
 
 function LowStockTableContent() {
-  const { data: lowStock } = useSuspenseQuery(getLowStockQueryOptions())
-  const { data: categories } = useSuspenseQuery(getCategoriesQueryOptions())
+  const { data: lowStock } = useSuspenseQuery(getLowStockQueryOptions());
+  const { data: categories } = useSuspenseQuery(getCategoriesQueryOptions());
 
   const columns = useMemo(
     () => buildProductColumns(categories.data),
     [categories.data],
-  )
+  );
 
-  return <DataTable columns={columns} data={lowStock.data} />
+  return <DataTable columns={columns} data={lowStock.data} />;
 }
 
 function LowStockTable() {
@@ -105,17 +105,17 @@ function LowStockTable() {
     <Suspense fallback={<PendingProducts />}>
       <LowStockTableContent />
     </Suspense>
-  )
+  );
 }
 
 function LowStockBadge() {
-  const { data: lowStock } = useSuspenseQuery(getLowStockQueryOptions())
-  if (lowStock.count === 0) return null
+  const { data: lowStock } = useSuspenseQuery(getLowStockQueryOptions());
+  if (lowStock.count === 0) return null;
   return (
     <Badge variant="destructive" className="ml-1.5 text-xs px-1.5 py-0">
       {lowStock.count}
     </Badge>
-  )
+  );
 }
 
 function Inventory() {
@@ -139,10 +139,10 @@ function Inventory() {
               </Suspense>
             </TabsTrigger>
           </TabsList>
-          <TabsContent value="products" className="mt-0">
+          <TabsContent value="products" className="mt-0 ml-4">
             <AddProduct />
           </TabsContent>
-          <TabsContent value="categories" className="mt-0">
+          <TabsContent value="categories" className="mt-0 ml-4">
             <AddCategory />
           </TabsContent>
         </div>
@@ -157,5 +157,5 @@ function Inventory() {
         </TabsContent>
       </Tabs>
     </div>
-  )
+  );
 }

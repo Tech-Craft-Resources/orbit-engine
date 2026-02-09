@@ -1,12 +1,12 @@
-import { zodResolver } from "@hookform/resolvers/zod"
-import { useMutation, useQueryClient } from "@tanstack/react-query"
-import { Plus } from "lucide-react"
-import { useState } from "react"
-import { useForm } from "react-hook-form"
-import { z } from "zod"
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { Plus } from "lucide-react";
+import { useState } from "react";
+import { useForm } from "react-hook-form";
+import { z } from "zod";
 
-import { CategoriesService, type CategoryCreate } from "@/client"
-import { Button } from "@/components/ui/button"
+import { CategoriesService, type CategoryCreate } from "@/client";
+import { Button } from "@/components/ui/button";
 import {
   Dialog,
   DialogClose,
@@ -16,7 +16,7 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from "@/components/ui/dialog"
+} from "@/components/ui/dialog";
 import {
   Form,
   FormControl,
@@ -24,23 +24,23 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "@/components/ui/form"
-import { Input } from "@/components/ui/input"
-import { LoadingButton } from "@/components/ui/loading-button"
-import useCustomToast from "@/hooks/useCustomToast"
-import { handleError } from "@/utils"
+} from "@/components/ui/form";
+import { Input } from "@/components/ui/input";
+import { LoadingButton } from "@/components/ui/loading-button";
+import useCustomToast from "@/hooks/useCustomToast";
+import { handleError } from "@/utils";
 
 const formSchema = z.object({
   name: z.string().min(1, { message: "Name is required" }),
   description: z.string().optional(),
-})
+});
 
-type FormData = z.infer<typeof formSchema>
+type FormData = z.infer<typeof formSchema>;
 
 const AddCategory = () => {
-  const [isOpen, setIsOpen] = useState(false)
-  const queryClient = useQueryClient()
-  const { showSuccessToast, showErrorToast } = useCustomToast()
+  const [isOpen, setIsOpen] = useState(false);
+  const queryClient = useQueryClient();
+  const { showSuccessToast, showErrorToast } = useCustomToast();
 
   const form = useForm<FormData>({
     resolver: zodResolver(formSchema),
@@ -50,34 +50,34 @@ const AddCategory = () => {
       name: "",
       description: "",
     },
-  })
+  });
 
   const mutation = useMutation({
     mutationFn: (data: CategoryCreate) =>
       CategoriesService.createCategory({ requestBody: data }),
     onSuccess: () => {
-      showSuccessToast("Category created successfully")
-      form.reset()
-      setIsOpen(false)
+      showSuccessToast("Category created successfully");
+      form.reset();
+      setIsOpen(false);
     },
     onError: handleError.bind(showErrorToast),
     onSettled: () => {
-      queryClient.invalidateQueries({ queryKey: ["categories"] })
+      queryClient.invalidateQueries({ queryKey: ["categories"] });
     },
-  })
+  });
 
   const onSubmit = (data: FormData) => {
     const requestBody: CategoryCreate = {
       name: data.name,
       description: data.description || undefined,
-    }
-    mutation.mutate(requestBody)
-  }
+    };
+    mutation.mutate(requestBody);
+  };
 
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
       <DialogTrigger asChild>
-        <Button className="my-4">
+        <Button className="my-0">
           <Plus className="mr-2" />
           Add Category
         </Button>
@@ -137,7 +137,7 @@ const AddCategory = () => {
         </Form>
       </DialogContent>
     </Dialog>
-  )
-}
+  );
+};
 
-export default AddCategory
+export default AddCategory;

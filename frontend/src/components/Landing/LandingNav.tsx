@@ -1,9 +1,9 @@
-import { Link as RouterLink } from "@tanstack/react-router"
-import { ChevronsUpDown, LogOut, Settings } from "lucide-react"
+import { Link as RouterLink } from "@tanstack/react-router";
+import { ChevronsUpDown, LogOut, Settings } from "lucide-react";
 
-import { Appearance } from "@/components/Common/Appearance"
-import { Avatar, AvatarFallback } from "@/components/ui/avatar"
-import { Button } from "@/components/ui/button"
+import { Appearance } from "@/components/Common/Appearance";
+import { Avatar, AvatarFallback } from "@/components/ui/avatar";
+import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -11,20 +11,20 @@ import {
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu"
-import useAuth from "@/hooks/useAuth"
-import { getInitials } from "@/utils"
+} from "@/components/ui/dropdown-menu";
+import useAuth from "@/hooks/useAuth";
+import { getInitials } from "@/utils";
 
 const navLinks = [
   { href: "#features", label: "Features" },
   { href: "#benefits", label: "Benefits" },
   { href: "#stats", label: "Results" },
-]
+];
 
 export function LandingNav() {
-  const { user, logout } = useAuth()
+  const { user, logout } = useAuth();
 
-  const fullName = user ? `${user.first_name} ${user.last_name}` : ""
+  const fullName = user ? `${user.first_name} ${user.last_name}` : "";
 
   return (
     <header className="sticky top-0 z-50 border-b bg-background/80 backdrop-blur-sm">
@@ -66,7 +66,7 @@ export function LandingNav() {
                 <DropdownMenuTrigger asChild>
                   <Button variant="ghost" size="sm" className="gap-2">
                     <Avatar className="size-6">
-                      <AvatarFallback className="bg-zinc-600 text-white text-xs">
+                      <AvatarFallback className="bg-muted text-muted-foreground border border-sidebar text-xs">
                         {getInitials(fullName || "User")}
                       </AvatarFallback>
                     </Avatar>
@@ -109,5 +109,5 @@ export function LandingNav() {
         </div>
       </div>
     </header>
-  )
+  );
 }
