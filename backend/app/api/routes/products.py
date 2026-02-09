@@ -11,12 +11,14 @@ from app.api.deps import (
     require_role,
 )
 from app.models import (
+    InventoryMovementCreate,
     Message,
     ProductCreate,
     ProductPublic,
     ProductsPublic,
     ProductUpdate,
     StockAdjustment,
+    InventoryMovementsPublic,
 )
 
 router = APIRouter()
@@ -229,6 +231,7 @@ def delete_product(
 def adjust_stock(
     *,
     session: SessionDep,
+    current_user: CurrentUser,
     current_organization: CurrentOrganization,
     product_id: uuid.UUID,
     adjustment: StockAdjustment,
@@ -238,6 +241,7 @@ def adjust_stock(
 
     Only admin and seller roles can adjust stock.
     The quantity can be positive (add stock) or negative (subtract stock).
+    Creates an inventory movement record for audit trail.
     """
     db_product = crud.get_product_by_id(
         session=session,
@@ -255,7 +259,64 @@ def adjust_stock(
             detail="Stock quantity cannot be negative",
         )
 
+    previous_stock = db_product.stock_quantity
+
     product = crud.adjust_product_stock(
         session=session, db_product=db_product, quantity=adjustment.quantity
     )
+
+    # Create inventory movement record
+    movement_create = InventoryMovementCreate(
+        product_id=product_id,
+        movement_type="adjustment",
+        quantity=adjustment.quantity,
+        reason=adjustment.reason,
+    )
+    crud.create_inventory_movement(
+        session=session,
+        movement_create=movement_create,
+        organization_id=current_organization,
+        user_id=current_user.id,
+        previous_stock=previous_stock,
+        new_stock=new_stock,
+    )
+
     return product
+
+
+@router.get("/{product_id}/movements", response_model=InventoryMovementsPublic)
+def read_product_movements(
+    product_id: uuid.UUID,
+    session: SessionDep,
+    current_user: CurrentUser,
+    current_organization: CurrentOrganization,
+    skip: int = 0,
+    limit: int = 100,
+) -> Any:
+    """
+    Retrieve inventory movements for a specific product.
+
+    Any authenticated user can view product movements.
+    """
+    # Validate product exists
+    product = crud.get_product_by_id(
+        session=session,
+        product_id=product_id,
+        organization_id=current_organization,
+    )
+    if not product:
+        raise HTTPException(status_code=404, detail="Product not found")
+
+    movements = crud.get_movements_by_product(
+        session=session,
+        product_id=product_id,
+        organization_id=current_organization,
+        skip=skip,
+        limit=limit,
+    )
+    count = crud.count_movements_by_product(
+        session=session,
+        product_id=product_id,
+        organization_id=current_organization,
+    )
+    return InventoryMovementsPublic(data=movements, count=count)

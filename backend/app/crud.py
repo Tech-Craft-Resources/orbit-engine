@@ -17,6 +17,11 @@ from app.models import (
     Product,
     ProductCreate,
     ProductUpdate,
+    Customer,
+    CustomerCreate,
+    CustomerUpdate,
+    InventoryMovement,
+    InventoryMovementCreate,
     Role,
 )
 
@@ -443,6 +448,223 @@ def soft_delete_product(*, session: Session, db_product: Product) -> Product:
     session.commit()
     session.refresh(db_product)
     return db_product
+
+
+# ============================================================================
+# CUSTOMER CRUD
+# ============================================================================
+
+
+def create_customer(
+    *, session: Session, customer_create: CustomerCreate, organization_id: uuid.UUID
+) -> Customer:
+    """Create a new customer within an organization"""
+    db_obj = Customer.model_validate(
+        customer_create,
+        update={"organization_id": organization_id},
+    )
+    session.add(db_obj)
+    session.commit()
+    session.refresh(db_obj)
+    return db_obj
+
+
+def get_customer_by_id(
+    *, session: Session, customer_id: uuid.UUID, organization_id: uuid.UUID
+) -> Customer | None:
+    """Get a customer by ID within an organization"""
+    statement = (
+        select(Customer)
+        .where(Customer.id == customer_id)
+        .where(Customer.organization_id == organization_id)
+        .where(Customer.deleted_at.is_(None))
+    )
+    return session.exec(statement).first()
+
+
+def get_customers_by_organization(
+    *,
+    session: Session,
+    organization_id: uuid.UUID,
+    skip: int = 0,
+    limit: int = 100,
+) -> list[Customer]:
+    """Get all customers for an organization"""
+    statement = (
+        select(Customer)
+        .where(Customer.organization_id == organization_id)
+        .where(Customer.deleted_at.is_(None))
+        .offset(skip)
+        .limit(limit)
+    )
+    return list(session.exec(statement).all())
+
+
+def count_customers_by_organization(
+    *, session: Session, organization_id: uuid.UUID
+) -> int:
+    """Count customers in an organization"""
+    from sqlalchemy import func
+
+    statement = (
+        select(func.count())
+        .select_from(Customer)
+        .where(Customer.organization_id == organization_id)
+        .where(Customer.deleted_at.is_(None))
+    )
+    return session.exec(statement).one()
+
+
+def get_customer_by_document(
+    *, session: Session, document_number: str, organization_id: uuid.UUID
+) -> Customer | None:
+    """Get a customer by document number within an organization"""
+    statement = (
+        select(Customer)
+        .where(Customer.document_number == document_number)
+        .where(Customer.organization_id == organization_id)
+        .where(Customer.deleted_at.is_(None))
+    )
+    return session.exec(statement).first()
+
+
+def update_customer(
+    *, session: Session, db_customer: Customer, customer_in: CustomerUpdate
+) -> Customer:
+    """Update a customer"""
+    from datetime import datetime, timezone
+
+    customer_data = customer_in.model_dump(exclude_unset=True)
+    db_customer.sqlmodel_update(customer_data)
+    db_customer.updated_at = datetime.now(timezone.utc)
+    session.add(db_customer)
+    session.commit()
+    session.refresh(db_customer)
+    return db_customer
+
+
+def soft_delete_customer(*, session: Session, db_customer: Customer) -> Customer:
+    """Soft delete a customer"""
+    from datetime import datetime, timezone
+
+    db_customer.deleted_at = datetime.now(timezone.utc)
+    db_customer.is_active = False
+    session.add(db_customer)
+    session.commit()
+    session.refresh(db_customer)
+    return db_customer
+
+
+# ============================================================================
+# INVENTORY MOVEMENT CRUD
+# ============================================================================
+
+
+def create_inventory_movement(
+    *,
+    session: Session,
+    movement_create: InventoryMovementCreate,
+    organization_id: uuid.UUID,
+    user_id: uuid.UUID,
+    previous_stock: int,
+    new_stock: int,
+) -> InventoryMovement:
+    """Create a new inventory movement record"""
+    db_obj = InventoryMovement.model_validate(
+        movement_create,
+        update={
+            "organization_id": organization_id,
+            "user_id": user_id,
+            "previous_stock": previous_stock,
+            "new_stock": new_stock,
+        },
+    )
+    session.add(db_obj)
+    session.commit()
+    session.refresh(db_obj)
+    return db_obj
+
+
+def get_inventory_movement_by_id(
+    *, session: Session, movement_id: uuid.UUID, organization_id: uuid.UUID
+) -> InventoryMovement | None:
+    """Get an inventory movement by ID within an organization"""
+    statement = (
+        select(InventoryMovement)
+        .where(InventoryMovement.id == movement_id)
+        .where(InventoryMovement.organization_id == organization_id)
+    )
+    return session.exec(statement).first()
+
+
+def get_movements_by_organization(
+    *,
+    session: Session,
+    organization_id: uuid.UUID,
+    skip: int = 0,
+    limit: int = 100,
+) -> list[InventoryMovement]:
+    """Get all inventory movements for an organization, ordered by most recent"""
+    statement = (
+        select(InventoryMovement)
+        .where(InventoryMovement.organization_id == organization_id)
+        .order_by(InventoryMovement.created_at.desc())
+        .offset(skip)
+        .limit(limit)
+    )
+    return list(session.exec(statement).all())
+
+
+def count_movements_by_organization(
+    *, session: Session, organization_id: uuid.UUID
+) -> int:
+    """Count inventory movements in an organization"""
+    from sqlalchemy import func
+
+    statement = (
+        select(func.count())
+        .select_from(InventoryMovement)
+        .where(InventoryMovement.organization_id == organization_id)
+    )
+    return session.exec(statement).one()
+
+
+def get_movements_by_product(
+    *,
+    session: Session,
+    product_id: uuid.UUID,
+    organization_id: uuid.UUID,
+    skip: int = 0,
+    limit: int = 100,
+) -> list[InventoryMovement]:
+    """Get all inventory movements for a specific product"""
+    statement = (
+        select(InventoryMovement)
+        .where(InventoryMovement.product_id == product_id)
+        .where(InventoryMovement.organization_id == organization_id)
+        .order_by(InventoryMovement.created_at.desc())
+        .offset(skip)
+        .limit(limit)
+    )
+    return list(session.exec(statement).all())
+
+
+def count_movements_by_product(
+    *,
+    session: Session,
+    product_id: uuid.UUID,
+    organization_id: uuid.UUID,
+) -> int:
+    """Count inventory movements for a specific product"""
+    from sqlalchemy import func
+
+    statement = (
+        select(func.count())
+        .select_from(InventoryMovement)
+        .where(InventoryMovement.product_id == product_id)
+        .where(InventoryMovement.organization_id == organization_id)
+    )
+    return session.exec(statement).one()
 
 
 # ============================================================================

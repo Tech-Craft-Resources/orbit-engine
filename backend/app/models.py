@@ -62,6 +62,8 @@ class Organization(OrganizationBase, table=True):
     users: list["User"] = Relationship(back_populates="organization")
     categories: list["Category"] = Relationship(back_populates="organization")
     products: list["Product"] = Relationship(back_populates="organization")
+    customers: list["Customer"] = Relationship(back_populates="organization")
+    inventory_movements: list["InventoryMovement"] = Relationship(back_populates="organization")
 
 
 class OrganizationCreate(OrganizationBase):
@@ -253,6 +255,7 @@ class Product(ProductBase, table=True):
     # Relationships
     organization: Organization = Relationship(back_populates="products")
     category: Optional["Category"] = Relationship(back_populates="products")
+    inventory_movements: list["InventoryMovement"] = Relationship(back_populates="product")
 
 
 class ProductCreate(SQLModel):
@@ -334,6 +337,177 @@ class ProductsPublic(SQLModel):
 
 
 # ============================================================================
+# INVENTORY MOVEMENT MODELS
+# ============================================================================
+
+
+class InventoryMovementBase(SQLModel):
+    movement_type: str = Field(max_length=50)  # sale, purchase, adjustment, return
+    quantity: int  # positive = in, negative = out
+    previous_stock: int
+    new_stock: int
+    reference_id: uuid.UUID | None = Field(default=None)
+    reference_type: str | None = Field(default=None, max_length=50)  # sale, purchase, adjustment
+    reason: str | None = Field(default=None)
+
+
+class InventoryMovement(InventoryMovementBase, table=True):
+    __tablename__ = "inventory_movements"
+    __table_args__ = (
+        Index("idx_inventory_movements_organization_id", "organization_id"),
+        Index("idx_inventory_movements_product_id", "product_id"),
+        Index("idx_inventory_movements_user_id", "user_id"),
+        Index("idx_inventory_movements_movement_type", "movement_type"),
+        Index("idx_inventory_movements_created_at", "created_at"),
+        Index(
+            "idx_inventory_movements_reference",
+            "reference_type",
+            "reference_id",
+        ),
+    )
+
+    id: uuid.UUID = Field(default_factory=uuid.uuid4, primary_key=True)
+    organization_id: uuid.UUID = Field(foreign_key="organizations.id", index=True)
+    product_id: uuid.UUID = Field(foreign_key="products.id", index=True)
+    user_id: uuid.UUID = Field(foreign_key="users.id", index=True)
+    created_at: datetime = Field(
+        default_factory=get_datetime_utc,
+        sa_type=DateTime(timezone=True),  # type: ignore
+    )
+
+    # Relationships
+    organization: Organization = Relationship(back_populates="inventory_movements")
+    product: "Product" = Relationship(back_populates="inventory_movements")
+    user: "User" = Relationship(back_populates="inventory_movements")
+
+
+class InventoryMovementCreate(SQLModel):
+    """Schema for creating an inventory movement."""
+    product_id: uuid.UUID
+    movement_type: str = Field(max_length=50)
+    quantity: int
+    reference_id: uuid.UUID | None = None
+    reference_type: str | None = Field(default=None, max_length=50)
+    reason: str | None = None
+
+
+class InventoryMovementPublic(InventoryMovementBase):
+    id: uuid.UUID
+    organization_id: uuid.UUID
+    product_id: uuid.UUID
+    user_id: uuid.UUID
+    created_at: datetime
+
+
+class InventoryMovementsPublic(SQLModel):
+    data: list[InventoryMovementPublic]
+    count: int
+
+
+# ============================================================================
+# CUSTOMER MODELS
+# ============================================================================
+
+
+class CustomerBase(SQLModel):
+    document_type: str = Field(max_length=50)  # DNI, RUC, Pasaporte, Otro
+    document_number: str = Field(max_length=50)
+    first_name: str = Field(max_length=100)
+    last_name: str = Field(max_length=100)
+    email: str | None = Field(default=None, max_length=255)
+    phone: str | None = Field(default=None, max_length=50)
+    address: str | None = Field(default=None)
+    city: str | None = Field(default=None, max_length=100)
+    country: str | None = Field(default=None, max_length=100)
+    notes: str | None = Field(default=None)
+    is_active: bool = Field(default=True)
+
+
+class Customer(CustomerBase, table=True):
+    __tablename__ = "customers"
+    __table_args__ = (
+        UniqueConstraint(
+            "organization_id",
+            "document_number",
+            name="uq_customers_organization_document",
+        ),
+        Index("idx_customers_organization_id", "organization_id"),
+        Index("idx_customers_email", "email"),
+        Index("idx_customers_phone", "phone"),
+        Index("idx_customers_is_active", "is_active"),
+    )
+
+    id: uuid.UUID = Field(default_factory=uuid.uuid4, primary_key=True)
+    organization_id: uuid.UUID = Field(foreign_key="organizations.id", index=True)
+    total_purchases: Decimal = Field(
+        default=Decimal("0"),
+        sa_column=Column(Numeric(precision=12, scale=2), nullable=False),
+    )
+    purchases_count: int = Field(default=0)
+    last_purchase_at: datetime | None = Field(
+        default=None,
+        sa_type=DateTime(timezone=True),  # type: ignore
+    )
+    created_at: datetime = Field(
+        default_factory=get_datetime_utc,
+        sa_type=DateTime(timezone=True),  # type: ignore
+    )
+    updated_at: datetime = Field(
+        default_factory=get_datetime_utc,
+        sa_type=DateTime(timezone=True),  # type: ignore
+    )
+    deleted_at: datetime | None = Field(
+        default=None,
+        sa_type=DateTime(timezone=True),  # type: ignore
+    )
+
+    # Relationships
+    organization: Organization = Relationship(back_populates="customers")
+
+
+class CustomerCreate(SQLModel):
+    document_type: str = Field(max_length=50)
+    document_number: str = Field(max_length=50)
+    first_name: str = Field(max_length=100)
+    last_name: str = Field(max_length=100)
+    email: str | None = Field(default=None, max_length=255)
+    phone: str | None = Field(default=None, max_length=50)
+    address: str | None = Field(default=None)
+    city: str | None = Field(default=None, max_length=100)
+    country: str | None = Field(default=None, max_length=100)
+    notes: str | None = Field(default=None)
+
+
+class CustomerUpdate(SQLModel):
+    document_type: str | None = Field(default=None, max_length=50)
+    document_number: str | None = Field(default=None, max_length=50)
+    first_name: str | None = Field(default=None, max_length=100)
+    last_name: str | None = Field(default=None, max_length=100)
+    email: str | None = Field(default=None, max_length=255)
+    phone: str | None = Field(default=None, max_length=50)
+    address: str | None = None
+    city: str | None = Field(default=None, max_length=100)
+    country: str | None = Field(default=None, max_length=100)
+    notes: str | None = None
+    is_active: bool | None = None
+
+
+class CustomerPublic(CustomerBase):
+    id: uuid.UUID
+    organization_id: uuid.UUID
+    total_purchases: Decimal
+    purchases_count: int
+    last_purchase_at: datetime | None = None
+    created_at: datetime
+    updated_at: datetime
+
+
+class CustomersPublic(SQLModel):
+    data: list[CustomerPublic]
+    count: int
+
+
+# ============================================================================
 # USER MODELS
 # ============================================================================
 
@@ -390,6 +564,7 @@ class User(UserBase, table=True):
     # Relationships
     organization: Organization = Relationship(back_populates="users")
     role: Role = Relationship(back_populates="users")
+    inventory_movements: list["InventoryMovement"] = Relationship(back_populates="user")
 
 
 class UserCreate(SQLModel):
