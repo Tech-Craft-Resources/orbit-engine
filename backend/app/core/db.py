@@ -29,10 +29,18 @@ def init_db(session: Session) -> None:
     # This works because the models are already imported and registered from app.models
     # SQLModel.metadata.create_all(engine)
 
-    # Check if any users exist
+    # Check if the superuser already exists (including soft-deleted)
     existing_user = session.exec(
         select(User).where(User.email == settings.FIRST_SUPERUSER)
     ).first()
+
+    if existing_user and (existing_user.deleted_at is not None or not existing_user.is_active):
+        # Restore a soft-deleted superuser
+        existing_user.deleted_at = None
+        existing_user.is_active = True
+        session.add(existing_user)
+        session.commit()
+        session.refresh(existing_user)
 
     if not existing_user:
         # Check if default organization exists
