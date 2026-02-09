@@ -18,6 +18,9 @@ import { Route as DashboardRouteImport } from './routes/dashboard'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as DashboardIndexRouteImport } from './routes/dashboard/index'
 import { Route as DashboardSettingsRouteImport } from './routes/dashboard/settings'
+import { Route as DashboardSalesRouteImport } from './routes/dashboard/sales'
+import { Route as DashboardInventoryRouteImport } from './routes/dashboard/inventory'
+import { Route as DashboardCustomersRouteImport } from './routes/dashboard/customers'
 import { Route as DashboardAdminRouteImport } from './routes/dashboard/admin'
 
 const SignupOrgRoute = SignupOrgRouteImport.update({
@@ -65,6 +68,21 @@ const DashboardSettingsRoute = DashboardSettingsRouteImport.update({
   path: '/settings',
   getParentRoute: () => DashboardRoute,
 } as any)
+const DashboardSalesRoute = DashboardSalesRouteImport.update({
+  id: '/sales',
+  path: '/sales',
+  getParentRoute: () => DashboardRoute,
+} as any)
+const DashboardInventoryRoute = DashboardInventoryRouteImport.update({
+  id: '/inventory',
+  path: '/inventory',
+  getParentRoute: () => DashboardRoute,
+} as any)
+const DashboardCustomersRoute = DashboardCustomersRouteImport.update({
+  id: '/customers',
+  path: '/customers',
+  getParentRoute: () => DashboardRoute,
+} as any)
 const DashboardAdminRoute = DashboardAdminRouteImport.update({
   id: '/admin',
   path: '/admin',
@@ -80,6 +98,9 @@ export interface FileRoutesByFullPath {
   '/signup': typeof SignupRoute
   '/signup-org': typeof SignupOrgRoute
   '/dashboard/admin': typeof DashboardAdminRoute
+  '/dashboard/customers': typeof DashboardCustomersRoute
+  '/dashboard/inventory': typeof DashboardInventoryRoute
+  '/dashboard/sales': typeof DashboardSalesRoute
   '/dashboard/settings': typeof DashboardSettingsRoute
   '/dashboard/': typeof DashboardIndexRoute
 }
@@ -91,6 +112,9 @@ export interface FileRoutesByTo {
   '/signup': typeof SignupRoute
   '/signup-org': typeof SignupOrgRoute
   '/dashboard/admin': typeof DashboardAdminRoute
+  '/dashboard/customers': typeof DashboardCustomersRoute
+  '/dashboard/inventory': typeof DashboardInventoryRoute
+  '/dashboard/sales': typeof DashboardSalesRoute
   '/dashboard/settings': typeof DashboardSettingsRoute
   '/dashboard': typeof DashboardIndexRoute
 }
@@ -104,6 +128,9 @@ export interface FileRoutesById {
   '/signup': typeof SignupRoute
   '/signup-org': typeof SignupOrgRoute
   '/dashboard/admin': typeof DashboardAdminRoute
+  '/dashboard/customers': typeof DashboardCustomersRoute
+  '/dashboard/inventory': typeof DashboardInventoryRoute
+  '/dashboard/sales': typeof DashboardSalesRoute
   '/dashboard/settings': typeof DashboardSettingsRoute
   '/dashboard/': typeof DashboardIndexRoute
 }
@@ -118,6 +145,9 @@ export interface FileRouteTypes {
     | '/signup'
     | '/signup-org'
     | '/dashboard/admin'
+    | '/dashboard/customers'
+    | '/dashboard/inventory'
+    | '/dashboard/sales'
     | '/dashboard/settings'
     | '/dashboard/'
   fileRoutesByTo: FileRoutesByTo
@@ -129,6 +159,9 @@ export interface FileRouteTypes {
     | '/signup'
     | '/signup-org'
     | '/dashboard/admin'
+    | '/dashboard/customers'
+    | '/dashboard/inventory'
+    | '/dashboard/sales'
     | '/dashboard/settings'
     | '/dashboard'
   id:
@@ -141,6 +174,9 @@ export interface FileRouteTypes {
     | '/signup'
     | '/signup-org'
     | '/dashboard/admin'
+    | '/dashboard/customers'
+    | '/dashboard/inventory'
+    | '/dashboard/sales'
     | '/dashboard/settings'
     | '/dashboard/'
   fileRoutesById: FileRoutesById
@@ -220,6 +256,27 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DashboardSettingsRouteImport
       parentRoute: typeof DashboardRoute
     }
+    '/dashboard/sales': {
+      id: '/dashboard/sales'
+      path: '/sales'
+      fullPath: '/dashboard/sales'
+      preLoaderRoute: typeof DashboardSalesRouteImport
+      parentRoute: typeof DashboardRoute
+    }
+    '/dashboard/inventory': {
+      id: '/dashboard/inventory'
+      path: '/inventory'
+      fullPath: '/dashboard/inventory'
+      preLoaderRoute: typeof DashboardInventoryRouteImport
+      parentRoute: typeof DashboardRoute
+    }
+    '/dashboard/customers': {
+      id: '/dashboard/customers'
+      path: '/customers'
+      fullPath: '/dashboard/customers'
+      preLoaderRoute: typeof DashboardCustomersRouteImport
+      parentRoute: typeof DashboardRoute
+    }
     '/dashboard/admin': {
       id: '/dashboard/admin'
       path: '/admin'
@@ -232,12 +289,18 @@ declare module '@tanstack/react-router' {
 
 interface DashboardRouteChildren {
   DashboardAdminRoute: typeof DashboardAdminRoute
+  DashboardCustomersRoute: typeof DashboardCustomersRoute
+  DashboardInventoryRoute: typeof DashboardInventoryRoute
+  DashboardSalesRoute: typeof DashboardSalesRoute
   DashboardSettingsRoute: typeof DashboardSettingsRoute
   DashboardIndexRoute: typeof DashboardIndexRoute
 }
 
 const DashboardRouteChildren: DashboardRouteChildren = {
   DashboardAdminRoute: DashboardAdminRoute,
+  DashboardCustomersRoute: DashboardCustomersRoute,
+  DashboardInventoryRoute: DashboardInventoryRoute,
+  DashboardSalesRoute: DashboardSalesRoute,
   DashboardSettingsRoute: DashboardSettingsRoute,
   DashboardIndexRoute: DashboardIndexRoute,
 }
