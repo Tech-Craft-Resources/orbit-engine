@@ -364,6 +364,12 @@ function SignUpOrg() {
               Log in
             </RouterLink>
           </div>
+
+          <div className="text-center text-sm text-muted-foreground">
+            <RouterLink to="/" className="underline underline-offset-4">
+              Back to main page
+            </RouterLink>
+          </div>
         </form>
       </Form>
     </AuthLayout>

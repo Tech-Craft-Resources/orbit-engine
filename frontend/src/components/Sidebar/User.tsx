@@ -1,5 +1,5 @@
-import { Link as RouterLink } from "@tanstack/react-router";
-import { ChevronsUpDown, LogOut, Settings } from "lucide-react";
+import { Link, Link as RouterLink } from "@tanstack/react-router";
+import { ChevronsUpDown, Home, LogOut, Settings } from "lucide-react";
 
 import type { UserPublic } from "@/client";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
@@ -96,6 +96,12 @@ export function User({ user }: { user: UserPublic | null | undefined }) {
               <LogOut />
               Log Out
             </DropdownMenuItem>
+            <Link to="/">
+              <DropdownMenuItem>
+                <Home />
+                Go to main page
+              </DropdownMenuItem>
+            </Link>
           </DropdownMenuContent>
         </DropdownMenu>
       </SidebarMenuItem>
