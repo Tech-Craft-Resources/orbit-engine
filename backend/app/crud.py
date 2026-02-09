@@ -1000,6 +1000,112 @@ def count_sales_by_customer(
 
 
 # ============================================================================
+# DASHBOARD
+# ============================================================================
+
+
+def get_top_products(
+    *,
+    session: Session,
+    organization_id: uuid.UUID,
+    limit: int = 5,
+) -> list[dict[str, Any]]:
+    """Get top-selling products by quantity sold for completed sales."""
+    from decimal import Decimal
+    from sqlalchemy import func
+
+    statement = (
+        select(
+            SaleItem.product_id,
+            SaleItem.product_name,
+            func.sum(SaleItem.quantity).label("quantity_sold"),
+            func.sum(SaleItem.subtotal).label("revenue"),
+        )
+        .join(Sale, SaleItem.sale_id == Sale.id)
+        .where(Sale.organization_id == organization_id)
+        .where(Sale.status == "completed")
+        .group_by(SaleItem.product_id, SaleItem.product_name)
+        .order_by(func.sum(SaleItem.quantity).desc())
+        .limit(limit)
+    )
+    results = session.exec(statement).all()
+    return [
+        {
+            "product_id": row[0],
+            "product_name": row[1],
+            "quantity_sold": int(row[2]),
+            "revenue": Decimal(str(row[3])),
+        }
+        for row in results
+    ]
+
+
+def get_sales_by_day(
+    *,
+    session: Session,
+    organization_id: uuid.UUID,
+    days: int = 30,
+) -> list[dict[str, Any]]:
+    """Get sales aggregated by day for the last N days, completed sales only."""
+    from datetime import datetime, timedelta, timezone
+    from decimal import Decimal
+    from sqlalchemy import func, cast, Date
+
+    now = datetime.now(timezone.utc)
+    start_date = now - timedelta(days=days)
+
+    statement = (
+        select(
+            cast(Sale.sale_date, Date).label("date"),
+            func.count().label("count"),
+            func.coalesce(func.sum(Sale.total), 0).label("total"),
+        )
+        .where(Sale.organization_id == organization_id)
+        .where(Sale.status == "completed")
+        .where(Sale.sale_date >= start_date)
+        .group_by(cast(Sale.sale_date, Date))
+        .order_by(cast(Sale.sale_date, Date))
+    )
+    results = session.exec(statement).all()
+    return [
+        {
+            "date": str(row[0]),
+            "count": int(row[1]),
+            "total": Decimal(str(row[2])),
+        }
+        for row in results
+    ]
+
+
+def get_dashboard_stats(
+    *,
+    session: Session,
+    organization_id: uuid.UUID,
+) -> dict[str, Any]:
+    """Get unified dashboard statistics for an organization."""
+    # Reuse existing functions
+    sales_stats = get_sales_stats(session=session, organization_id=organization_id)
+    low_stock = count_low_stock_products(session=session, organization_id=organization_id)
+    top_products = get_top_products(session=session, organization_id=organization_id)
+    sales_by_day = get_sales_by_day(session=session, organization_id=organization_id)
+
+    return {
+        "sales_today": {
+            "count": sales_stats["sales_today_count"],
+            "total": sales_stats["sales_today_total"],
+        },
+        "sales_month": {
+            "count": sales_stats["sales_month_count"],
+            "total": sales_stats["sales_month_total"],
+        },
+        "low_stock_count": low_stock,
+        "average_ticket": sales_stats["average_ticket"],
+        "top_products": top_products,
+        "sales_by_day": sales_by_day,
+    }
+
+
+# ============================================================================
 # AUTHENTICATION
 # ============================================================================
 

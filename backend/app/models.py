@@ -709,6 +709,48 @@ class SaleStatsPublic(SQLModel):
 
 
 # ============================================================================
+# DASHBOARD MODELS
+# ============================================================================
+
+
+class SalesTodayStats(SQLModel):
+    """Sales stats for today."""
+    count: int
+    total: Decimal
+
+
+class SalesMonthStats(SQLModel):
+    """Sales stats for current month."""
+    count: int
+    total: Decimal
+
+
+class TopProductItem(SQLModel):
+    """A top-selling product in dashboard stats."""
+    product_id: uuid.UUID
+    product_name: str
+    quantity_sold: int
+    revenue: Decimal
+
+
+class SalesByDayItem(SQLModel):
+    """Sales aggregated by day."""
+    date: str
+    count: int
+    total: Decimal
+
+
+class DashboardStatsPublic(SQLModel):
+    """Unified dashboard statistics response."""
+    sales_today: SalesTodayStats
+    sales_month: SalesMonthStats
+    low_stock_count: int
+    average_ticket: Decimal
+    top_products: list[TopProductItem]
+    sales_by_day: list[SalesByDayItem]
+
+
+# ============================================================================
 # USER MODELS
 # ============================================================================
 
