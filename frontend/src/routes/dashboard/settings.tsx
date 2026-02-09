@@ -1,14 +1,29 @@
 import { createFileRoute } from "@tanstack/react-router"
+import { type ComponentType, useMemo } from "react"
 
 import ChangePassword from "@/components/UserSettings/ChangePassword"
 import DeleteAccount from "@/components/UserSettings/DeleteAccount"
+import OrganizationSettings from "@/components/UserSettings/OrganizationSettings"
 import UserInformation from "@/components/UserSettings/UserInformation"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import useAuth from "@/hooks/useAuth"
+import useAuth, { type RoleName } from "@/hooks/useAuth"
 
-const tabsConfig = [
+interface TabConfig {
+  value: string
+  title: string
+  component: ComponentType
+  roles?: RoleName[]
+}
+
+const tabsConfig: TabConfig[] = [
   { value: "my-profile", title: "My profile", component: UserInformation },
   { value: "password", title: "Password", component: ChangePassword },
+  {
+    value: "organization",
+    title: "Organization",
+    component: OrganizationSettings,
+    roles: ["admin"],
+  },
   { value: "danger-zone", title: "Danger zone", component: DeleteAccount },
 ]
 
@@ -24,10 +39,12 @@ export const Route = createFileRoute("/dashboard/settings")({
 })
 
 function UserSettings() {
-  const { user: currentUser } = useAuth()
-  // Show all tabs (including danger zone) for all users
-  // In the future, we can restrict based on role_id if needed
-  const finalTabs = tabsConfig
+  const { user: currentUser, hasRole } = useAuth()
+
+  const finalTabs = useMemo(
+    () => tabsConfig.filter((tab) => !tab.roles || hasRole(tab.roles)),
+    [hasRole],
+  )
 
   if (!currentUser) {
     return null
