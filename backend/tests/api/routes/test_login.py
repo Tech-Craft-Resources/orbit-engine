@@ -4,12 +4,13 @@ from fastapi.testclient import TestClient
 from pwdlib.hashers.bcrypt import BcryptHasher
 from sqlmodel import Session
 
+from app import crud
 from app.core.config import settings
 from app.core.security import get_password_hash, verify_password
 from app.crud import create_user
 from app.models import User, UserCreate
 from app.utils import generate_password_reset_token
-from tests.utils.user import user_authentication_headers
+from tests.utils.user import _get_default_org_id, _get_role_id, user_authentication_headers
 from tests.utils.utils import random_email, random_lower_string
 
 
@@ -84,14 +85,17 @@ def test_reset_password(client: TestClient, db: Session) -> None:
     password = random_lower_string()
     new_password = random_lower_string()
 
+    organization_id = _get_default_org_id(db)
+    role_id = _get_role_id(db, "viewer")
+
     user_create = UserCreate(
         email=email,
-        full_name="Test User",
+        first_name="Test",
+        last_name="User",
         password=password,
-        is_active=True,
-        is_superuser=False,
+        role_id=role_id,
     )
-    user = create_user(session=db, user_create=user_create)
+    user = create_user(session=db, user_create=user_create, organization_id=organization_id)
     token = generate_password_reset_token(email=email)
     headers = user_authentication_headers(client=client, email=email, password=password)
     data = {"new_password": new_password, "token": token}
@@ -133,12 +137,23 @@ def test_login_with_bcrypt_password_upgrades_to_argon2(
     email = random_email()
     password = random_lower_string()
 
+    organization_id = _get_default_org_id(db)
+    role_id = _get_role_id(db, "viewer")
+
     # Create a bcrypt hash directly (simulating legacy password)
     bcrypt_hasher = BcryptHasher()
     bcrypt_hash = bcrypt_hasher.hash(password)
     assert bcrypt_hash.startswith("$2")  # bcrypt hashes start with $2
 
-    user = User(email=email, hashed_password=bcrypt_hash, is_active=True)
+    user = User(
+        email=email,
+        hashed_password=bcrypt_hash,
+        is_active=True,
+        first_name="Test",
+        last_name="User",
+        organization_id=organization_id,
+        role_id=role_id,
+    )
     db.add(user)
     db.commit()
     db.refresh(user)
@@ -167,12 +182,23 @@ def test_login_with_argon2_password_keeps_hash(client: TestClient, db: Session) 
     email = random_email()
     password = random_lower_string()
 
+    organization_id = _get_default_org_id(db)
+    role_id = _get_role_id(db, "viewer")
+
     # Create an argon2 hash (current default)
     argon2_hash = get_password_hash(password)
     assert argon2_hash.startswith("$argon2")
 
     # Create user with argon2 hash
-    user = User(email=email, hashed_password=argon2_hash, is_active=True)
+    user = User(
+        email=email,
+        hashed_password=argon2_hash,
+        is_active=True,
+        first_name="Test",
+        last_name="User",
+        organization_id=organization_id,
+        role_id=role_id,
+    )
     db.add(user)
     db.commit()
     db.refresh(user)

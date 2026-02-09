@@ -1,9 +1,10 @@
 import uuid
 from datetime import datetime, timezone
-from typing import TYPE_CHECKING
+from decimal import Decimal
+from typing import TYPE_CHECKING, Optional
 
 from pydantic import EmailStr, field_validator
-from sqlalchemy import Column, DateTime, Index, String, UniqueConstraint
+from sqlalchemy import Column, DateTime, Index, Numeric, String, UniqueConstraint
 from sqlalchemy.dialects.postgresql import JSONB
 from sqlmodel import Field, Relationship, SQLModel
 
@@ -59,6 +60,8 @@ class Organization(OrganizationBase, table=True):
 
     # Relationships
     users: list["User"] = Relationship(back_populates="organization")
+    categories: list["Category"] = Relationship(back_populates="organization")
+    products: list["Product"] = Relationship(back_populates="organization")
 
 
 class OrganizationCreate(OrganizationBase):
@@ -110,6 +113,223 @@ class RolePublic(RoleBase):
 
 class RolesPublic(SQLModel):
     data: list[RolePublic]
+    count: int
+
+
+# ============================================================================
+# CATEGORY MODELS
+# ============================================================================
+
+
+class CategoryBase(SQLModel):
+    name: str = Field(max_length=255)
+    description: str | None = Field(default=None)
+    parent_id: uuid.UUID | None = Field(default=None, foreign_key="categories.id")
+    is_active: bool = Field(default=True)
+
+
+class Category(CategoryBase, table=True):
+    __tablename__ = "categories"
+    __table_args__ = (
+        UniqueConstraint(
+            "organization_id",
+            "name",
+            "parent_id",
+            name="uq_categories_organization_name_parent",
+        ),
+        Index("idx_categories_organization_id", "organization_id"),
+        Index("idx_categories_parent_id", "parent_id"),
+        Index("idx_categories_is_active", "is_active"),
+    )
+
+    id: uuid.UUID = Field(default_factory=uuid.uuid4, primary_key=True)
+    organization_id: uuid.UUID = Field(foreign_key="organizations.id", index=True)
+    created_at: datetime = Field(
+        default_factory=get_datetime_utc,
+        sa_type=DateTime(timezone=True),  # type: ignore
+    )
+    updated_at: datetime = Field(
+        default_factory=get_datetime_utc,
+        sa_type=DateTime(timezone=True),  # type: ignore
+    )
+    deleted_at: datetime | None = Field(
+        default=None,
+        sa_type=DateTime(timezone=True),  # type: ignore
+    )
+
+    # Relationships
+    organization: Organization = Relationship(back_populates="categories")
+    parent: Optional["Category"] = Relationship(
+        back_populates="children",
+        sa_relationship_kwargs={"remote_side": "Category.id"},
+    )
+    children: list["Category"] = Relationship(back_populates="parent")
+    products: list["Product"] = Relationship(back_populates="category")
+
+
+class CategoryCreate(SQLModel):
+    name: str = Field(max_length=255)
+    description: str | None = Field(default=None)
+    parent_id: uuid.UUID | None = None
+
+
+class CategoryUpdate(SQLModel):
+    name: str | None = Field(default=None, max_length=255)
+    description: str | None = None
+    parent_id: uuid.UUID | None = None
+    is_active: bool | None = None
+
+
+class CategoryPublic(CategoryBase):
+    id: uuid.UUID
+    organization_id: uuid.UUID
+    created_at: datetime
+    updated_at: datetime
+
+
+class CategoriesPublic(SQLModel):
+    data: list[CategoryPublic]
+    count: int
+
+
+# ============================================================================
+# PRODUCT MODELS
+# ============================================================================
+
+
+class ProductBase(SQLModel):
+    name: str = Field(max_length=255)
+    sku: str = Field(max_length=100)
+    description: str | None = Field(default=None)
+    image_url: str | None = Field(default=None, max_length=500)
+    cost_price: Decimal = Field(
+        default=Decimal("0"),
+        sa_column=Column(Numeric(precision=12, scale=2), nullable=False),
+    )
+    sale_price: Decimal = Field(
+        default=Decimal("0"),
+        sa_column=Column(Numeric(precision=12, scale=2), nullable=False),
+    )
+    stock_quantity: int = Field(default=0)
+    stock_min: int = Field(default=0)
+    stock_max: int | None = Field(default=None)
+    unit: str = Field(default="unit", max_length=50)
+    barcode: str | None = Field(default=None, max_length=100)
+    is_active: bool = Field(default=True)
+
+
+class Product(ProductBase, table=True):
+    __tablename__ = "products"
+    __table_args__ = (
+        UniqueConstraint(
+            "organization_id",
+            "sku",
+            name="uq_products_organization_sku",
+        ),
+        Index("idx_products_organization_id", "organization_id"),
+        Index("idx_products_category_id", "category_id"),
+        Index("idx_products_is_active", "is_active"),
+        Index("idx_products_sku", "sku"),
+    )
+
+    id: uuid.UUID = Field(default_factory=uuid.uuid4, primary_key=True)
+    organization_id: uuid.UUID = Field(foreign_key="organizations.id", index=True)
+    category_id: uuid.UUID | None = Field(
+        default=None, foreign_key="categories.id", index=True
+    )
+    created_at: datetime = Field(
+        default_factory=get_datetime_utc,
+        sa_type=DateTime(timezone=True),  # type: ignore
+    )
+    updated_at: datetime = Field(
+        default_factory=get_datetime_utc,
+        sa_type=DateTime(timezone=True),  # type: ignore
+    )
+    deleted_at: datetime | None = Field(
+        default=None,
+        sa_type=DateTime(timezone=True),  # type: ignore
+    )
+
+    # Relationships
+    organization: Organization = Relationship(back_populates="products")
+    category: Optional["Category"] = Relationship(back_populates="products")
+
+
+class ProductCreate(SQLModel):
+    name: str = Field(max_length=255)
+    sku: str = Field(max_length=100)
+    description: str | None = Field(default=None)
+    image_url: str | None = Field(default=None, max_length=500)
+    category_id: uuid.UUID | None = None
+    cost_price: Decimal = Field(default=Decimal("0"))
+    sale_price: Decimal = Field(default=Decimal("0"))
+    stock_quantity: int = Field(default=0)
+    stock_min: int = Field(default=0)
+    stock_max: int | None = None
+    unit: str = Field(default="unit", max_length=50)
+    barcode: str | None = Field(default=None, max_length=100)
+
+    @field_validator("cost_price", "sale_price")
+    @classmethod
+    def validate_price(cls, v: Decimal) -> Decimal:
+        if v < 0:
+            raise ValueError("Price must be non-negative")
+        return v
+
+    @field_validator("stock_quantity", "stock_min")
+    @classmethod
+    def validate_stock(cls, v: int) -> int:
+        if v < 0:
+            raise ValueError("Stock values must be non-negative")
+        return v
+
+
+class ProductUpdate(SQLModel):
+    name: str | None = Field(default=None, max_length=255)
+    sku: str | None = Field(default=None, max_length=100)
+    description: str | None = None
+    image_url: str | None = Field(default=None, max_length=500)
+    category_id: uuid.UUID | None = None
+    cost_price: Decimal | None = None
+    sale_price: Decimal | None = None
+    stock_quantity: int | None = None
+    stock_min: int | None = None
+    stock_max: int | None = None
+    unit: str | None = Field(default=None, max_length=50)
+    barcode: str | None = Field(default=None, max_length=100)
+    is_active: bool | None = None
+
+    @field_validator("cost_price", "sale_price")
+    @classmethod
+    def validate_price(cls, v: Decimal | None) -> Decimal | None:
+        if v is not None and v < 0:
+            raise ValueError("Price must be non-negative")
+        return v
+
+    @field_validator("stock_quantity", "stock_min")
+    @classmethod
+    def validate_stock(cls, v: int | None) -> int | None:
+        if v is not None and v < 0:
+            raise ValueError("Stock values must be non-negative")
+        return v
+
+
+class StockAdjustment(SQLModel):
+    """Schema for manual stock adjustment."""
+    quantity: int  # Can be positive (add) or negative (subtract)
+    reason: str = Field(max_length=500)
+
+
+class ProductPublic(ProductBase):
+    id: uuid.UUID
+    organization_id: uuid.UUID
+    category_id: uuid.UUID | None = None
+    created_at: datetime
+    updated_at: datetime
+
+
+class ProductsPublic(SQLModel):
+    data: list[ProductPublic]
     count: int
 
 
@@ -193,6 +413,7 @@ class UserRegister(SQLModel):
 
 class UserUpdate(SQLModel):
     email: EmailStr | None = Field(default=None, max_length=255)
+    password: str | None = Field(default=None, min_length=8, max_length=128)
     first_name: str | None = Field(default=None, max_length=100)
     last_name: str | None = Field(default=None, max_length=100)
     phone: str | None = Field(default=None, max_length=50)

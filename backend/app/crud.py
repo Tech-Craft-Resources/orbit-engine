@@ -11,6 +11,12 @@ from app.models import (
     Organization,
     OrganizationCreate,
     OrganizationUpdate,
+    Category,
+    CategoryCreate,
+    CategoryUpdate,
+    Product,
+    ProductCreate,
+    ProductUpdate,
     Role,
 )
 
@@ -170,6 +176,273 @@ def count_users_by_organization(*, session: Session, organization_id: uuid.UUID)
         .where(User.deleted_at.is_(None))
     )
     return session.exec(statement).one()
+
+
+# ============================================================================
+# CATEGORY CRUD
+# ============================================================================
+
+
+def create_category(
+    *, session: Session, category_create: CategoryCreate, organization_id: uuid.UUID
+) -> Category:
+    """Create a new category within an organization"""
+    db_obj = Category.model_validate(
+        category_create,
+        update={"organization_id": organization_id},
+    )
+    session.add(db_obj)
+    session.commit()
+    session.refresh(db_obj)
+    return db_obj
+
+
+def get_category_by_id(
+    *, session: Session, category_id: uuid.UUID, organization_id: uuid.UUID
+) -> Category | None:
+    """Get a category by ID within an organization"""
+    statement = (
+        select(Category)
+        .where(Category.id == category_id)
+        .where(Category.organization_id == organization_id)
+        .where(Category.deleted_at.is_(None))
+    )
+    return session.exec(statement).first()
+
+
+def get_categories_by_organization(
+    *,
+    session: Session,
+    organization_id: uuid.UUID,
+    skip: int = 0,
+    limit: int = 100,
+) -> list[Category]:
+    """Get all categories for an organization"""
+    statement = (
+        select(Category)
+        .where(Category.organization_id == organization_id)
+        .where(Category.deleted_at.is_(None))
+        .offset(skip)
+        .limit(limit)
+    )
+    return list(session.exec(statement).all())
+
+
+def count_categories_by_organization(
+    *, session: Session, organization_id: uuid.UUID
+) -> int:
+    """Count categories in an organization"""
+    from sqlalchemy import func
+
+    statement = (
+        select(func.count())
+        .select_from(Category)
+        .where(Category.organization_id == organization_id)
+        .where(Category.deleted_at.is_(None))
+    )
+    return session.exec(statement).one()
+
+
+def get_category_by_name(
+    *,
+    session: Session,
+    name: str,
+    organization_id: uuid.UUID,
+    parent_id: uuid.UUID | None = None,
+) -> Category | None:
+    """Get a category by name within an organization and parent"""
+    statement = (
+        select(Category)
+        .where(Category.name == name)
+        .where(Category.organization_id == organization_id)
+        .where(Category.deleted_at.is_(None))
+    )
+    if parent_id is not None:
+        statement = statement.where(Category.parent_id == parent_id)
+    else:
+        statement = statement.where(Category.parent_id.is_(None))
+    return session.exec(statement).first()
+
+
+def update_category(
+    *, session: Session, db_category: Category, category_in: CategoryUpdate
+) -> Category:
+    """Update a category"""
+    from datetime import datetime, timezone
+
+    category_data = category_in.model_dump(exclude_unset=True)
+    db_category.sqlmodel_update(category_data)
+    db_category.updated_at = datetime.now(timezone.utc)
+    session.add(db_category)
+    session.commit()
+    session.refresh(db_category)
+    return db_category
+
+
+def soft_delete_category(*, session: Session, db_category: Category) -> Category:
+    """Soft delete a category"""
+    from datetime import datetime, timezone
+
+    db_category.deleted_at = datetime.now(timezone.utc)
+    db_category.is_active = False
+    session.add(db_category)
+    session.commit()
+    session.refresh(db_category)
+    return db_category
+
+
+# ============================================================================
+# PRODUCT CRUD
+# ============================================================================
+
+
+def create_product(
+    *, session: Session, product_create: ProductCreate, organization_id: uuid.UUID
+) -> Product:
+    """Create a new product within an organization"""
+    db_obj = Product.model_validate(
+        product_create,
+        update={"organization_id": organization_id},
+    )
+    session.add(db_obj)
+    session.commit()
+    session.refresh(db_obj)
+    return db_obj
+
+
+def get_product_by_id(
+    *, session: Session, product_id: uuid.UUID, organization_id: uuid.UUID
+) -> Product | None:
+    """Get a product by ID within an organization"""
+    statement = (
+        select(Product)
+        .where(Product.id == product_id)
+        .where(Product.organization_id == organization_id)
+        .where(Product.deleted_at.is_(None))
+    )
+    return session.exec(statement).first()
+
+
+def get_products_by_organization(
+    *,
+    session: Session,
+    organization_id: uuid.UUID,
+    skip: int = 0,
+    limit: int = 100,
+) -> list[Product]:
+    """Get all products for an organization"""
+    statement = (
+        select(Product)
+        .where(Product.organization_id == organization_id)
+        .where(Product.deleted_at.is_(None))
+        .offset(skip)
+        .limit(limit)
+    )
+    return list(session.exec(statement).all())
+
+
+def count_products_by_organization(
+    *, session: Session, organization_id: uuid.UUID
+) -> int:
+    """Count products in an organization"""
+    from sqlalchemy import func
+
+    statement = (
+        select(func.count())
+        .select_from(Product)
+        .where(Product.organization_id == organization_id)
+        .where(Product.deleted_at.is_(None))
+    )
+    return session.exec(statement).one()
+
+
+def get_product_by_sku(
+    *, session: Session, sku: str, organization_id: uuid.UUID
+) -> Product | None:
+    """Get a product by SKU within an organization"""
+    statement = (
+        select(Product)
+        .where(Product.sku == sku)
+        .where(Product.organization_id == organization_id)
+        .where(Product.deleted_at.is_(None))
+    )
+    return session.exec(statement).first()
+
+
+def get_low_stock_products(
+    *,
+    session: Session,
+    organization_id: uuid.UUID,
+    skip: int = 0,
+    limit: int = 100,
+) -> list[Product]:
+    """Get products where stock_quantity <= stock_min"""
+    statement = (
+        select(Product)
+        .where(Product.organization_id == organization_id)
+        .where(Product.deleted_at.is_(None))
+        .where(Product.stock_quantity <= Product.stock_min)
+        .offset(skip)
+        .limit(limit)
+    )
+    return list(session.exec(statement).all())
+
+
+def count_low_stock_products(
+    *, session: Session, organization_id: uuid.UUID
+) -> int:
+    """Count products where stock_quantity <= stock_min"""
+    from sqlalchemy import func
+
+    statement = (
+        select(func.count())
+        .select_from(Product)
+        .where(Product.organization_id == organization_id)
+        .where(Product.deleted_at.is_(None))
+        .where(Product.stock_quantity <= Product.stock_min)
+    )
+    return session.exec(statement).one()
+
+
+def update_product(
+    *, session: Session, db_product: Product, product_in: ProductUpdate
+) -> Product:
+    """Update a product"""
+    from datetime import datetime, timezone
+
+    product_data = product_in.model_dump(exclude_unset=True)
+    db_product.sqlmodel_update(product_data)
+    db_product.updated_at = datetime.now(timezone.utc)
+    session.add(db_product)
+    session.commit()
+    session.refresh(db_product)
+    return db_product
+
+
+def adjust_product_stock(
+    *, session: Session, db_product: Product, quantity: int
+) -> Product:
+    """Adjust product stock by a given quantity (positive or negative)"""
+    from datetime import datetime, timezone
+
+    db_product.stock_quantity += quantity
+    db_product.updated_at = datetime.now(timezone.utc)
+    session.add(db_product)
+    session.commit()
+    session.refresh(db_product)
+    return db_product
+
+
+def soft_delete_product(*, session: Session, db_product: Product) -> Product:
+    """Soft delete a product"""
+    from datetime import datetime, timezone
+
+    db_product.deleted_at = datetime.now(timezone.utc)
+    db_product.is_active = False
+    session.add(db_product)
+    session.commit()
+    session.refresh(db_product)
+    return db_product
 
 
 # ============================================================================
