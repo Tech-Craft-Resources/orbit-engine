@@ -1,13 +1,13 @@
-import { Link as RouterLink } from "@tanstack/react-router"
-import { ArrowRight, Bot, ChevronRight } from "lucide-react"
+import { Link as RouterLink } from "@tanstack/react-router";
+import { ArrowRight, Bot, ChevronRight } from "lucide-react";
 
-import { Badge } from "@/components/ui/badge"
-import { Button } from "@/components/ui/button"
-import { useScrollAnimation } from "@/hooks/useScrollAnimation"
-import { cn } from "@/lib/utils"
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { useScrollAnimation } from "@/hooks/useScrollAnimation";
+import { cn } from "@/lib/utils";
 
 export function Hero() {
-  const { ref, isVisible } = useScrollAnimation({ threshold: 0.1 })
+  const { ref, isVisible } = useScrollAnimation({ threshold: 0.1 });
 
   return (
     <section className="relative overflow-hidden">
@@ -44,7 +44,7 @@ export function Hero() {
             )}
           >
             <Button size="lg" asChild>
-              <RouterLink to="/signup">
+              <RouterLink to="/signup-org">
                 Start Free
                 <ArrowRight className="ml-2 h-4 w-4" />
               </RouterLink>
@@ -59,5 +59,5 @@ export function Hero() {
         </div>
       </div>
     </section>
-  )
+  );
 }

@@ -1,38 +1,38 @@
-import { Monitor, Moon, Sun } from "lucide-react"
+import { Monitor, Moon, Sun } from "lucide-react";
 
-import { type Theme, useTheme } from "@/components/theme-provider"
-import { Button } from "@/components/ui/button"
+import { type Theme, useTheme } from "@/components/theme-provider";
+import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu"
+} from "@/components/ui/dropdown-menu";
 import {
   SidebarMenuButton,
   SidebarMenuItem,
   useSidebar,
-} from "@/components/ui/sidebar"
+} from "@/components/ui/sidebar";
 
-type LucideIcon = React.FC<React.SVGProps<SVGSVGElement>>
+type LucideIcon = React.FC<React.SVGProps<SVGSVGElement>>;
 
 const ICON_MAP: Record<Theme, LucideIcon> = {
   system: Monitor,
   light: Sun,
   dark: Moon,
-}
+};
 
 export const SidebarAppearance = () => {
-  const { isMobile } = useSidebar()
-  const { setTheme, theme } = useTheme()
-  const Icon = ICON_MAP[theme]
+  const { isMobile } = useSidebar();
+  const { setTheme, theme } = useTheme();
+  const Icon = ICON_MAP[theme];
 
   return (
     <SidebarMenuItem>
       <DropdownMenu modal={false}>
         <DropdownMenuTrigger asChild>
           <SidebarMenuButton tooltip="Appearance" data-testid="theme-button">
-            <Icon className="size-4 text-muted-foreground" />
+            <Icon className="size-4 text-sidebar-foreground" />
             <span>Appearance</span>
             <span className="sr-only">Toggle theme</span>
           </SidebarMenuButton>
@@ -63,11 +63,11 @@ export const SidebarAppearance = () => {
         </DropdownMenuContent>
       </DropdownMenu>
     </SidebarMenuItem>
-  )
-}
+  );
+};
 
 export const Appearance = () => {
-  const { setTheme } = useTheme()
+  const { setTheme } = useTheme();
 
   return (
     <div className="flex items-center justify-center">
@@ -101,5 +101,5 @@ export const Appearance = () => {
         </DropdownMenuContent>
       </DropdownMenu>
     </div>
-  )
-}
+  );
+};

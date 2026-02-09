@@ -66,7 +66,7 @@ export function LandingNav() {
                 <DropdownMenuTrigger asChild>
                   <Button variant="ghost" size="sm" className="gap-2">
                     <Avatar className="size-6">
-                      <AvatarFallback className="bg-zinc-600 text-white text-xs">
+                      <AvatarFallback className="bg-muted text-muted-foreground border border-sidebar text-xs">
                         {getInitials(fullName || "User")}
                       </AvatarFallback>
                     </Avatar>

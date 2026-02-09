@@ -57,6 +57,610 @@ export const Body_login_login_access_tokenSchema = {
     title: 'Body_login-login_access_token'
 } as const;
 
+export const CategoriesPublicSchema = {
+    properties: {
+        data: {
+            items: {
+                '$ref': '#/components/schemas/CategoryPublic'
+            },
+            type: 'array',
+            title: 'Data'
+        },
+        count: {
+            type: 'integer',
+            title: 'Count'
+        }
+    },
+    type: 'object',
+    required: ['data', 'count'],
+    title: 'CategoriesPublic'
+} as const;
+
+export const CategoryCreateSchema = {
+    properties: {
+        name: {
+            type: 'string',
+            maxLength: 255,
+            title: 'Name'
+        },
+        description: {
+            anyOf: [
+                {
+                    type: 'string'
+                },
+                {
+                    type: 'null'
+                }
+            ],
+            title: 'Description'
+        },
+        parent_id: {
+            anyOf: [
+                {
+                    type: 'string',
+                    format: 'uuid'
+                },
+                {
+                    type: 'null'
+                }
+            ],
+            title: 'Parent Id'
+        }
+    },
+    type: 'object',
+    required: ['name'],
+    title: 'CategoryCreate'
+} as const;
+
+export const CategoryPublicSchema = {
+    properties: {
+        name: {
+            type: 'string',
+            maxLength: 255,
+            title: 'Name'
+        },
+        description: {
+            anyOf: [
+                {
+                    type: 'string'
+                },
+                {
+                    type: 'null'
+                }
+            ],
+            title: 'Description'
+        },
+        parent_id: {
+            anyOf: [
+                {
+                    type: 'string',
+                    format: 'uuid'
+                },
+                {
+                    type: 'null'
+                }
+            ],
+            title: 'Parent Id'
+        },
+        is_active: {
+            type: 'boolean',
+            title: 'Is Active',
+            default: true
+        },
+        id: {
+            type: 'string',
+            format: 'uuid',
+            title: 'Id'
+        },
+        organization_id: {
+            type: 'string',
+            format: 'uuid',
+            title: 'Organization Id'
+        },
+        created_at: {
+            type: 'string',
+            format: 'date-time',
+            title: 'Created At'
+        },
+        updated_at: {
+            type: 'string',
+            format: 'date-time',
+            title: 'Updated At'
+        }
+    },
+    type: 'object',
+    required: ['name', 'id', 'organization_id', 'created_at', 'updated_at'],
+    title: 'CategoryPublic'
+} as const;
+
+export const CategoryUpdateSchema = {
+    properties: {
+        name: {
+            anyOf: [
+                {
+                    type: 'string',
+                    maxLength: 255
+                },
+                {
+                    type: 'null'
+                }
+            ],
+            title: 'Name'
+        },
+        description: {
+            anyOf: [
+                {
+                    type: 'string'
+                },
+                {
+                    type: 'null'
+                }
+            ],
+            title: 'Description'
+        },
+        parent_id: {
+            anyOf: [
+                {
+                    type: 'string',
+                    format: 'uuid'
+                },
+                {
+                    type: 'null'
+                }
+            ],
+            title: 'Parent Id'
+        },
+        is_active: {
+            anyOf: [
+                {
+                    type: 'boolean'
+                },
+                {
+                    type: 'null'
+                }
+            ],
+            title: 'Is Active'
+        }
+    },
+    type: 'object',
+    title: 'CategoryUpdate'
+} as const;
+
+export const CustomerCreateSchema = {
+    properties: {
+        document_type: {
+            type: 'string',
+            maxLength: 50,
+            title: 'Document Type'
+        },
+        document_number: {
+            type: 'string',
+            maxLength: 50,
+            title: 'Document Number'
+        },
+        first_name: {
+            type: 'string',
+            maxLength: 100,
+            title: 'First Name'
+        },
+        last_name: {
+            type: 'string',
+            maxLength: 100,
+            title: 'Last Name'
+        },
+        email: {
+            anyOf: [
+                {
+                    type: 'string',
+                    maxLength: 255
+                },
+                {
+                    type: 'null'
+                }
+            ],
+            title: 'Email'
+        },
+        phone: {
+            anyOf: [
+                {
+                    type: 'string',
+                    maxLength: 50
+                },
+                {
+                    type: 'null'
+                }
+            ],
+            title: 'Phone'
+        },
+        address: {
+            anyOf: [
+                {
+                    type: 'string'
+                },
+                {
+                    type: 'null'
+                }
+            ],
+            title: 'Address'
+        },
+        city: {
+            anyOf: [
+                {
+                    type: 'string',
+                    maxLength: 100
+                },
+                {
+                    type: 'null'
+                }
+            ],
+            title: 'City'
+        },
+        country: {
+            anyOf: [
+                {
+                    type: 'string',
+                    maxLength: 100
+                },
+                {
+                    type: 'null'
+                }
+            ],
+            title: 'Country'
+        },
+        notes: {
+            anyOf: [
+                {
+                    type: 'string'
+                },
+                {
+                    type: 'null'
+                }
+            ],
+            title: 'Notes'
+        }
+    },
+    type: 'object',
+    required: ['document_type', 'document_number', 'first_name', 'last_name'],
+    title: 'CustomerCreate'
+} as const;
+
+export const CustomerPublicSchema = {
+    properties: {
+        document_type: {
+            type: 'string',
+            maxLength: 50,
+            title: 'Document Type'
+        },
+        document_number: {
+            type: 'string',
+            maxLength: 50,
+            title: 'Document Number'
+        },
+        first_name: {
+            type: 'string',
+            maxLength: 100,
+            title: 'First Name'
+        },
+        last_name: {
+            type: 'string',
+            maxLength: 100,
+            title: 'Last Name'
+        },
+        email: {
+            anyOf: [
+                {
+                    type: 'string',
+                    maxLength: 255
+                },
+                {
+                    type: 'null'
+                }
+            ],
+            title: 'Email'
+        },
+        phone: {
+            anyOf: [
+                {
+                    type: 'string',
+                    maxLength: 50
+                },
+                {
+                    type: 'null'
+                }
+            ],
+            title: 'Phone'
+        },
+        address: {
+            anyOf: [
+                {
+                    type: 'string'
+                },
+                {
+                    type: 'null'
+                }
+            ],
+            title: 'Address'
+        },
+        city: {
+            anyOf: [
+                {
+                    type: 'string',
+                    maxLength: 100
+                },
+                {
+                    type: 'null'
+                }
+            ],
+            title: 'City'
+        },
+        country: {
+            anyOf: [
+                {
+                    type: 'string',
+                    maxLength: 100
+                },
+                {
+                    type: 'null'
+                }
+            ],
+            title: 'Country'
+        },
+        notes: {
+            anyOf: [
+                {
+                    type: 'string'
+                },
+                {
+                    type: 'null'
+                }
+            ],
+            title: 'Notes'
+        },
+        is_active: {
+            type: 'boolean',
+            title: 'Is Active',
+            default: true
+        },
+        id: {
+            type: 'string',
+            format: 'uuid',
+            title: 'Id'
+        },
+        organization_id: {
+            type: 'string',
+            format: 'uuid',
+            title: 'Organization Id'
+        },
+        total_purchases: {
+            type: 'string',
+            pattern: '^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$',
+            title: 'Total Purchases'
+        },
+        purchases_count: {
+            type: 'integer',
+            title: 'Purchases Count'
+        },
+        last_purchase_at: {
+            anyOf: [
+                {
+                    type: 'string',
+                    format: 'date-time'
+                },
+                {
+                    type: 'null'
+                }
+            ],
+            title: 'Last Purchase At'
+        },
+        created_at: {
+            type: 'string',
+            format: 'date-time',
+            title: 'Created At'
+        },
+        updated_at: {
+            type: 'string',
+            format: 'date-time',
+            title: 'Updated At'
+        }
+    },
+    type: 'object',
+    required: ['document_type', 'document_number', 'first_name', 'last_name', 'id', 'organization_id', 'total_purchases', 'purchases_count', 'created_at', 'updated_at'],
+    title: 'CustomerPublic'
+} as const;
+
+export const CustomerUpdateSchema = {
+    properties: {
+        document_type: {
+            anyOf: [
+                {
+                    type: 'string',
+                    maxLength: 50
+                },
+                {
+                    type: 'null'
+                }
+            ],
+            title: 'Document Type'
+        },
+        document_number: {
+            anyOf: [
+                {
+                    type: 'string',
+                    maxLength: 50
+                },
+                {
+                    type: 'null'
+                }
+            ],
+            title: 'Document Number'
+        },
+        first_name: {
+            anyOf: [
+                {
+                    type: 'string',
+                    maxLength: 100
+                },
+                {
+                    type: 'null'
+                }
+            ],
+            title: 'First Name'
+        },
+        last_name: {
+            anyOf: [
+                {
+                    type: 'string',
+                    maxLength: 100
+                },
+                {
+                    type: 'null'
+                }
+            ],
+            title: 'Last Name'
+        },
+        email: {
+            anyOf: [
+                {
+                    type: 'string',
+                    maxLength: 255
+                },
+                {
+                    type: 'null'
+                }
+            ],
+            title: 'Email'
+        },
+        phone: {
+            anyOf: [
+                {
+                    type: 'string',
+                    maxLength: 50
+                },
+                {
+                    type: 'null'
+                }
+            ],
+            title: 'Phone'
+        },
+        address: {
+            anyOf: [
+                {
+                    type: 'string'
+                },
+                {
+                    type: 'null'
+                }
+            ],
+            title: 'Address'
+        },
+        city: {
+            anyOf: [
+                {
+                    type: 'string',
+                    maxLength: 100
+                },
+                {
+                    type: 'null'
+                }
+            ],
+            title: 'City'
+        },
+        country: {
+            anyOf: [
+                {
+                    type: 'string',
+                    maxLength: 100
+                },
+                {
+                    type: 'null'
+                }
+            ],
+            title: 'Country'
+        },
+        notes: {
+            anyOf: [
+                {
+                    type: 'string'
+                },
+                {
+                    type: 'null'
+                }
+            ],
+            title: 'Notes'
+        },
+        is_active: {
+            anyOf: [
+                {
+                    type: 'boolean'
+                },
+                {
+                    type: 'null'
+                }
+            ],
+            title: 'Is Active'
+        }
+    },
+    type: 'object',
+    title: 'CustomerUpdate'
+} as const;
+
+export const CustomersPublicSchema = {
+    properties: {
+        data: {
+            items: {
+                '$ref': '#/components/schemas/CustomerPublic'
+            },
+            type: 'array',
+            title: 'Data'
+        },
+        count: {
+            type: 'integer',
+            title: 'Count'
+        }
+    },
+    type: 'object',
+    required: ['data', 'count'],
+    title: 'CustomersPublic'
+} as const;
+
+export const DashboardStatsPublicSchema = {
+    properties: {
+        sales_today: {
+            '$ref': '#/components/schemas/SalesTodayStats'
+        },
+        sales_month: {
+            '$ref': '#/components/schemas/SalesMonthStats'
+        },
+        low_stock_count: {
+            type: 'integer',
+            title: 'Low Stock Count'
+        },
+        average_ticket: {
+            type: 'string',
+            pattern: '^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$',
+            title: 'Average Ticket'
+        },
+        top_products: {
+            items: {
+                '$ref': '#/components/schemas/TopProductItem'
+            },
+            type: 'array',
+            title: 'Top Products'
+        },
+        sales_by_day: {
+            items: {
+                '$ref': '#/components/schemas/SalesByDayItem'
+            },
+            type: 'array',
+            title: 'Sales By Day'
+        }
+    },
+    type: 'object',
+    required: ['sales_today', 'sales_month', 'low_stock_count', 'average_ticket', 'top_products', 'sales_by_day'],
+    title: 'DashboardStatsPublic',
+    description: 'Unified dashboard statistics response.'
+} as const;
+
 export const HTTPValidationErrorSchema = {
     properties: {
         detail: {
@@ -69,6 +673,168 @@ export const HTTPValidationErrorSchema = {
     },
     type: 'object',
     title: 'HTTPValidationError'
+} as const;
+
+export const InventoryMovementCreateSchema = {
+    properties: {
+        product_id: {
+            type: 'string',
+            format: 'uuid',
+            title: 'Product Id'
+        },
+        movement_type: {
+            type: 'string',
+            maxLength: 50,
+            title: 'Movement Type'
+        },
+        quantity: {
+            type: 'integer',
+            title: 'Quantity'
+        },
+        reference_id: {
+            anyOf: [
+                {
+                    type: 'string',
+                    format: 'uuid'
+                },
+                {
+                    type: 'null'
+                }
+            ],
+            title: 'Reference Id'
+        },
+        reference_type: {
+            anyOf: [
+                {
+                    type: 'string',
+                    maxLength: 50
+                },
+                {
+                    type: 'null'
+                }
+            ],
+            title: 'Reference Type'
+        },
+        reason: {
+            anyOf: [
+                {
+                    type: 'string'
+                },
+                {
+                    type: 'null'
+                }
+            ],
+            title: 'Reason'
+        }
+    },
+    type: 'object',
+    required: ['product_id', 'movement_type', 'quantity'],
+    title: 'InventoryMovementCreate',
+    description: 'Schema for creating an inventory movement.'
+} as const;
+
+export const InventoryMovementPublicSchema = {
+    properties: {
+        movement_type: {
+            type: 'string',
+            maxLength: 50,
+            title: 'Movement Type'
+        },
+        quantity: {
+            type: 'integer',
+            title: 'Quantity'
+        },
+        previous_stock: {
+            type: 'integer',
+            title: 'Previous Stock'
+        },
+        new_stock: {
+            type: 'integer',
+            title: 'New Stock'
+        },
+        reference_id: {
+            anyOf: [
+                {
+                    type: 'string',
+                    format: 'uuid'
+                },
+                {
+                    type: 'null'
+                }
+            ],
+            title: 'Reference Id'
+        },
+        reference_type: {
+            anyOf: [
+                {
+                    type: 'string',
+                    maxLength: 50
+                },
+                {
+                    type: 'null'
+                }
+            ],
+            title: 'Reference Type'
+        },
+        reason: {
+            anyOf: [
+                {
+                    type: 'string'
+                },
+                {
+                    type: 'null'
+                }
+            ],
+            title: 'Reason'
+        },
+        id: {
+            type: 'string',
+            format: 'uuid',
+            title: 'Id'
+        },
+        organization_id: {
+            type: 'string',
+            format: 'uuid',
+            title: 'Organization Id'
+        },
+        product_id: {
+            type: 'string',
+            format: 'uuid',
+            title: 'Product Id'
+        },
+        user_id: {
+            type: 'string',
+            format: 'uuid',
+            title: 'User Id'
+        },
+        created_at: {
+            type: 'string',
+            format: 'date-time',
+            title: 'Created At'
+        }
+    },
+    type: 'object',
+    required: ['movement_type', 'quantity', 'previous_stock', 'new_stock', 'id', 'organization_id', 'product_id', 'user_id', 'created_at'],
+    title: 'InventoryMovementPublic'
+} as const;
+
+export const InventoryMovementsPublicSchema = {
+    properties: {
+        data: {
+            items: {
+                '$ref': '#/components/schemas/InventoryMovementPublic'
+            },
+            type: 'array',
+            title: 'Data'
+        },
+        count: {
+            type: 'integer',
+            title: 'Count'
+        }
+    },
+    type: 'object',
+    required: ['data', 'count'],
+    title: 'InventoryMovementsPublic'
 } as const;
 
 export const LoginResponseSchema = {
@@ -310,9 +1076,23 @@ export const PrivateUserCreateSchema = {
             type: 'string',
             title: 'Password'
         },
-        full_name: {
+        first_name: {
             type: 'string',
-            title: 'Full Name'
+            title: 'First Name'
+        },
+        last_name: {
+            type: 'string',
+            title: 'Last Name'
+        },
+        organization_id: {
+            type: 'string',
+            format: 'uuid',
+            title: 'Organization Id'
+        },
+        role_id: {
+            type: 'integer',
+            title: 'Role Id',
+            default: 3
         },
         is_verified: {
             type: 'boolean',
@@ -321,8 +1101,438 @@ export const PrivateUserCreateSchema = {
         }
     },
     type: 'object',
-    required: ['email', 'password', 'full_name'],
+    required: ['email', 'password', 'first_name', 'last_name', 'organization_id'],
     title: 'PrivateUserCreate'
+} as const;
+
+export const ProductCreateSchema = {
+    properties: {
+        name: {
+            type: 'string',
+            maxLength: 255,
+            title: 'Name'
+        },
+        sku: {
+            type: 'string',
+            maxLength: 100,
+            title: 'Sku'
+        },
+        description: {
+            anyOf: [
+                {
+                    type: 'string'
+                },
+                {
+                    type: 'null'
+                }
+            ],
+            title: 'Description'
+        },
+        image_url: {
+            anyOf: [
+                {
+                    type: 'string',
+                    maxLength: 500
+                },
+                {
+                    type: 'null'
+                }
+            ],
+            title: 'Image Url'
+        },
+        category_id: {
+            anyOf: [
+                {
+                    type: 'string',
+                    format: 'uuid'
+                },
+                {
+                    type: 'null'
+                }
+            ],
+            title: 'Category Id'
+        },
+        cost_price: {
+            anyOf: [
+                {
+                    type: 'number'
+                },
+                {
+                    type: 'string',
+                    pattern: '^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$'
+                }
+            ],
+            title: 'Cost Price',
+            default: '0'
+        },
+        sale_price: {
+            anyOf: [
+                {
+                    type: 'number'
+                },
+                {
+                    type: 'string',
+                    pattern: '^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$'
+                }
+            ],
+            title: 'Sale Price',
+            default: '0'
+        },
+        stock_quantity: {
+            type: 'integer',
+            title: 'Stock Quantity',
+            default: 0
+        },
+        stock_min: {
+            type: 'integer',
+            title: 'Stock Min',
+            default: 0
+        },
+        stock_max: {
+            anyOf: [
+                {
+                    type: 'integer'
+                },
+                {
+                    type: 'null'
+                }
+            ],
+            title: 'Stock Max'
+        },
+        unit: {
+            type: 'string',
+            maxLength: 50,
+            title: 'Unit',
+            default: 'unit'
+        },
+        barcode: {
+            anyOf: [
+                {
+                    type: 'string',
+                    maxLength: 100
+                },
+                {
+                    type: 'null'
+                }
+            ],
+            title: 'Barcode'
+        }
+    },
+    type: 'object',
+    required: ['name', 'sku'],
+    title: 'ProductCreate'
+} as const;
+
+export const ProductPublicSchema = {
+    properties: {
+        name: {
+            type: 'string',
+            maxLength: 255,
+            title: 'Name'
+        },
+        sku: {
+            type: 'string',
+            maxLength: 100,
+            title: 'Sku'
+        },
+        description: {
+            anyOf: [
+                {
+                    type: 'string'
+                },
+                {
+                    type: 'null'
+                }
+            ],
+            title: 'Description'
+        },
+        image_url: {
+            anyOf: [
+                {
+                    type: 'string',
+                    maxLength: 500
+                },
+                {
+                    type: 'null'
+                }
+            ],
+            title: 'Image Url'
+        },
+        cost_price: {
+            type: 'string',
+            pattern: '^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$',
+            title: 'Cost Price',
+            default: '0'
+        },
+        sale_price: {
+            type: 'string',
+            pattern: '^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$',
+            title: 'Sale Price',
+            default: '0'
+        },
+        stock_quantity: {
+            type: 'integer',
+            title: 'Stock Quantity',
+            default: 0
+        },
+        stock_min: {
+            type: 'integer',
+            title: 'Stock Min',
+            default: 0
+        },
+        stock_max: {
+            anyOf: [
+                {
+                    type: 'integer'
+                },
+                {
+                    type: 'null'
+                }
+            ],
+            title: 'Stock Max'
+        },
+        unit: {
+            type: 'string',
+            maxLength: 50,
+            title: 'Unit',
+            default: 'unit'
+        },
+        barcode: {
+            anyOf: [
+                {
+                    type: 'string',
+                    maxLength: 100
+                },
+                {
+                    type: 'null'
+                }
+            ],
+            title: 'Barcode'
+        },
+        is_active: {
+            type: 'boolean',
+            title: 'Is Active',
+            default: true
+        },
+        id: {
+            type: 'string',
+            format: 'uuid',
+            title: 'Id'
+        },
+        organization_id: {
+            type: 'string',
+            format: 'uuid',
+            title: 'Organization Id'
+        },
+        category_id: {
+            anyOf: [
+                {
+                    type: 'string',
+                    format: 'uuid'
+                },
+                {
+                    type: 'null'
+                }
+            ],
+            title: 'Category Id'
+        },
+        created_at: {
+            type: 'string',
+            format: 'date-time',
+            title: 'Created At'
+        },
+        updated_at: {
+            type: 'string',
+            format: 'date-time',
+            title: 'Updated At'
+        }
+    },
+    type: 'object',
+    required: ['name', 'sku', 'id', 'organization_id', 'created_at', 'updated_at'],
+    title: 'ProductPublic'
+} as const;
+
+export const ProductUpdateSchema = {
+    properties: {
+        name: {
+            anyOf: [
+                {
+                    type: 'string',
+                    maxLength: 255
+                },
+                {
+                    type: 'null'
+                }
+            ],
+            title: 'Name'
+        },
+        sku: {
+            anyOf: [
+                {
+                    type: 'string',
+                    maxLength: 100
+                },
+                {
+                    type: 'null'
+                }
+            ],
+            title: 'Sku'
+        },
+        description: {
+            anyOf: [
+                {
+                    type: 'string'
+                },
+                {
+                    type: 'null'
+                }
+            ],
+            title: 'Description'
+        },
+        image_url: {
+            anyOf: [
+                {
+                    type: 'string',
+                    maxLength: 500
+                },
+                {
+                    type: 'null'
+                }
+            ],
+            title: 'Image Url'
+        },
+        category_id: {
+            anyOf: [
+                {
+                    type: 'string',
+                    format: 'uuid'
+                },
+                {
+                    type: 'null'
+                }
+            ],
+            title: 'Category Id'
+        },
+        cost_price: {
+            anyOf: [
+                {
+                    type: 'number'
+                },
+                {
+                    type: 'string',
+                    pattern: '^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$'
+                },
+                {
+                    type: 'null'
+                }
+            ],
+            title: 'Cost Price'
+        },
+        sale_price: {
+            anyOf: [
+                {
+                    type: 'number'
+                },
+                {
+                    type: 'string',
+                    pattern: '^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$'
+                },
+                {
+                    type: 'null'
+                }
+            ],
+            title: 'Sale Price'
+        },
+        stock_quantity: {
+            anyOf: [
+                {
+                    type: 'integer'
+                },
+                {
+                    type: 'null'
+                }
+            ],
+            title: 'Stock Quantity'
+        },
+        stock_min: {
+            anyOf: [
+                {
+                    type: 'integer'
+                },
+                {
+                    type: 'null'
+                }
+            ],
+            title: 'Stock Min'
+        },
+        stock_max: {
+            anyOf: [
+                {
+                    type: 'integer'
+                },
+                {
+                    type: 'null'
+                }
+            ],
+            title: 'Stock Max'
+        },
+        unit: {
+            anyOf: [
+                {
+                    type: 'string',
+                    maxLength: 50
+                },
+                {
+                    type: 'null'
+                }
+            ],
+            title: 'Unit'
+        },
+        barcode: {
+            anyOf: [
+                {
+                    type: 'string',
+                    maxLength: 100
+                },
+                {
+                    type: 'null'
+                }
+            ],
+            title: 'Barcode'
+        },
+        is_active: {
+            anyOf: [
+                {
+                    type: 'boolean'
+                },
+                {
+                    type: 'null'
+                }
+            ],
+            title: 'Is Active'
+        }
+    },
+    type: 'object',
+    title: 'ProductUpdate'
+} as const;
+
+export const ProductsPublicSchema = {
+    properties: {
+        data: {
+            items: {
+                '$ref': '#/components/schemas/ProductPublic'
+            },
+            type: 'array',
+            title: 'Data'
+        },
+        count: {
+            type: 'integer',
+            title: 'Count'
+        }
+    },
+    type: 'object',
+    required: ['data', 'count'],
+    title: 'ProductsPublic'
 } as const;
 
 export const RolePublicSchema = {
@@ -382,6 +1592,451 @@ export const RolesPublicSchema = {
     type: 'object',
     required: ['data', 'count'],
     title: 'RolesPublic'
+} as const;
+
+export const SaleCancelRequestSchema = {
+    properties: {
+        reason: {
+            type: 'string',
+            maxLength: 500,
+            title: 'Reason'
+        }
+    },
+    type: 'object',
+    required: ['reason'],
+    title: 'SaleCancelRequest',
+    description: 'Schema for cancelling a sale.'
+} as const;
+
+export const SaleCreateSchema = {
+    properties: {
+        customer_id: {
+            anyOf: [
+                {
+                    type: 'string',
+                    format: 'uuid'
+                },
+                {
+                    type: 'null'
+                }
+            ],
+            title: 'Customer Id'
+        },
+        payment_method: {
+            type: 'string',
+            maxLength: 50,
+            title: 'Payment Method',
+            default: 'cash'
+        },
+        discount: {
+            anyOf: [
+                {
+                    type: 'number'
+                },
+                {
+                    type: 'string',
+                    pattern: '^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$'
+                }
+            ],
+            title: 'Discount',
+            default: '0'
+        },
+        tax: {
+            anyOf: [
+                {
+                    type: 'number'
+                },
+                {
+                    type: 'string',
+                    pattern: '^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$'
+                }
+            ],
+            title: 'Tax',
+            default: '0'
+        },
+        notes: {
+            anyOf: [
+                {
+                    type: 'string'
+                },
+                {
+                    type: 'null'
+                }
+            ],
+            title: 'Notes'
+        },
+        items: {
+            items: {
+                '$ref': '#/components/schemas/SaleItemCreate'
+            },
+            type: 'array',
+            title: 'Items'
+        }
+    },
+    type: 'object',
+    required: ['items'],
+    title: 'SaleCreate',
+    description: 'Schema for creating a sale.'
+} as const;
+
+export const SaleItemCreateSchema = {
+    properties: {
+        product_id: {
+            type: 'string',
+            format: 'uuid',
+            title: 'Product Id'
+        },
+        quantity: {
+            type: 'integer',
+            title: 'Quantity'
+        }
+    },
+    type: 'object',
+    required: ['product_id', 'quantity'],
+    title: 'SaleItemCreate',
+    description: 'Schema for creating a sale item within a sale.'
+} as const;
+
+export const SaleItemPublicSchema = {
+    properties: {
+        product_name: {
+            type: 'string',
+            maxLength: 255,
+            title: 'Product Name'
+        },
+        product_sku: {
+            type: 'string',
+            maxLength: 100,
+            title: 'Product Sku'
+        },
+        quantity: {
+            type: 'integer',
+            title: 'Quantity'
+        },
+        unit_price: {
+            type: 'string',
+            pattern: '^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$',
+            title: 'Unit Price'
+        },
+        subtotal: {
+            type: 'string',
+            pattern: '^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$',
+            title: 'Subtotal'
+        },
+        id: {
+            type: 'string',
+            format: 'uuid',
+            title: 'Id'
+        },
+        sale_id: {
+            type: 'string',
+            format: 'uuid',
+            title: 'Sale Id'
+        },
+        product_id: {
+            type: 'string',
+            format: 'uuid',
+            title: 'Product Id'
+        },
+        created_at: {
+            type: 'string',
+            format: 'date-time',
+            title: 'Created At'
+        }
+    },
+    type: 'object',
+    required: ['product_name', 'product_sku', 'quantity', 'unit_price', 'subtotal', 'id', 'sale_id', 'product_id', 'created_at'],
+    title: 'SaleItemPublic'
+} as const;
+
+export const SalePublicSchema = {
+    properties: {
+        id: {
+            type: 'string',
+            format: 'uuid',
+            title: 'Id'
+        },
+        organization_id: {
+            type: 'string',
+            format: 'uuid',
+            title: 'Organization Id'
+        },
+        invoice_number: {
+            type: 'string',
+            title: 'Invoice Number'
+        },
+        customer_id: {
+            anyOf: [
+                {
+                    type: 'string',
+                    format: 'uuid'
+                },
+                {
+                    type: 'null'
+                }
+            ],
+            title: 'Customer Id'
+        },
+        user_id: {
+            type: 'string',
+            format: 'uuid',
+            title: 'User Id'
+        },
+        sale_date: {
+            type: 'string',
+            format: 'date-time',
+            title: 'Sale Date'
+        },
+        subtotal: {
+            type: 'string',
+            pattern: '^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$',
+            title: 'Subtotal'
+        },
+        discount: {
+            type: 'string',
+            pattern: '^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$',
+            title: 'Discount'
+        },
+        tax: {
+            type: 'string',
+            pattern: '^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$',
+            title: 'Tax'
+        },
+        total: {
+            type: 'string',
+            pattern: '^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$',
+            title: 'Total'
+        },
+        payment_method: {
+            type: 'string',
+            title: 'Payment Method'
+        },
+        status: {
+            type: 'string',
+            title: 'Status'
+        },
+        notes: {
+            anyOf: [
+                {
+                    type: 'string'
+                },
+                {
+                    type: 'null'
+                }
+            ],
+            title: 'Notes'
+        },
+        cancelled_at: {
+            anyOf: [
+                {
+                    type: 'string',
+                    format: 'date-time'
+                },
+                {
+                    type: 'null'
+                }
+            ],
+            title: 'Cancelled At'
+        },
+        cancelled_by: {
+            anyOf: [
+                {
+                    type: 'string',
+                    format: 'uuid'
+                },
+                {
+                    type: 'null'
+                }
+            ],
+            title: 'Cancelled By'
+        },
+        cancellation_reason: {
+            anyOf: [
+                {
+                    type: 'string'
+                },
+                {
+                    type: 'null'
+                }
+            ],
+            title: 'Cancellation Reason'
+        },
+        items: {
+            items: {
+                '$ref': '#/components/schemas/SaleItemPublic'
+            },
+            type: 'array',
+            title: 'Items',
+            default: []
+        },
+        created_at: {
+            type: 'string',
+            format: 'date-time',
+            title: 'Created At'
+        },
+        updated_at: {
+            type: 'string',
+            format: 'date-time',
+            title: 'Updated At'
+        }
+    },
+    type: 'object',
+    required: ['id', 'organization_id', 'invoice_number', 'user_id', 'sale_date', 'subtotal', 'discount', 'tax', 'total', 'payment_method', 'status', 'created_at', 'updated_at'],
+    title: 'SalePublic'
+} as const;
+
+export const SaleStatsPublicSchema = {
+    properties: {
+        sales_today_count: {
+            type: 'integer',
+            title: 'Sales Today Count'
+        },
+        sales_today_total: {
+            type: 'string',
+            pattern: '^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$',
+            title: 'Sales Today Total'
+        },
+        sales_month_count: {
+            type: 'integer',
+            title: 'Sales Month Count'
+        },
+        sales_month_total: {
+            type: 'string',
+            pattern: '^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$',
+            title: 'Sales Month Total'
+        },
+        average_ticket: {
+            type: 'string',
+            pattern: '^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$',
+            title: 'Average Ticket'
+        }
+    },
+    type: 'object',
+    required: ['sales_today_count', 'sales_today_total', 'sales_month_count', 'sales_month_total', 'average_ticket'],
+    title: 'SaleStatsPublic',
+    description: 'Schema for sales statistics.'
+} as const;
+
+export const SalesByDayItemSchema = {
+    properties: {
+        date: {
+            type: 'string',
+            title: 'Date'
+        },
+        count: {
+            type: 'integer',
+            title: 'Count'
+        },
+        total: {
+            type: 'string',
+            pattern: '^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$',
+            title: 'Total'
+        }
+    },
+    type: 'object',
+    required: ['date', 'count', 'total'],
+    title: 'SalesByDayItem',
+    description: 'Sales aggregated by day.'
+} as const;
+
+export const SalesMonthStatsSchema = {
+    properties: {
+        count: {
+            type: 'integer',
+            title: 'Count'
+        },
+        total: {
+            type: 'string',
+            pattern: '^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$',
+            title: 'Total'
+        }
+    },
+    type: 'object',
+    required: ['count', 'total'],
+    title: 'SalesMonthStats',
+    description: 'Sales stats for current month.'
+} as const;
+
+export const SalesPublicSchema = {
+    properties: {
+        data: {
+            items: {
+                '$ref': '#/components/schemas/SalePublic'
+            },
+            type: 'array',
+            title: 'Data'
+        },
+        count: {
+            type: 'integer',
+            title: 'Count'
+        }
+    },
+    type: 'object',
+    required: ['data', 'count'],
+    title: 'SalesPublic'
+} as const;
+
+export const SalesTodayStatsSchema = {
+    properties: {
+        count: {
+            type: 'integer',
+            title: 'Count'
+        },
+        total: {
+            type: 'string',
+            pattern: '^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$',
+            title: 'Total'
+        }
+    },
+    type: 'object',
+    required: ['count', 'total'],
+    title: 'SalesTodayStats',
+    description: 'Sales stats for today.'
+} as const;
+
+export const StockAdjustmentSchema = {
+    properties: {
+        quantity: {
+            type: 'integer',
+            title: 'Quantity'
+        },
+        reason: {
+            type: 'string',
+            maxLength: 500,
+            title: 'Reason'
+        }
+    },
+    type: 'object',
+    required: ['quantity', 'reason'],
+    title: 'StockAdjustment',
+    description: 'Schema for manual stock adjustment.'
+} as const;
+
+export const TopProductItemSchema = {
+    properties: {
+        product_id: {
+            type: 'string',
+            format: 'uuid',
+            title: 'Product Id'
+        },
+        product_name: {
+            type: 'string',
+            title: 'Product Name'
+        },
+        quantity_sold: {
+            type: 'integer',
+            title: 'Quantity Sold'
+        },
+        revenue: {
+            type: 'string',
+            pattern: '^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$',
+            title: 'Revenue'
+        }
+    },
+    type: 'object',
+    required: ['product_id', 'product_name', 'quantity_sold', 'revenue'],
+    title: 'TopProductItem',
+    description: 'A top-selling product in dashboard stats.'
 } as const;
 
 export const UpdatePasswordSchema = {
@@ -659,6 +2314,19 @@ export const UserUpdateSchema = {
                 }
             ],
             title: 'Email'
+        },
+        password: {
+            anyOf: [
+                {
+                    type: 'string',
+                    maxLength: 128,
+                    minLength: 8
+                },
+                {
+                    type: 'null'
+                }
+            ],
+            title: 'Password'
         },
         first_name: {
             anyOf: [

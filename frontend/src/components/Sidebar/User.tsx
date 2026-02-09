@@ -1,7 +1,8 @@
-import { Link as RouterLink } from "@tanstack/react-router"
-import { ChevronsUpDown, LogOut, Settings } from "lucide-react"
+import { Link, Link as RouterLink } from "@tanstack/react-router";
+import { ChevronsUpDown, Home, LogOut, Settings } from "lucide-react";
 
-import { Avatar, AvatarFallback } from "@/components/ui/avatar"
+import type { UserPublic } from "@/client";
+import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -9,51 +10,57 @@ import {
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu"
+} from "@/components/ui/dropdown-menu";
 import {
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
   useSidebar,
-} from "@/components/ui/sidebar"
-import useAuth from "@/hooks/useAuth"
-import { getInitials } from "@/utils"
+} from "@/components/ui/sidebar";
+import useAuth from "@/hooks/useAuth";
+import { getInitials } from "@/utils";
 
 interface UserInfoProps {
-  fullName?: string
-  email?: string
+  fullName?: string;
+  email?: string;
 }
 
 function UserInfo({ fullName, email }: UserInfoProps) {
   return (
     <div className="flex items-center gap-2.5 w-full min-w-0">
       <Avatar className="size-8">
-        <AvatarFallback className="bg-zinc-600 text-white">
+        <AvatarFallback className="bg-muted text-muted-foreground border border-sidebar">
           {getInitials(fullName || "User")}
         </AvatarFallback>
       </Avatar>
       <div className="flex flex-col items-start min-w-0">
         <p className="text-sm font-medium truncate w-full">{fullName}</p>
-        <p className="text-xs text-muted-foreground truncate w-full">{email}</p>
+        <p className="text-xs truncate w-full">{email}</p>
       </div>
     </div>
-  )
+  );
 }
 
-export function User({ user }: { user: any }) {
-  const { logout } = useAuth()
-  const { isMobile, setOpenMobile } = useSidebar()
+function getFullName(user: UserPublic): string {
+  return `${user.first_name} ${user.last_name}`.trim();
+}
 
-  if (!user) return null
+export function User({ user }: { user: UserPublic | null | undefined }) {
+  const { logout } = useAuth();
+  const { isMobile, setOpenMobile } = useSidebar();
+
+  if (!user) return null;
+
+  const fullName = getFullName(user);
 
   const handleMenuClick = () => {
     if (isMobile) {
-      setOpenMobile(false)
+      setOpenMobile(false);
     }
-  }
+  };
   const handleLogout = async () => {
-    logout()
-  }
+    logout();
+  };
 
   return (
     <SidebarMenu>
@@ -65,8 +72,8 @@ export function User({ user }: { user: any }) {
               className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground"
               data-testid="user-menu"
             >
-              <UserInfo fullName={user?.full_name} email={user?.email} />
-              <ChevronsUpDown className="ml-auto size-4 text-muted-foreground" />
+              <UserInfo fullName={fullName} email={user.email} />
+              <ChevronsUpDown className="ml-auto size-4 text-sidebar-foreground" />
             </SidebarMenuButton>
           </DropdownMenuTrigger>
           <DropdownMenuContent
@@ -76,7 +83,7 @@ export function User({ user }: { user: any }) {
             sideOffset={4}
           >
             <DropdownMenuLabel className="p-0 font-normal">
-              <UserInfo fullName={user?.full_name} email={user?.email} />
+              <UserInfo fullName={fullName} email={user.email} />
             </DropdownMenuLabel>
             <DropdownMenuSeparator />
             <RouterLink to="/dashboard/settings" onClick={handleMenuClick}>
@@ -89,9 +96,15 @@ export function User({ user }: { user: any }) {
               <LogOut />
               Log Out
             </DropdownMenuItem>
+            <Link to="/">
+              <DropdownMenuItem>
+                <Home />
+                Go to main page
+              </DropdownMenuItem>
+            </Link>
           </DropdownMenuContent>
         </DropdownMenu>
       </SidebarMenuItem>
     </SidebarMenu>
-  )
+  );
 }

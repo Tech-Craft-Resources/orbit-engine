@@ -131,8 +131,17 @@ function Login() {
 
           <div className="text-center text-sm">
             Don't have an account yet?{" "}
-            <RouterLink to="/signup" className="underline underline-offset-4">
-              Sign up
+            <RouterLink
+              to="/signup-org"
+              className="underline underline-offset-4"
+            >
+              Create an organization
+            </RouterLink>
+          </div>
+
+          <div className="text-center text-sm text-muted-foreground">
+            <RouterLink to="/" className="underline underline-offset-4">
+              Back to main page
             </RouterLink>
           </div>
         </form>
