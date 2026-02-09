@@ -36,7 +36,11 @@ export function Main({ items }: MainProps) {
       <SidebarGroupContent>
         <SidebarMenu>
           {items.map((item) => {
-            const isActive = currentPath === item.path
+            // Exact match for dashboard root, prefix match for sub-sections
+            const isActive =
+              item.path === "/dashboard"
+                ? currentPath === "/dashboard"
+                : currentPath.startsWith(item.path)
 
             return (
               <SidebarMenuItem key={item.title}>

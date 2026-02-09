@@ -1,6 +1,7 @@
 import { Link as RouterLink } from "@tanstack/react-router"
 import { ChevronsUpDown, LogOut, Settings } from "lucide-react"
 
+import type { UserPublic } from "@/client"
 import { Avatar, AvatarFallback } from "@/components/ui/avatar"
 import {
   DropdownMenu,
@@ -40,11 +41,17 @@ function UserInfo({ fullName, email }: UserInfoProps) {
   )
 }
 
-export function User({ user }: { user: any }) {
+function getFullName(user: UserPublic): string {
+  return `${user.first_name} ${user.last_name}`.trim()
+}
+
+export function User({ user }: { user: UserPublic | null | undefined }) {
   const { logout } = useAuth()
   const { isMobile, setOpenMobile } = useSidebar()
 
   if (!user) return null
+
+  const fullName = getFullName(user)
 
   const handleMenuClick = () => {
     if (isMobile) {
@@ -65,7 +72,7 @@ export function User({ user }: { user: any }) {
               className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground"
               data-testid="user-menu"
             >
-              <UserInfo fullName={user?.full_name} email={user?.email} />
+              <UserInfo fullName={fullName} email={user.email} />
               <ChevronsUpDown className="ml-auto size-4 text-muted-foreground" />
             </SidebarMenuButton>
           </DropdownMenuTrigger>
@@ -76,7 +83,7 @@ export function User({ user }: { user: any }) {
             sideOffset={4}
           >
             <DropdownMenuLabel className="p-0 font-normal">
-              <UserInfo fullName={user?.full_name} email={user?.email} />
+              <UserInfo fullName={fullName} email={user.email} />
             </DropdownMenuLabel>
             <DropdownMenuSeparator />
             <RouterLink to="/dashboard/settings" onClick={handleMenuClick}>

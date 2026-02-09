@@ -9,8 +9,134 @@ export type Body_login_login_access_token = {
     client_secret?: (string | null);
 };
 
+export type CategoriesPublic = {
+    data: Array<CategoryPublic>;
+    count: number;
+};
+
+export type CategoryCreate = {
+    name: string;
+    description?: (string | null);
+    parent_id?: (string | null);
+};
+
+export type CategoryPublic = {
+    name: string;
+    description?: (string | null);
+    parent_id?: (string | null);
+    is_active?: boolean;
+    id: string;
+    organization_id: string;
+    created_at: string;
+    updated_at: string;
+};
+
+export type CategoryUpdate = {
+    name?: (string | null);
+    description?: (string | null);
+    parent_id?: (string | null);
+    is_active?: (boolean | null);
+};
+
+export type CustomerCreate = {
+    document_type: string;
+    document_number: string;
+    first_name: string;
+    last_name: string;
+    email?: (string | null);
+    phone?: (string | null);
+    address?: (string | null);
+    city?: (string | null);
+    country?: (string | null);
+    notes?: (string | null);
+};
+
+export type CustomerPublic = {
+    document_type: string;
+    document_number: string;
+    first_name: string;
+    last_name: string;
+    email?: (string | null);
+    phone?: (string | null);
+    address?: (string | null);
+    city?: (string | null);
+    country?: (string | null);
+    notes?: (string | null);
+    is_active?: boolean;
+    id: string;
+    organization_id: string;
+    total_purchases: string;
+    purchases_count: number;
+    last_purchase_at?: (string | null);
+    created_at: string;
+    updated_at: string;
+};
+
+export type CustomersPublic = {
+    data: Array<CustomerPublic>;
+    count: number;
+};
+
+export type CustomerUpdate = {
+    document_type?: (string | null);
+    document_number?: (string | null);
+    first_name?: (string | null);
+    last_name?: (string | null);
+    email?: (string | null);
+    phone?: (string | null);
+    address?: (string | null);
+    city?: (string | null);
+    country?: (string | null);
+    notes?: (string | null);
+    is_active?: (boolean | null);
+};
+
+/**
+ * Unified dashboard statistics response.
+ */
+export type DashboardStatsPublic = {
+    sales_today: SalesTodayStats;
+    sales_month: SalesMonthStats;
+    low_stock_count: number;
+    average_ticket: string;
+    top_products: Array<TopProductItem>;
+    sales_by_day: Array<SalesByDayItem>;
+};
+
 export type HTTPValidationError = {
     detail?: Array<ValidationError>;
+};
+
+/**
+ * Schema for creating an inventory movement.
+ */
+export type InventoryMovementCreate = {
+    product_id: string;
+    movement_type: string;
+    quantity: number;
+    reference_id?: (string | null);
+    reference_type?: (string | null);
+    reason?: (string | null);
+};
+
+export type InventoryMovementPublic = {
+    movement_type: string;
+    quantity: number;
+    previous_stock: number;
+    new_stock: number;
+    reference_id?: (string | null);
+    reference_type?: (string | null);
+    reason?: (string | null);
+    id: string;
+    organization_id: string;
+    product_id: string;
+    user_id: string;
+    created_at: string;
+};
+
+export type InventoryMovementsPublic = {
+    data: Array<InventoryMovementPublic>;
+    count: number;
 };
 
 /**
@@ -66,8 +192,67 @@ export type OrganizationUpdate = {
 export type PrivateUserCreate = {
     email: string;
     password: string;
-    full_name: string;
+    first_name: string;
+    last_name: string;
+    organization_id: string;
+    role_id?: number;
     is_verified?: boolean;
+};
+
+export type ProductCreate = {
+    name: string;
+    sku: string;
+    description?: (string | null);
+    image_url?: (string | null);
+    category_id?: (string | null);
+    cost_price?: (number | string);
+    sale_price?: (number | string);
+    stock_quantity?: number;
+    stock_min?: number;
+    stock_max?: (number | null);
+    unit?: string;
+    barcode?: (string | null);
+};
+
+export type ProductPublic = {
+    name: string;
+    sku: string;
+    description?: (string | null);
+    image_url?: (string | null);
+    cost_price?: string;
+    sale_price?: string;
+    stock_quantity?: number;
+    stock_min?: number;
+    stock_max?: (number | null);
+    unit?: string;
+    barcode?: (string | null);
+    is_active?: boolean;
+    id: string;
+    organization_id: string;
+    category_id?: (string | null);
+    created_at: string;
+    updated_at: string;
+};
+
+export type ProductsPublic = {
+    data: Array<ProductPublic>;
+    count: number;
+};
+
+export type ProductUpdate = {
+    name?: (string | null);
+    sku?: (string | null);
+    description?: (string | null);
+    image_url?: (string | null);
+    category_id?: (string | null);
+    cost_price?: (number | string | null);
+    sale_price?: (number | string | null);
+    stock_quantity?: (number | null);
+    stock_min?: (number | null);
+    stock_max?: (number | null);
+    unit?: (string | null);
+    barcode?: (string | null);
+    is_active?: (boolean | null);
 };
 
 export type RolePublic = {
@@ -81,6 +266,126 @@ export type RolePublic = {
 export type RolesPublic = {
     data: Array<RolePublic>;
     count: number;
+};
+
+/**
+ * Schema for cancelling a sale.
+ */
+export type SaleCancelRequest = {
+    reason: string;
+};
+
+/**
+ * Schema for creating a sale.
+ */
+export type SaleCreate = {
+    customer_id?: (string | null);
+    payment_method?: string;
+    discount?: (number | string);
+    tax?: (number | string);
+    notes?: (string | null);
+    items: Array<SaleItemCreate>;
+};
+
+/**
+ * Schema for creating a sale item within a sale.
+ */
+export type SaleItemCreate = {
+    product_id: string;
+    quantity: number;
+};
+
+export type SaleItemPublic = {
+    product_name: string;
+    product_sku: string;
+    quantity: number;
+    unit_price: string;
+    subtotal: string;
+    id: string;
+    sale_id: string;
+    product_id: string;
+    created_at: string;
+};
+
+export type SalePublic = {
+    id: string;
+    organization_id: string;
+    invoice_number: string;
+    customer_id?: (string | null);
+    user_id: string;
+    sale_date: string;
+    subtotal: string;
+    discount: string;
+    tax: string;
+    total: string;
+    payment_method: string;
+    status: string;
+    notes?: (string | null);
+    cancelled_at?: (string | null);
+    cancelled_by?: (string | null);
+    cancellation_reason?: (string | null);
+    items?: Array<SaleItemPublic>;
+    created_at: string;
+    updated_at: string;
+};
+
+/**
+ * Sales aggregated by day.
+ */
+export type SalesByDayItem = {
+    date: string;
+    count: number;
+    total: string;
+};
+
+/**
+ * Sales stats for current month.
+ */
+export type SalesMonthStats = {
+    count: number;
+    total: string;
+};
+
+export type SalesPublic = {
+    data: Array<SalePublic>;
+    count: number;
+};
+
+/**
+ * Schema for sales statistics.
+ */
+export type SaleStatsPublic = {
+    sales_today_count: number;
+    sales_today_total: string;
+    sales_month_count: number;
+    sales_month_total: string;
+    average_ticket: string;
+};
+
+/**
+ * Sales stats for today.
+ */
+export type SalesTodayStats = {
+    count: number;
+    total: string;
+};
+
+/**
+ * Schema for manual stock adjustment.
+ */
+export type StockAdjustment = {
+    quantity: number;
+    reason: string;
+};
+
+/**
+ * A top-selling product in dashboard stats.
+ */
+export type TopProductItem = {
+    product_id: string;
+    product_name: string;
+    quantity_sold: number;
+    revenue: string;
 };
 
 export type UpdatePassword = {
@@ -141,6 +446,7 @@ export type UsersPublic = {
 
 export type UserUpdate = {
     email?: (string | null);
+    password?: (string | null);
     first_name?: (string | null);
     last_name?: (string | null);
     phone?: (string | null);
@@ -161,6 +467,99 @@ export type ValidationError = {
     msg: string;
     type: string;
 };
+
+export type CategoriesReadCategoriesData = {
+    limit?: number;
+    skip?: number;
+};
+
+export type CategoriesReadCategoriesResponse = (CategoriesPublic);
+
+export type CategoriesCreateCategoryData = {
+    requestBody: CategoryCreate;
+};
+
+export type CategoriesCreateCategoryResponse = (CategoryPublic);
+
+export type CategoriesReadCategoryData = {
+    categoryId: string;
+};
+
+export type CategoriesReadCategoryResponse = (CategoryPublic);
+
+export type CategoriesUpdateCategoryData = {
+    categoryId: string;
+    requestBody: CategoryUpdate;
+};
+
+export type CategoriesUpdateCategoryResponse = (CategoryPublic);
+
+export type CategoriesDeleteCategoryData = {
+    categoryId: string;
+};
+
+export type CategoriesDeleteCategoryResponse = (Message);
+
+export type CustomersReadCustomersData = {
+    limit?: number;
+    skip?: number;
+};
+
+export type CustomersReadCustomersResponse = (CustomersPublic);
+
+export type CustomersCreateCustomerData = {
+    requestBody: CustomerCreate;
+};
+
+export type CustomersCreateCustomerResponse = (CustomerPublic);
+
+export type CustomersReadCustomerData = {
+    customerId: string;
+};
+
+export type CustomersReadCustomerResponse = (CustomerPublic);
+
+export type CustomersUpdateCustomerData = {
+    customerId: string;
+    requestBody: CustomerUpdate;
+};
+
+export type CustomersUpdateCustomerResponse = (CustomerPublic);
+
+export type CustomersDeleteCustomerData = {
+    customerId: string;
+};
+
+export type CustomersDeleteCustomerResponse = (Message);
+
+export type CustomersReadCustomerSalesData = {
+    customerId: string;
+    limit?: number;
+    skip?: number;
+};
+
+export type CustomersReadCustomerSalesResponse = (SalesPublic);
+
+export type DashboardReadDashboardStatsResponse = (DashboardStatsPublic);
+
+export type InventoryReadMovementsData = {
+    limit?: number;
+    skip?: number;
+};
+
+export type InventoryReadMovementsResponse = (InventoryMovementsPublic);
+
+export type InventoryCreateMovementData = {
+    requestBody: InventoryMovementCreate;
+};
+
+export type InventoryCreateMovementResponse = (InventoryMovementPublic);
+
+export type InventoryReadMovementData = {
+    movementId: string;
+};
+
+export type InventoryReadMovementResponse = (InventoryMovementPublic);
 
 export type LoginLoginAccessTokenData = {
     formData: Body_login_login_access_token;
@@ -208,7 +607,96 @@ export type PrivateCreateUserData = {
 
 export type PrivateCreateUserResponse = (UserPublic);
 
+export type ProductsReadProductsData = {
+    limit?: number;
+    skip?: number;
+};
+
+export type ProductsReadProductsResponse = (ProductsPublic);
+
+export type ProductsCreateProductData = {
+    requestBody: ProductCreate;
+};
+
+export type ProductsCreateProductResponse = (ProductPublic);
+
+export type ProductsReadLowStockProductsData = {
+    limit?: number;
+    skip?: number;
+};
+
+export type ProductsReadLowStockProductsResponse = (ProductsPublic);
+
+export type ProductsReadProductData = {
+    productId: string;
+};
+
+export type ProductsReadProductResponse = (ProductPublic);
+
+export type ProductsUpdateProductData = {
+    productId: string;
+    requestBody: ProductUpdate;
+};
+
+export type ProductsUpdateProductResponse = (ProductPublic);
+
+export type ProductsDeleteProductData = {
+    productId: string;
+};
+
+export type ProductsDeleteProductResponse = (Message);
+
+export type ProductsAdjustStockData = {
+    productId: string;
+    requestBody: StockAdjustment;
+};
+
+export type ProductsAdjustStockResponse = (ProductPublic);
+
+export type ProductsReadProductMovementsData = {
+    limit?: number;
+    productId: string;
+    skip?: number;
+};
+
+export type ProductsReadProductMovementsResponse = (InventoryMovementsPublic);
+
 export type RolesListRolesResponse = (RolesPublic);
+
+export type SalesReadSalesData = {
+    limit?: number;
+    skip?: number;
+};
+
+export type SalesReadSalesResponse = (SalesPublic);
+
+export type SalesCreateSaleData = {
+    requestBody: SaleCreate;
+};
+
+export type SalesCreateSaleResponse = (SalePublic);
+
+export type SalesReadSalesTodayData = {
+    limit?: number;
+    skip?: number;
+};
+
+export type SalesReadSalesTodayResponse = (SalesPublic);
+
+export type SalesReadSalesStatsResponse = (SaleStatsPublic);
+
+export type SalesReadSaleData = {
+    saleId: string;
+};
+
+export type SalesReadSaleResponse = (SalePublic);
+
+export type SalesCancelSaleData = {
+    requestBody: SaleCancelRequest;
+    saleId: string;
+};
+
+export type SalesCancelSaleResponse = (SalePublic);
 
 export type UsersReadUsersData = {
     limit?: number;

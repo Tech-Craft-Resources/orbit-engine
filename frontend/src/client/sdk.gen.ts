@@ -3,7 +3,371 @@
 import type { CancelablePromise } from './core/CancelablePromise';
 import { OpenAPI } from './core/OpenAPI';
 import { request as __request } from './core/request';
-import type { LoginLoginAccessTokenData, LoginLoginAccessTokenResponse, LoginTestTokenResponse, LoginRecoverPasswordData, LoginRecoverPasswordResponse, LoginResetPasswordData, LoginResetPasswordResponse, LoginRecoverPasswordHtmlContentData, LoginRecoverPasswordHtmlContentResponse, OrganizationsSignupOrganizationData, OrganizationsSignupOrganizationResponse, OrganizationsGetMyOrganizationResponse, OrganizationsUpdateMyOrganizationData, OrganizationsUpdateMyOrganizationResponse, PrivateCreateUserData, PrivateCreateUserResponse, RolesListRolesResponse, UsersReadUsersData, UsersReadUsersResponse, UsersCreateUserData, UsersCreateUserResponse, UsersReadUserMeResponse, UsersDeleteUserMeResponse, UsersUpdateUserMeData, UsersUpdateUserMeResponse, UsersUpdatePasswordMeData, UsersUpdatePasswordMeResponse, UsersReadUserByIdData, UsersReadUserByIdResponse, UsersUpdateUserData, UsersUpdateUserResponse, UsersDeleteUserData, UsersDeleteUserResponse, UtilsTestEmailData, UtilsTestEmailResponse, UtilsHealthCheckResponse } from './types.gen';
+import type { CategoriesReadCategoriesData, CategoriesReadCategoriesResponse, CategoriesCreateCategoryData, CategoriesCreateCategoryResponse, CategoriesReadCategoryData, CategoriesReadCategoryResponse, CategoriesUpdateCategoryData, CategoriesUpdateCategoryResponse, CategoriesDeleteCategoryData, CategoriesDeleteCategoryResponse, CustomersReadCustomersData, CustomersReadCustomersResponse, CustomersCreateCustomerData, CustomersCreateCustomerResponse, CustomersReadCustomerData, CustomersReadCustomerResponse, CustomersUpdateCustomerData, CustomersUpdateCustomerResponse, CustomersDeleteCustomerData, CustomersDeleteCustomerResponse, CustomersReadCustomerSalesData, CustomersReadCustomerSalesResponse, DashboardReadDashboardStatsResponse, InventoryReadMovementsData, InventoryReadMovementsResponse, InventoryCreateMovementData, InventoryCreateMovementResponse, InventoryReadMovementData, InventoryReadMovementResponse, LoginLoginAccessTokenData, LoginLoginAccessTokenResponse, LoginTestTokenResponse, LoginRecoverPasswordData, LoginRecoverPasswordResponse, LoginResetPasswordData, LoginResetPasswordResponse, LoginRecoverPasswordHtmlContentData, LoginRecoverPasswordHtmlContentResponse, OrganizationsSignupOrganizationData, OrganizationsSignupOrganizationResponse, OrganizationsGetMyOrganizationResponse, OrganizationsUpdateMyOrganizationData, OrganizationsUpdateMyOrganizationResponse, PrivateCreateUserData, PrivateCreateUserResponse, ProductsReadProductsData, ProductsReadProductsResponse, ProductsCreateProductData, ProductsCreateProductResponse, ProductsReadLowStockProductsData, ProductsReadLowStockProductsResponse, ProductsReadProductData, ProductsReadProductResponse, ProductsUpdateProductData, ProductsUpdateProductResponse, ProductsDeleteProductData, ProductsDeleteProductResponse, ProductsAdjustStockData, ProductsAdjustStockResponse, ProductsReadProductMovementsData, ProductsReadProductMovementsResponse, RolesListRolesResponse, SalesReadSalesData, SalesReadSalesResponse, SalesCreateSaleData, SalesCreateSaleResponse, SalesReadSalesTodayData, SalesReadSalesTodayResponse, SalesReadSalesStatsResponse, SalesReadSaleData, SalesReadSaleResponse, SalesCancelSaleData, SalesCancelSaleResponse, UsersReadUsersData, UsersReadUsersResponse, UsersCreateUserData, UsersCreateUserResponse, UsersReadUserMeResponse, UsersDeleteUserMeResponse, UsersUpdateUserMeData, UsersUpdateUserMeResponse, UsersUpdatePasswordMeData, UsersUpdatePasswordMeResponse, UsersReadUserByIdData, UsersReadUserByIdResponse, UsersUpdateUserData, UsersUpdateUserResponse, UsersDeleteUserData, UsersDeleteUserResponse, UtilsTestEmailData, UtilsTestEmailResponse, UtilsHealthCheckResponse } from './types.gen';
+
+export class CategoriesService {
+    /**
+     * Read Categories
+     * Retrieve categories in current organization.
+     *
+     * Any authenticated user can list categories.
+     * @param data The data for the request.
+     * @param data.skip
+     * @param data.limit
+     * @returns CategoriesPublic Successful Response
+     * @throws ApiError
+     */
+    public static readCategories(data: CategoriesReadCategoriesData = {}): CancelablePromise<CategoriesReadCategoriesResponse> {
+        return __request(OpenAPI, {
+            method: 'GET',
+            url: '/api/v1/categories/',
+            query: {
+                skip: data.skip,
+                limit: data.limit
+            },
+            errors: {
+                422: 'Validation Error'
+            }
+        });
+    }
+    
+    /**
+     * Create Category
+     * Create a new category in current organization.
+     *
+     * Only admin and seller roles can create categories.
+     * @param data The data for the request.
+     * @param data.requestBody
+     * @returns CategoryPublic Successful Response
+     * @throws ApiError
+     */
+    public static createCategory(data: CategoriesCreateCategoryData): CancelablePromise<CategoriesCreateCategoryResponse> {
+        return __request(OpenAPI, {
+            method: 'POST',
+            url: '/api/v1/categories/',
+            body: data.requestBody,
+            mediaType: 'application/json',
+            errors: {
+                422: 'Validation Error'
+            }
+        });
+    }
+    
+    /**
+     * Read Category
+     * Get a specific category by ID.
+     *
+     * Any authenticated user can view a category.
+     * @param data The data for the request.
+     * @param data.categoryId
+     * @returns CategoryPublic Successful Response
+     * @throws ApiError
+     */
+    public static readCategory(data: CategoriesReadCategoryData): CancelablePromise<CategoriesReadCategoryResponse> {
+        return __request(OpenAPI, {
+            method: 'GET',
+            url: '/api/v1/categories/{category_id}',
+            path: {
+                category_id: data.categoryId
+            },
+            errors: {
+                422: 'Validation Error'
+            }
+        });
+    }
+    
+    /**
+     * Update Category
+     * Update a category.
+     *
+     * Only admin and seller roles can update categories.
+     * @param data The data for the request.
+     * @param data.categoryId
+     * @param data.requestBody
+     * @returns CategoryPublic Successful Response
+     * @throws ApiError
+     */
+    public static updateCategory(data: CategoriesUpdateCategoryData): CancelablePromise<CategoriesUpdateCategoryResponse> {
+        return __request(OpenAPI, {
+            method: 'PATCH',
+            url: '/api/v1/categories/{category_id}',
+            path: {
+                category_id: data.categoryId
+            },
+            body: data.requestBody,
+            mediaType: 'application/json',
+            errors: {
+                422: 'Validation Error'
+            }
+        });
+    }
+    
+    /**
+     * Delete Category
+     * Delete a category (soft delete).
+     *
+     * Only admin users can delete categories.
+     * @param data The data for the request.
+     * @param data.categoryId
+     * @returns Message Successful Response
+     * @throws ApiError
+     */
+    public static deleteCategory(data: CategoriesDeleteCategoryData): CancelablePromise<CategoriesDeleteCategoryResponse> {
+        return __request(OpenAPI, {
+            method: 'DELETE',
+            url: '/api/v1/categories/{category_id}',
+            path: {
+                category_id: data.categoryId
+            },
+            errors: {
+                422: 'Validation Error'
+            }
+        });
+    }
+}
+
+export class CustomersService {
+    /**
+     * Read Customers
+     * Retrieve customers in current organization.
+     *
+     * Admin and seller roles can list customers.
+     * @param data The data for the request.
+     * @param data.skip
+     * @param data.limit
+     * @returns CustomersPublic Successful Response
+     * @throws ApiError
+     */
+    public static readCustomers(data: CustomersReadCustomersData = {}): CancelablePromise<CustomersReadCustomersResponse> {
+        return __request(OpenAPI, {
+            method: 'GET',
+            url: '/api/v1/customers/',
+            query: {
+                skip: data.skip,
+                limit: data.limit
+            },
+            errors: {
+                422: 'Validation Error'
+            }
+        });
+    }
+    
+    /**
+     * Create Customer
+     * Create a new customer in current organization.
+     *
+     * Only admin and seller roles can create customers.
+     * @param data The data for the request.
+     * @param data.requestBody
+     * @returns CustomerPublic Successful Response
+     * @throws ApiError
+     */
+    public static createCustomer(data: CustomersCreateCustomerData): CancelablePromise<CustomersCreateCustomerResponse> {
+        return __request(OpenAPI, {
+            method: 'POST',
+            url: '/api/v1/customers/',
+            body: data.requestBody,
+            mediaType: 'application/json',
+            errors: {
+                422: 'Validation Error'
+            }
+        });
+    }
+    
+    /**
+     * Read Customer
+     * Get a specific customer by ID.
+     *
+     * Admin and seller roles can view a customer.
+     * @param data The data for the request.
+     * @param data.customerId
+     * @returns CustomerPublic Successful Response
+     * @throws ApiError
+     */
+    public static readCustomer(data: CustomersReadCustomerData): CancelablePromise<CustomersReadCustomerResponse> {
+        return __request(OpenAPI, {
+            method: 'GET',
+            url: '/api/v1/customers/{customer_id}',
+            path: {
+                customer_id: data.customerId
+            },
+            errors: {
+                422: 'Validation Error'
+            }
+        });
+    }
+    
+    /**
+     * Update Customer
+     * Update a customer.
+     *
+     * Only admin and seller roles can update customers.
+     * @param data The data for the request.
+     * @param data.customerId
+     * @param data.requestBody
+     * @returns CustomerPublic Successful Response
+     * @throws ApiError
+     */
+    public static updateCustomer(data: CustomersUpdateCustomerData): CancelablePromise<CustomersUpdateCustomerResponse> {
+        return __request(OpenAPI, {
+            method: 'PATCH',
+            url: '/api/v1/customers/{customer_id}',
+            path: {
+                customer_id: data.customerId
+            },
+            body: data.requestBody,
+            mediaType: 'application/json',
+            errors: {
+                422: 'Validation Error'
+            }
+        });
+    }
+    
+    /**
+     * Delete Customer
+     * Delete a customer (soft delete).
+     *
+     * Only admin users can delete customers.
+     * @param data The data for the request.
+     * @param data.customerId
+     * @returns Message Successful Response
+     * @throws ApiError
+     */
+    public static deleteCustomer(data: CustomersDeleteCustomerData): CancelablePromise<CustomersDeleteCustomerResponse> {
+        return __request(OpenAPI, {
+            method: 'DELETE',
+            url: '/api/v1/customers/{customer_id}',
+            path: {
+                customer_id: data.customerId
+            },
+            errors: {
+                422: 'Validation Error'
+            }
+        });
+    }
+    
+    /**
+     * Read Customer Sales
+     * Get sales for a specific customer.
+     *
+     * Any authenticated user can view a customer's sales.
+     * @param data The data for the request.
+     * @param data.customerId
+     * @param data.skip
+     * @param data.limit
+     * @returns SalesPublic Successful Response
+     * @throws ApiError
+     */
+    public static readCustomerSales(data: CustomersReadCustomerSalesData): CancelablePromise<CustomersReadCustomerSalesResponse> {
+        return __request(OpenAPI, {
+            method: 'GET',
+            url: '/api/v1/customers/{customer_id}/sales',
+            path: {
+                customer_id: data.customerId
+            },
+            query: {
+                skip: data.skip,
+                limit: data.limit
+            },
+            errors: {
+                422: 'Validation Error'
+            }
+        });
+    }
+}
+
+export class DashboardService {
+    /**
+     * Read Dashboard Stats
+     * Get dashboard statistics for the current organization.
+     *
+     * Any authenticated user can view dashboard stats.
+     * Returns sales today/month, low stock count, average ticket,
+     * top products, and sales by day.
+     * @returns DashboardStatsPublic Successful Response
+     * @throws ApiError
+     */
+    public static readDashboardStats(): CancelablePromise<DashboardReadDashboardStatsResponse> {
+        return __request(OpenAPI, {
+            method: 'GET',
+            url: '/api/v1/dashboard/stats'
+        });
+    }
+}
+
+export class InventoryService {
+    /**
+     * Read Movements
+     * Retrieve inventory movements in current organization.
+     *
+     * Any authenticated user can list movements.
+     * @param data The data for the request.
+     * @param data.skip
+     * @param data.limit
+     * @returns InventoryMovementsPublic Successful Response
+     * @throws ApiError
+     */
+    public static readMovements(data: InventoryReadMovementsData = {}): CancelablePromise<InventoryReadMovementsResponse> {
+        return __request(OpenAPI, {
+            method: 'GET',
+            url: '/api/v1/inventory-movements/',
+            query: {
+                skip: data.skip,
+                limit: data.limit
+            },
+            errors: {
+                422: 'Validation Error'
+            }
+        });
+    }
+    
+    /**
+     * Create Movement
+     * Create a manual inventory movement (purchase, adjustment, return).
+     *
+     * Only admin and seller roles can create movements.
+     * Movement types 'sale' cannot be created directly; they are created
+     * automatically when a sale is recorded.
+     * @param data The data for the request.
+     * @param data.requestBody
+     * @returns InventoryMovementPublic Successful Response
+     * @throws ApiError
+     */
+    public static createMovement(data: InventoryCreateMovementData): CancelablePromise<InventoryCreateMovementResponse> {
+        return __request(OpenAPI, {
+            method: 'POST',
+            url: '/api/v1/inventory-movements/',
+            body: data.requestBody,
+            mediaType: 'application/json',
+            errors: {
+                422: 'Validation Error'
+            }
+        });
+    }
+    
+    /**
+     * Read Movement
+     * Get a specific inventory movement by ID.
+     *
+     * Any authenticated user can view a movement.
+     * @param data The data for the request.
+     * @param data.movementId
+     * @returns InventoryMovementPublic Successful Response
+     * @throws ApiError
+     */
+    public static readMovement(data: InventoryReadMovementData): CancelablePromise<InventoryReadMovementResponse> {
+        return __request(OpenAPI, {
+            method: 'GET',
+            url: '/api/v1/inventory-movements/{movement_id}',
+            path: {
+                movement_id: data.movementId
+            },
+            errors: {
+                422: 'Validation Error'
+            }
+        });
+    }
+}
 
 export class LoginService {
     /**
@@ -172,7 +536,7 @@ export class OrganizationsService {
 export class PrivateService {
     /**
      * Create User
-     * Create a new user.
+     * Create a new user (internal/private endpoint).
      * @param data The data for the request.
      * @param data.requestBody
      * @returns UserPublic Successful Response
@@ -184,6 +548,209 @@ export class PrivateService {
             url: '/api/v1/private/users/',
             body: data.requestBody,
             mediaType: 'application/json',
+            errors: {
+                422: 'Validation Error'
+            }
+        });
+    }
+}
+
+export class ProductsService {
+    /**
+     * Read Products
+     * Retrieve products in current organization.
+     *
+     * Any authenticated user can list products.
+     * @param data The data for the request.
+     * @param data.skip
+     * @param data.limit
+     * @returns ProductsPublic Successful Response
+     * @throws ApiError
+     */
+    public static readProducts(data: ProductsReadProductsData = {}): CancelablePromise<ProductsReadProductsResponse> {
+        return __request(OpenAPI, {
+            method: 'GET',
+            url: '/api/v1/products/',
+            query: {
+                skip: data.skip,
+                limit: data.limit
+            },
+            errors: {
+                422: 'Validation Error'
+            }
+        });
+    }
+    
+    /**
+     * Create Product
+     * Create a new product in current organization.
+     *
+     * Only admin and seller roles can create products.
+     * @param data The data for the request.
+     * @param data.requestBody
+     * @returns ProductPublic Successful Response
+     * @throws ApiError
+     */
+    public static createProduct(data: ProductsCreateProductData): CancelablePromise<ProductsCreateProductResponse> {
+        return __request(OpenAPI, {
+            method: 'POST',
+            url: '/api/v1/products/',
+            body: data.requestBody,
+            mediaType: 'application/json',
+            errors: {
+                422: 'Validation Error'
+            }
+        });
+    }
+    
+    /**
+     * Read Low Stock Products
+     * Retrieve products with stock at or below minimum level.
+     *
+     * Any authenticated user can view low-stock products.
+     * @param data The data for the request.
+     * @param data.skip
+     * @param data.limit
+     * @returns ProductsPublic Successful Response
+     * @throws ApiError
+     */
+    public static readLowStockProducts(data: ProductsReadLowStockProductsData = {}): CancelablePromise<ProductsReadLowStockProductsResponse> {
+        return __request(OpenAPI, {
+            method: 'GET',
+            url: '/api/v1/products/low-stock',
+            query: {
+                skip: data.skip,
+                limit: data.limit
+            },
+            errors: {
+                422: 'Validation Error'
+            }
+        });
+    }
+    
+    /**
+     * Read Product
+     * Get a specific product by ID.
+     *
+     * Any authenticated user can view a product.
+     * @param data The data for the request.
+     * @param data.productId
+     * @returns ProductPublic Successful Response
+     * @throws ApiError
+     */
+    public static readProduct(data: ProductsReadProductData): CancelablePromise<ProductsReadProductResponse> {
+        return __request(OpenAPI, {
+            method: 'GET',
+            url: '/api/v1/products/{product_id}',
+            path: {
+                product_id: data.productId
+            },
+            errors: {
+                422: 'Validation Error'
+            }
+        });
+    }
+    
+    /**
+     * Update Product
+     * Update a product.
+     *
+     * Only admin and seller roles can update products.
+     * @param data The data for the request.
+     * @param data.productId
+     * @param data.requestBody
+     * @returns ProductPublic Successful Response
+     * @throws ApiError
+     */
+    public static updateProduct(data: ProductsUpdateProductData): CancelablePromise<ProductsUpdateProductResponse> {
+        return __request(OpenAPI, {
+            method: 'PATCH',
+            url: '/api/v1/products/{product_id}',
+            path: {
+                product_id: data.productId
+            },
+            body: data.requestBody,
+            mediaType: 'application/json',
+            errors: {
+                422: 'Validation Error'
+            }
+        });
+    }
+    
+    /**
+     * Delete Product
+     * Delete a product (soft delete).
+     *
+     * Only admin users can delete products.
+     * @param data The data for the request.
+     * @param data.productId
+     * @returns Message Successful Response
+     * @throws ApiError
+     */
+    public static deleteProduct(data: ProductsDeleteProductData): CancelablePromise<ProductsDeleteProductResponse> {
+        return __request(OpenAPI, {
+            method: 'DELETE',
+            url: '/api/v1/products/{product_id}',
+            path: {
+                product_id: data.productId
+            },
+            errors: {
+                422: 'Validation Error'
+            }
+        });
+    }
+    
+    /**
+     * Adjust Stock
+     * Adjust product stock quantity.
+     *
+     * Only admin and seller roles can adjust stock.
+     * The quantity can be positive (add stock) or negative (subtract stock).
+     * Creates an inventory movement record for audit trail.
+     * @param data The data for the request.
+     * @param data.productId
+     * @param data.requestBody
+     * @returns ProductPublic Successful Response
+     * @throws ApiError
+     */
+    public static adjustStock(data: ProductsAdjustStockData): CancelablePromise<ProductsAdjustStockResponse> {
+        return __request(OpenAPI, {
+            method: 'POST',
+            url: '/api/v1/products/{product_id}/adjust-stock',
+            path: {
+                product_id: data.productId
+            },
+            body: data.requestBody,
+            mediaType: 'application/json',
+            errors: {
+                422: 'Validation Error'
+            }
+        });
+    }
+    
+    /**
+     * Read Product Movements
+     * Retrieve inventory movements for a specific product.
+     *
+     * Any authenticated user can view product movements.
+     * @param data The data for the request.
+     * @param data.productId
+     * @param data.skip
+     * @param data.limit
+     * @returns InventoryMovementsPublic Successful Response
+     * @throws ApiError
+     */
+    public static readProductMovements(data: ProductsReadProductMovementsData): CancelablePromise<ProductsReadProductMovementsResponse> {
+        return __request(OpenAPI, {
+            method: 'GET',
+            url: '/api/v1/products/{product_id}/movements',
+            path: {
+                product_id: data.productId
+            },
+            query: {
+                skip: data.skip,
+                limit: data.limit
+            },
             errors: {
                 422: 'Validation Error'
             }
@@ -204,6 +771,156 @@ export class RolesService {
         return __request(OpenAPI, {
             method: 'GET',
             url: '/api/v1/roles/'
+        });
+    }
+}
+
+export class SalesService {
+    /**
+     * Read Sales
+     * Retrieve sales in current organization.
+     *
+     * Any authenticated user can list sales.
+     * @param data The data for the request.
+     * @param data.skip
+     * @param data.limit
+     * @returns SalesPublic Successful Response
+     * @throws ApiError
+     */
+    public static readSales(data: SalesReadSalesData = {}): CancelablePromise<SalesReadSalesResponse> {
+        return __request(OpenAPI, {
+            method: 'GET',
+            url: '/api/v1/sales/',
+            query: {
+                skip: data.skip,
+                limit: data.limit
+            },
+            errors: {
+                422: 'Validation Error'
+            }
+        });
+    }
+    
+    /**
+     * Create Sale
+     * Create a new sale.
+     *
+     * Only admin and seller roles can create sales.
+     * This endpoint:
+     * - Validates all products exist and have sufficient stock
+     * - Calculates subtotal, total
+     * - Deducts stock from each product
+     * - Creates inventory movement records (type: sale)
+     * - Updates customer purchase stats if customer_id is provided
+     * - Generates a unique invoice number
+     * @param data The data for the request.
+     * @param data.requestBody
+     * @returns SalePublic Successful Response
+     * @throws ApiError
+     */
+    public static createSale(data: SalesCreateSaleData): CancelablePromise<SalesCreateSaleResponse> {
+        return __request(OpenAPI, {
+            method: 'POST',
+            url: '/api/v1/sales/',
+            body: data.requestBody,
+            mediaType: 'application/json',
+            errors: {
+                422: 'Validation Error'
+            }
+        });
+    }
+    
+    /**
+     * Read Sales Today
+     * Retrieve today's completed sales.
+     *
+     * Any authenticated user can view today's sales.
+     * @param data The data for the request.
+     * @param data.skip
+     * @param data.limit
+     * @returns SalesPublic Successful Response
+     * @throws ApiError
+     */
+    public static readSalesToday(data: SalesReadSalesTodayData = {}): CancelablePromise<SalesReadSalesTodayResponse> {
+        return __request(OpenAPI, {
+            method: 'GET',
+            url: '/api/v1/sales/today',
+            query: {
+                skip: data.skip,
+                limit: data.limit
+            },
+            errors: {
+                422: 'Validation Error'
+            }
+        });
+    }
+    
+    /**
+     * Read Sales Stats
+     * Get sales statistics for the current organization.
+     *
+     * Any authenticated user can view sales stats.
+     * @returns SaleStatsPublic Successful Response
+     * @throws ApiError
+     */
+    public static readSalesStats(): CancelablePromise<SalesReadSalesStatsResponse> {
+        return __request(OpenAPI, {
+            method: 'GET',
+            url: '/api/v1/sales/stats'
+        });
+    }
+    
+    /**
+     * Read Sale
+     * Get a specific sale by ID, including its items.
+     *
+     * Any authenticated user can view a sale.
+     * @param data The data for the request.
+     * @param data.saleId
+     * @returns SalePublic Successful Response
+     * @throws ApiError
+     */
+    public static readSale(data: SalesReadSaleData): CancelablePromise<SalesReadSaleResponse> {
+        return __request(OpenAPI, {
+            method: 'GET',
+            url: '/api/v1/sales/{sale_id}',
+            path: {
+                sale_id: data.saleId
+            },
+            errors: {
+                422: 'Validation Error'
+            }
+        });
+    }
+    
+    /**
+     * Cancel Sale
+     * Cancel a sale.
+     *
+     * Only admin and seller roles can cancel sales.
+     * This endpoint:
+     * - Validates the sale exists and is not already cancelled
+     * - Restores stock for each sale item
+     * - Creates inventory movement records (type: return)
+     * - Reverts customer purchase stats if customer_id is set
+     * @param data The data for the request.
+     * @param data.saleId
+     * @param data.requestBody
+     * @returns SalePublic Successful Response
+     * @throws ApiError
+     */
+    public static cancelSale(data: SalesCancelSaleData): CancelablePromise<SalesCancelSaleResponse> {
+        return __request(OpenAPI, {
+            method: 'POST',
+            url: '/api/v1/sales/{sale_id}/cancel',
+            path: {
+                sale_id: data.saleId
+            },
+            body: data.requestBody,
+            mediaType: 'application/json',
+            errors: {
+                422: 'Validation Error'
+            }
         });
     }
 }

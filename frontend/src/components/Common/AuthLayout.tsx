@@ -1,8 +1,8 @@
-import { Appearance } from "@/components/Common/Appearance";
-import { Footer } from "./Footer";
+import { Appearance } from "@/components/Common/Appearance"
+import { Footer } from "./Footer"
 
 interface AuthLayoutProps {
-  children: React.ReactNode;
+  children: React.ReactNode
 }
 
 export function AuthLayout({ children }: AuthLayoutProps) {
@@ -48,5 +48,5 @@ export function AuthLayout({ children }: AuthLayoutProps) {
         <Footer />
       </div>
     </div>
-  );
+  )
 }
