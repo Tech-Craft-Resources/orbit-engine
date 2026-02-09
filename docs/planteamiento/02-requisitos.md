@@ -684,14 +684,16 @@
 | Sprint 1 | HU-001, HU-002, HU-003 | Autenticación | 13 |
 | Sprint 2 | HU-005, HU-006, HU-007 | Inventario Core | 13 |
 | Sprint 3 | HU-009, HU-010, HU-011 | Inventario Avanzado | 13 |
-| Sprint 4 | HU-012, HU-013, HU-014 | Ventas Core | 21 |
+| Sprint 4 | HU-012, HU-013, HU-014, HU-015 | Ventas Core | 21 |
 | Sprint 5 | HU-016, HU-017, HU-018, HU-019 | Clientes | 13 |
 | Sprint 6 | HU-021, HU-022, HU-023 | Reportes | 13 |
 | Sprint 7 | HU-025, HU-026 | IA - Predicción | 21 |
-| Sprint 8 | HU-004, HU-015, HU-024, HU-027 | Complementos | 13 |
 
-**Total Story Points:** 120  
-**Sprints:** 8 (2 semanas cada uno) = 16 semanas ≈ 4 meses de desarrollo  
+**Historias fuera del MVP core (roadmap posterior):** HU-004, HU-024, HU-027  
+**Nota de alineación:** HU-015 (Cancelar Venta) se consolidó dentro de Ventas Core.
+
+**Total Story Points (MVP core):** 107  
+**Sprints (MVP core):** 7 (2 semanas cada uno) = 14 semanas ≈ 3.5 meses de desarrollo  
 
 ---
 
@@ -738,4 +740,3 @@ Este documento establece las bases funcionales del sistema OrbitEngine mediante 
 **Fecha de elaboración:** Octubre 2025  
 **Versión:** 1.0  
 **Elaborado por:** Equipo OrbitEngine
-

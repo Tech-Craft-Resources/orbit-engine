@@ -2261,13 +2261,13 @@ Ver documento "03-cronograma.md"
 
 ### 8.8 Apéndice H: Stack Tecnológico
 
-Ver documento "04-stack-tecnologico.md"
+Ver documento "04-arquitectura-tecnica.md" (decisiones tecnológicas y stack base)
 
 ---
 
 ### 8.9 Apéndice I: Arquitectura del Sistema
 
-Ver documento "06-arquitectura-tecnica.md"
+Ver documento "04-arquitectura-tecnica.md"
 
 ---
 
@@ -2289,4 +2289,3 @@ Ver documento "06-arquitectura-tecnica.md"
 **Fecha:** Octubre 2025  
 **Versión:** 1.0  
 **Estado:** Borrador para Revisión
-

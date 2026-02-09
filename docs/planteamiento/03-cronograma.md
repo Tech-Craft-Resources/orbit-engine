@@ -302,7 +302,7 @@ Este cronograma establece la planificación completa del proyecto OrbitEngine de
 
 ## FASE 4: DESARROLLO AVANZADO Y AI
 
-### Semanas: 16-19 (24 Feb - 21 Mar 2025)
+### Semanas: 16-19 (24 Feb - 21 Mar 2026)
 
 ### Sprint 6: Reportes y Dashboard
 
@@ -356,7 +356,7 @@ Este cronograma establece la planificación completa del proyecto OrbitEngine de
 
 ## FASE 5: TESTING, VALIDACIÓN Y REFINAMIENTO
 
-### Semanas: 20-23 (24 Mar - 18 Abr 2025)
+### Semanas: 20-23 (24 Mar - 18 Abr 2026)
 
 #### Semana 20 (24-28 Mar)
 
@@ -521,12 +521,12 @@ Sem 5: [====Entrega====]
 | #   | Hito                    | Fecha       | Criterio de Éxito                |
 | --- | ----------------------- | ----------- | -------------------------------- |
 | M1  | Propuesta Aprobada      | 22 Nov 2025 | Aprobación del asesor            |
-| M2  | Diseño Completado       | 6 Dic 2024  | Mockups y arquitectura aprobados |
-| M3  | Autenticación Funcional | 20 Dic 2024 | Login/registro operativo         |
-| M4  | MVP Core Completado     | 21 Feb 2025 | Inventario + Ventas + Clientes   |
-| M5  | IA Integrada            | 28 Mar 2025 | Predicciones funcionando         |
-| M6  | Validación Completada   | 18 Abr 2025 | Pruebas con usuarios finalizadas |
-| M7  | Entrega Final           | 30 Abr 2025 | Documentos entregados            |
+| M2  | Diseño Completado       | 6 Dic 2025  | Mockups y arquitectura aprobados |
+| M3  | Autenticación Funcional | 20 Dic 2025 | Login/registro operativo         |
+| M4  | MVP Core Completado     | 21 Feb 2026 | Inventario + Ventas + Clientes   |
+| M5  | IA Integrada            | 28 Mar 2026 | Predicciones funcionando         |
+| M6  | Validación Completada   | 18 Abr 2026 | Pruebas con usuarios finalizadas |
+| M7  | Entrega Final           | 30 Abr 2026 | Documentos entregados            |
 | M8  | Defensa                 | Mayo 2026   | Presentación exitosa             |
 
 ---
