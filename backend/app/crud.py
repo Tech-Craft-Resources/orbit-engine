@@ -22,6 +22,8 @@ from app.models import (
     CustomerUpdate,
     InventoryMovement,
     InventoryMovementCreate,
+    Sale,
+    SaleItem,
     Role,
 )
 
@@ -663,6 +665,336 @@ def count_movements_by_product(
         .select_from(InventoryMovement)
         .where(InventoryMovement.product_id == product_id)
         .where(InventoryMovement.organization_id == organization_id)
+    )
+    return session.exec(statement).one()
+
+
+# ============================================================================
+# SALE CRUD
+# ============================================================================
+
+
+def generate_invoice_number(
+    *, session: Session, organization_id: uuid.UUID
+) -> str:
+    """Generate the next invoice number for an organization."""
+    from sqlalchemy import func
+
+    count = session.exec(
+        select(func.count())
+        .select_from(Sale)
+        .where(Sale.organization_id == organization_id)
+    ).one()
+    return f"INV-{count + 1:06d}"
+
+
+def create_sale(
+    *,
+    session: Session,
+    organization_id: uuid.UUID,
+    user_id: uuid.UUID,
+    customer_id: uuid.UUID | None,
+    invoice_number: str,
+    subtotal: Any,
+    discount: Any,
+    tax: Any,
+    total: Any,
+    payment_method: str,
+    notes: str | None,
+) -> Sale:
+    """Create a new sale record."""
+    sale = Sale(
+        organization_id=organization_id,
+        user_id=user_id,
+        customer_id=customer_id,
+        invoice_number=invoice_number,
+        subtotal=subtotal,
+        discount=discount,
+        tax=tax,
+        total=total,
+        payment_method=payment_method,
+        notes=notes,
+        status="completed",
+    )
+    session.add(sale)
+    session.commit()
+    session.refresh(sale)
+    return sale
+
+
+def create_sale_item(
+    *,
+    session: Session,
+    sale_id: uuid.UUID,
+    product_id: uuid.UUID,
+    product_name: str,
+    product_sku: str,
+    quantity: int,
+    unit_price: Any,
+    subtotal: Any,
+) -> SaleItem:
+    """Create a sale item record."""
+    item = SaleItem(
+        sale_id=sale_id,
+        product_id=product_id,
+        product_name=product_name,
+        product_sku=product_sku,
+        quantity=quantity,
+        unit_price=unit_price,
+        subtotal=subtotal,
+    )
+    session.add(item)
+    session.commit()
+    session.refresh(item)
+    return item
+
+
+def get_sale_by_id(
+    *, session: Session, sale_id: uuid.UUID, organization_id: uuid.UUID
+) -> Sale | None:
+    """Get a sale by ID within an organization, including items."""
+    statement = (
+        select(Sale)
+        .where(Sale.id == sale_id)
+        .where(Sale.organization_id == organization_id)
+    )
+    return session.exec(statement).first()
+
+
+def get_sales_by_organization(
+    *,
+    session: Session,
+    organization_id: uuid.UUID,
+    skip: int = 0,
+    limit: int = 100,
+) -> list[Sale]:
+    """Get all sales for an organization, ordered by most recent."""
+    statement = (
+        select(Sale)
+        .where(Sale.organization_id == organization_id)
+        .order_by(Sale.created_at.desc())
+        .offset(skip)
+        .limit(limit)
+    )
+    return list(session.exec(statement).all())
+
+
+def count_sales_by_organization(
+    *, session: Session, organization_id: uuid.UUID
+) -> int:
+    """Count sales in an organization."""
+    from sqlalchemy import func
+
+    statement = (
+        select(func.count())
+        .select_from(Sale)
+        .where(Sale.organization_id == organization_id)
+    )
+    return session.exec(statement).one()
+
+
+def get_sale_items(
+    *, session: Session, sale_id: uuid.UUID
+) -> list[SaleItem]:
+    """Get all items for a sale."""
+    statement = (
+        select(SaleItem)
+        .where(SaleItem.sale_id == sale_id)
+    )
+    return list(session.exec(statement).all())
+
+
+def cancel_sale(
+    *,
+    session: Session,
+    db_sale: Sale,
+    cancelled_by: uuid.UUID,
+    reason: str,
+) -> Sale:
+    """Cancel a sale."""
+    from datetime import datetime, timezone
+
+    db_sale.status = "cancelled"
+    db_sale.cancelled_at = datetime.now(timezone.utc)
+    db_sale.cancelled_by = cancelled_by
+    db_sale.cancellation_reason = reason
+    db_sale.updated_at = datetime.now(timezone.utc)
+    session.add(db_sale)
+    session.commit()
+    session.refresh(db_sale)
+    return db_sale
+
+
+def get_sales_today(
+    *,
+    session: Session,
+    organization_id: uuid.UUID,
+    skip: int = 0,
+    limit: int = 100,
+) -> list[Sale]:
+    """Get today's sales for an organization."""
+    from datetime import datetime, timezone, time
+
+    today_start = datetime.combine(
+        datetime.now(timezone.utc).date(), time.min, tzinfo=timezone.utc
+    )
+    statement = (
+        select(Sale)
+        .where(Sale.organization_id == organization_id)
+        .where(Sale.status == "completed")
+        .where(Sale.sale_date >= today_start)
+        .order_by(Sale.created_at.desc())
+        .offset(skip)
+        .limit(limit)
+    )
+    return list(session.exec(statement).all())
+
+
+def count_sales_today(
+    *, session: Session, organization_id: uuid.UUID
+) -> int:
+    """Count today's completed sales in an organization."""
+    from datetime import datetime, timezone, time
+    from sqlalchemy import func
+
+    today_start = datetime.combine(
+        datetime.now(timezone.utc).date(), time.min, tzinfo=timezone.utc
+    )
+    statement = (
+        select(func.count())
+        .select_from(Sale)
+        .where(Sale.organization_id == organization_id)
+        .where(Sale.status == "completed")
+        .where(Sale.sale_date >= today_start)
+    )
+    return session.exec(statement).one()
+
+
+def get_sales_stats(
+    *, session: Session, organization_id: uuid.UUID
+) -> dict[str, Any]:
+    """Get sales statistics for an organization."""
+    from datetime import datetime, timezone, time
+    from decimal import Decimal
+    from sqlalchemy import func
+
+    now = datetime.now(timezone.utc)
+    today_start = datetime.combine(now.date(), time.min, tzinfo=timezone.utc)
+    month_start = now.replace(day=1, hour=0, minute=0, second=0, microsecond=0)
+
+    # Today stats
+    today_result = session.exec(
+        select(func.count(), func.coalesce(func.sum(Sale.total), 0))
+        .select_from(Sale)
+        .where(Sale.organization_id == organization_id)
+        .where(Sale.status == "completed")
+        .where(Sale.sale_date >= today_start)
+    ).one()
+
+    # Month stats
+    month_result = session.exec(
+        select(func.count(), func.coalesce(func.sum(Sale.total), 0))
+        .select_from(Sale)
+        .where(Sale.organization_id == organization_id)
+        .where(Sale.status == "completed")
+        .where(Sale.sale_date >= month_start)
+    ).one()
+
+    sales_today_count = today_result[0]
+    sales_today_total = today_result[1]
+    sales_month_count = month_result[0]
+    sales_month_total = month_result[1]
+
+    # Average ticket
+    if sales_month_count > 0:
+        average_ticket = Decimal(str(sales_month_total)) / sales_month_count
+    else:
+        average_ticket = Decimal("0")
+
+    return {
+        "sales_today_count": sales_today_count,
+        "sales_today_total": Decimal(str(sales_today_total)),
+        "sales_month_count": sales_month_count,
+        "sales_month_total": Decimal(str(sales_month_total)),
+        "average_ticket": average_ticket,
+    }
+
+
+def update_customer_purchase_stats(
+    *,
+    session: Session,
+    db_customer: Customer,
+    sale_total: Any,
+) -> Customer:
+    """Update customer's denormalized purchase stats after a sale."""
+    from datetime import datetime, timezone
+    from decimal import Decimal
+
+    db_customer.total_purchases = Decimal(str(db_customer.total_purchases)) + Decimal(str(sale_total))
+    db_customer.purchases_count += 1
+    db_customer.last_purchase_at = datetime.now(timezone.utc)
+    db_customer.updated_at = datetime.now(timezone.utc)
+    session.add(db_customer)
+    session.commit()
+    session.refresh(db_customer)
+    return db_customer
+
+
+def revert_customer_purchase_stats(
+    *,
+    session: Session,
+    db_customer: Customer,
+    sale_total: Any,
+) -> Customer:
+    """Revert customer's denormalized purchase stats after a sale cancellation."""
+    from datetime import datetime, timezone
+    from decimal import Decimal
+
+    db_customer.total_purchases = Decimal(str(db_customer.total_purchases)) - Decimal(str(sale_total))
+    if db_customer.total_purchases < 0:
+        db_customer.total_purchases = Decimal("0")
+    db_customer.purchases_count = max(0, db_customer.purchases_count - 1)
+    db_customer.updated_at = datetime.now(timezone.utc)
+    session.add(db_customer)
+    session.commit()
+    session.refresh(db_customer)
+    return db_customer
+
+
+def get_sales_by_customer(
+    *,
+    session: Session,
+    customer_id: uuid.UUID,
+    organization_id: uuid.UUID,
+    skip: int = 0,
+    limit: int = 100,
+) -> list[Sale]:
+    """Get all sales for a specific customer."""
+    statement = (
+        select(Sale)
+        .where(Sale.customer_id == customer_id)
+        .where(Sale.organization_id == organization_id)
+        .order_by(Sale.created_at.desc())
+        .offset(skip)
+        .limit(limit)
+    )
+    return list(session.exec(statement).all())
+
+
+def count_sales_by_customer(
+    *,
+    session: Session,
+    customer_id: uuid.UUID,
+    organization_id: uuid.UUID,
+) -> int:
+    """Count sales for a specific customer."""
+    from sqlalchemy import func
+
+    statement = (
+        select(func.count())
+        .select_from(Sale)
+        .where(Sale.customer_id == customer_id)
+        .where(Sale.organization_id == organization_id)
     )
     return session.exec(statement).one()
 

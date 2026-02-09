@@ -1,6 +1,6 @@
 from fastapi import APIRouter
 
-from app.api.routes import categories, customers, inventory_movements, login, organizations, private, products, roles, users, utils
+from app.api.routes import categories, customers, inventory_movements, login, organizations, private, products, roles, sales, users, utils
 from app.core.config import settings
 
 api_router = APIRouter()
@@ -21,6 +21,9 @@ api_router.include_router(
 )
 api_router.include_router(
     inventory_movements.router, prefix="/inventory-movements", tags=["inventory"]
+)
+api_router.include_router(
+    sales.router, prefix="/sales", tags=["sales"]
 )
 api_router.include_router(utils.router)
 

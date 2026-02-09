@@ -64,6 +64,7 @@ class Organization(OrganizationBase, table=True):
     products: list["Product"] = Relationship(back_populates="organization")
     customers: list["Customer"] = Relationship(back_populates="organization")
     inventory_movements: list["InventoryMovement"] = Relationship(back_populates="organization")
+    sales: list["Sale"] = Relationship(back_populates="organization")
 
 
 class OrganizationCreate(OrganizationBase):
@@ -256,6 +257,7 @@ class Product(ProductBase, table=True):
     organization: Organization = Relationship(back_populates="products")
     category: Optional["Category"] = Relationship(back_populates="products")
     inventory_movements: list["InventoryMovement"] = Relationship(back_populates="product")
+    sale_items: list["SaleItem"] = Relationship(back_populates="product")
 
 
 class ProductCreate(SQLModel):
@@ -463,6 +465,7 @@ class Customer(CustomerBase, table=True):
 
     # Relationships
     organization: Organization = Relationship(back_populates="customers")
+    sales: list["Sale"] = Relationship(back_populates="customer")
 
 
 class CustomerCreate(SQLModel):
@@ -505,6 +508,204 @@ class CustomerPublic(CustomerBase):
 class CustomersPublic(SQLModel):
     data: list[CustomerPublic]
     count: int
+
+
+# ============================================================================
+# SALE MODELS
+# ============================================================================
+
+
+class SaleBase(SQLModel):
+    invoice_number: str = Field(max_length=100)
+    sale_date: datetime = Field(
+        default_factory=get_datetime_utc,
+        sa_type=DateTime(timezone=True),  # type: ignore
+    )
+    subtotal: Decimal = Field(
+        default=Decimal("0"),
+        sa_column=Column(Numeric(precision=12, scale=2), nullable=False),
+    )
+    discount: Decimal = Field(
+        default=Decimal("0"),
+        sa_column=Column(Numeric(precision=12, scale=2), nullable=False),
+    )
+    tax: Decimal = Field(
+        default=Decimal("0"),
+        sa_column=Column(Numeric(precision=12, scale=2), nullable=False),
+    )
+    total: Decimal = Field(
+        default=Decimal("0"),
+        sa_column=Column(Numeric(precision=12, scale=2), nullable=False),
+    )
+    payment_method: str = Field(default="cash", max_length=50)  # cash, card, transfer, other
+    status: str = Field(default="completed", max_length=50)  # completed, cancelled, pending
+    notes: str | None = Field(default=None)
+
+
+class Sale(SaleBase, table=True):
+    __tablename__ = "sales"
+    __table_args__ = (
+        UniqueConstraint(
+            "organization_id",
+            "invoice_number",
+            name="uq_sales_organization_invoice_number",
+        ),
+        Index("idx_sales_organization_id", "organization_id"),
+        Index("idx_sales_customer_id", "customer_id"),
+        Index("idx_sales_user_id", "user_id"),
+        Index("idx_sales_status", "status"),
+        Index("idx_sales_sale_date", "sale_date"),
+        Index("idx_sales_invoice_number", "invoice_number"),
+    )
+
+    id: uuid.UUID = Field(default_factory=uuid.uuid4, primary_key=True)
+    organization_id: uuid.UUID = Field(foreign_key="organizations.id", index=True)
+    customer_id: uuid.UUID | None = Field(
+        default=None, foreign_key="customers.id", index=True
+    )
+    user_id: uuid.UUID = Field(foreign_key="users.id", index=True)
+    cancelled_at: datetime | None = Field(
+        default=None,
+        sa_type=DateTime(timezone=True),  # type: ignore
+    )
+    cancelled_by: uuid.UUID | None = Field(
+        default=None, foreign_key="users.id"
+    )
+    cancellation_reason: str | None = Field(default=None)
+    created_at: datetime = Field(
+        default_factory=get_datetime_utc,
+        sa_type=DateTime(timezone=True),  # type: ignore
+    )
+    updated_at: datetime = Field(
+        default_factory=get_datetime_utc,
+        sa_type=DateTime(timezone=True),  # type: ignore
+    )
+
+    # Relationships
+    organization: Organization = Relationship(back_populates="sales")
+    customer: Optional["Customer"] = Relationship(back_populates="sales")
+    items: list["SaleItem"] = Relationship(back_populates="sale")
+    user: "User" = Relationship(
+        back_populates="sales",
+        sa_relationship_kwargs={"foreign_keys": "[Sale.user_id]"},
+    )
+
+
+class SaleItemBase(SQLModel):
+    product_name: str = Field(max_length=255)
+    product_sku: str = Field(max_length=100)
+    quantity: int
+    unit_price: Decimal = Field(
+        sa_column=Column(Numeric(precision=12, scale=2), nullable=False),
+    )
+    subtotal: Decimal = Field(
+        sa_column=Column(Numeric(precision=12, scale=2), nullable=False),
+    )
+
+
+class SaleItem(SaleItemBase, table=True):
+    __tablename__ = "sale_items"
+    __table_args__ = (
+        Index("idx_sale_items_sale_id", "sale_id"),
+        Index("idx_sale_items_product_id", "product_id"),
+    )
+
+    id: uuid.UUID = Field(default_factory=uuid.uuid4, primary_key=True)
+    sale_id: uuid.UUID = Field(foreign_key="sales.id", index=True)
+    product_id: uuid.UUID = Field(foreign_key="products.id", index=True)
+    created_at: datetime = Field(
+        default_factory=get_datetime_utc,
+        sa_type=DateTime(timezone=True),  # type: ignore
+    )
+
+    # Relationships
+    sale: "Sale" = Relationship(back_populates="items")
+    product: "Product" = Relationship(back_populates="sale_items")
+
+
+class SaleItemCreate(SQLModel):
+    """Schema for creating a sale item within a sale."""
+    product_id: uuid.UUID
+    quantity: int
+
+    @field_validator("quantity")
+    @classmethod
+    def validate_quantity(cls, v: int) -> int:
+        if v <= 0:
+            raise ValueError("Quantity must be greater than zero")
+        return v
+
+
+class SaleCreate(SQLModel):
+    """Schema for creating a sale."""
+    customer_id: uuid.UUID | None = None
+    payment_method: str = Field(default="cash", max_length=50)
+    discount: Decimal = Field(default=Decimal("0"))
+    tax: Decimal = Field(default=Decimal("0"))
+    notes: str | None = None
+    items: list[SaleItemCreate]
+
+    @field_validator("discount", "tax")
+    @classmethod
+    def validate_non_negative(cls, v: Decimal) -> Decimal:
+        if v < 0:
+            raise ValueError("Value must be non-negative")
+        return v
+
+    @field_validator("items")
+    @classmethod
+    def validate_items_not_empty(cls, v: list[SaleItemCreate]) -> list[SaleItemCreate]:
+        if not v:
+            raise ValueError("A sale must have at least one item")
+        return v
+
+
+class SaleItemPublic(SaleItemBase):
+    id: uuid.UUID
+    sale_id: uuid.UUID
+    product_id: uuid.UUID
+    created_at: datetime
+
+
+class SalePublic(SQLModel):
+    id: uuid.UUID
+    organization_id: uuid.UUID
+    invoice_number: str
+    customer_id: uuid.UUID | None = None
+    user_id: uuid.UUID
+    sale_date: datetime
+    subtotal: Decimal
+    discount: Decimal
+    tax: Decimal
+    total: Decimal
+    payment_method: str
+    status: str
+    notes: str | None = None
+    cancelled_at: datetime | None = None
+    cancelled_by: uuid.UUID | None = None
+    cancellation_reason: str | None = None
+    items: list[SaleItemPublic] = []
+    created_at: datetime
+    updated_at: datetime
+
+
+class SalesPublic(SQLModel):
+    data: list[SalePublic]
+    count: int
+
+
+class SaleCancelRequest(SQLModel):
+    """Schema for cancelling a sale."""
+    reason: str = Field(max_length=500)
+
+
+class SaleStatsPublic(SQLModel):
+    """Schema for sales statistics."""
+    sales_today_count: int
+    sales_today_total: Decimal
+    sales_month_count: int
+    sales_month_total: Decimal
+    average_ticket: Decimal
 
 
 # ============================================================================
@@ -565,6 +766,10 @@ class User(UserBase, table=True):
     organization: Organization = Relationship(back_populates="users")
     role: Role = Relationship(back_populates="users")
     inventory_movements: list["InventoryMovement"] = Relationship(back_populates="user")
+    sales: list["Sale"] = Relationship(
+        back_populates="user",
+        sa_relationship_kwargs={"foreign_keys": "[Sale.user_id]"},
+    )
 
 
 class UserCreate(SQLModel):

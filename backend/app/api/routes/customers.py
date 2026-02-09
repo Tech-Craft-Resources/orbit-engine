@@ -16,6 +16,7 @@ from app.models import (
     CustomersPublic,
     CustomerUpdate,
     Message,
+    SalesPublic,
 )
 
 router = APIRouter()
@@ -173,3 +174,40 @@ def delete_customer(
 
     crud.soft_delete_customer(session=session, db_customer=db_customer)
     return Message(message="Customer deleted successfully")
+
+
+@router.get("/{customer_id}/sales", response_model=SalesPublic)
+def read_customer_sales(
+    customer_id: uuid.UUID,
+    session: SessionDep,
+    current_user: CurrentUser,
+    current_organization: CurrentOrganization,
+    skip: int = 0,
+    limit: int = 100,
+) -> Any:
+    """
+    Get sales for a specific customer.
+
+    Any authenticated user can view a customer's sales.
+    """
+    customer = crud.get_customer_by_id(
+        session=session,
+        customer_id=customer_id,
+        organization_id=current_organization,
+    )
+    if not customer:
+        raise HTTPException(status_code=404, detail="Customer not found")
+
+    sales = crud.get_sales_by_customer(
+        session=session,
+        customer_id=customer_id,
+        organization_id=current_organization,
+        skip=skip,
+        limit=limit,
+    )
+    count = crud.count_sales_by_customer(
+        session=session,
+        customer_id=customer_id,
+        organization_id=current_organization,
+    )
+    return SalesPublic(data=sales, count=count)
