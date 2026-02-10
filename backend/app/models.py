@@ -63,7 +63,9 @@ class Organization(OrganizationBase, table=True):
     categories: list["Category"] = Relationship(back_populates="organization")
     products: list["Product"] = Relationship(back_populates="organization")
     customers: list["Customer"] = Relationship(back_populates="organization")
-    inventory_movements: list["InventoryMovement"] = Relationship(back_populates="organization")
+    inventory_movements: list["InventoryMovement"] = Relationship(
+        back_populates="organization"
+    )
     sales: list["Sale"] = Relationship(back_populates="organization")
 
 
@@ -73,9 +75,24 @@ class OrganizationCreate(OrganizationBase):
 
 class OrganizationUpdate(SQLModel):
     name: str | None = Field(default=None, max_length=255)
+    slug: str | None = Field(default=None, max_length=100)
     description: str | None = None
     logo_url: str | None = Field(default=None, max_length=500)
     is_active: bool | None = None
+
+    @field_validator("slug")
+    @classmethod
+    def validate_slug(cls, v: str | None) -> str | None:
+        if v is None:
+            return v
+
+        import re
+
+        if not re.match(r"^[a-z0-9-]{3,50}$", v):
+            raise ValueError(
+                "Slug must be 3-50 characters, lowercase letters, numbers and hyphens only"
+            )
+        return v
 
 
 class OrganizationPublic(OrganizationBase):
@@ -256,7 +273,9 @@ class Product(ProductBase, table=True):
     # Relationships
     organization: Organization = Relationship(back_populates="products")
     category: Optional["Category"] = Relationship(back_populates="products")
-    inventory_movements: list["InventoryMovement"] = Relationship(back_populates="product")
+    inventory_movements: list["InventoryMovement"] = Relationship(
+        back_populates="product"
+    )
     sale_items: list["SaleItem"] = Relationship(back_populates="product")
 
 
@@ -321,6 +340,7 @@ class ProductUpdate(SQLModel):
 
 class StockAdjustment(SQLModel):
     """Schema for manual stock adjustment."""
+
     quantity: int  # Can be positive (add) or negative (subtract)
     reason: str = Field(max_length=500)
 
@@ -349,7 +369,9 @@ class InventoryMovementBase(SQLModel):
     previous_stock: int
     new_stock: int
     reference_id: uuid.UUID | None = Field(default=None)
-    reference_type: str | None = Field(default=None, max_length=50)  # sale, purchase, adjustment
+    reference_type: str | None = Field(
+        default=None, max_length=50
+    )  # sale, purchase, adjustment
     reason: str | None = Field(default=None)
 
 
@@ -385,6 +407,7 @@ class InventoryMovement(InventoryMovementBase, table=True):
 
 class InventoryMovementCreate(SQLModel):
     """Schema for creating an inventory movement."""
+
     product_id: uuid.UUID
     movement_type: str = Field(max_length=50)
     quantity: int
@@ -537,8 +560,12 @@ class SaleBase(SQLModel):
         default=Decimal("0"),
         sa_column=Column(Numeric(precision=12, scale=2), nullable=False),
     )
-    payment_method: str = Field(default="cash", max_length=50)  # cash, card, transfer, other
-    status: str = Field(default="completed", max_length=50)  # completed, cancelled, pending
+    payment_method: str = Field(
+        default="cash", max_length=50
+    )  # cash, card, transfer, other
+    status: str = Field(
+        default="completed", max_length=50
+    )  # completed, cancelled, pending
     notes: str | None = Field(default=None)
 
 
@@ -568,9 +595,7 @@ class Sale(SaleBase, table=True):
         default=None,
         sa_type=DateTime(timezone=True),  # type: ignore
     )
-    cancelled_by: uuid.UUID | None = Field(
-        default=None, foreign_key="users.id"
-    )
+    cancelled_by: uuid.UUID | None = Field(default=None, foreign_key="users.id")
     cancellation_reason: str | None = Field(default=None)
     created_at: datetime = Field(
         default_factory=get_datetime_utc,
@@ -625,6 +650,7 @@ class SaleItem(SaleItemBase, table=True):
 
 class SaleItemCreate(SQLModel):
     """Schema for creating a sale item within a sale."""
+
     product_id: uuid.UUID
     quantity: int
 
@@ -638,6 +664,7 @@ class SaleItemCreate(SQLModel):
 
 class SaleCreate(SQLModel):
     """Schema for creating a sale."""
+
     customer_id: uuid.UUID | None = None
     payment_method: str = Field(default="cash", max_length=50)
     discount: Decimal = Field(default=Decimal("0"))
@@ -696,11 +723,13 @@ class SalesPublic(SQLModel):
 
 class SaleCancelRequest(SQLModel):
     """Schema for cancelling a sale."""
+
     reason: str = Field(max_length=500)
 
 
 class SaleStatsPublic(SQLModel):
     """Schema for sales statistics."""
+
     sales_today_count: int
     sales_today_total: Decimal
     sales_month_count: int
@@ -715,18 +744,21 @@ class SaleStatsPublic(SQLModel):
 
 class SalesTodayStats(SQLModel):
     """Sales stats for today."""
+
     count: int
     total: Decimal
 
 
 class SalesMonthStats(SQLModel):
     """Sales stats for current month."""
+
     count: int
     total: Decimal
 
 
 class TopProductItem(SQLModel):
     """A top-selling product in dashboard stats."""
+
     product_id: uuid.UUID
     product_name: str
     quantity_sold: int
@@ -735,6 +767,7 @@ class TopProductItem(SQLModel):
 
 class SalesByDayItem(SQLModel):
     """Sales aggregated by day."""
+
     date: str
     count: int
     total: Decimal
@@ -742,6 +775,7 @@ class SalesByDayItem(SQLModel):
 
 class DashboardStatsPublic(SQLModel):
     """Unified dashboard statistics response."""
+
     sales_today: SalesTodayStats
     sales_month: SalesMonthStats
     low_stock_count: int
