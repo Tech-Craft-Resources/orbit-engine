@@ -1,8 +1,8 @@
-import { Appearance } from "@/components/Common/Appearance"
-import { Footer } from "./Footer"
+// import { Appearance } from "@/components/Common/Appearance";
+import { Footer } from "./Footer";
 
 interface AuthLayoutProps {
-  children: React.ReactNode
+  children: React.ReactNode;
 }
 
 export function AuthLayout({ children }: AuthLayoutProps) {
@@ -40,7 +40,7 @@ export function AuthLayout({ children }: AuthLayoutProps) {
               <span className="font-bold">Orbit</span>Engine
             </h2>
           </div>
-          <Appearance />
+          {/* <Appearance /> */}
         </div>
         <div className="flex flex-1 items-center justify-center">
           <div className="w-full max-w-xs">{children}</div>
@@ -48,5 +48,5 @@ export function AuthLayout({ children }: AuthLayoutProps) {
         <Footer />
       </div>
     </div>
-  )
+  );
 }

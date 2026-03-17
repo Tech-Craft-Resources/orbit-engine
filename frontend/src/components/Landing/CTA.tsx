@@ -9,48 +9,55 @@ export function CTA() {
   const { ref, isVisible } = useScrollAnimation()
 
   return (
-    <section className="py-24 md:py-32">
+    <section className="py-20 md:py-24">
       <div className="mx-auto max-w-6xl px-6">
         <div
           ref={ref}
           className={cn(
-            "rounded-2xl border bg-card p-8 text-center shadow-sm md:p-16 scroll-hidden",
+            "relative overflow-hidden rounded-lg border border-border/80 bg-card px-6 py-10 shadow-sm md:px-10 md:py-12 scroll-hidden",
             isVisible && "animate-scale-in",
           )}
         >
+          <div
+            aria-hidden="true"
+            className="pointer-events-none absolute -right-20 -top-20 h-56 w-56 rounded-full bg-sky-400/10 blur-3xl"
+          />
           <h2
             className={cn(
-              "text-3xl font-bold tracking-tight sm:text-4xl scroll-hidden",
+              "max-w-3xl text-balance text-3xl font-semibold tracking-tight sm:text-4xl scroll-hidden",
               isVisible && "animate-fade-in-up stagger-1",
             )}
           >
-            Ready to take control of your business?
+            Replace Fragmented Tools With One Reliable Control Surface
           </h2>
           <p
             className={cn(
-              "mx-auto mt-4 max-w-xl text-muted-foreground scroll-hidden",
+              "mt-4 max-w-2xl text-pretty text-muted-foreground scroll-hidden",
               isVisible && "animate-fade-in stagger-2",
             )}
           >
-            Stop losing time on spreadsheets and manual processes. OrbitEngine
-            gives you the tools and intelligence to grow with confidence.
+            Launch with your current team, preserve process clarity, and give
+            every role the same trusted source of operational truth.
           </p>
           <div
             className={cn(
-              "mt-8 flex flex-col items-center gap-4 sm:flex-row sm:justify-center scroll-hidden",
+              "mt-8 flex flex-col gap-3 sm:flex-row sm:items-center scroll-hidden",
               isVisible && "animate-fade-in-up stagger-3",
             )}
           >
-            <Button size="lg" asChild>
+            <Button size="lg" asChild className="touch-manipulation">
               <RouterLink to="/signup">
-                Get Started Now
-                <ArrowRight className="ml-2 h-4 w-4" />
+                Create Your Workspace
+                <ArrowRight className="ml-2 h-4 w-4" aria-hidden="true" />
               </RouterLink>
             </Button>
             <Button variant="outline" size="lg" asChild>
-              <RouterLink to="/login">Log In to Your Account</RouterLink>
+              <RouterLink to="/login">Open Existing Account</RouterLink>
             </Button>
           </div>
+          <p className="mt-5 font-mono text-xs tabular-nums text-muted-foreground">
+            setup_time=15m | migration_mode=incremental | support_window=24x5
+          </p>
         </div>
       </div>
     </section>

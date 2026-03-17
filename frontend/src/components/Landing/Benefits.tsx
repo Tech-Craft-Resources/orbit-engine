@@ -15,54 +15,45 @@ interface Benefit {
 const benefits: Benefit[] = [
   {
     icon: Zap,
-    title: "Built for Simplicity",
+    title: "Fast Team Adoption",
     description:
-      "Designed for non-technical users. Your team can get started in minutes, not weeks.",
+      "Interface patterns stay simple enough for non-technical operators and robust enough for managers.",
   },
   {
     icon: Layers,
-    title: "Modular & Scalable",
+    title: "Composable By Design",
     description:
-      "Start with what you need today and add modules as your business grows. Pay for what you use.",
+      "Start with essential modules, then expand as your operation adds complexity.",
   },
   {
     icon: Globe,
-    title: "Cloud-Native",
+    title: "Cloud-Ready Access",
     description:
-      "Access your business data from anywhere, on any device. No hardware or installation required.",
+      "Run workflows from desktop or mobile with consistent access and control.",
   },
   {
     icon: TrendingUp,
-    title: "AI-Powered Insights",
+    title: "Decision-Grade Signals",
     description:
-      "Go beyond data entry. Get predictions, trends, and actionable recommendations automatically.",
+      "Move from static reports to prediction-supported planning and prioritization.",
   },
 ]
 
-interface Role {
-  letter: string
-  title: string
-  description: string
-}
-
-const roles: Role[] = [
+const rolloutSteps = [
   {
-    letter: "A",
-    title: "Administrator",
-    description:
-      "Full control over inventory, sales, customers, and reports. Manage your team and make strategic decisions with AI insights.",
+    step: "01",
+    title: "Map Current Flow",
+    detail: "Capture current inventory, sales, and customer touchpoints.",
   },
   {
-    letter: "S",
-    title: "Seller",
-    description:
-      "Register sales quickly, check stock in real time, and access customer history for better service.",
+    step: "02",
+    title: "Activate Shared Modules",
+    detail: "Launch a common workspace for operators and decision-makers.",
   },
   {
-    letter: "V",
-    title: "Viewer",
-    description:
-      "Read-only access to reports and analytics. Perfect for external accountants and business advisors.",
+    step: "03",
+    title: "Scale With Confidence",
+    detail: "Use forecasting and analytics to guide monthly planning.",
   },
 ]
 
@@ -73,9 +64,12 @@ export function Benefits() {
   const right = useScrollAnimation()
 
   return (
-    <section id="benefits" className="border-y bg-muted/30 py-24 md:py-32">
+    <section
+      id="benefits"
+      className="scroll-mt-24 border-y border-border/70 bg-muted/20 py-20 md:py-24"
+    >
       <div className="mx-auto max-w-6xl px-6">
-        <div className="grid gap-12 lg:grid-cols-2 lg:items-center">
+        <div className="grid gap-8 lg:grid-cols-[1.1fr_0.9fr] lg:items-start">
           <div
             ref={left.ref}
             className={cn(
@@ -83,72 +77,80 @@ export function Benefits() {
               left.isVisible && "animate-fade-in-left",
             )}
           >
-            <Badge variant="outline" className="mb-4">
+            <Badge
+              variant="outline"
+              className="mb-4 rounded-md border-border/70"
+            >
               Why OrbitEngine
             </Badge>
-            <h2 className="text-3xl font-bold tracking-tight sm:text-4xl">
-              Designed for the reality of small businesses
+            <h2 className="text-balance text-3xl font-semibold tracking-tight sm:text-4xl">
+              Minimal Surface, High Operational Depth
             </h2>
-            <p className="mt-4 text-muted-foreground">
-              Enterprise tools are too complex and expensive. Spreadsheets don't
-              scale. OrbitEngine bridges the gap with a platform that's powerful
-              yet accessible.
+            <p className="mt-4 max-w-2xl text-pretty text-muted-foreground">
+              You get a clean interface that still supports dense workflows,
+              role-based control, and measurable process discipline.
             </p>
-            <div className="mt-8 grid gap-6 sm:grid-cols-2">
-              {benefits.map((benefit, i) => (
-                <div
+            <div className="mt-8 grid gap-4 sm:grid-cols-2">
+              {benefits.map((benefit, index) => (
+                <article
                   key={benefit.title}
                   className={cn(
-                    "flex gap-3 scroll-hidden",
+                    "rounded-md border border-border/75 bg-card p-4 shadow-sm scroll-hidden",
                     left.isVisible &&
-                      `animate-fade-in-up ${staggerClass[i + 1]}`,
+                      `animate-fade-in-up ${staggerClass[index]}`,
                   )}
                 >
-                  <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-primary/10 text-primary">
-                    <benefit.icon className="h-4 w-4" />
+                  <div className="mb-3 flex h-8 w-8 items-center justify-center rounded-md bg-sky-100 text-sky-700 dark:bg-sky-950/70 dark:text-sky-300">
+                    <benefit.icon className="h-4 w-4" aria-hidden="true" />
                   </div>
-                  <div>
-                    <h3 className="font-semibold">{benefit.title}</h3>
-                    <p className="mt-1 text-sm text-muted-foreground">
-                      {benefit.description}
-                    </p>
-                  </div>
-                </div>
+                  <h3 className="text-sm font-medium text-foreground">
+                    {benefit.title}
+                  </h3>
+                  <p className="mt-1 text-sm leading-6 text-muted-foreground">
+                    {benefit.description}
+                  </p>
+                </article>
               ))}
             </div>
           </div>
-          <div
+
+          <aside
             ref={right.ref}
             className={cn(
-              "rounded-xl border bg-card p-8 shadow-sm scroll-hidden",
+              "rounded-md border border-border/75 bg-card p-6 shadow-sm scroll-hidden",
               right.isVisible && "animate-fade-in-right",
             )}
+            aria-label="Implementation Path"
           >
-            <h3 className="text-lg font-semibold">Built for three key roles</h3>
-            <Separator className="my-4" />
-            <div className="space-y-6">
-              {roles.map((role, i) => (
+            <h3 className="text-base font-medium">Implementation Path</h3>
+            <p className="mt-2 text-sm text-muted-foreground">
+              Roll out in short cycles while keeping governance and reporting
+              intact.
+            </p>
+            <Separator className="my-5" />
+            <div className="space-y-5">
+              {rolloutSteps.map((item, index) => (
                 <div
-                  key={role.letter}
+                  key={item.step}
                   className={cn(
-                    "flex gap-4 scroll-hidden",
+                    "rounded-sm border border-border/65 p-3 scroll-hidden",
                     right.isVisible &&
-                      `animate-fade-in-up ${staggerClass[i + 1]}`,
+                      `animate-fade-in-up ${staggerClass[index]}`,
                   )}
                 >
-                  <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-primary/10 text-sm font-bold text-primary">
-                    {role.letter}
-                  </div>
-                  <div>
-                    <p className="font-medium">{role.title}</p>
-                    <p className="text-sm text-muted-foreground">
-                      {role.description}
-                    </p>
-                  </div>
+                  <p className="font-mono text-xs tabular-nums text-sky-700 dark:text-sky-300">
+                    Step {item.step}
+                  </p>
+                  <p className="mt-1 text-sm font-medium text-foreground">
+                    {item.title}
+                  </p>
+                  <p className="mt-1 text-sm text-muted-foreground">
+                    {item.detail}
+                  </p>
                 </div>
               ))}
             </div>
-          </div>
+          </aside>
         </div>
       </div>
     </section>

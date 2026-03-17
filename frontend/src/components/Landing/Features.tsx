@@ -22,45 +22,52 @@ import { cn } from "@/lib/utils"
 interface Feature {
   icon: LucideIcon
   title: string
-  description: string
+  detail: string
+  dataPoint: string
 }
 
 const features: Feature[] = [
   {
     icon: Package,
-    title: "Inventory Management",
-    description:
-      "Full product catalog with stock control, low-stock alerts, and movement history. Never lose track of your inventory again.",
+    title: "Inventory Control",
+    detail:
+      "Track SKU movement, low-stock thresholds, and replenishment windows from one ledger.",
+    dataPoint: "Stock Drift: -41%",
   },
   {
     icon: ShoppingCart,
-    title: "Sales Management",
-    description:
-      "Register sales, generate invoices automatically, and track your transaction history with a real-time sales dashboard.",
+    title: "Sales Workspace",
+    detail:
+      "Create invoices, monitor pending orders, and map revenue trends without switching tools.",
+    dataPoint: "Checkout Time: 58s",
   },
   {
     icon: Users,
-    title: "Customer Management",
-    description:
-      "Maintain a complete customer database with purchase history, contact info, and segmentation for targeted service.",
+    title: "Customer Registry",
+    detail:
+      "Maintain complete profiles with order history, segmentation, and lifecycle signals.",
+    dataPoint: "Retention Lift: +18%",
   },
   {
     icon: BarChart3,
-    title: "Reports & Analytics",
-    description:
-      "KPI dashboards with interactive charts. Export daily, weekly, and monthly reports in PDF and Excel formats.",
+    title: "Operational Analytics",
+    detail:
+      "See margin, volume, and conversion in a shared source of truth for every role.",
+    dataPoint: "Report Prep: 1.4h",
   },
   {
     icon: Bot,
-    title: "AI Demand Prediction",
-    description:
-      "Powered by Meta's Prophet, get smart restocking recommendations with quantity, urgency, and suggested order dates.",
+    title: "Forecast Automation",
+    detail:
+      "Use built-in demand modeling to prioritize purchase timing and reduce overstock.",
+    dataPoint: "Forecast Confidence: 94.2%",
   },
   {
     icon: ShieldCheck,
-    title: "Roles & Security",
-    description:
-      "Multi-tenant architecture with role-based access. Administrators, sellers, and viewers each see what they need.",
+    title: "Role Guardrails",
+    detail:
+      "Apply precise access controls so operators, managers, and finance teams only see what they need.",
+    dataPoint: "Policy Coverage: 100%",
   },
 ]
 
@@ -78,48 +85,58 @@ export function Features() {
   const grid = useScrollAnimation({ threshold: 0.1 })
 
   return (
-    <section id="features" className="py-24 md:py-32">
+    <section id="features" className="scroll-mt-24 py-20 md:py-24">
       <div className="mx-auto max-w-6xl px-6">
         <div
           ref={header.ref}
           className={cn(
-            "mx-auto max-w-2xl text-center scroll-hidden",
+            "mx-auto max-w-3xl text-center scroll-hidden",
             header.isVisible && "animate-fade-in-up",
           )}
         >
-          <Badge variant="outline" className="mb-4">
-            Core Modules
+          <Badge variant="outline" className="mb-4 rounded-md border-border/70">
+            Product Surface
           </Badge>
-          <h2 className="text-3xl font-bold tracking-tight sm:text-4xl">
-            Everything your business needs, in one place
+          <h2 className="text-balance text-3xl font-semibold tracking-tight sm:text-4xl">
+            Every Core Workflow, Composed Into One Operating Layer
           </h2>
-          <p className="mt-4 text-muted-foreground">
-            Six integrated modules designed to cover every aspect of your daily
-            operations, from inventory to AI-powered forecasting.
+          <p className="mt-4 text-pretty text-muted-foreground">
+            OrbitEngine keeps teams aligned by combining critical modules under
+            a shared model, shared data, and shared accountability.
           </p>
         </div>
+
         <div
           ref={grid.ref}
-          className="mt-16 grid gap-6 sm:grid-cols-2 lg:grid-cols-3"
+          className="mt-12 grid gap-3 sm:grid-cols-2 xl:grid-cols-3"
         >
-          {features.map((feature, i) => (
+          {features.map((feature, index) => (
             <Card
               key={feature.title}
               className={cn(
-                "group transition-colors hover:border-primary/50 scroll-hidden",
-                grid.isVisible && `animate-scale-in ${staggerClass[i]}`,
+                "relative overflow-hidden border-border/75 bg-card/95 transition-colors hover:border-sky-300/70 dark:hover:border-sky-600/70 scroll-hidden",
+                grid.isVisible && `animate-scale-in ${staggerClass[index]}`,
               )}
             >
-              <CardHeader>
-                <div className="mb-2 flex h-10 w-10 items-center justify-center rounded-lg bg-primary/10 text-primary transition-colors group-hover:bg-primary group-hover:text-primary-foreground">
-                  <feature.icon className="h-5 w-5" />
+              <div
+                aria-hidden="true"
+                className="pointer-events-none absolute left-0 top-0 h-full w-1 bg-gradient-to-b from-sky-400/80 via-cyan-400/70 to-emerald-400/60"
+              />
+              <CardHeader className="pb-3 pl-5 pr-5 pt-5">
+                <div className="mb-2 flex h-9 w-9 items-center justify-center rounded-md border border-border/70 bg-muted/70 text-foreground">
+                  <feature.icon className="h-4 w-4" aria-hidden="true" />
                 </div>
-                <CardTitle className="text-lg">{feature.title}</CardTitle>
+                <CardTitle className="text-lg font-medium">
+                  {feature.title}
+                </CardTitle>
               </CardHeader>
-              <CardContent>
-                <CardDescription className="text-sm leading-relaxed">
-                  {feature.description}
+              <CardContent className="space-y-4 pl-5 pr-5 pb-5">
+                <CardDescription className="text-sm leading-6 text-muted-foreground">
+                  {feature.detail}
                 </CardDescription>
+                <p className="rounded-sm bg-muted/60 px-2.5 py-1.5 font-mono text-xs tabular-nums text-foreground">
+                  {feature.dataPoint}
+                </p>
               </CardContent>
             </Card>
           ))}

@@ -1,9 +1,9 @@
-import { Link as RouterLink } from "@tanstack/react-router";
-import { ChevronsUpDown, LogOut, Settings } from "lucide-react";
+import { Link as RouterLink } from "@tanstack/react-router"
+import { ChevronsUpDown, LogOut, Settings } from "lucide-react"
 
-import { Appearance } from "@/components/Common/Appearance";
-import { Avatar, AvatarFallback } from "@/components/ui/avatar";
-import { Button } from "@/components/ui/button";
+import { Appearance } from "@/components/Common/Appearance"
+import { Avatar, AvatarFallback } from "@/components/ui/avatar"
+import { Button } from "@/components/ui/button"
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -11,66 +11,79 @@ import {
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
-import useAuth from "@/hooks/useAuth";
-import { getInitials } from "@/utils";
+} from "@/components/ui/dropdown-menu"
+import useAuth from "@/hooks/useAuth"
+import { getInitials } from "@/utils"
 
 const navLinks = [
-  { href: "#features", label: "Features" },
-  { href: "#benefits", label: "Benefits" },
-  { href: "#stats", label: "Results" },
-];
+  { href: "#features", label: "Modules" },
+  { href: "#benefits", label: "Approach" },
+  { href: "#stats", label: "Proof" },
+]
 
 export function LandingNav() {
-  const { user, logout } = useAuth();
+  const { user, logout } = useAuth()
 
-  const fullName = user ? `${user.first_name} ${user.last_name}` : "";
+  const fullName = user ? `${user.first_name} ${user.last_name}` : ""
 
   return (
-    <header className="sticky top-0 z-50 border-b bg-background/80 backdrop-blur-sm">
+    <header className="fixed inset-x-0 top-0 z-50 w-full border-b border-border/70 bg-background/95 backdrop-blur-md supports-[backdrop-filter]:bg-background/75">
       <div className="mx-auto flex h-16 max-w-6xl items-center justify-between px-6">
-        <RouterLink to="/" className="flex items-center gap-2">
+        <RouterLink to="/" className="group flex items-center gap-3">
           <img
             src="/assets/images/orbit-engine-logo.png"
             alt="OrbitEngine"
-            className="h-8 dark:hidden"
+            width={28}
+            height={28}
+            className="h-7 dark:hidden"
           />
           <img
             src="/assets/images/orbit-engine-logo-dark.png"
             alt="OrbitEngine"
-            className="h-8 hidden dark:block"
+            width={28}
+            height={28}
+            className="hidden h-7 dark:block"
           />
-          <span className="text-xl">
-            <span className="font-bold">Orbit</span>Engine
+          <span className="text-base tracking-tight">
+            <span className="font-semibold">Orbit</span>Engine
           </span>
+          <span
+            aria-hidden="true"
+            className="hidden h-2 w-2 rounded-full bg-sky-500/80 md:block"
+          />
         </RouterLink>
-        <nav className="hidden items-center gap-6 md:flex">
+        <nav className="hidden items-center gap-1 md:flex" aria-label="Primary">
           {navLinks.map((link) => (
             <a
               key={link.href}
               href={link.href}
-              className="text-sm text-muted-foreground transition-colors hover:text-foreground"
+              className="rounded-md px-3 py-2 text-sm text-muted-foreground transition-colors hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/60"
             >
               {link.label}
             </a>
           ))}
         </nav>
-        <div className="flex items-center gap-3">
+        <div className="flex items-center gap-2">
           <Appearance />
           {user ? (
             <>
-              <Button size="sm" asChild>
+              <Button size="sm" asChild className="touch-manipulation">
                 <RouterLink to="/dashboard">Go to Dashboard</RouterLink>
               </Button>
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
-                  <Button variant="ghost" size="sm" className="gap-2">
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    className="gap-2"
+                    aria-label="Open User Menu"
+                  >
                     <Avatar className="size-6">
                       <AvatarFallback className="bg-muted text-muted-foreground border border-sidebar text-xs">
                         {getInitials(fullName || "User")}
                       </AvatarFallback>
                     </Avatar>
-                    <ChevronsUpDown className="size-4" />
+                    <ChevronsUpDown className="size-4" aria-hidden="true" />
                   </Button>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent align="end" className="w-56">
@@ -83,14 +96,14 @@ export function LandingNav() {
                     </div>
                   </DropdownMenuLabel>
                   <DropdownMenuSeparator />
-                  <RouterLink to="/dashboard/settings">
-                    <DropdownMenuItem>
-                      <Settings />
+                  <DropdownMenuItem asChild>
+                    <RouterLink to="/dashboard/settings">
+                      <Settings aria-hidden="true" />
                       User Settings
-                    </DropdownMenuItem>
-                  </RouterLink>
+                    </RouterLink>
+                  </DropdownMenuItem>
                   <DropdownMenuItem onClick={logout}>
-                    <LogOut />
+                    <LogOut aria-hidden="true" />
                     Log Out
                   </DropdownMenuItem>
                 </DropdownMenuContent>
@@ -101,7 +114,7 @@ export function LandingNav() {
               <Button variant="ghost" size="sm" asChild>
                 <RouterLink to="/login">Log In</RouterLink>
               </Button>
-              <Button size="sm" asChild>
+              <Button size="sm" asChild className="touch-manipulation">
                 <RouterLink to="/signup">Get Started</RouterLink>
               </Button>
             </>
@@ -109,5 +122,5 @@ export function LandingNav() {
         </div>
       </div>
     </header>
-  );
+  )
 }

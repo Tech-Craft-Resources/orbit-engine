@@ -1,8 +1,8 @@
-import { Link, Link as RouterLink } from "@tanstack/react-router";
-import { ChevronsUpDown, Home, LogOut, Settings } from "lucide-react";
+import { Link, Link as RouterLink } from "@tanstack/react-router"
+import { ChevronsUpDown, Home, LogOut, Settings } from "lucide-react"
 
-import type { UserPublic } from "@/client";
-import { Avatar, AvatarFallback } from "@/components/ui/avatar";
+import type { UserPublic } from "@/client"
+import { Avatar, AvatarFallback } from "@/components/ui/avatar"
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -10,19 +10,19 @@ import {
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
+} from "@/components/ui/dropdown-menu"
 import {
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
   useSidebar,
-} from "@/components/ui/sidebar";
-import useAuth from "@/hooks/useAuth";
-import { getInitials } from "@/utils";
+} from "@/components/ui/sidebar"
+import useAuth from "@/hooks/useAuth"
+import { getInitials } from "@/utils"
 
 interface UserInfoProps {
-  fullName?: string;
-  email?: string;
+  fullName?: string
+  email?: string
 }
 
 function UserInfo({ fullName, email }: UserInfoProps) {
@@ -38,29 +38,29 @@ function UserInfo({ fullName, email }: UserInfoProps) {
         <p className="text-xs truncate w-full">{email}</p>
       </div>
     </div>
-  );
+  )
 }
 
 function getFullName(user: UserPublic): string {
-  return `${user.first_name} ${user.last_name}`.trim();
+  return `${user.first_name} ${user.last_name}`.trim()
 }
 
 export function User({ user }: { user: UserPublic | null | undefined }) {
-  const { logout } = useAuth();
-  const { isMobile, setOpenMobile } = useSidebar();
+  const { logout } = useAuth()
+  const { isMobile, setOpenMobile } = useSidebar()
 
-  if (!user) return null;
+  if (!user) return null
 
-  const fullName = getFullName(user);
+  const fullName = getFullName(user)
 
   const handleMenuClick = () => {
     if (isMobile) {
-      setOpenMobile(false);
+      setOpenMobile(false)
     }
-  };
+  }
   const handleLogout = async () => {
-    logout();
-  };
+    logout()
+  }
 
   return (
     <SidebarMenu>
@@ -106,5 +106,5 @@ export function User({ user }: { user: UserPublic | null | undefined }) {
         </DropdownMenu>
       </SidebarMenuItem>
     </SidebarMenu>
-  );
+  )
 }

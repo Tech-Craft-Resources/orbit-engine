@@ -18,17 +18,17 @@ const footerSections: FooterSection[] = [
   {
     title: "Product",
     links: [
-      { label: "Features", href: "#features" },
-      { label: "Benefits", href: "#benefits" },
-      { label: "Results", href: "#stats" },
-      { label: "Pricing", href: "/signup" },
+      { label: "Modules", href: "#features" },
+      { label: "Approach", href: "#benefits" },
+      { label: "Proof", href: "#stats" },
+      { label: "Create Workspace", href: "/signup" },
     ],
   },
   {
     title: "Company",
     links: [
       {
-        label: "About Us",
+        label: "Repository",
         href: "https://github.com/Tech-Craft-Resources/orbit-engine",
         external: true,
       },
@@ -43,24 +43,19 @@ const footerSections: FooterSection[] = [
         external: true,
       },
       {
-        label: "Contact",
+        label: "Support",
         href: "https://github.com/Tech-Craft-Resources/orbit-engine/issues",
         external: true,
       },
     ],
   },
   {
-    title: "Resources",
+    title: "Access",
     links: [
       { label: "Log In", href: "/login" },
       { label: "Sign Up", href: "/signup" },
       {
-        label: "GitHub",
-        href: "https://github.com/Tech-Craft-Resources/orbit-engine",
-        external: true,
-      },
-      {
-        label: "API Docs",
+        label: "API Notes",
         href: "https://github.com/Tech-Craft-Resources/orbit-engine/blob/main/README.md",
         external: true,
       },
@@ -79,107 +74,114 @@ const legalLinks: FooterLink[] = [
     href: "https://github.com/Tech-Craft-Resources/orbit-engine/blob/main/LICENSE",
     external: true,
   },
-  {
-    label: "Support",
-    href: "https://github.com/Tech-Craft-Resources/orbit-engine/issues",
-    external: true,
-  },
 ]
+
+function FooterLinkItem({ link }: { link: FooterLink }) {
+  if (link.external) {
+    return (
+      <a
+        href={link.href}
+        target="_blank"
+        rel="noopener noreferrer"
+        className="text-muted-foreground transition-colors hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/60"
+      >
+        {link.label}
+      </a>
+    )
+  }
+
+  if (link.href.startsWith("#")) {
+    return (
+      <a
+        href={link.href}
+        className="text-muted-foreground transition-colors hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/60"
+      >
+        {link.label}
+      </a>
+    )
+  }
+
+  return (
+    <RouterLink
+      to={link.href}
+      className="text-muted-foreground transition-colors hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/60"
+    >
+      {link.label}
+    </RouterLink>
+  )
+}
 
 export function LandingFooter() {
   return (
-    <footer className="border-t bg-muted/30">
-      <div className="mx-auto max-w-6xl px-6 py-12 md:py-16">
-        <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-5">
-          {/* Brand Section */}
+    <footer className="border-t border-border/70 bg-muted/15">
+      <div className="mx-auto max-w-6xl px-6 py-12">
+        <div className="grid gap-10 md:grid-cols-2 lg:grid-cols-5">
           <div className="lg:col-span-2">
-            <RouterLink to="/" className="flex items-center gap-2">
+            <RouterLink to="/" className="flex items-center gap-3">
               <img
                 src="/assets/images/orbit-engine-logo.png"
                 alt="OrbitEngine"
-                className="h-8 dark:hidden"
+                width={28}
+                height={28}
+                className="h-7 dark:hidden"
               />
               <img
                 src="/assets/images/orbit-engine-logo-dark.png"
                 alt="OrbitEngine"
-                className="h-8 hidden dark:block"
+                width={28}
+                height={28}
+                className="hidden h-7 dark:block"
               />
-              <span className="text-xl font-semibold">
-                <span className="font-bold">Orbit</span>Engine
+              <span className="text-base tracking-tight">
+                <span className="font-semibold">Orbit</span>Engine
               </span>
             </RouterLink>
-            <p className="mt-4 text-sm text-muted-foreground">
-              Smart business management platform for SMEs. Digitalize your
-              operations, automate routine tasks, and make data-driven decisions
-              with AI.
+            <p className="mt-4 max-w-sm text-sm leading-6 text-muted-foreground">
+              Operational software for modern SMEs that want cleaner process
+              control, faster execution, and dependable planning signals.
             </p>
-            <div className="mt-6 flex items-center gap-4">
-              <a
-                href="https://github.com/Tech-Craft-Resources/orbit-engine"
-                target="_blank"
-                rel="noopener noreferrer"
-                aria-label="GitHub"
-                className="text-muted-foreground transition-colors hover:text-foreground"
-              >
-                <FaGithub className="h-5 w-5" />
-              </a>
-            </div>
+            <a
+              href="https://github.com/Tech-Craft-Resources/orbit-engine"
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="Open OrbitEngine GitHub Repository"
+              className="mt-5 inline-flex items-center gap-2 text-muted-foreground transition-colors hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/60"
+            >
+              <FaGithub className="h-4 w-4" aria-hidden="true" />
+              <span className="text-sm">GitHub</span>
+            </a>
           </div>
 
-          {/* Link Sections */}
           {footerSections.map((section) => (
             <div key={section.title}>
-              <h3 className="mb-4 text-sm font-semibold">{section.title}</h3>
+              <h3 className="mb-4 text-xs font-medium uppercase tracking-[0.08em] text-muted-foreground">
+                {section.title}
+              </h3>
               <ul className="space-y-3 text-sm">
-                {section.links.map((link) =>
-                  link.external ? (
-                    <li key={link.label}>
-                      <a
-                        href={link.href}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="text-muted-foreground transition-colors hover:text-foreground"
-                      >
-                        {link.label}
-                      </a>
-                    </li>
-                  ) : (
-                    <li key={link.label}>
-                      {link.href.startsWith("#") ? (
-                        <a
-                          href={link.href}
-                          className="text-muted-foreground transition-colors hover:text-foreground"
-                        >
-                          {link.label}
-                        </a>
-                      ) : (
-                        <RouterLink
-                          to={link.href}
-                          className="text-muted-foreground transition-colors hover:text-foreground"
-                        >
-                          {link.label}
-                        </RouterLink>
-                      )}
-                    </li>
-                  ),
-                )}
+                {section.links.map((link) => (
+                  <li key={link.label}>
+                    <FooterLinkItem link={link} />
+                  </li>
+                ))}
               </ul>
             </div>
           ))}
         </div>
 
-        {/* Bottom Bar */}
         <Separator className="my-8" />
-        <div className="flex flex-col items-center justify-between gap-4 text-sm text-muted-foreground sm:flex-row">
-          <p>© {new Date().getFullYear()} OrbitEngine. All rights reserved.</p>
-          <div className="flex gap-6">
+        <div className="flex flex-col gap-3 text-sm text-muted-foreground sm:flex-row sm:items-center sm:justify-between">
+          <p>
+            Copyright {new Date().getFullYear()} OrbitEngine. All rights
+            reserved.
+          </p>
+          <div className="flex items-center gap-6">
             {legalLinks.map((link) => (
               <a
                 key={link.label}
                 href={link.href}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="transition-colors hover:text-foreground"
+                className="transition-colors hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/60"
               >
                 {link.label}
               </a>

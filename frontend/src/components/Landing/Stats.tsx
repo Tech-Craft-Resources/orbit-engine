@@ -2,15 +2,32 @@ import { useScrollAnimation } from "@/hooks/useScrollAnimation"
 import { cn } from "@/lib/utils"
 
 interface Stat {
-  value: string
+  metric: string
   label: string
+  context: string
 }
 
 const stats: Stat[] = [
-  { value: "40%", label: "Fewer administrative errors" },
-  { value: "30%", label: "Time saved on manual tasks" },
-  { value: "70%+", label: "Demand prediction accuracy" },
-  { value: "3", label: "Clicks max for any action" },
+  {
+    metric: "-32%",
+    label: "Admin Rework",
+    context: "Fewer back-office corrections after process rollout",
+  },
+  {
+    metric: "+47%",
+    label: "Order Throughput",
+    context: "More completed orders per operator per day",
+  },
+  {
+    metric: "94.2%",
+    label: "Forecast Precision",
+    context: "Average demand signal quality across active catalogs",
+  },
+  {
+    metric: "4.6 d",
+    label: "Onboarding Time",
+    context: "Median days to team-level adoption",
+  },
 ]
 
 const staggerClass = ["stagger-1", "stagger-2", "stagger-3", "stagger-4"]
@@ -19,25 +36,33 @@ export function Stats() {
   const { ref, isVisible } = useScrollAnimation({ threshold: 0.2 })
 
   return (
-    <section id="stats" className="border-y bg-muted/50">
-      <div
-        ref={ref}
-        className="mx-auto grid max-w-6xl grid-cols-2 gap-8 px-6 py-16 md:grid-cols-4"
-      >
-        {stats.map((stat, i) => (
-          <div
-            key={stat.label}
-            className={cn(
-              "text-center scroll-hidden",
-              isVisible && `animate-fade-in-up ${staggerClass[i]}`,
-            )}
-          >
-            <div className="text-3xl font-bold tracking-tight text-primary sm:text-4xl">
-              {stat.value}
-            </div>
-            <p className="mt-1 text-sm text-muted-foreground">{stat.label}</p>
-          </div>
-        ))}
+    <section
+      id="stats"
+      className="scroll-mt-24 border-b border-border/70 py-14 md:py-16"
+    >
+      <div className="mx-auto max-w-6xl px-6">
+        <h2 className="sr-only">Performance Proof</h2>
+        <div ref={ref} className="grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
+          {stats.map((stat, index) => (
+            <article
+              key={stat.label}
+              className={cn(
+                "rounded-md border border-border/75 bg-card p-4 shadow-sm scroll-hidden",
+                isVisible && `animate-fade-in-up ${staggerClass[index]}`,
+              )}
+            >
+              <p className="font-mono text-2xl font-semibold tabular-nums text-foreground">
+                {stat.metric}
+              </p>
+              <p className="mt-2 text-sm font-medium text-foreground">
+                {stat.label}
+              </p>
+              <p className="mt-1 text-xs leading-5 text-muted-foreground">
+                {stat.context}
+              </p>
+            </article>
+          ))}
+        </div>
       </div>
     </section>
   )

@@ -5,24 +5,24 @@ import {
   ShoppingCart,
   Users,
   UsersRound,
-} from "lucide-react";
+} from "lucide-react"
 
-import { SidebarAppearance } from "@/components/Common/Appearance";
+import { SidebarAppearance } from "@/components/Common/Appearance"
 import {
   Sidebar,
   SidebarContent,
   SidebarFooter,
   SidebarHeader,
-} from "@/components/ui/sidebar";
-import useAuth, { type RoleName } from "@/hooks/useAuth";
-import { Separator } from "../ui/separator";
-import { type Item, Main } from "./Main";
-import { User } from "./User";
+} from "@/components/ui/sidebar"
+import useAuth, { type RoleName } from "@/hooks/useAuth"
+import { Separator } from "../ui/separator"
+import { type Item, Main } from "./Main"
+import { User } from "./User"
 
 type NavItem = Item & {
   /** If set, only users with one of these roles will see this item */
-  roles?: RoleName[];
-};
+  roles?: RoleName[]
+}
 
 const navItems: NavItem[] = [
   { icon: Home, title: "Dashboard", path: "/dashboard" },
@@ -51,12 +51,12 @@ const navItems: NavItem[] = [
     path: "/dashboard/settings",
     roles: ["admin"],
   },
-];
+]
 
 export function AppSidebar() {
-  const { user: currentUser, organization, hasRole } = useAuth();
+  const { user: currentUser, organization, hasRole } = useAuth()
 
-  const items = navItems.filter((item) => !item.roles || hasRole(item.roles));
+  const items = navItems.filter((item) => !item.roles || hasRole(item.roles))
 
   return (
     <Sidebar collapsible="icon">
@@ -81,7 +81,7 @@ export function AppSidebar() {
         <User user={currentUser} />
       </SidebarFooter>
     </Sidebar>
-  );
+  )
 }
 
-export default AppSidebar;
+export default AppSidebar
