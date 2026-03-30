@@ -1,14 +1,14 @@
 // import { Appearance } from "@/components/Common/Appearance";
-import { Footer } from "./Footer";
+import { Footer } from "./Footer"
 
 interface AuthLayoutProps {
-  children: React.ReactNode;
+  children: React.ReactNode
 }
 
 export function AuthLayout({ children }: AuthLayoutProps) {
   return (
-    <div className="grid min-h-svh lg:grid-cols-2">
-      <div className="bg-muted relative hidden lg:flex lg:flex-col lg:items-center lg:justify-center">
+    <div className="grid min-h-svh lg:h-svh lg:grid-cols-2">
+      <div className="bg-muted relative hidden lg:flex lg:flex-col lg:items-center lg:justify-center lg:overflow-hidden">
         <img
           src="/assets/images/orbit-engine-logo.png"
           alt="OrbitEngine"
@@ -23,7 +23,7 @@ export function AuthLayout({ children }: AuthLayoutProps) {
           <span className="font-bold">Orbit</span>Engine
         </h1>
       </div>
-      <div className="flex flex-col gap-4 p-6 md:p-10">
+      <div className="flex flex-col gap-4 p-6 md:p-10 lg:overflow-y-scroll auth-panel-scroll">
         <div className="flex justify-between">
           <div className="text-2xl lg:hidden flex items-center gap-2">
             <img
@@ -48,5 +48,5 @@ export function AuthLayout({ children }: AuthLayoutProps) {
         <Footer />
       </div>
     </div>
-  );
+  )
 }

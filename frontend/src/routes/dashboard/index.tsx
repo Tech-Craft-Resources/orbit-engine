@@ -2,11 +2,23 @@ import { useQuery } from "@tanstack/react-query"
 import { createFileRoute, Link } from "@tanstack/react-router"
 import {
   AlertTriangle,
+  ArrowUpRight,
   DollarSign,
+  PackageSearch,
   Receipt,
   ShoppingCart,
   TrendingUp,
 } from "lucide-react"
+import {
+  Bar,
+  BarChart,
+  CartesianGrid,
+  Cell,
+  Line,
+  LineChart,
+  XAxis,
+  YAxis,
+} from "recharts"
 
 import { DashboardService } from "@/client"
 import {
@@ -16,15 +28,13 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card"
-import { Skeleton } from "@/components/ui/skeleton"
 import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table"
+  type ChartConfig,
+  ChartContainer,
+  ChartTooltip,
+  ChartTooltipContent,
+} from "@/components/ui/chart"
+import { Skeleton } from "@/components/ui/skeleton"
 import useAuth from "@/hooks/useAuth"
 
 export const Route = createFileRoute("/dashboard/")({
@@ -38,21 +48,86 @@ export const Route = createFileRoute("/dashboard/")({
   }),
 })
 
-function formatCurrency(value: string): string {
-  return `$${Number(value).toFixed(2)}`
+function formatCurrency(value: string | number): string {
+  return new Intl.NumberFormat("en-US", {
+    style: "currency",
+    currency: "USD",
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2,
+  }).format(Number(value))
 }
+
+function formatCompact(value: string | number): string {
+  return new Intl.NumberFormat("en-US", {
+    style: "currency",
+    currency: "USD",
+    notation: "compact",
+    maximumFractionDigits: 1,
+  }).format(Number(value))
+}
+
+function formatCount(value: number): string {
+  return new Intl.NumberFormat("en-US").format(value)
+}
+
+const CHART_COLORS = [
+  "var(--chart-1)",
+  "var(--chart-2)",
+  "var(--chart-3)",
+  "var(--chart-4)",
+  "var(--chart-5)",
+]
+
+const salesChartConfig = {
+  total: {
+    label: "Revenue",
+    color: "var(--chart-1)",
+  },
+  count: {
+    label: "Transactions",
+    color: "var(--chart-2)",
+  },
+} satisfies ChartConfig
+
+const productsChartConfig = {
+  revenue: {
+    label: "Revenue",
+    color: "var(--chart-1)",
+  },
+} satisfies ChartConfig
 
 function KPICardSkeleton() {
   return (
     <Card>
-      <CardHeader>
-        <Skeleton className="h-4 w-24" />
+      <CardHeader className="pb-2">
+        <Skeleton className="h-4 w-28" />
       </CardHeader>
       <CardContent>
-        <Skeleton className="h-8 w-32" />
-        <Skeleton className="mt-2 h-3 w-20" />
+        <Skeleton className="h-8 w-32 mb-2" />
+        <Skeleton className="h-3 w-20" />
       </CardContent>
     </Card>
+  )
+}
+
+function ChartSkeleton() {
+  return (
+    <div className="space-y-3">
+      <div className="flex items-end gap-2 h-48">
+        {Array.from({ length: 7 }).map((_, i) => (
+          <Skeleton
+            key={i}
+            className="flex-1 rounded"
+            style={{ height: `${30 + Math.random() * 70}%` }}
+          />
+        ))}
+      </div>
+      <div className="flex justify-between">
+        {Array.from({ length: 7 }).map((_, i) => (
+          <Skeleton key={i} className="h-3 w-8" />
+        ))}
+      </div>
+    </div>
   )
 }
 
@@ -68,14 +143,39 @@ function Dashboard() {
     ? `${currentUser.first_name} ${currentUser.last_name}`.trim()
     : currentUser?.email
 
+  const salesByDayData =
+    stats?.sales_by_day.map((d) => ({
+      date: d.date,
+      label: new Date(`${d.date}T00:00:00`).toLocaleDateString("en-US", {
+        weekday: "short",
+        month: "short",
+        day: "numeric",
+      }),
+      shortLabel: new Date(`${d.date}T00:00:00`).toLocaleDateString("en-US", {
+        weekday: "short",
+      }),
+      total: Number(d.total),
+      count: d.count,
+    })) ?? []
+
+  const topProductsData =
+    stats?.top_products.map((p) => ({
+      name: p.product_name,
+      revenue: Number(p.revenue),
+      quantity_sold: p.quantity_sold,
+    })) ?? []
+
+  const maxRevenue = Math.max(...topProductsData.map((p) => p.revenue), 1)
+
+  const hasLowStock = (stats?.low_stock_count ?? 0) > 0
+
   return (
     <div className="flex flex-col gap-6">
-      <div>
-        <h1 className="text-2xl font-bold tracking-tight truncate max-w-sm">
-          Hi, {displayName}
-        </h1>
-        <p className="text-muted-foreground">
-          Here&apos;s an overview of your business
+      {/* Header */}
+      <div className="flex flex-col gap-1">
+        <h1 className="text-2xl font-bold tracking-tight">Hi, {displayName}</h1>
+        <p className="text-muted-foreground text-sm">
+          Here&apos;s an overview of your business today
         </p>
       </div>
 
@@ -88,72 +188,99 @@ function Dashboard() {
         </div>
       ) : stats ? (
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+          {/* Today's Sales */}
           <Card>
-            <CardHeader>
-              <CardDescription className="flex items-center gap-2">
-                <ShoppingCart className="size-4" />
+            <CardHeader className="flex flex-row items-center justify-between pb-2 space-y-0">
+              <CardDescription className="text-sm font-medium">
                 Today&apos;s Sales
               </CardDescription>
+              <div className="flex h-8 w-8 items-center justify-center rounded-md bg-blue-50 dark:bg-blue-950">
+                <ShoppingCart className="size-4 text-blue-600 dark:text-blue-400" />
+              </div>
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold">
+              <div className="text-2xl font-bold tabular-nums">
                 {formatCurrency(stats.sales_today.total)}
               </div>
-              <p className="text-xs text-muted-foreground">
-                {stats.sales_today.count} transactions
+              <p className="text-xs text-muted-foreground mt-1">
+                {formatCount(stats.sales_today.count)} transactions today
               </p>
             </CardContent>
           </Card>
 
+          {/* Monthly Sales */}
           <Card>
-            <CardHeader>
-              <CardDescription className="flex items-center gap-2">
-                <DollarSign className="size-4" />
+            <CardHeader className="flex flex-row items-center justify-between pb-2 space-y-0">
+              <CardDescription className="text-sm font-medium">
                 Monthly Sales
               </CardDescription>
+              <div className="flex h-8 w-8 items-center justify-center rounded-md bg-emerald-50 dark:bg-emerald-950">
+                <DollarSign className="size-4 text-emerald-600 dark:text-emerald-400" />
+              </div>
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold">
+              <div className="text-2xl font-bold tabular-nums">
                 {formatCurrency(stats.sales_month.total)}
               </div>
-              <p className="text-xs text-muted-foreground">
-                {stats.sales_month.count} transactions
+              <p className="text-xs text-muted-foreground mt-1">
+                {formatCount(stats.sales_month.count)} transactions this month
               </p>
             </CardContent>
           </Card>
 
+          {/* Average Ticket */}
           <Card>
-            <CardHeader>
-              <CardDescription className="flex items-center gap-2">
-                <TrendingUp className="size-4" />
+            <CardHeader className="flex flex-row items-center justify-between pb-2 space-y-0">
+              <CardDescription className="text-sm font-medium">
                 Average Ticket
               </CardDescription>
+              <div className="flex h-8 w-8 items-center justify-center rounded-md bg-amber-50 dark:bg-amber-950">
+                <TrendingUp className="size-4 text-amber-600 dark:text-amber-400" />
+              </div>
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold">
+              <div className="text-2xl font-bold tabular-nums">
                 {formatCurrency(stats.average_ticket)}
               </div>
-              <p className="text-xs text-muted-foreground">Per transaction</p>
+              <p className="text-xs text-muted-foreground mt-1">
+                Per transaction average
+              </p>
             </CardContent>
           </Card>
 
+          {/* Low Stock */}
           <Link
             to="/dashboard/inventory"
-            className="block transition-opacity hover:opacity-80"
+            className="block transition-opacity hover:opacity-80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring rounded-xl"
           >
-            <Card>
-              <CardHeader>
-                <CardDescription className="flex items-center gap-2">
-                  <AlertTriangle className="size-4" />
+            <Card
+              className={
+                hasLowStock ? "border-orange-200 dark:border-orange-900" : ""
+              }
+            >
+              <CardHeader className="flex flex-row items-center justify-between pb-2 space-y-0">
+                <CardDescription className="text-sm font-medium">
                   Low Stock
                 </CardDescription>
+                <div
+                  className={`flex h-8 w-8 items-center justify-center rounded-md ${
+                    hasLowStock ? "bg-orange-50 dark:bg-orange-950" : "bg-muted"
+                  }`}
+                >
+                  <AlertTriangle
+                    className={`size-4 ${hasLowStock ? "text-orange-500" : "text-muted-foreground"}`}
+                  />
+                </div>
               </CardHeader>
               <CardContent>
-                <div className="text-2xl font-bold">
-                  {stats.low_stock_count}
+                <div
+                  className={`text-2xl font-bold tabular-nums ${hasLowStock ? "text-orange-600 dark:text-orange-400" : ""}`}
+                >
+                  {formatCount(stats.low_stock_count)}
                 </div>
-                <p className="text-xs text-muted-foreground">
+                <p className="text-xs text-muted-foreground mt-1 flex items-center gap-1">
                   Products below minimum
+                  <ArrowUpRight className="size-3" />
                 </p>
               </CardContent>
             </Card>
@@ -161,117 +288,241 @@ function Dashboard() {
         </div>
       ) : null}
 
-      {/* Bottom section: Top Products + Sales by Day */}
+      {/* Sales This Week Chart */}
+      <Card>
+        <CardHeader>
+          <CardTitle className="flex items-center gap-2">
+            <Receipt className="size-4" />
+            Sales This Week
+          </CardTitle>
+          <CardDescription>
+            Daily revenue — Mon to Sun this week, hover to see details
+          </CardDescription>
+        </CardHeader>
+        <CardContent>
+          {isLoading ? (
+            <ChartSkeleton />
+          ) : salesByDayData.length > 0 ? (
+            <ChartContainer config={salesChartConfig} className="h-56 w-full">
+              <LineChart
+                data={salesByDayData}
+                margin={{ top: 8, right: 8, left: 4, bottom: 0 }}
+              >
+                <CartesianGrid
+                  vertical={false}
+                  strokeDasharray="3 3"
+                  className="stroke-border"
+                />
+                <XAxis
+                  dataKey="shortLabel"
+                  tickLine={false}
+                  axisLine={false}
+                  tick={{ fontSize: 12 }}
+                  className="fill-muted-foreground"
+                />
+                <YAxis
+                  tickLine={false}
+                  axisLine={false}
+                  tick={{ fontSize: 11 }}
+                  tickFormatter={(v: number) => formatCompact(v)}
+                  width={56}
+                  className="fill-muted-foreground"
+                />
+                <ChartTooltip
+                  cursor={{ stroke: "var(--border)", strokeWidth: 1 }}
+                  content={({ content: _c, ...props }) => (
+                    <ChartTooltipContent
+                      {...props}
+                      formatter={(value, name) => {
+                        if (name === "total") {
+                          return (
+                            <span className="font-medium tabular-nums">
+                              {formatCurrency(value as number)}
+                            </span>
+                          )
+                        }
+                        return (
+                          <span className="tabular-nums">
+                            {formatCount(value as number)} sales
+                          </span>
+                        )
+                      }}
+                      labelFormatter={(_, payload) => {
+                        const item = payload?.[0]?.payload
+                        return item ? (
+                          <span className="font-medium">{item.label}</span>
+                        ) : null
+                      }}
+                    />
+                  )}
+                />
+                <Line
+                  type="monotone"
+                  dataKey="total"
+                  name="total"
+                  stroke="var(--color-total)"
+                  strokeWidth={2}
+                  dot={{ fill: "var(--color-total)", r: 4, strokeWidth: 0 }}
+                  activeDot={{ r: 6, strokeWidth: 0 }}
+                />
+              </LineChart>
+            </ChartContainer>
+          ) : (
+            <div className="flex h-56 flex-col items-center justify-center gap-2 text-muted-foreground">
+              <TrendingUp className="size-8 opacity-30" />
+              <p className="text-sm">No sales data for this week yet</p>
+            </div>
+          )}
+        </CardContent>
+      </Card>
+
+      {/* Bottom section: Top Products */}
       <div className="grid gap-6 lg:grid-cols-2">
-        {/* Top Products */}
+        {/* Top Products Table */}
         <Card>
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
-              <Receipt className="size-4" />
+              <PackageSearch className="size-4" />
               Top Products
             </CardTitle>
             <CardDescription>Best selling products this month</CardDescription>
           </CardHeader>
           <CardContent>
             {isLoading ? (
-              <div className="space-y-3">
+              <div className="space-y-4">
                 {Array.from({ length: 5 }).map((_, i) => (
-                  <Skeleton key={i} className="h-6 w-full" />
+                  <div key={i} className="flex items-center gap-3">
+                    <Skeleton className="h-4 flex-1" />
+                    <Skeleton className="h-4 w-12" />
+                    <Skeleton className="h-4 w-20" />
+                  </div>
                 ))}
               </div>
-            ) : stats?.top_products && stats.top_products.length > 0 ? (
-              <Table>
-                <TableHeader>
-                  <TableRow>
-                    <TableHead>Product</TableHead>
-                    <TableHead className="text-right">Sold</TableHead>
-                    <TableHead className="text-right">Revenue</TableHead>
-                  </TableRow>
-                </TableHeader>
-                <TableBody>
-                  {stats.top_products.map((product) => (
-                    <TableRow key={product.product_id}>
-                      <TableCell className="font-medium">
-                        {product.product_name}
-                      </TableCell>
-                      <TableCell className="text-right">
-                        {product.quantity_sold}
-                      </TableCell>
-                      <TableCell className="text-right">
-                        {formatCurrency(product.revenue)}
-                      </TableCell>
-                    </TableRow>
-                  ))}
-                </TableBody>
-              </Table>
+            ) : topProductsData.length > 0 ? (
+              <div className="space-y-3">
+                {topProductsData.map((product, idx) => (
+                  <div key={product.name} className="space-y-1.5">
+                    <div className="flex items-center justify-between gap-2 text-sm">
+                      <div className="flex items-center gap-2 min-w-0">
+                        <span className="text-xs font-mono text-muted-foreground w-4 shrink-0">
+                          {idx + 1}
+                        </span>
+                        <span className="font-medium truncate">
+                          {product.name}
+                        </span>
+                      </div>
+                      <div className="flex items-center gap-3 shrink-0">
+                        <span className="text-xs text-muted-foreground">
+                          {formatCount(product.quantity_sold)} units
+                        </span>
+                        <span className="font-semibold tabular-nums">
+                          {formatCurrency(product.revenue)}
+                        </span>
+                      </div>
+                    </div>
+                    <div className="h-1.5 rounded-full bg-muted overflow-hidden">
+                      <div
+                        className="h-full rounded-full transition-all duration-500"
+                        style={{
+                          width: `${(product.revenue / maxRevenue) * 100}%`,
+                          backgroundColor:
+                            CHART_COLORS[idx % CHART_COLORS.length],
+                        }}
+                      />
+                    </div>
+                  </div>
+                ))}
+              </div>
             ) : (
-              <p className="text-sm text-muted-foreground text-center py-4">
-                No sales data yet
-              </p>
+              <div className="flex flex-col items-center justify-center gap-2 py-8 text-muted-foreground">
+                <PackageSearch className="size-8 opacity-30" />
+                <p className="text-sm">No sales data yet</p>
+              </div>
             )}
           </CardContent>
         </Card>
 
-        {/* Sales by Day */}
+        {/* Revenue by Product Chart */}
         <Card>
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
-              <TrendingUp className="size-4" />
-              Sales This Week
+              <DollarSign className="size-4" />
+              Revenue by Product
             </CardTitle>
-            <CardDescription>Daily sales breakdown</CardDescription>
+            <CardDescription>
+              Comparative revenue — hover bars for details
+            </CardDescription>
           </CardHeader>
           <CardContent>
             {isLoading ? (
-              <div className="space-y-3">
-                {Array.from({ length: 7 }).map((_, i) => (
-                  <Skeleton key={i} className="h-6 w-full" />
-                ))}
-              </div>
-            ) : stats?.sales_by_day && stats.sales_by_day.length > 0 ? (
-              <div className="space-y-3">
-                {stats.sales_by_day.map((day) => {
-                  const maxTotal = Math.max(
-                    ...stats.sales_by_day.map((d) => Number(d.total)),
-                  )
-                  const percentage =
-                    maxTotal > 0 ? (Number(day.total) / maxTotal) * 100 : 0
-                  return (
-                    <div key={day.date} className="space-y-1">
-                      <div className="flex items-center justify-between text-sm">
-                        <span className="text-muted-foreground">
-                          {new Date(`${day.date}T00:00:00`).toLocaleDateString(
-                            "en-US",
-                            {
-                              weekday: "short",
-                              month: "short",
-                              day: "numeric",
-                            },
-                          )}
-                        </span>
-                        <div className="flex items-center gap-2">
-                          <span className="text-xs text-muted-foreground">
-                            {day.count} sales
+              <ChartSkeleton />
+            ) : topProductsData.length > 0 ? (
+              <ChartContainer
+                config={productsChartConfig}
+                className="h-56 w-full"
+              >
+                <BarChart
+                  data={topProductsData}
+                  layout="vertical"
+                  margin={{ top: 0, right: 8, left: 8, bottom: 0 }}
+                  barCategoryGap="25%"
+                >
+                  <CartesianGrid
+                    horizontal={false}
+                    strokeDasharray="3 3"
+                    className="stroke-border"
+                  />
+                  <XAxis
+                    type="number"
+                    tickLine={false}
+                    axisLine={false}
+                    tick={{ fontSize: 11 }}
+                    tickFormatter={(v: number) => formatCompact(v)}
+                  />
+                  <YAxis
+                    type="category"
+                    dataKey="name"
+                    tickLine={false}
+                    axisLine={false}
+                    tick={{ fontSize: 11 }}
+                    width={90}
+                    tickFormatter={(v: string) =>
+                      v.length > 12 ? `${v.slice(0, 12)}…` : v
+                    }
+                  />
+                  <ChartTooltip
+                    cursor={{ fill: "var(--muted)", radius: 4 }}
+                    content={({ content: _c, ...props }) => (
+                      <ChartTooltipContent
+                        {...props}
+                        formatter={(value) => (
+                          <span className="font-medium tabular-nums">
+                            {formatCurrency(value as number)}
                           </span>
-                          <span className="font-medium">
-                            {formatCurrency(day.total)}
-                          </span>
-                        </div>
-                      </div>
-                      <div className="h-2 rounded-full bg-muted">
-                        <div
-                          className="h-2 rounded-full bg-primary transition-all"
-                          style={{ width: `${percentage}%` }}
-                        />
-                      </div>
-                    </div>
-                  )
-                })}
-              </div>
+                        )}
+                      />
+                    )}
+                  />
+                  <Bar
+                    dataKey="revenue"
+                    name="revenue"
+                    radius={[0, 4, 4, 0]}
+                    maxBarSize={32}
+                  >
+                    {topProductsData.map((_, index) => (
+                      <Cell
+                        key={`cell-${index}`}
+                        fill={CHART_COLORS[index % CHART_COLORS.length]}
+                      />
+                    ))}
+                  </Bar>
+                </BarChart>
+              </ChartContainer>
             ) : (
-              <p className="text-sm text-muted-foreground text-center py-4">
-                No sales data yet
-              </p>
+              <div className="flex h-56 flex-col items-center justify-center gap-2 text-muted-foreground">
+                <DollarSign className="size-8 opacity-30" />
+                <p className="text-sm">No product revenue data yet</p>
+              </div>
             )}
           </CardContent>
         </Card>

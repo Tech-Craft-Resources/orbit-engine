@@ -191,6 +191,26 @@
   }
 }
 
+/* Auth layout scrollable panel — thin always-visible scrollbar */
+.auth-panel-scroll {
+  scrollbar-width: thin;
+  scrollbar-color: var(--muted-foreground) transparent;
+}
+
+.auth-panel-scroll::-webkit-scrollbar {
+  width: 6px;
+}
+
+.auth-panel-scroll::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.auth-panel-scroll::-webkit-scrollbar-thumb {
+  background-color: var(--muted-foreground);
+  border-radius: 9999px;
+  opacity: 0.4;
+}
+
 /* Scroll-triggered animations */
 @keyframes fade-in-up {
   from {

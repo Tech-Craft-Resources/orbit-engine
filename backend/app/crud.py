@@ -1044,15 +1044,20 @@ def get_sales_by_day(
     *,
     session: Session,
     organization_id: uuid.UUID,
-    days: int = 30,
 ) -> list[dict[str, Any]]:
-    """Get sales aggregated by day for the last N days, completed sales only."""
-    from datetime import datetime, timedelta, timezone
+    """Get sales aggregated by day for the current calendar week (Mon–Sun).
+
+    Always returns exactly 7 entries — one per day — filling missing days
+    with zero values so the frontend can render a continuous line chart.
+    """
+    from datetime import date, datetime, timedelta, timezone
     from decimal import Decimal
     from sqlalchemy import func, cast, Date
 
-    now = datetime.now(timezone.utc)
-    start_date = now - timedelta(days=days)
+    today = datetime.now(timezone.utc).date()
+    # Monday of the current week (ISO weekday: Mon=1 … Sun=7)
+    week_start = today - timedelta(days=today.weekday())
+    week_end = week_start + timedelta(days=6)
 
     statement = (
         select(
@@ -1062,19 +1067,21 @@ def get_sales_by_day(
         )
         .where(Sale.organization_id == organization_id)
         .where(Sale.status == "completed")
-        .where(Sale.sale_date >= start_date)
+        .where(cast(Sale.sale_date, Date) >= week_start)
+        .where(cast(Sale.sale_date, Date) <= week_end)
         .group_by(cast(Sale.sale_date, Date))
         .order_by(cast(Sale.sale_date, Date))
     )
-    results = session.exec(statement).all()
-    return [
-        {
-            "date": str(row[0]),
-            "count": int(row[1]),
-            "total": Decimal(str(row[2])),
-        }
-        for row in results
-    ]
+    rows = {str(row[0]): (int(row[1]), Decimal(str(row[2]))) for row in session.exec(statement).all()}
+
+    # Build a complete 7-day series, inserting zeros for days with no sales
+    result: list[dict[str, Any]] = []
+    for offset in range(7):
+        day: date = week_start + timedelta(days=offset)
+        day_str = str(day)
+        count, total = rows.get(day_str, (0, Decimal("0")))
+        result.append({"date": day_str, "count": count, "total": total})
+    return result
 
 
 def get_dashboard_stats(
