@@ -170,11 +170,13 @@ function Dashboard() {
   const hasLowStock = (stats?.low_stock_count ?? 0) > 0
 
   return (
-    <div className="flex flex-col gap-6">
+    <div className="flex flex-col gap-7">
       {/* Header */}
-      <div className="flex flex-col gap-1">
-        <h1 className="text-2xl font-bold tracking-tight">Hi, {displayName}</h1>
-        <p className="text-muted-foreground text-sm">
+      <div className="flex flex-col gap-1.5">
+        <h1 className="text-3xl font-bold tracking-tight">
+          Hi, <span className="text-primary">{displayName}</span>
+        </h1>
+        <p className="text-muted-foreground text-sm font-medium">
           Here&apos;s an overview of your business today
         </p>
       </div>
@@ -189,60 +191,60 @@ function Dashboard() {
       ) : stats ? (
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
           {/* Today's Sales */}
-          <Card>
+          <Card className="transition-shadow hover:shadow-md">
             <CardHeader className="flex flex-row items-center justify-between pb-2 space-y-0">
-              <CardDescription className="text-sm font-medium">
+              <CardDescription className="text-sm font-semibold tracking-tight">
                 Today&apos;s Sales
               </CardDescription>
-              <div className="flex h-8 w-8 items-center justify-center rounded-md bg-blue-50 dark:bg-blue-950">
-                <ShoppingCart className="size-4 text-blue-600 dark:text-blue-400" />
+              <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-blue-500/10 dark:bg-blue-500/15 ring-1 ring-blue-500/20">
+                <ShoppingCart className="size-4 text-blue-500 dark:text-blue-400" />
               </div>
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold tabular-nums">
+              <div className="text-2xl font-bold tabular-nums tracking-tight">
                 {formatCurrency(stats.sales_today.total)}
               </div>
-              <p className="text-xs text-muted-foreground mt-1">
+              <p className="text-xs text-muted-foreground mt-1 font-medium">
                 {formatCount(stats.sales_today.count)} transactions today
               </p>
             </CardContent>
           </Card>
 
           {/* Monthly Sales */}
-          <Card>
+          <Card className="transition-shadow hover:shadow-md">
             <CardHeader className="flex flex-row items-center justify-between pb-2 space-y-0">
-              <CardDescription className="text-sm font-medium">
+              <CardDescription className="text-sm font-semibold tracking-tight">
                 Monthly Sales
               </CardDescription>
-              <div className="flex h-8 w-8 items-center justify-center rounded-md bg-emerald-50 dark:bg-emerald-950">
-                <DollarSign className="size-4 text-emerald-600 dark:text-emerald-400" />
+              <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-emerald-500/10 dark:bg-emerald-500/15 ring-1 ring-emerald-500/20">
+                <DollarSign className="size-4 text-emerald-500 dark:text-emerald-400" />
               </div>
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold tabular-nums">
+              <div className="text-2xl font-bold tabular-nums tracking-tight">
                 {formatCurrency(stats.sales_month.total)}
               </div>
-              <p className="text-xs text-muted-foreground mt-1">
+              <p className="text-xs text-muted-foreground mt-1 font-medium">
                 {formatCount(stats.sales_month.count)} transactions this month
               </p>
             </CardContent>
           </Card>
 
           {/* Average Ticket */}
-          <Card>
+          <Card className="transition-shadow hover:shadow-md">
             <CardHeader className="flex flex-row items-center justify-between pb-2 space-y-0">
-              <CardDescription className="text-sm font-medium">
+              <CardDescription className="text-sm font-semibold tracking-tight">
                 Average Ticket
               </CardDescription>
-              <div className="flex h-8 w-8 items-center justify-center rounded-md bg-amber-50 dark:bg-amber-950">
-                <TrendingUp className="size-4 text-amber-600 dark:text-amber-400" />
+              <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-teal-500/10 dark:bg-teal-500/15 ring-1 ring-teal-500/20">
+                <TrendingUp className="size-4 text-teal-500 dark:text-teal-400" />
               </div>
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold tabular-nums">
+              <div className="text-2xl font-bold tabular-nums tracking-tight">
                 {formatCurrency(stats.average_ticket)}
               </div>
-              <p className="text-xs text-muted-foreground mt-1">
+              <p className="text-xs text-muted-foreground mt-1 font-medium">
                 Per transaction average
               </p>
             </CardContent>
@@ -251,20 +253,24 @@ function Dashboard() {
           {/* Low Stock */}
           <Link
             to="/dashboard/inventory"
-            className="block transition-opacity hover:opacity-80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring rounded-xl"
+            className="block transition-all hover:shadow-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring rounded-xl"
           >
             <Card
               className={
-                hasLowStock ? "border-orange-200 dark:border-orange-900" : ""
+                hasLowStock
+                  ? "border-orange-300/60 dark:border-orange-700/50"
+                  : ""
               }
             >
               <CardHeader className="flex flex-row items-center justify-between pb-2 space-y-0">
-                <CardDescription className="text-sm font-medium">
+                <CardDescription className="text-sm font-semibold tracking-tight">
                   Low Stock
                 </CardDescription>
                 <div
-                  className={`flex h-8 w-8 items-center justify-center rounded-md ${
-                    hasLowStock ? "bg-orange-50 dark:bg-orange-950" : "bg-muted"
+                  className={`flex h-8 w-8 items-center justify-center rounded-lg ring-1 ${
+                    hasLowStock
+                      ? "bg-orange-500/10 dark:bg-orange-500/15 ring-orange-500/20"
+                      : "bg-muted ring-border"
                   }`}
                 >
                   <AlertTriangle
@@ -274,11 +280,11 @@ function Dashboard() {
               </CardHeader>
               <CardContent>
                 <div
-                  className={`text-2xl font-bold tabular-nums ${hasLowStock ? "text-orange-600 dark:text-orange-400" : ""}`}
+                  className={`text-2xl font-bold tabular-nums tracking-tight ${hasLowStock ? "text-orange-500 dark:text-orange-400" : ""}`}
                 >
                   {formatCount(stats.low_stock_count)}
                 </div>
-                <p className="text-xs text-muted-foreground mt-1 flex items-center gap-1">
+                <p className="text-xs text-muted-foreground mt-1 flex items-center gap-1 font-medium">
                   Products below minimum
                   <ArrowUpRight className="size-3" />
                 </p>
@@ -289,13 +295,13 @@ function Dashboard() {
       ) : null}
 
       {/* Sales This Week Chart */}
-      <Card>
+      <Card className="transition-shadow hover:shadow-md">
         <CardHeader>
-          <CardTitle className="flex items-center gap-2">
-            <Receipt className="size-4" />
+          <CardTitle className="flex items-center gap-2 text-base font-semibold tracking-tight">
+            <Receipt className="size-4 text-primary" />
             Sales This Week
           </CardTitle>
-          <CardDescription>
+          <CardDescription className="text-xs font-medium">
             Daily revenue — Mon to Sun this week, hover to see details
           </CardDescription>
         </CardHeader>
@@ -379,13 +385,13 @@ function Dashboard() {
       {/* Bottom section: Top Products */}
       <div className="grid gap-6 lg:grid-cols-2">
         {/* Top Products Table */}
-        <Card>
+        <Card className="transition-shadow hover:shadow-md">
           <CardHeader>
-            <CardTitle className="flex items-center gap-2">
-              <PackageSearch className="size-4" />
+            <CardTitle className="flex items-center gap-2 text-base font-semibold tracking-tight">
+              <PackageSearch className="size-4 text-primary" />
               Top Products
             </CardTitle>
-            <CardDescription>Best selling products this month</CardDescription>
+            <CardDescription className="text-xs font-medium">Best selling products this month</CardDescription>
           </CardHeader>
           <CardContent>
             {isLoading ? (
@@ -443,13 +449,13 @@ function Dashboard() {
         </Card>
 
         {/* Revenue by Product Chart */}
-        <Card>
+        <Card className="transition-shadow hover:shadow-md">
           <CardHeader>
-            <CardTitle className="flex items-center gap-2">
-              <DollarSign className="size-4" />
+            <CardTitle className="flex items-center gap-2 text-base font-semibold tracking-tight">
+              <DollarSign className="size-4 text-primary" />
               Revenue by Product
             </CardTitle>
-            <CardDescription>
+            <CardDescription className="text-xs font-medium">
               Comparative revenue — hover bars for details
             </CardDescription>
           </CardHeader>

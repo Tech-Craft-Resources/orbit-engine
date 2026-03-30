@@ -79,11 +79,11 @@ export function Benefits() {
           >
             <Badge
               variant="outline"
-              className="mb-4 rounded-md border-border/70"
+              className="mb-4 rounded-full border-primary/25 bg-primary/8 text-primary font-medium px-3"
             >
               Why OrbitEngine
             </Badge>
-            <h2 className="text-balance text-3xl font-semibold tracking-tight sm:text-4xl">
+            <h2 className="text-balance text-3xl font-bold tracking-tight sm:text-4xl">
               Minimal Surface, High Operational Depth
             </h2>
             <p className="mt-4 max-w-2xl text-pretty text-muted-foreground">
@@ -95,12 +95,12 @@ export function Benefits() {
                 <article
                   key={benefit.title}
                   className={cn(
-                    "rounded-md border border-border/75 bg-card p-4 shadow-sm scroll-hidden",
+                    "rounded-lg border border-border/75 bg-card p-4 shadow-sm transition-all hover:border-primary/30 hover:shadow-md scroll-hidden",
                     left.isVisible &&
                       `animate-fade-in-up ${staggerClass[index]}`,
                   )}
                 >
-                  <div className="mb-3 flex h-8 w-8 items-center justify-center rounded-md bg-sky-100 text-sky-700 dark:bg-sky-950/70 dark:text-sky-300">
+                  <div className="mb-3 flex h-8 w-8 items-center justify-center rounded-lg bg-primary/10 text-primary ring-1 ring-primary/20 dark:bg-primary/15">
                     <benefit.icon className="h-4 w-4" aria-hidden="true" />
                   </div>
                   <h3 className="text-sm font-medium text-foreground">
@@ -114,15 +114,15 @@ export function Benefits() {
             </div>
           </div>
 
-          <aside
+            <aside
             ref={right.ref}
             className={cn(
-              "rounded-md border border-border/75 bg-card p-6 shadow-sm scroll-hidden",
+              "rounded-xl border border-border/75 bg-card p-6 shadow-sm scroll-hidden",
               right.isVisible && "animate-fade-in-right",
             )}
             aria-label="Implementation Path"
           >
-            <h3 className="text-base font-medium">Implementation Path</h3>
+            <h3 className="text-base font-semibold tracking-tight">Implementation Path</h3>
             <p className="mt-2 text-sm text-muted-foreground">
               Roll out in short cycles while keeping governance and reporting
               intact.
@@ -133,12 +133,12 @@ export function Benefits() {
                 <div
                   key={item.step}
                   className={cn(
-                    "rounded-sm border border-border/65 p-3 scroll-hidden",
+                    "rounded-lg border border-border/65 bg-muted/20 p-3 scroll-hidden",
                     right.isVisible &&
                       `animate-fade-in-up ${staggerClass[index]}`,
                   )}
                 >
-                  <p className="font-mono text-xs tabular-nums text-sky-700 dark:text-sky-300">
+                  <p className="font-mono text-xs tabular-nums font-semibold text-primary">
                     Step {item.step}
                   </p>
                   <p className="mt-1 text-sm font-medium text-foreground">

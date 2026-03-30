@@ -94,10 +94,10 @@ export function Features() {
             header.isVisible && "animate-fade-in-up",
           )}
         >
-          <Badge variant="outline" className="mb-4 rounded-md border-border/70">
+          <Badge variant="outline" className="mb-4 rounded-full border-primary/25 bg-primary/8 text-primary font-medium px-3">
             Product Surface
           </Badge>
-          <h2 className="text-balance text-3xl font-semibold tracking-tight sm:text-4xl">
+          <h2 className="text-balance text-3xl font-bold tracking-tight sm:text-4xl">
             Every Core Workflow, Composed Into One Operating Layer
           </h2>
           <p className="mt-4 text-pretty text-muted-foreground">
@@ -114,19 +114,19 @@ export function Features() {
             <Card
               key={feature.title}
               className={cn(
-                "relative overflow-hidden border-border/75 bg-card/95 transition-colors hover:border-sky-300/70 dark:hover:border-sky-600/70 scroll-hidden",
+                "relative overflow-hidden border-border/75 bg-card/95 transition-all hover:border-primary/40 hover:shadow-md scroll-hidden",
                 grid.isVisible && `animate-scale-in ${staggerClass[index]}`,
               )}
             >
               <div
                 aria-hidden="true"
-                className="pointer-events-none absolute left-0 top-0 h-full w-1 bg-gradient-to-b from-sky-400/80 via-cyan-400/70 to-emerald-400/60"
+                className="pointer-events-none absolute left-0 top-0 h-full w-0.5 bg-linear-to-b from-primary/80 via-primary/50 to-emerald-500/70"
               />
               <CardHeader className="pb-3 pl-5 pr-5 pt-5">
-                <div className="mb-2 flex h-9 w-9 items-center justify-center rounded-md border border-border/70 bg-muted/70 text-foreground">
+                <div className="mb-2 flex h-9 w-9 items-center justify-center rounded-lg bg-primary/10 text-primary ring-1 ring-primary/20 dark:bg-primary/15">
                   <feature.icon className="h-4 w-4" aria-hidden="true" />
                 </div>
-                <CardTitle className="text-lg font-medium">
+                <CardTitle className="text-base font-semibold tracking-tight">
                   {feature.title}
                 </CardTitle>
               </CardHeader>
@@ -134,7 +134,7 @@ export function Features() {
                 <CardDescription className="text-sm leading-6 text-muted-foreground">
                   {feature.detail}
                 </CardDescription>
-                <p className="rounded-sm bg-muted/60 px-2.5 py-1.5 font-mono text-xs tabular-nums text-foreground">
+                <p className="rounded-md bg-primary/8 px-2.5 py-1.5 font-mono text-xs tabular-nums text-primary">
                   {feature.dataPoint}
                 </p>
               </CardContent>

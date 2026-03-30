@@ -47,14 +47,14 @@ export function Stats() {
             <article
               key={stat.label}
               className={cn(
-                "rounded-md border border-border/75 bg-card p-4 shadow-sm scroll-hidden",
+                "rounded-lg border border-border/75 bg-card p-5 shadow-sm transition-shadow hover:shadow-md hover:border-primary/30 scroll-hidden",
                 isVisible && `animate-fade-in-up ${staggerClass[index]}`,
               )}
             >
-              <p className="font-mono text-2xl font-semibold tabular-nums text-foreground">
+              <p className="font-mono text-2xl font-bold tabular-nums tracking-tight text-primary">
                 {stat.metric}
               </p>
-              <p className="mt-2 text-sm font-medium text-foreground">
+              <p className="mt-2 text-sm font-semibold text-foreground">
                 {stat.label}
               </p>
               <p className="mt-1 text-xs leading-5 text-muted-foreground">

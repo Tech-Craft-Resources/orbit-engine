@@ -14,17 +14,23 @@ export function CTA() {
         <div
           ref={ref}
           className={cn(
-            "relative overflow-hidden rounded-lg border border-border/80 bg-card px-6 py-10 shadow-sm md:px-10 md:py-12 scroll-hidden",
+            "relative overflow-hidden rounded-2xl border border-primary/20 bg-linear-to-br from-primary/5 via-card to-emerald-500/5 px-6 py-12 shadow-lg md:px-12 md:py-14 scroll-hidden",
             isVisible && "animate-scale-in",
           )}
         >
+          {/* Electric glow orbs */}
           <div
             aria-hidden="true"
-            className="pointer-events-none absolute -right-20 -top-20 h-56 w-56 rounded-full bg-sky-400/10 blur-3xl"
+            className="pointer-events-none absolute -right-24 -top-24 h-72 w-72 rounded-full bg-primary/10 blur-3xl"
           />
+          <div
+            aria-hidden="true"
+            className="pointer-events-none absolute -left-16 -bottom-16 h-48 w-48 rounded-full bg-emerald-500/10 blur-3xl"
+          />
+
           <h2
             className={cn(
-              "max-w-3xl text-balance text-3xl font-semibold tracking-tight sm:text-4xl scroll-hidden",
+              "relative max-w-3xl text-balance text-3xl font-bold tracking-tight sm:text-4xl scroll-hidden",
               isVisible && "animate-fade-in-up stagger-1",
             )}
           >
@@ -32,7 +38,7 @@ export function CTA() {
           </h2>
           <p
             className={cn(
-              "mt-4 max-w-2xl text-pretty text-muted-foreground scroll-hidden",
+              "relative mt-4 max-w-2xl text-pretty text-muted-foreground scroll-hidden",
               isVisible && "animate-fade-in stagger-2",
             )}
           >
@@ -41,11 +47,11 @@ export function CTA() {
           </p>
           <div
             className={cn(
-              "mt-8 flex flex-col gap-3 sm:flex-row sm:items-center scroll-hidden",
+              "relative mt-8 flex flex-col gap-3 sm:flex-row sm:items-center scroll-hidden",
               isVisible && "animate-fade-in-up stagger-3",
             )}
           >
-            <Button size="lg" asChild className="touch-manipulation">
+            <Button size="lg" asChild className="touch-manipulation shadow-md shadow-primary/20">
               <RouterLink to="/signup">
                 Create Your Workspace
                 <ArrowRight className="ml-2 h-4 w-4" aria-hidden="true" />
@@ -55,7 +61,7 @@ export function CTA() {
               <RouterLink to="/login">Open Existing Account</RouterLink>
             </Button>
           </div>
-          <p className="mt-5 font-mono text-xs tabular-nums text-muted-foreground">
+          <p className="relative mt-5 font-mono text-xs tabular-nums text-muted-foreground/70">
             setup_time=15m | migration_mode=incremental | support_window=24x5
           </p>
         </div>

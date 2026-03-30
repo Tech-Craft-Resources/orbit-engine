@@ -14,7 +14,7 @@ export function Hero() {
     <section className="relative overflow-hidden border-b border-border/70 py-20 md:py-24 lg:py-28">
       <div
         aria-hidden="true"
-        className="pointer-events-none absolute inset-0 -z-10 bg-[linear-gradient(180deg,transparent_0%,rgba(15,23,42,0.02)_100%)] dark:bg-[linear-gradient(180deg,transparent_0%,rgba(148,163,184,0.07)_100%)]"
+        className="pointer-events-none absolute inset-0 -z-10 bg-[linear-gradient(180deg,transparent_0%,rgba(15,23,42,0.02)_100%)] dark:bg-[linear-gradient(180deg,transparent_0%,rgba(37,99,235,0.04)_100%)]"
       />
       <div
         ref={ref}
@@ -28,11 +28,11 @@ export function Hero() {
         >
           <Badge
             variant="secondary"
-            className="mb-5 rounded-md border border-border/70"
+            className="mb-5 rounded-full border border-primary/20 bg-primary/8 text-primary font-medium px-3"
           >
             Operations Intelligence for SME Teams
           </Badge>
-          <h1 className="text-balance text-4xl font-semibold tracking-tight sm:text-5xl lg:text-6xl">
+          <h1 className="text-balance text-4xl font-bold tracking-tight sm:text-5xl lg:text-6xl">
             Build a Clear Operating System for Your Business
           </h1>
           <p
@@ -66,19 +66,19 @@ export function Hero() {
           </div>
           <div className="mt-10 flex flex-wrap gap-x-6 gap-y-2 text-sm text-muted-foreground">
             <p>
-              <span className="font-mono tabular-nums text-foreground">
+              <span className="font-mono tabular-nums font-semibold text-primary">
                 99.95%
               </span>{" "}
               Uptime
             </p>
             <p>
-              <span className="font-mono tabular-nums text-foreground">
+              <span className="font-mono tabular-nums font-semibold text-primary">
                 3.8x
               </span>{" "}
               Faster Monthly Close
             </p>
             <p>
-              <span className="font-mono tabular-nums text-foreground">
+              <span className="font-mono tabular-nums font-semibold text-primary">
                 24/7
               </span>{" "}
               Audit Trail
@@ -94,38 +94,38 @@ export function Hero() {
         >
           <div
             aria-hidden="true"
-            className="pointer-events-none absolute inset-x-0 top-0 h-1 rounded-t-lg bg-linear-to-r from-sky-500/70 via-cyan-400/80 to-emerald-400/80"
+            className="pointer-events-none absolute inset-x-0 top-0 h-0.5 rounded-t-lg bg-linear-to-r from-primary/90 via-primary/70 to-emerald-500/80"
           />
           <CardHeader className="pb-3">
-            <CardTitle className="text-sm font-medium uppercase tracking-[0.12em] text-muted-foreground">
+            <CardTitle className="text-xs font-semibold uppercase tracking-[0.12em] text-muted-foreground">
               Live Operations Snapshot
             </CardTitle>
           </CardHeader>
           <CardContent className="space-y-5">
             <div className="grid grid-cols-2 gap-3">
-              <div className="rounded-md border border-border/70 bg-muted/40 p-3">
+              <div className="rounded-lg border border-border/70 bg-muted/40 p-3">
                 <p className="text-xs text-muted-foreground">Open Orders</p>
-                <p className="mt-2 font-mono text-2xl font-semibold tabular-nums">
+                <p className="mt-2 font-mono text-2xl font-bold tabular-nums tracking-tight">
                   128
                 </p>
               </div>
-              <div className="rounded-md border border-border/70 bg-muted/40 p-3">
+              <div className="rounded-lg border border-primary/20 bg-primary/5 p-3">
                 <p className="text-xs text-muted-foreground">Low Stock SKUs</p>
-                <p className="mt-2 font-mono text-2xl font-semibold tabular-nums text-sky-700 dark:text-sky-300">
+                <p className="mt-2 font-mono text-2xl font-bold tabular-nums tracking-tight text-primary">
                   09
                 </p>
               </div>
             </div>
-            <div className="rounded-md border border-border/70 p-4">
+            <div className="rounded-lg border border-border/70 bg-muted/20 p-4">
               <p className="text-xs uppercase tracking-[0.08em] text-muted-foreground">
                 Forecast Engine
               </p>
-              <p className="mt-2 font-mono text-sm text-foreground">
+              <p className="mt-2 font-mono text-sm text-primary">
                 model://demand-weekly-v3
               </p>
               <p className="mt-3 text-sm text-muted-foreground">
                 Next recommendation: Reorder{" "}
-                <span className="font-medium text-foreground">42</span> units of
+                <span className="font-semibold text-foreground">42</span> units of
                 "Premium Beans" by Friday.
               </p>
             </div>

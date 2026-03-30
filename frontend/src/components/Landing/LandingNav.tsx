@@ -49,7 +49,7 @@ export function LandingNav() {
           </span>
           <span
             aria-hidden="true"
-            className="hidden h-2 w-2 rounded-full bg-sky-500/80 md:block"
+            className="hidden h-2 w-2 rounded-full bg-primary md:block"
           />
         </RouterLink>
         <nav className="hidden items-center gap-1 md:flex" aria-label="Primary">
