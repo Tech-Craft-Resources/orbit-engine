@@ -94,7 +94,10 @@ export function Features() {
             header.isVisible && "animate-fade-in-up",
           )}
         >
-          <Badge variant="outline" className="mb-4 rounded-full border-primary/25 bg-primary/8 text-primary font-medium px-3">
+          <Badge
+            variant="outline"
+            className="mb-4 rounded-full border-primary/25 bg-primary/8 text-primary font-medium px-3"
+          >
             Product Surface
           </Badge>
           <h2 className="text-balance text-3xl font-bold tracking-tight sm:text-4xl">

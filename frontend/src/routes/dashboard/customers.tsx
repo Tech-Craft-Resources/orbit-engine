@@ -1,20 +1,25 @@
-import { useSuspenseQuery } from "@tanstack/react-query"
+import { useQuery } from "@tanstack/react-query"
 import { createFileRoute, redirect } from "@tanstack/react-router"
-import { Suspense } from "react"
+import { Suspense, useState } from "react"
 
 import { CustomersService, UsersService } from "@/client"
-import { DataTable } from "@/components/Common/DataTable"
+import { DataTable, type FilterableColumn } from "@/components/Common/DataTable"
 import AddCustomer from "@/components/Customers/AddCustomer"
 import { customerColumns } from "@/components/Customers/columns"
 import PendingCustomers from "@/components/Customers/PendingCustomers"
 import { hasRole } from "@/hooks/useAuth"
+import { useDebounce } from "@/hooks/useDebounce"
 
-function getCustomersQueryOptions() {
-  return {
-    queryFn: () => CustomersService.readCustomers({ skip: 0, limit: 100 }),
-    queryKey: ["customers"],
-  }
-}
+const CUSTOMERS_FILTER_COLUMNS: FilterableColumn[] = [
+  {
+    id: "is_active",
+    label: "Status",
+    options: [
+      { label: "Active", value: "true" },
+      { label: "Inactive", value: "false" },
+    ],
+  },
+]
 
 export const Route = createFileRoute("/dashboard/customers")({
   component: Customers,
@@ -35,20 +40,42 @@ export const Route = createFileRoute("/dashboard/customers")({
   }),
 })
 
-function CustomersTableContent() {
-  const { data: customers } = useSuspenseQuery(getCustomersQueryOptions())
-  return <DataTable columns={customerColumns} data={customers.data} />
-}
+function CustomersTableContent({
+  search,
+  onSearchChange,
+}: {
+  search: string
+  onSearchChange: (v: string) => void
+}) {
+  const debouncedSearch = useDebounce(search, 300)
 
-function CustomersTable() {
+  const { data: customers, isLoading } = useQuery({
+    queryFn: () =>
+      CustomersService.readCustomers({
+        skip: 0,
+        limit: 100,
+        search: debouncedSearch || undefined,
+      }),
+    queryKey: ["customers", debouncedSearch],
+  })
+
+  if (isLoading) return <PendingCustomers />
+
   return (
-    <Suspense fallback={<PendingCustomers />}>
-      <CustomersTableContent />
-    </Suspense>
+    <DataTable
+      columns={customerColumns}
+      data={customers?.data ?? []}
+      searchValue={search}
+      onSearchChange={onSearchChange}
+      searchPlaceholder="Search by name, email, document…"
+      filterableColumns={CUSTOMERS_FILTER_COLUMNS}
+    />
   )
 }
 
 function Customers() {
+  const [search, setSearch] = useState("")
+
   return (
     <div className="flex flex-col gap-6">
       <div className="flex items-center justify-between">
@@ -58,7 +85,9 @@ function Customers() {
         </div>
         <AddCustomer />
       </div>
-      <CustomersTable />
+      <Suspense fallback={<PendingCustomers />}>
+        <CustomersTableContent search={search} onSearchChange={setSearch} />
+      </Suspense>
     </div>
   )
 }

@@ -114,7 +114,7 @@ export function Benefits() {
             </div>
           </div>
 
-            <aside
+          <aside
             ref={right.ref}
             className={cn(
               "rounded-xl border border-border/75 bg-card p-6 shadow-sm scroll-hidden",
@@ -122,7 +122,9 @@ export function Benefits() {
             )}
             aria-label="Implementation Path"
           >
-            <h3 className="text-base font-semibold tracking-tight">Implementation Path</h3>
+            <h3 className="text-base font-semibold tracking-tight">
+              Implementation Path
+            </h3>
             <p className="mt-2 text-sm text-muted-foreground">
               Roll out in short cycles while keeping governance and reporting
               intact.

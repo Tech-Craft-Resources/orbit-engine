@@ -1027,6 +1027,18 @@ export const OrganizationUpdateSchema = {
             ],
             title: 'Name'
         },
+        slug: {
+            anyOf: [
+                {
+                    type: 'string',
+                    maxLength: 100
+                },
+                {
+                    type: 'null'
+                }
+            ],
+            title: 'Slug'
+        },
         description: {
             anyOf: [
                 {

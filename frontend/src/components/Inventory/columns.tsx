@@ -18,6 +18,7 @@ export function buildProductColumns(
     {
       accessorKey: "sku",
       header: "SKU",
+      enableSorting: true,
       cell: ({ row }) => (
         <span className="font-mono text-sm">{row.original.sku}</span>
       ),
@@ -25,6 +26,7 @@ export function buildProductColumns(
     {
       accessorKey: "name",
       header: "Name",
+      enableSorting: true,
       cell: ({ row }) => (
         <span className="font-medium">{row.original.name}</span>
       ),
@@ -32,6 +34,9 @@ export function buildProductColumns(
     {
       accessorKey: "category_id",
       header: "Category",
+      enableSorting: false,
+      filterFn: (row, _columnId, filterValue) =>
+        row.original.category_id === filterValue,
       cell: ({ row }) => {
         const catId = row.original.category_id
         const catName = catId ? categoryMap.get(catId) : null
@@ -41,6 +46,8 @@ export function buildProductColumns(
     {
       accessorKey: "stock_quantity",
       header: "Stock",
+      enableSorting: true,
+      sortingFn: "alphanumeric",
       cell: ({ row }) => {
         const qty = row.original.stock_quantity ?? 0
         const min = row.original.stock_min ?? 0
@@ -62,6 +69,8 @@ export function buildProductColumns(
     {
       accessorKey: "sale_price",
       header: "Sale Price",
+      enableSorting: true,
+      sortingFn: "alphanumeric",
       cell: ({ row }) => {
         const price = row.original.sale_price
         return (
@@ -74,6 +83,9 @@ export function buildProductColumns(
     {
       accessorKey: "is_active",
       header: "Status",
+      enableSorting: false,
+      filterFn: (row, _columnId, filterValue) =>
+        String(row.original.is_active) === filterValue,
       cell: ({ row }) => (
         <div className="flex items-center gap-2">
           <span
@@ -93,6 +105,7 @@ export function buildProductColumns(
     {
       id: "actions",
       header: () => <span className="sr-only">Actions</span>,
+      enableSorting: false,
       cell: ({ row }) => (
         <div className="flex justify-end">
           <ProductActionsMenu product={row.original} />

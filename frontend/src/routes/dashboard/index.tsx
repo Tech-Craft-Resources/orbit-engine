@@ -391,7 +391,9 @@ function Dashboard() {
               <PackageSearch className="size-4 text-primary" />
               Top Products
             </CardTitle>
-            <CardDescription className="text-xs font-medium">Best selling products this month</CardDescription>
+            <CardDescription className="text-xs font-medium">
+              Best selling products this month
+            </CardDescription>
           </CardHeader>
           <CardContent>
             {isLoading ? (

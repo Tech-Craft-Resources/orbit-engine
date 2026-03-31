@@ -1,32 +1,32 @@
-from typing import Any
 import uuid
+from typing import Any
 
+from sqlalchemy import or_
 from sqlmodel import Session, select
 
 from app.core.security import get_password_hash, verify_password
 from app.models import (
-    User,
-    UserCreate,
-    UserUpdate,
-    Organization,
-    OrganizationCreate,
-    OrganizationUpdate,
     Category,
     CategoryCreate,
     CategoryUpdate,
-    Product,
-    ProductCreate,
-    ProductUpdate,
     Customer,
     CustomerCreate,
     CustomerUpdate,
     InventoryMovement,
     InventoryMovementCreate,
+    Organization,
+    OrganizationCreate,
+    OrganizationUpdate,
+    Product,
+    ProductCreate,
+    ProductUpdate,
+    Role,
     Sale,
     SaleItem,
-    Role,
+    User,
+    UserCreate,
+    UserUpdate,
 )
-
 
 # ============================================================================
 # ORGANIZATION CRUD
@@ -330,26 +330,63 @@ def get_product_by_id(
     return session.exec(statement).first()
 
 
+_PRODUCT_SORT_COLUMNS: dict[str, Any] = {
+    "name": Product.name,
+    "sku": Product.sku,
+    "stock_quantity": Product.stock_quantity,
+    "sale_price": Product.sale_price,
+    "is_active": Product.is_active,
+    "created_at": Product.created_at,
+}
+
+
 def get_products_by_organization(
     *,
     session: Session,
     organization_id: uuid.UUID,
     skip: int = 0,
     limit: int = 100,
+    search: str | None = None,
+    sort_by: str | None = None,
+    sort_order: str = "asc",
+    is_active: bool | None = None,
+    category_id: uuid.UUID | None = None,
 ) -> list[Product]:
     """Get all products for an organization"""
     statement = (
         select(Product)
         .where(Product.organization_id == organization_id)
         .where(Product.deleted_at.is_(None))
-        .offset(skip)
-        .limit(limit)
     )
+    if search:
+        term = f"%{search}%"
+        statement = statement.where(
+            or_(
+                Product.name.ilike(term),  # type: ignore[attr-defined]
+                Product.sku.ilike(term),  # type: ignore[attr-defined]
+                Product.description.ilike(term),  # type: ignore[attr-defined]
+            )
+        )
+    if is_active is not None:
+        statement = statement.where(Product.is_active == is_active)
+    if category_id is not None:
+        statement = statement.where(Product.category_id == category_id)
+    sort_col = _PRODUCT_SORT_COLUMNS.get(sort_by or "")
+    if sort_col is not None:
+        statement = statement.order_by(
+            sort_col.asc() if sort_order == "asc" else sort_col.desc()
+        )
+    statement = statement.offset(skip).limit(limit)
     return list(session.exec(statement).all())
 
 
 def count_products_by_organization(
-    *, session: Session, organization_id: uuid.UUID
+    *,
+    session: Session,
+    organization_id: uuid.UUID,
+    search: str | None = None,
+    is_active: bool | None = None,
+    category_id: uuid.UUID | None = None,
 ) -> int:
     """Count products in an organization"""
     from sqlalchemy import func
@@ -360,6 +397,19 @@ def count_products_by_organization(
         .where(Product.organization_id == organization_id)
         .where(Product.deleted_at.is_(None))
     )
+    if search:
+        term = f"%{search}%"
+        statement = statement.where(
+            or_(
+                Product.name.ilike(term),  # type: ignore[attr-defined]
+                Product.sku.ilike(term),  # type: ignore[attr-defined]
+                Product.description.ilike(term),  # type: ignore[attr-defined]
+            )
+        )
+    if is_active is not None:
+        statement = statement.where(Product.is_active == is_active)
+    if category_id is not None:
+        statement = statement.where(Product.category_id == category_id)
     return session.exec(statement).one()
 
 
@@ -484,26 +534,62 @@ def get_customer_by_id(
     return session.exec(statement).first()
 
 
+_CUSTOMER_SORT_COLUMNS: dict[str, Any] = {
+    "first_name": Customer.first_name,
+    "last_name": Customer.last_name,
+    "email": Customer.email,
+    "document_number": Customer.document_number,
+    "purchases_count": Customer.purchases_count,
+    "total_purchases": Customer.total_purchases,
+    "created_at": Customer.created_at,
+}
+
+
 def get_customers_by_organization(
     *,
     session: Session,
     organization_id: uuid.UUID,
     skip: int = 0,
     limit: int = 100,
+    search: str | None = None,
+    sort_by: str | None = None,
+    sort_order: str = "asc",
+    is_active: bool | None = None,
 ) -> list[Customer]:
     """Get all customers for an organization"""
     statement = (
         select(Customer)
         .where(Customer.organization_id == organization_id)
         .where(Customer.deleted_at.is_(None))
-        .offset(skip)
-        .limit(limit)
     )
+    if search:
+        term = f"%{search}%"
+        statement = statement.where(
+            or_(
+                Customer.first_name.ilike(term),  # type: ignore[attr-defined]
+                Customer.last_name.ilike(term),  # type: ignore[attr-defined]
+                Customer.email.ilike(term),  # type: ignore[attr-defined]
+                Customer.document_number.ilike(term),  # type: ignore[attr-defined]
+                Customer.phone.ilike(term),  # type: ignore[attr-defined]
+            )
+        )
+    if is_active is not None:
+        statement = statement.where(Customer.is_active == is_active)
+    sort_col = _CUSTOMER_SORT_COLUMNS.get(sort_by or "")
+    if sort_col is not None:
+        statement = statement.order_by(
+            sort_col.asc() if sort_order == "asc" else sort_col.desc()
+        )
+    statement = statement.offset(skip).limit(limit)
     return list(session.exec(statement).all())
 
 
 def count_customers_by_organization(
-    *, session: Session, organization_id: uuid.UUID
+    *,
+    session: Session,
+    organization_id: uuid.UUID,
+    search: str | None = None,
+    is_active: bool | None = None,
 ) -> int:
     """Count customers in an organization"""
     from sqlalchemy import func
@@ -514,6 +600,19 @@ def count_customers_by_organization(
         .where(Customer.organization_id == organization_id)
         .where(Customer.deleted_at.is_(None))
     )
+    if search:
+        term = f"%{search}%"
+        statement = statement.where(
+            or_(
+                Customer.first_name.ilike(term),  # type: ignore[attr-defined]
+                Customer.last_name.ilike(term),  # type: ignore[attr-defined]
+                Customer.email.ilike(term),  # type: ignore[attr-defined]
+                Customer.document_number.ilike(term),  # type: ignore[attr-defined]
+                Customer.phone.ilike(term),  # type: ignore[attr-defined]
+            )
+        )
+    if is_active is not None:
+        statement = statement.where(Customer.is_active == is_active)
     return session.exec(statement).one()
 
 
@@ -761,26 +860,55 @@ def get_sale_by_id(
     return session.exec(statement).first()
 
 
+_SALE_SORT_COLUMNS: dict[str, Any] = {
+    "invoice_number": Sale.invoice_number,
+    "sale_date": Sale.sale_date,
+    "total": Sale.total,
+    "status": Sale.status,
+    "payment_method": Sale.payment_method,
+    "created_at": Sale.created_at,
+}
+
+
 def get_sales_by_organization(
     *,
     session: Session,
     organization_id: uuid.UUID,
     skip: int = 0,
     limit: int = 100,
+    search: str | None = None,
+    sort_by: str | None = None,
+    sort_order: str = "asc",
+    status: str | None = None,
+    payment_method: str | None = None,
 ) -> list[Sale]:
     """Get all sales for an organization, ordered by most recent."""
-    statement = (
-        select(Sale)
-        .where(Sale.organization_id == organization_id)
-        .order_by(Sale.created_at.desc())
-        .offset(skip)
-        .limit(limit)
-    )
+    statement = select(Sale).where(Sale.organization_id == organization_id)
+    if search:
+        term = f"%{search}%"
+        statement = statement.where(Sale.invoice_number.ilike(term))  # type: ignore[attr-defined]
+    if status:
+        statement = statement.where(Sale.status == status)
+    if payment_method:
+        statement = statement.where(Sale.payment_method == payment_method)
+    sort_col = _SALE_SORT_COLUMNS.get(sort_by or "")
+    if sort_col is not None:
+        statement = statement.order_by(
+            sort_col.asc() if sort_order == "asc" else sort_col.desc()
+        )
+    else:
+        statement = statement.order_by(Sale.created_at.desc())  # type: ignore[attr-defined]
+    statement = statement.offset(skip).limit(limit)
     return list(session.exec(statement).all())
 
 
 def count_sales_by_organization(
-    *, session: Session, organization_id: uuid.UUID
+    *,
+    session: Session,
+    organization_id: uuid.UUID,
+    search: str | None = None,
+    status: str | None = None,
+    payment_method: str | None = None,
 ) -> int:
     """Count sales in an organization."""
     from sqlalchemy import func
@@ -790,6 +918,13 @@ def count_sales_by_organization(
         .select_from(Sale)
         .where(Sale.organization_id == organization_id)
     )
+    if search:
+        term = f"%{search}%"
+        statement = statement.where(Sale.invoice_number.ilike(term))  # type: ignore[attr-defined]
+    if status:
+        statement = statement.where(Sale.status == status)
+    if payment_method:
+        statement = statement.where(Sale.payment_method == payment_method)
     return session.exec(statement).one()
 
 
@@ -833,7 +968,7 @@ def get_sales_today(
     limit: int = 100,
 ) -> list[Sale]:
     """Get today's sales for an organization."""
-    from datetime import datetime, timezone, time
+    from datetime import datetime, time, timezone
 
     today_start = datetime.combine(
         datetime.now(timezone.utc).date(), time.min, tzinfo=timezone.utc
@@ -854,7 +989,8 @@ def count_sales_today(
     *, session: Session, organization_id: uuid.UUID
 ) -> int:
     """Count today's completed sales in an organization."""
-    from datetime import datetime, timezone, time
+    from datetime import datetime, time, timezone
+
     from sqlalchemy import func
 
     today_start = datetime.combine(
@@ -874,8 +1010,9 @@ def get_sales_stats(
     *, session: Session, organization_id: uuid.UUID
 ) -> dict[str, Any]:
     """Get sales statistics for an organization."""
-    from datetime import datetime, timezone, time
+    from datetime import datetime, time, timezone
     from decimal import Decimal
+
     from sqlalchemy import func
 
     now = datetime.now(timezone.utc)
@@ -1012,6 +1149,7 @@ def get_top_products(
 ) -> list[dict[str, Any]]:
     """Get top-selling products by quantity sold for completed sales."""
     from decimal import Decimal
+
     from sqlalchemy import func
 
     statement = (
@@ -1052,7 +1190,8 @@ def get_sales_by_day(
     """
     from datetime import date, datetime, timedelta, timezone
     from decimal import Decimal
-    from sqlalchemy import func, cast, Date
+
+    from sqlalchemy import Date, cast, func
 
     today = datetime.now(timezone.utc).date()
     # Monday of the current week (ISO weekday: Mon=1 … Sun=7)

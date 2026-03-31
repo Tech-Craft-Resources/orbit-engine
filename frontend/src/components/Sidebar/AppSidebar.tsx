@@ -91,7 +91,11 @@ export function AppSidebar() {
           className="hidden group-data-[collapsible=icon]:flex items-center justify-center rounded-md p-0.5 hover:bg-sidebar-accent transition-colors duration-150"
           aria-label="Open sidebar"
         >
-          <img src={logoSrc} alt="OrbitEngine" className="size-8 shrink-0 aspect-square object-contain" />
+          <img
+            src={logoSrc}
+            alt="OrbitEngine"
+            className="size-8 shrink-0 aspect-square object-contain"
+          />
         </button>
 
         <div className="mt-2.5 h-px bg-linear-to-r from-transparent via-sidebar-border to-transparent group-data-[collapsible=icon]:hidden" />

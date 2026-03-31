@@ -8,11 +8,13 @@ export const categoryColumns: ColumnDef<CategoryPublic>[] = [
   {
     accessorKey: "name",
     header: "Name",
+    enableSorting: true,
     cell: ({ row }) => <span className="font-medium">{row.original.name}</span>,
   },
   {
     accessorKey: "description",
     header: "Description",
+    enableSorting: false,
     cell: ({ row }) => (
       <span className="text-muted-foreground">
         {row.original.description || "—"}
@@ -22,6 +24,9 @@ export const categoryColumns: ColumnDef<CategoryPublic>[] = [
   {
     accessorKey: "is_active",
     header: "Status",
+    enableSorting: false,
+    filterFn: (row, _columnId, filterValue) =>
+      String(row.original.is_active) === filterValue,
     cell: ({ row }) => (
       <div className="flex items-center gap-2">
         <span
@@ -39,6 +44,8 @@ export const categoryColumns: ColumnDef<CategoryPublic>[] = [
   {
     accessorKey: "created_at",
     header: "Created",
+    enableSorting: true,
+    sortingFn: "datetime",
     cell: ({ row }) => (
       <span className="text-muted-foreground">
         {new Date(row.original.created_at).toLocaleDateString()}
@@ -48,6 +55,7 @@ export const categoryColumns: ColumnDef<CategoryPublic>[] = [
   {
     id: "actions",
     header: () => <span className="sr-only">Actions</span>,
+    enableSorting: false,
     cell: ({ row }) => (
       <div className="flex justify-end">
         <CategoryActionsMenu category={row.original} />

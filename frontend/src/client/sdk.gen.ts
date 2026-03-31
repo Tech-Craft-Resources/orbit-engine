@@ -132,9 +132,15 @@ export class CustomersService {
      * Retrieve customers in current organization.
      *
      * Admin and seller roles can list customers.
+     * Supports search (name/email/document/phone), sort_by, sort_order (asc/desc),
+     * and is_active filter.
      * @param data The data for the request.
      * @param data.skip
      * @param data.limit
+     * @param data.search
+     * @param data.sortBy
+     * @param data.sortOrder
+     * @param data.isActive
      * @returns CustomersPublic Successful Response
      * @throws ApiError
      */
@@ -144,7 +150,11 @@ export class CustomersService {
             url: '/api/v1/customers/',
             query: {
                 skip: data.skip,
-                limit: data.limit
+                limit: data.limit,
+                search: data.search,
+                sort_by: data.sortBy,
+                sort_order: data.sortOrder,
+                is_active: data.isActive
             },
             errors: {
                 422: 'Validation Error'
@@ -561,9 +571,16 @@ export class ProductsService {
      * Retrieve products in current organization.
      *
      * Any authenticated user can list products.
+     * Supports search (name/sku/description), sort_by, sort_order (asc/desc),
+     * is_active filter, and category_id filter.
      * @param data The data for the request.
      * @param data.skip
      * @param data.limit
+     * @param data.search
+     * @param data.sortBy
+     * @param data.sortOrder
+     * @param data.isActive
+     * @param data.categoryId
      * @returns ProductsPublic Successful Response
      * @throws ApiError
      */
@@ -573,7 +590,12 @@ export class ProductsService {
             url: '/api/v1/products/',
             query: {
                 skip: data.skip,
-                limit: data.limit
+                limit: data.limit,
+                search: data.search,
+                sort_by: data.sortBy,
+                sort_order: data.sortOrder,
+                is_active: data.isActive,
+                category_id: data.categoryId
             },
             errors: {
                 422: 'Validation Error'
@@ -781,9 +803,16 @@ export class SalesService {
      * Retrieve sales in current organization.
      *
      * Any authenticated user can list sales.
+     * Supports search (invoice number), sort_by, sort_order (asc/desc),
+     * status filter, and payment_method filter.
      * @param data The data for the request.
      * @param data.skip
      * @param data.limit
+     * @param data.search
+     * @param data.sortBy
+     * @param data.sortOrder
+     * @param data.status
+     * @param data.paymentMethod
      * @returns SalesPublic Successful Response
      * @throws ApiError
      */
@@ -793,7 +822,12 @@ export class SalesService {
             url: '/api/v1/sales/',
             query: {
                 skip: data.skip,
-                limit: data.limit
+                limit: data.limit,
+                search: data.search,
+                sort_by: data.sortBy,
+                sort_order: data.sortOrder,
+                status: data.status,
+                payment_method: data.paymentMethod
             },
             errors: {
                 422: 'Validation Error'

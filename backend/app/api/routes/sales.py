@@ -31,17 +31,36 @@ def read_sales(
     current_organization: CurrentOrganization,
     skip: int = 0,
     limit: int = 100,
+    search: str | None = None,
+    sort_by: str | None = None,
+    sort_order: str = "asc",
+    status: str | None = None,
+    payment_method: str | None = None,
 ) -> Any:
     """
     Retrieve sales in current organization.
 
     Any authenticated user can list sales.
+    Supports search (invoice number), sort_by, sort_order (asc/desc),
+    status filter, and payment_method filter.
     """
     sales = crud.get_sales_by_organization(
-        session=session, organization_id=current_organization, skip=skip, limit=limit
+        session=session,
+        organization_id=current_organization,
+        skip=skip,
+        limit=limit,
+        search=search,
+        sort_by=sort_by,
+        sort_order=sort_order,
+        status=status,
+        payment_method=payment_method,
     )
     count = crud.count_sales_by_organization(
-        session=session, organization_id=current_organization
+        session=session,
+        organization_id=current_organization,
+        search=search,
+        status=status,
+        payment_method=payment_method,
     )
     return SalesPublic(data=sales, count=count)
 

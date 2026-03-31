@@ -29,6 +29,7 @@ export const saleColumns: ColumnDef<SalePublic>[] = [
   {
     accessorKey: "invoice_number",
     header: "Invoice #",
+    enableSorting: true,
     cell: ({ row }) => (
       <span className="font-mono text-sm">{row.original.invoice_number}</span>
     ),
@@ -36,6 +37,8 @@ export const saleColumns: ColumnDef<SalePublic>[] = [
   {
     accessorKey: "sale_date",
     header: "Date",
+    enableSorting: true,
+    sortingFn: "datetime",
     cell: ({ row }) => (
       <span className="text-muted-foreground">
         {formatDate(row.original.sale_date)}
@@ -45,11 +48,14 @@ export const saleColumns: ColumnDef<SalePublic>[] = [
   {
     id: "items_count",
     header: "Items",
+    enableSorting: false,
     cell: ({ row }) => <span>{row.original.items?.length ?? 0}</span>,
   },
   {
     accessorKey: "total",
     header: "Total",
+    enableSorting: true,
+    sortingFn: "alphanumeric",
     cell: ({ row }) => (
       <span className="font-semibold">
         {formatCurrency(row.original.total)}
@@ -59,6 +65,9 @@ export const saleColumns: ColumnDef<SalePublic>[] = [
   {
     accessorKey: "payment_method",
     header: "Payment",
+    enableSorting: false,
+    filterFn: (row, _columnId, filterValue) =>
+      row.original.payment_method === filterValue,
     cell: ({ row }) => (
       <Badge variant="secondary" className="capitalize">
         {row.original.payment_method}
@@ -68,6 +77,9 @@ export const saleColumns: ColumnDef<SalePublic>[] = [
   {
     accessorKey: "status",
     header: "Status",
+    enableSorting: false,
+    filterFn: (row, _columnId, filterValue) =>
+      row.original.status === filterValue,
     cell: ({ row }) => {
       const status = row.original.status
       const config = statusConfig[status] ?? {
@@ -91,6 +103,7 @@ export const saleColumns: ColumnDef<SalePublic>[] = [
   {
     id: "actions",
     header: () => <span className="sr-only">Actions</span>,
+    enableSorting: false,
     cell: ({ row }) => (
       <div className="flex justify-end">
         <SaleActionsMenu sale={row.original} />

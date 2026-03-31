@@ -1,9 +1,9 @@
-import { useSuspenseQuery } from "@tanstack/react-query"
+import { useQuery, useSuspenseQuery } from "@tanstack/react-query"
 import { createFileRoute, redirect } from "@tanstack/react-router"
-import { Suspense, useMemo } from "react"
+import { Suspense, useMemo, useState } from "react"
 
 import { CategoriesService, ProductsService, UsersService } from "@/client"
-import { DataTable } from "@/components/Common/DataTable"
+import { DataTable, type FilterableColumn } from "@/components/Common/DataTable"
 import AddCategory from "@/components/Inventory/AddCategory"
 import AddProduct from "@/components/Inventory/AddProduct"
 import { categoryColumns } from "@/components/Inventory/categoryColumns"
@@ -13,12 +13,15 @@ import PendingProducts from "@/components/Inventory/PendingProducts"
 import { Badge } from "@/components/ui/badge"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { hasRole } from "@/hooks/useAuth"
+import { useDebounce } from "@/hooks/useDebounce"
 
-function getProductsQueryOptions() {
-  return {
-    queryFn: () => ProductsService.readProducts({ skip: 0, limit: 100 }),
-    queryKey: ["products"],
-  }
+const STATUS_FILTER: FilterableColumn = {
+  id: "is_active",
+  label: "Status",
+  options: [
+    { label: "Active", value: "true" },
+    { label: "Inactive", value: "false" },
+  ],
 }
 
 function getCategoriesQueryOptions() {
@@ -55,40 +58,132 @@ export const Route = createFileRoute("/dashboard/inventory")({
   }),
 })
 
-function ProductsTableContent() {
-  const { data: products } = useSuspenseQuery(getProductsQueryOptions())
+function ProductsTableContent({
+  search,
+  onSearchChange,
+}: {
+  search: string
+  onSearchChange: (v: string) => void
+}) {
+  const debouncedSearch = useDebounce(search, 300)
   const { data: categories } = useSuspenseQuery(getCategoriesQueryOptions())
+
+  const { data: products, isLoading } = useQuery({
+    queryFn: () =>
+      ProductsService.readProducts({
+        skip: 0,
+        limit: 100,
+        search: debouncedSearch || undefined,
+      }),
+    queryKey: ["products", debouncedSearch],
+  })
 
   const columns = useMemo(
     () => buildProductColumns(categories.data),
     [categories.data],
   )
 
-  return <DataTable columns={columns} data={products.data} />
+  const categoryFilterOptions = useMemo(
+    () =>
+      categories.data.map((c) => ({
+        label: c.name,
+        value: c.id,
+      })),
+    [categories.data],
+  )
+
+  const filterableColumns: FilterableColumn[] = useMemo(
+    () => [
+      {
+        id: "category_id",
+        label: "Category",
+        options: categoryFilterOptions,
+      },
+      STATUS_FILTER,
+    ],
+    [categoryFilterOptions],
+  )
+
+  if (isLoading) return <PendingProducts />
+
+  return (
+    <DataTable
+      columns={columns}
+      data={products?.data ?? []}
+      searchValue={search}
+      onSearchChange={onSearchChange}
+      searchPlaceholder="Search by name or SKU…"
+      filterableColumns={filterableColumns}
+    />
+  )
 }
 
-function ProductsTable() {
+function ProductsTable({
+  search,
+  onSearchChange,
+}: {
+  search: string
+  onSearchChange: (v: string) => void
+}) {
   return (
     <Suspense fallback={<PendingProducts />}>
-      <ProductsTableContent />
+      <ProductsTableContent search={search} onSearchChange={onSearchChange} />
     </Suspense>
   )
 }
 
-function CategoriesTableContent() {
+function CategoriesTableContent({
+  search,
+  onSearchChange,
+}: {
+  search: string
+  onSearchChange: (v: string) => void
+}) {
   const { data: categories } = useSuspenseQuery(getCategoriesQueryOptions())
-  return <DataTable columns={categoryColumns} data={categories.data} />
+
+  const filtered = useMemo(() => {
+    if (!search) return categories.data
+    const term = search.toLowerCase()
+    return categories.data.filter(
+      (c) =>
+        c.name.toLowerCase().includes(term) ||
+        (c.description ?? "").toLowerCase().includes(term),
+    )
+  }, [categories.data, search])
+
+  return (
+    <DataTable
+      columns={categoryColumns}
+      data={filtered}
+      searchValue={search}
+      onSearchChange={onSearchChange}
+      searchPlaceholder="Search by name…"
+      filterableColumns={[STATUS_FILTER]}
+    />
+  )
 }
 
-function CategoriesTable() {
+function CategoriesTable({
+  search,
+  onSearchChange,
+}: {
+  search: string
+  onSearchChange: (v: string) => void
+}) {
   return (
     <Suspense fallback={<PendingCategories />}>
-      <CategoriesTableContent />
+      <CategoriesTableContent search={search} onSearchChange={onSearchChange} />
     </Suspense>
   )
 }
 
-function LowStockTableContent() {
+function LowStockTableContent({
+  search,
+  onSearchChange,
+}: {
+  search: string
+  onSearchChange: (v: string) => void
+}) {
   const { data: lowStock } = useSuspenseQuery(getLowStockQueryOptions())
   const { data: categories } = useSuspenseQuery(getCategoriesQueryOptions())
 
@@ -97,13 +192,58 @@ function LowStockTableContent() {
     [categories.data],
   )
 
-  return <DataTable columns={columns} data={lowStock.data} />
+  const categoryFilterOptions = useMemo(
+    () =>
+      categories.data.map((c) => ({
+        label: c.name,
+        value: c.id,
+      })),
+    [categories.data],
+  )
+
+  const filterableColumns: FilterableColumn[] = useMemo(
+    () => [
+      {
+        id: "category_id",
+        label: "Category",
+        options: categoryFilterOptions,
+      },
+    ],
+    [categoryFilterOptions],
+  )
+
+  const filtered = useMemo(() => {
+    if (!search) return lowStock.data
+    const term = search.toLowerCase()
+    return lowStock.data.filter(
+      (p) =>
+        p.name.toLowerCase().includes(term) ||
+        p.sku.toLowerCase().includes(term),
+    )
+  }, [lowStock.data, search])
+
+  return (
+    <DataTable
+      columns={columns}
+      data={filtered}
+      searchValue={search}
+      onSearchChange={onSearchChange}
+      searchPlaceholder="Search by name or SKU…"
+      filterableColumns={filterableColumns}
+    />
+  )
 }
 
-function LowStockTable() {
+function LowStockTable({
+  search,
+  onSearchChange,
+}: {
+  search: string
+  onSearchChange: (v: string) => void
+}) {
   return (
     <Suspense fallback={<PendingProducts />}>
-      <LowStockTableContent />
+      <LowStockTableContent search={search} onSearchChange={onSearchChange} />
     </Suspense>
   )
 }
@@ -119,6 +259,10 @@ function LowStockBadge() {
 }
 
 function Inventory() {
+  const [productSearch, setProductSearch] = useState("")
+  const [categorySearch, setCategorySearch] = useState("")
+  const [lowStockSearch, setLowStockSearch] = useState("")
+
   return (
     <div className="flex flex-col gap-6">
       <div>
@@ -147,13 +291,22 @@ function Inventory() {
           </TabsContent>
         </div>
         <TabsContent value="products">
-          <ProductsTable />
+          <ProductsTable
+            search={productSearch}
+            onSearchChange={setProductSearch}
+          />
         </TabsContent>
         <TabsContent value="categories">
-          <CategoriesTable />
+          <CategoriesTable
+            search={categorySearch}
+            onSearchChange={setCategorySearch}
+          />
         </TabsContent>
         <TabsContent value="low-stock">
-          <LowStockTable />
+          <LowStockTable
+            search={lowStockSearch}
+            onSearchChange={setLowStockSearch}
+          />
         </TabsContent>
       </Tabs>
     </div>

@@ -125,8 +125,8 @@ export function Hero() {
               </p>
               <p className="mt-3 text-sm text-muted-foreground">
                 Next recommendation: Reorder{" "}
-                <span className="font-semibold text-foreground">42</span> units of
-                "Premium Beans" by Friday.
+                <span className="font-semibold text-foreground">42</span> units
+                of "Premium Beans" by Friday.
               </p>
             </div>
           </CardContent>

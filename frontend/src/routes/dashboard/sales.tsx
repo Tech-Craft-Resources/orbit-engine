@@ -1,20 +1,36 @@
-import { useSuspenseQuery } from "@tanstack/react-query"
+import { useQuery } from "@tanstack/react-query"
 import { createFileRoute, redirect } from "@tanstack/react-router"
-import { Suspense } from "react"
+import { Suspense, useState } from "react"
 
 import { SalesService, UsersService } from "@/client"
-import { DataTable } from "@/components/Common/DataTable"
+import { DataTable, type FilterableColumn } from "@/components/Common/DataTable"
 import AddSale from "@/components/Sales/AddSale"
 import { saleColumns } from "@/components/Sales/columns"
 import PendingSales from "@/components/Sales/PendingSales"
 import { hasRole } from "@/hooks/useAuth"
+import { useDebounce } from "@/hooks/useDebounce"
 
-function getSalesQueryOptions() {
-  return {
-    queryFn: () => SalesService.readSales({ skip: 0, limit: 100 }),
-    queryKey: ["sales"],
-  }
-}
+const SALES_FILTER_COLUMNS: FilterableColumn[] = [
+  {
+    id: "status",
+    label: "Status",
+    options: [
+      { label: "Completed", value: "completed" },
+      { label: "Cancelled", value: "cancelled" },
+      { label: "Pending", value: "pending" },
+    ],
+  },
+  {
+    id: "payment_method",
+    label: "Payment",
+    options: [
+      { label: "Cash", value: "cash" },
+      { label: "Card", value: "card" },
+      { label: "Transfer", value: "transfer" },
+      { label: "Other", value: "other" },
+    ],
+  },
+]
 
 export const Route = createFileRoute("/dashboard/sales")({
   component: Sales,
@@ -35,20 +51,42 @@ export const Route = createFileRoute("/dashboard/sales")({
   }),
 })
 
-function SalesTableContent() {
-  const { data: sales } = useSuspenseQuery(getSalesQueryOptions())
-  return <DataTable columns={saleColumns} data={sales.data} />
-}
+function SalesTableContent({
+  search,
+  onSearchChange,
+}: {
+  search: string
+  onSearchChange: (v: string) => void
+}) {
+  const debouncedSearch = useDebounce(search, 300)
 
-function SalesTable() {
+  const { data: sales, isLoading } = useQuery({
+    queryFn: () =>
+      SalesService.readSales({
+        skip: 0,
+        limit: 100,
+        search: debouncedSearch || undefined,
+      }),
+    queryKey: ["sales", debouncedSearch],
+  })
+
+  if (isLoading) return <PendingSales />
+
   return (
-    <Suspense fallback={<PendingSales />}>
-      <SalesTableContent />
-    </Suspense>
+    <DataTable
+      columns={saleColumns}
+      data={sales?.data ?? []}
+      searchValue={search}
+      onSearchChange={onSearchChange}
+      searchPlaceholder="Search by invoice number…"
+      filterableColumns={SALES_FILTER_COLUMNS}
+    />
   )
 }
 
 function Sales() {
+  const [search, setSearch] = useState("")
+
   return (
     <div className="flex flex-col gap-6">
       <div className="flex items-center justify-between">
@@ -60,7 +98,9 @@ function Sales() {
         </div>
         <AddSale />
       </div>
-      <SalesTable />
+      <Suspense fallback={<PendingSales />}>
+        <SalesTableContent search={search} onSearchChange={setSearch} />
+      </Suspense>
     </div>
   )
 }

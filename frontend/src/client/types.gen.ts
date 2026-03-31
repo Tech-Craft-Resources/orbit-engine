@@ -184,6 +184,7 @@ export type OrganizationSignup = {
 
 export type OrganizationUpdate = {
     name?: (string | null);
+    slug?: (string | null);
     description?: (string | null);
     logo_url?: (string | null);
     is_active?: (boolean | null);
@@ -501,8 +502,12 @@ export type CategoriesDeleteCategoryData = {
 export type CategoriesDeleteCategoryResponse = (Message);
 
 export type CustomersReadCustomersData = {
+    isActive?: (boolean | null);
     limit?: number;
+    search?: (string | null);
     skip?: number;
+    sortBy?: (string | null);
+    sortOrder?: string;
 };
 
 export type CustomersReadCustomersResponse = (CustomersPublic);
@@ -608,8 +613,13 @@ export type PrivateCreateUserData = {
 export type PrivateCreateUserResponse = (UserPublic);
 
 export type ProductsReadProductsData = {
+    categoryId?: (string | null);
+    isActive?: (boolean | null);
     limit?: number;
+    search?: (string | null);
     skip?: number;
+    sortBy?: (string | null);
+    sortOrder?: string;
 };
 
 export type ProductsReadProductsResponse = (ProductsPublic);
@@ -665,7 +675,12 @@ export type RolesListRolesResponse = (RolesPublic);
 
 export type SalesReadSalesData = {
     limit?: number;
+    paymentMethod?: (string | null);
+    search?: (string | null);
     skip?: number;
+    sortBy?: (string | null);
+    sortOrder?: string;
+    status?: (string | null);
 };
 
 export type SalesReadSalesResponse = (SalesPublic);

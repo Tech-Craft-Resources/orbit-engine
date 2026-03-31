@@ -31,17 +31,36 @@ def read_products(
     current_organization: CurrentOrganization,
     skip: int = 0,
     limit: int = 100,
+    search: str | None = None,
+    sort_by: str | None = None,
+    sort_order: str = "asc",
+    is_active: bool | None = None,
+    category_id: uuid.UUID | None = None,
 ) -> Any:
     """
     Retrieve products in current organization.
 
     Any authenticated user can list products.
+    Supports search (name/sku/description), sort_by, sort_order (asc/desc),
+    is_active filter, and category_id filter.
     """
     products = crud.get_products_by_organization(
-        session=session, organization_id=current_organization, skip=skip, limit=limit
+        session=session,
+        organization_id=current_organization,
+        skip=skip,
+        limit=limit,
+        search=search,
+        sort_by=sort_by,
+        sort_order=sort_order,
+        is_active=is_active,
+        category_id=category_id,
     )
     count = crud.count_products_by_organization(
-        session=session, organization_id=current_organization
+        session=session,
+        organization_id=current_organization,
+        search=search,
+        is_active=is_active,
+        category_id=category_id,
     )
     return ProductsPublic(data=products, count=count)
 

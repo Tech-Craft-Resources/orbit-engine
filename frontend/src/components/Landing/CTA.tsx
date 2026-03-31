@@ -51,7 +51,11 @@ export function CTA() {
               isVisible && "animate-fade-in-up stagger-3",
             )}
           >
-            <Button size="lg" asChild className="touch-manipulation shadow-md shadow-primary/20">
+            <Button
+              size="lg"
+              asChild
+              className="touch-manipulation shadow-md shadow-primary/20"
+            >
               <RouterLink to="/signup">
                 Create Your Workspace
                 <ArrowRight className="ml-2 h-4 w-4" aria-hidden="true" />

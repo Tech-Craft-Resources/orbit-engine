@@ -12,6 +12,7 @@ export const customerColumns: ColumnDef<CustomerPublic>[] = [
   {
     accessorKey: "first_name",
     header: "Name",
+    enableSorting: true,
     cell: ({ row }) => {
       const { first_name, last_name } = row.original
       return (
@@ -24,6 +25,7 @@ export const customerColumns: ColumnDef<CustomerPublic>[] = [
   {
     accessorKey: "document_number",
     header: "Document",
+    enableSorting: true,
     cell: ({ row }) => (
       <div>
         <span className="text-xs text-muted-foreground uppercase">
@@ -38,6 +40,7 @@ export const customerColumns: ColumnDef<CustomerPublic>[] = [
   {
     accessorKey: "email",
     header: "Contact",
+    enableSorting: false,
     cell: ({ row }) => (
       <div className="text-sm">
         {row.original.email && (
@@ -55,11 +58,15 @@ export const customerColumns: ColumnDef<CustomerPublic>[] = [
   {
     accessorKey: "purchases_count",
     header: "Purchases",
+    enableSorting: true,
+    sortingFn: "alphanumeric",
     cell: ({ row }) => <span>{row.original.purchases_count}</span>,
   },
   {
     accessorKey: "total_purchases",
     header: "Total Spent",
+    enableSorting: true,
+    sortingFn: "alphanumeric",
     cell: ({ row }) => (
       <span className="font-medium">
         {formatCurrency(row.original.total_purchases)}
@@ -69,6 +76,9 @@ export const customerColumns: ColumnDef<CustomerPublic>[] = [
   {
     accessorKey: "is_active",
     header: "Status",
+    enableSorting: false,
+    filterFn: (row, _columnId, filterValue) =>
+      String(row.original.is_active) === filterValue,
     cell: ({ row }) => (
       <div className="flex items-center gap-2">
         <span
@@ -86,6 +96,7 @@ export const customerColumns: ColumnDef<CustomerPublic>[] = [
   {
     id: "actions",
     header: () => <span className="sr-only">Actions</span>,
+    enableSorting: false,
     cell: ({ row }) => (
       <div className="flex justify-end">
         <CustomerActionsMenu customer={row.original} />

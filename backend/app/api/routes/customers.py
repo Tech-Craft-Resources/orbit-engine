@@ -29,17 +29,33 @@ def read_customers(
     current_organization: CurrentOrganization,
     skip: int = 0,
     limit: int = 100,
+    search: str | None = None,
+    sort_by: str | None = None,
+    sort_order: str = "asc",
+    is_active: bool | None = None,
 ) -> Any:
     """
     Retrieve customers in current organization.
 
     Admin and seller roles can list customers.
+    Supports search (name/email/document/phone), sort_by, sort_order (asc/desc),
+    and is_active filter.
     """
     customers = crud.get_customers_by_organization(
-        session=session, organization_id=current_organization, skip=skip, limit=limit
+        session=session,
+        organization_id=current_organization,
+        skip=skip,
+        limit=limit,
+        search=search,
+        sort_by=sort_by,
+        sort_order=sort_order,
+        is_active=is_active,
     )
     count = crud.count_customers_by_organization(
-        session=session, organization_id=current_organization
+        session=session,
+        organization_id=current_organization,
+        search=search,
+        is_active=is_active,
     )
     return CustomersPublic(data=customers, count=count)
 
