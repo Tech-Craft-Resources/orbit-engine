@@ -53,9 +53,10 @@ function CustomersTableContent({
         search: debouncedSearch || undefined,
       }),
     queryKey: ["customers", debouncedSearch],
+    placeholderData: (previousData) => previousData,
   })
 
-  if (isLoading) return <PendingCustomers />
+  if (!customers && isLoading) return <PendingCustomers />
 
   return (
     <DataTable

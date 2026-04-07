@@ -72,6 +72,7 @@ function ProductsTableContent({
         search: debouncedSearch || undefined,
       }),
     queryKey: ["products", debouncedSearch],
+    placeholderData: (previousData) => previousData,
   })
 
   const columns = useMemo(
@@ -100,7 +101,7 @@ function ProductsTableContent({
     [categoryFilterOptions],
   )
 
-  if (isLoading) return <PendingProducts />
+  if (!products && isLoading) return <PendingProducts />
 
   return (
     <DataTable

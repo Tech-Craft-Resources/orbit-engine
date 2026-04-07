@@ -64,9 +64,10 @@ function SalesTableContent({
         search: debouncedSearch || undefined,
       }),
     queryKey: ["sales", debouncedSearch],
+    placeholderData: (previousData) => previousData,
   })
 
-  if (isLoading) return <PendingSales />
+  if (!sales && isLoading) return <PendingSales />
 
   return (
     <DataTable
