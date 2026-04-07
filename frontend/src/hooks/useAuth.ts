@@ -1,14 +1,21 @@
-import { useMutation, useQuery } from "@tanstack/react-query"
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
 import { useNavigate } from "@tanstack/react-router"
 
 import {
   type Body_login_login_access_token as AccessToken,
   LoginService,
-  type OrganizationPublic,
-  OrganizationsService,
   type UserPublic,
-  UsersService,
 } from "@/client"
+import {
+  AUTH_QUERY_KEYS,
+  clearAccessToken,
+  clearAuthCache,
+  currentOrganizationQueryOptions,
+  currentUserQueryOptions,
+  hasAccessToken,
+  type SessionStatus,
+  setAccessToken,
+} from "@/lib/auth-session"
 import { handleError } from "@/utils"
 import useCustomToast from "./useCustomToast"
 
@@ -28,7 +35,7 @@ const ROLE_NAMES: Record<number, RoleName> = {
 }
 
 const isLoggedIn = () => {
-  return localStorage.getItem("access_token") !== null
+  return hasAccessToken()
 }
 
 /**
@@ -55,48 +62,63 @@ export function getRoleName(
 
 const useAuth = () => {
   const navigate = useNavigate()
+  const queryClient = useQueryClient()
   const { showErrorToast } = useCustomToast()
+  const hasToken = hasAccessToken()
 
-  const { data: user, isLoading } = useQuery<UserPublic | null, Error>({
-    queryKey: ["currentUser"],
-    queryFn: UsersService.readUserMe,
-    enabled: isLoggedIn(),
+  const {
+    data: user,
+    isPending: isUserPending,
+    isFetching: isUserFetching,
+  } = useQuery({
+    ...currentUserQueryOptions(),
+    enabled: hasToken,
   })
 
-  const { data: organization } = useQuery<OrganizationPublic | null, Error>({
-    queryKey: ["currentOrganization"],
-    queryFn: OrganizationsService.getMyOrganization,
-    enabled: isLoggedIn(),
+  const { data: organization } = useQuery({
+    ...currentOrganizationQueryOptions(),
+    enabled: hasToken && Boolean(user),
   })
 
   const login = async (data: AccessToken) => {
     const response = await LoginService.loginAccessToken({
       formData: data,
     })
-    localStorage.setItem("access_token", response.access_token)
+    setAccessToken(response.access_token)
   }
 
   const loginMutation = useMutation({
     mutationFn: login,
-    onSuccess: () => {
+    onSuccess: async () => {
+      await queryClient.invalidateQueries({ queryKey: AUTH_QUERY_KEYS.root })
       navigate({ to: "/dashboard" })
     },
     onError: handleError.bind(showErrorToast),
   })
 
   const logout = () => {
-    localStorage.removeItem("access_token")
+    clearAccessToken()
+    clearAuthCache(queryClient)
     navigate({ to: "/login" })
   }
+
+  const sessionStatus: SessionStatus = !hasToken
+    ? "unauthenticated"
+    : isUserPending || (isUserFetching && !user)
+      ? "unknown"
+      : user
+        ? "authenticated"
+        : "unauthenticated"
 
   const roleName = getRoleName(user)
 
   return {
     loginMutation,
     logout,
+    sessionStatus,
     user,
     organization,
-    isLoading,
+    isLoading: sessionStatus === "unknown",
     roleName,
     /** Check if the current user has any of the given roles */
     hasRole: (roles: RoleName[]) => hasRole(user, roles),

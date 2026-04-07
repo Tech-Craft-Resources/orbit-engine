@@ -115,3 +115,52 @@ test("Redirects to /login when token is wrong", async ({ page }) => {
   await page.waitForURL("/login")
   await expect(page).toHaveURL("/login")
 })
+
+test("Allows /login when token exists but /users/me returns 404", async ({
+  page,
+}) => {
+  await page.route("**/api/v1/users/me", async (route) => {
+    await route.fulfill({
+      status: 404,
+      contentType: "application/json",
+      body: JSON.stringify({ detail: "User not found" }),
+    })
+  })
+
+  await page.goto("/login", {
+    waitUntil: "domcontentloaded",
+  })
+  await page.evaluate(() => {
+    localStorage.setItem("access_token", "orphan_token")
+  })
+
+  await page.goto("/login")
+
+  await expect(page).toHaveURL("/login")
+  await expect(page.getByRole("button", { name: "Log In" })).toBeVisible()
+
+  const token = await page.evaluate(() => localStorage.getItem("access_token"))
+  expect(token).toBeNull()
+})
+
+test("Protected route redirects cleanly on /users/me 404", async ({ page }) => {
+  await page.route("**/api/v1/users/me", async (route) => {
+    await route.fulfill({
+      status: 404,
+      contentType: "application/json",
+      body: JSON.stringify({ detail: "User not found" }),
+    })
+  })
+
+  await page.goto("/login", {
+    waitUntil: "domcontentloaded",
+  })
+  await page.evaluate(() => {
+    localStorage.setItem("access_token", "orphan_token")
+  })
+
+  await page.goto("/dashboard/inventory")
+
+  await expect(page).toHaveURL(/\/login\?reason=session-invalid/)
+  await expect(page.getByTestId("error-component")).toHaveCount(0)
+})

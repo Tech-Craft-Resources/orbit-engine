@@ -77,6 +77,7 @@ export function AppSidebar() {
             {organization?.name ?? "OrbitEngine"}
           </span>
           <button
+            type="button"
             onClick={toggleSidebar}
             className="flex size-7 shrink-0 items-center justify-center rounded-md text-sidebar-foreground/50 hover:bg-sidebar-accent hover:text-sidebar-accent-foreground transition-colors duration-150"
             aria-label="Collapse sidebar"
@@ -87,6 +88,7 @@ export function AppSidebar() {
 
         {/* Collapsed: logo as expand trigger */}
         <button
+          type="button"
           onClick={toggleSidebar}
           className="hidden group-data-[collapsible=icon]:flex items-center justify-center rounded-md p-0.5 hover:bg-sidebar-accent transition-colors duration-150"
           aria-label="Open sidebar"

@@ -1,8 +1,8 @@
 import { useQuery, useSuspenseQuery } from "@tanstack/react-query"
-import { createFileRoute, redirect } from "@tanstack/react-router"
+import { createFileRoute } from "@tanstack/react-router"
 import { Suspense, useMemo, useState } from "react"
 
-import { CategoriesService, ProductsService, UsersService } from "@/client"
+import { CategoriesService, ProductsService } from "@/client"
 import { DataTable, type FilterableColumn } from "@/components/Common/DataTable"
 import AddCategory from "@/components/Inventory/AddCategory"
 import AddProduct from "@/components/Inventory/AddProduct"
@@ -12,8 +12,9 @@ import PendingCategories from "@/components/Inventory/PendingCategories"
 import PendingProducts from "@/components/Inventory/PendingProducts"
 import { Badge } from "@/components/ui/badge"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { hasRole } from "@/hooks/useAuth"
 import { useDebounce } from "@/hooks/useDebounce"
+import { requireUserWithRoles } from "@/lib/auth-guards"
+import { queryClient } from "@/lib/queryClient"
 
 const STATUS_FILTER: FilterableColumn = {
   id: "is_active",
@@ -42,12 +43,7 @@ function getLowStockQueryOptions() {
 export const Route = createFileRoute("/dashboard/inventory")({
   component: Inventory,
   beforeLoad: async () => {
-    const user = await UsersService.readUserMe()
-    if (!hasRole(user, ["admin", "seller"])) {
-      throw redirect({
-        to: "/",
-      })
-    }
+    await requireUserWithRoles(queryClient, ["admin", "seller"])
   },
   head: () => ({
     meta: [

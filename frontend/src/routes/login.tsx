@@ -1,14 +1,12 @@
 import { zodResolver } from "@hookform/resolvers/zod"
-import {
-  createFileRoute,
-  Link as RouterLink,
-  redirect,
-} from "@tanstack/react-router"
+import { createFileRoute, Link as RouterLink } from "@tanstack/react-router"
+import { CircleAlert } from "lucide-react"
 import { useForm } from "react-hook-form"
 import { z } from "zod"
 
 import type { Body_login_login_access_token as AccessToken } from "@/client"
 import { AuthLayout } from "@/components/Common/AuthLayout"
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
 import {
   Form,
   FormControl,
@@ -20,7 +18,9 @@ import {
 import { Input } from "@/components/ui/input"
 import { LoadingButton } from "@/components/ui/loading-button"
 import { PasswordInput } from "@/components/ui/password-input"
-import useAuth, { isLoggedIn } from "@/hooks/useAuth"
+import useAuth from "@/hooks/useAuth"
+import { redirectIfAuthenticated } from "@/lib/auth-guards"
+import { queryClient } from "@/lib/queryClient"
 
 const formSchema = z.object({
   username: z.email(),
@@ -32,14 +32,15 @@ const formSchema = z.object({
 
 type FormData = z.infer<typeof formSchema>
 
+const searchSchema = z.object({
+  reason: z.enum(["auth-required", "session-invalid"]).optional(),
+})
+
 export const Route = createFileRoute("/login")({
   component: Login,
+  validateSearch: searchSchema,
   beforeLoad: async () => {
-    if (isLoggedIn()) {
-      throw redirect({
-        to: "/",
-      })
-    }
+    await redirectIfAuthenticated(queryClient)
   },
   head: () => ({
     meta: [
@@ -52,6 +53,8 @@ export const Route = createFileRoute("/login")({
 
 function Login() {
   const { loginMutation } = useAuth()
+  const { reason } = Route.useSearch()
+
   const form = useForm<FormData>({
     resolver: zodResolver(formSchema),
     mode: "onBlur",
@@ -77,6 +80,17 @@ function Login() {
           <div className="flex flex-col items-center gap-2 text-center">
             <h1 className="text-2xl font-bold">Login to your account</h1>
           </div>
+
+          {reason === "session-invalid" ? (
+            <Alert variant="destructive">
+              <CircleAlert />
+              <AlertTitle>Session no longer valid</AlertTitle>
+              <AlertDescription>
+                Your account session expired or is no longer available. Please
+                log in again to continue.
+              </AlertDescription>
+            </Alert>
+          ) : null}
 
           <div className="grid gap-4">
             <FormField

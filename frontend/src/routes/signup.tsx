@@ -1,12 +1,11 @@
 import { createFileRoute, redirect } from "@tanstack/react-router"
-import { isLoggedIn } from "@/hooks/useAuth"
+import { redirectIfAuthenticated } from "@/lib/auth-guards"
+import { queryClient } from "@/lib/queryClient"
 
 export const Route = createFileRoute("/signup")({
   component: () => null,
   beforeLoad: async () => {
-    if (isLoggedIn()) {
-      throw redirect({ to: "/" })
-    }
+    await redirectIfAuthenticated(queryClient)
     // Redirect to organization signup
     throw redirect({ to: "/signup-org" })
   },

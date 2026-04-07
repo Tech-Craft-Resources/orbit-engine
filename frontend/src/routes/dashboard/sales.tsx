@@ -1,14 +1,15 @@
 import { useQuery } from "@tanstack/react-query"
-import { createFileRoute, redirect } from "@tanstack/react-router"
+import { createFileRoute } from "@tanstack/react-router"
 import { Suspense, useState } from "react"
 
-import { SalesService, UsersService } from "@/client"
+import { SalesService } from "@/client"
 import { DataTable, type FilterableColumn } from "@/components/Common/DataTable"
 import AddSale from "@/components/Sales/AddSale"
 import { saleColumns } from "@/components/Sales/columns"
 import PendingSales from "@/components/Sales/PendingSales"
-import { hasRole } from "@/hooks/useAuth"
 import { useDebounce } from "@/hooks/useDebounce"
+import { requireUserWithRoles } from "@/lib/auth-guards"
+import { queryClient } from "@/lib/queryClient"
 
 const SALES_FILTER_COLUMNS: FilterableColumn[] = [
   {
@@ -35,12 +36,7 @@ const SALES_FILTER_COLUMNS: FilterableColumn[] = [
 export const Route = createFileRoute("/dashboard/sales")({
   component: Sales,
   beforeLoad: async () => {
-    const user = await UsersService.readUserMe()
-    if (!hasRole(user, ["admin", "seller"])) {
-      throw redirect({
-        to: "/",
-      })
-    }
+    await requireUserWithRoles(queryClient, ["admin", "seller"])
   },
   head: () => ({
     meta: [

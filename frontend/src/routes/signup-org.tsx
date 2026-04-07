@@ -3,7 +3,6 @@ import { useMutation } from "@tanstack/react-query"
 import {
   createFileRoute,
   Link as RouterLink,
-  redirect,
   useNavigate,
 } from "@tanstack/react-router"
 import { useForm } from "react-hook-form"
@@ -24,8 +23,10 @@ import { Input } from "@/components/ui/input"
 import { LoadingButton } from "@/components/ui/loading-button"
 import { PasswordInput } from "@/components/ui/password-input"
 import { Separator } from "@/components/ui/separator"
-import { isLoggedIn } from "@/hooks/useAuth"
 import useCustomToast from "@/hooks/useCustomToast"
+import { redirectIfAuthenticated } from "@/lib/auth-guards"
+import { setAccessToken } from "@/lib/auth-session"
+import { queryClient } from "@/lib/queryClient"
 import { handleError } from "@/utils"
 
 const slugRegex = /^[a-z0-9]+(?:-[a-z0-9]+)*$/
@@ -65,9 +66,7 @@ type FormData = z.infer<typeof formSchema>
 export const Route = createFileRoute("/signup-org")({
   component: SignUpOrg,
   beforeLoad: async () => {
-    if (isLoggedIn()) {
-      throw redirect({ to: "/" })
-    }
+    await redirectIfAuthenticated(queryClient)
   },
   head: () => ({
     meta: [{ title: "Create Organization - OrbitEngine" }],
@@ -110,7 +109,7 @@ function SignUpOrg() {
         },
       }),
     onSuccess: (response) => {
-      localStorage.setItem("access_token", response.access_token)
+      setAccessToken(response.access_token)
       showSuccessToast("Organization created successfully!")
       navigate({ to: "/dashboard" })
     },
