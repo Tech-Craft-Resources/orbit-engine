@@ -1,5 +1,6 @@
 import { Link as RouterLink } from "@tanstack/react-router"
 import { ChevronsUpDown, LogOut, Settings } from "lucide-react"
+import { useEffect, useState } from "react"
 
 import { Appearance } from "@/components/Common/Appearance"
 import { Avatar, AvatarFallback } from "@/components/ui/avatar"
@@ -13,18 +14,75 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
 import useAuth from "@/hooks/useAuth"
+import { cn } from "@/lib/utils"
 import { getInitials } from "@/utils"
-
-const navLinks = [
-  { href: "#features", label: "Cómo funciona" },
-  { href: "#benefits", label: "Roles" },
-  { href: "#stats", label: "Beneficios" },
-]
+import { landingNavLinks } from "./landingNavLinks"
 
 export function LandingNav() {
   const { user, logout } = useAuth()
+  const [activeHref, setActiveHref] = useState<`#${string}` | "">("")
 
   const fullName = user ? `${user.first_name} ${user.last_name}` : ""
+
+  useEffect(() => {
+    const trackedSections = landingNavLinks
+      .map((link) => document.getElementById(link.sectionId))
+      .filter((section): section is HTMLElement => section !== null)
+
+    if (!trackedSections.length) {
+      return
+    }
+
+    const sectionEntries = new Map<string, IntersectionObserverEntry>()
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        for (const entry of entries) {
+          sectionEntries.set(entry.target.id, entry)
+        }
+
+        const visibleEntries = Array.from(sectionEntries.values())
+          .filter(
+            (entry): entry is IntersectionObserverEntry => entry.isIntersecting,
+          )
+          .sort(
+            (a, b) =>
+              Math.abs(a.boundingClientRect.top) -
+              Math.abs(b.boundingClientRect.top),
+          )
+
+        const activeSectionId = visibleEntries[0]?.target.id
+        if (!activeSectionId) {
+          setActiveHref("")
+          return
+        }
+
+        const activeLink = landingNavLinks.find(
+          (link) => link.sectionId === activeSectionId,
+        )
+
+        if (activeLink) {
+          setActiveHref(activeLink.href)
+          return
+        }
+
+        setActiveHref("")
+      },
+      {
+        root: null,
+        rootMargin: "-80px 0px -55% 0px",
+        threshold: [0.2, 0.35, 0.5, 0.65],
+      },
+    )
+
+    trackedSections.forEach((section) => {
+      observer.observe(section)
+    })
+
+    return () => {
+      observer.disconnect()
+    }
+  }, [])
 
   return (
     <header className="fixed inset-x-0 top-0 z-50 w-full border-b border-border/70 bg-background/95 backdrop-blur-md supports-[backdrop-filter]:bg-background/75">
@@ -56,15 +114,25 @@ export function LandingNav() {
           className="hidden items-center gap-1 md:flex"
           aria-label="Principal"
         >
-          {navLinks.map((link) => (
-            <a
-              key={link.href}
-              href={link.href}
-              className="rounded-md px-3 py-2 text-sm text-muted-foreground transition-colors hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/60"
-            >
-              {link.label}
-            </a>
-          ))}
+          {landingNavLinks.map((link) => {
+            const isActive = activeHref === link.href
+
+            return (
+              <a
+                key={link.href}
+                href={link.href}
+                aria-current={isActive ? "location" : undefined}
+                className={cn(
+                  "rounded-md px-3 py-2 text-sm transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/60",
+                  isActive
+                    ? "font-semibold text-primary"
+                    : "text-muted-foreground hover:text-foreground",
+                )}
+              >
+                {link.label}
+              </a>
+            )
+          })}
         </nav>
         <div className="flex items-center gap-2">
           <Appearance />

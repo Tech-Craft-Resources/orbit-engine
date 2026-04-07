@@ -2,6 +2,7 @@ import { Link as RouterLink } from "@tanstack/react-router"
 import { FaGithub } from "react-icons/fa"
 
 import { Separator } from "@/components/ui/separator"
+import { landingNavLinks } from "./landingNavLinks"
 
 interface FooterLink {
   label: string
@@ -18,9 +19,7 @@ const footerSections: FooterSection[] = [
   {
     title: "Producto",
     links: [
-      { label: "Cómo funciona", href: "#features" },
-      { label: "Roles", href: "#benefits" },
-      { label: "Beneficios", href: "#stats" },
+      ...landingNavLinks.map(({ href, label }) => ({ href, label })),
       { label: "Comenzar prueba gratis", href: "/signup" },
     ],
   },
