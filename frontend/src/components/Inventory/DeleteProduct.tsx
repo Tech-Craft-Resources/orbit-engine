@@ -34,7 +34,7 @@ const DeleteProduct = ({ id, onSuccess }: DeleteProductProps) => {
     mutationFn: (productId: string) =>
       ProductsService.deleteProduct({ productId }),
     onSuccess: () => {
-      showSuccessToast("Product deleted successfully")
+      showSuccessToast("Producto eliminado correctamente")
       setIsOpen(false)
       onSuccess()
     },
@@ -56,23 +56,22 @@ const DeleteProduct = ({ id, onSuccess }: DeleteProductProps) => {
         onClick={() => setIsOpen(true)}
       >
         <Trash2 />
-        Delete Product
+        Eliminar producto
       </DropdownMenuItem>
       <DialogContent className="sm:max-w-md">
         <form onSubmit={handleSubmit(onSubmit)}>
           <DialogHeader>
-            <DialogTitle>Delete Product</DialogTitle>
+            <DialogTitle>Eliminar producto</DialogTitle>
             <DialogDescription>
-              This product will be permanently deleted. All associated inventory
-              movements will be preserved. Are you sure? You will not be able to
-              undo this action.
+              Este producto se eliminará de forma permanente. Los movimientos
+              asociados se conservarán. Esta acción no se puede deshacer.
             </DialogDescription>
           </DialogHeader>
 
           <DialogFooter className="mt-4">
             <DialogClose asChild>
               <Button variant="outline" disabled={mutation.isPending}>
-                Cancel
+                Cancelar
               </Button>
             </DialogClose>
             <LoadingButton
@@ -80,7 +79,7 @@ const DeleteProduct = ({ id, onSuccess }: DeleteProductProps) => {
               type="submit"
               loading={mutation.isPending}
             >
-              Delete
+              Eliminar
             </LoadingButton>
           </DialogFooter>
         </form>

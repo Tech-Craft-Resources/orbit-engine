@@ -12,14 +12,14 @@ const PendingSales = () => (
   <Table>
     <TableHeader>
       <TableRow>
-        <TableHead>Invoice #</TableHead>
-        <TableHead>Date</TableHead>
-        <TableHead>Items</TableHead>
+        <TableHead>Factura #</TableHead>
+        <TableHead>Fecha</TableHead>
+        <TableHead>Productos</TableHead>
         <TableHead>Total</TableHead>
-        <TableHead>Payment</TableHead>
-        <TableHead>Status</TableHead>
+        <TableHead>Pago</TableHead>
+        <TableHead>Estado</TableHead>
         <TableHead>
-          <span className="sr-only">Actions</span>
+          <span className="sr-only">Acciones</span>
         </TableHead>
       </TableRow>
     </TableHeader>

@@ -31,7 +31,9 @@ import useCustomToast from "@/hooks/useCustomToast"
 import { handleError } from "@/utils"
 
 const formSchema = z.object({
-  reason: z.string().min(1, { message: "Cancellation reason is required" }),
+  reason: z
+    .string()
+    .min(1, { message: "El motivo de cancelacion es obligatorio" }),
 })
 
 type FormData = z.infer<typeof formSchema>
@@ -62,7 +64,7 @@ const CancelSale = ({ sale, onSuccess }: CancelSaleProps) => {
         requestBody: { reason: data.reason },
       }),
     onSuccess: () => {
-      showSuccessToast("Sale cancelled successfully")
+      showSuccessToast("Venta cancelada correctamente")
       form.reset()
       setIsOpen(false)
       onSuccess()
@@ -86,17 +88,18 @@ const CancelSale = ({ sale, onSuccess }: CancelSaleProps) => {
         onClick={() => setIsOpen(true)}
       >
         <Ban />
-        Cancel Sale
+        Cancelar venta
       </DropdownMenuItem>
       <DialogContent className="sm:max-w-md">
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)}>
             <DialogHeader>
-              <DialogTitle>Cancel Sale</DialogTitle>
+              <DialogTitle>Cancelar venta</DialogTitle>
               <DialogDescription>
-                Cancel sale <strong>{sale.invoice_number}</strong> for{" "}
-                <strong>${Number(sale.total).toFixed(2)}</strong>. This will
-                restore the stock for all items. This action cannot be undone.
+                Cancelaras la venta <strong>{sale.invoice_number}</strong> por{" "}
+                <strong>${Number(sale.total).toFixed(2)}</strong>. Esto
+                restaurara el stock de todos los productos. Esta accion no se
+                puede deshacer.
               </DialogDescription>
             </DialogHeader>
             <div className="grid gap-4 py-4">
@@ -106,11 +109,11 @@ const CancelSale = ({ sale, onSuccess }: CancelSaleProps) => {
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel>
-                      Reason <span className="text-destructive">*</span>
+                      Motivo <span className="text-destructive">*</span>
                     </FormLabel>
                     <FormControl>
                       <Input
-                        placeholder="Why is this sale being cancelled?"
+                        placeholder="Indica por que cancelas esta venta"
                         {...field}
                       />
                     </FormControl>
@@ -123,7 +126,7 @@ const CancelSale = ({ sale, onSuccess }: CancelSaleProps) => {
             <DialogFooter>
               <DialogClose asChild>
                 <Button variant="outline" disabled={mutation.isPending}>
-                  Keep Sale
+                  Mantener venta
                 </Button>
               </DialogClose>
               <LoadingButton
@@ -131,7 +134,7 @@ const CancelSale = ({ sale, onSuccess }: CancelSaleProps) => {
                 type="submit"
                 loading={mutation.isPending}
               >
-                Cancel Sale
+                Cancelar venta
               </LoadingButton>
             </DialogFooter>
           </form>

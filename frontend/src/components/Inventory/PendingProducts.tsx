@@ -13,13 +13,13 @@ const PendingProducts = () => (
     <TableHeader>
       <TableRow>
         <TableHead>SKU</TableHead>
-        <TableHead>Name</TableHead>
-        <TableHead>Category</TableHead>
+        <TableHead>Nombre</TableHead>
+        <TableHead>Categoría</TableHead>
         <TableHead>Stock</TableHead>
-        <TableHead>Sale Price</TableHead>
-        <TableHead>Status</TableHead>
+        <TableHead>Precio de venta</TableHead>
+        <TableHead>Estado</TableHead>
         <TableHead>
-          <span className="sr-only">Actions</span>
+          <span className="sr-only">Acciones</span>
         </TableHead>
       </TableRow>
     </TableHeader>

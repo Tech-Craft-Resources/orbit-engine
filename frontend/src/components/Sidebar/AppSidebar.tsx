@@ -27,29 +27,34 @@ type NavItem = Item & {
 }
 
 const navItems: NavItem[] = [
-  { icon: Home, title: "Dashboard", path: "/dashboard" },
+  { icon: Home, title: "Panel", path: "/dashboard" },
   {
     icon: Package,
-    title: "Inventory",
+    title: "Inventario",
     path: "/dashboard/inventory",
     roles: ["admin", "seller"],
   },
   {
     icon: ShoppingCart,
-    title: "Sales",
+    title: "Ventas",
     path: "/dashboard/sales",
     roles: ["admin", "seller"],
   },
   {
     icon: UsersRound,
-    title: "Customers",
+    title: "Clientes",
     path: "/dashboard/customers",
     roles: ["admin", "seller"],
   },
-  { icon: Users, title: "Admin", path: "/dashboard/admin", roles: ["admin"] },
+  {
+    icon: Users,
+    title: "Administración",
+    path: "/dashboard/admin",
+    roles: ["admin"],
+  },
   {
     icon: Settings,
-    title: "Settings",
+    title: "Configuración",
     path: "/dashboard/settings",
     roles: ["admin"],
   },
@@ -80,7 +85,7 @@ export function AppSidebar() {
             type="button"
             onClick={toggleSidebar}
             className="flex size-7 shrink-0 items-center justify-center rounded-md text-sidebar-foreground/50 hover:bg-sidebar-accent hover:text-sidebar-accent-foreground transition-colors duration-150"
-            aria-label="Collapse sidebar"
+            aria-label="Colapsar barra lateral"
           >
             <PanelLeft className="size-4" />
           </button>
@@ -91,7 +96,7 @@ export function AppSidebar() {
           type="button"
           onClick={toggleSidebar}
           className="hidden group-data-[collapsible=icon]:flex items-center justify-center rounded-md p-0.5 hover:bg-sidebar-accent transition-colors duration-150"
-          aria-label="Open sidebar"
+          aria-label="Abrir barra lateral"
         >
           <img
             src={logoSrc}

@@ -14,7 +14,13 @@ export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
       {
-        title: "OrbitEngine - Smart Business Management for SMEs",
+        title:
+          "OrbitEngine | Digitaliza y automatiza procesos internos de tu pyme",
+      },
+      {
+        name: "description",
+        content:
+          "Centraliza inventario, ventas y control operativo en un solo lugar. OrbitEngine te ayuda a tomar decisiones con reportes claros y crecer con procesos ordenados. Prueba gratis por 1 mes con acceso completo al plan Pro.",
       },
     ],
   }),
@@ -40,7 +46,7 @@ function LandingPage() {
         href="#main-content"
         className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-100 focus:rounded-md focus:border focus:bg-background focus:px-3 focus:py-2 focus:text-sm"
       >
-        Skip to Main Content
+        Ir al contenido principal
       </a>
       <LandingNav />
       <main id="main-content" className="pt-16">

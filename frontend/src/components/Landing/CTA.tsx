@@ -34,7 +34,7 @@ export function CTA() {
               isVisible && "animate-fade-in-up stagger-1",
             )}
           >
-            Replace Fragmented Tools With One Reliable Control Surface
+            Haz que tu operación sea más clara, rápida y escalable
           </h2>
           <p
             className={cn(
@@ -42,8 +42,7 @@ export function CTA() {
               isVisible && "animate-fade-in stagger-2",
             )}
           >
-            Launch with your current team, preserve process clarity, and give
-            every role the same trusted source of operational truth.
+            Empieza hoy con 1 mes gratis y acceso completo al plan Pro.
           </p>
           <div
             className={cn(
@@ -57,16 +56,16 @@ export function CTA() {
               className="touch-manipulation shadow-md shadow-primary/20"
             >
               <RouterLink to="/signup">
-                Create Your Workspace
+                Comenzar prueba gratis
                 <ArrowRight className="ml-2 h-4 w-4" aria-hidden="true" />
               </RouterLink>
             </Button>
             <Button variant="outline" size="lg" asChild>
-              <RouterLink to="/login">Open Existing Account</RouterLink>
+              <a href="mailto:support@orbitengine.com">Hablar con soporte</a>
             </Button>
           </div>
           <p className="relative mt-5 font-mono text-xs tabular-nums text-muted-foreground/70">
-            setup_time=15m | migration_mode=incremental | support_window=24x5
+            prueba_gratis=1_mes | acceso=plan_pro | activacion=inmediata
           </p>
         </div>
       </div>

@@ -10,7 +10,7 @@ function formatCurrency(value: string): string {
 }
 
 function formatDate(value: string): string {
-  return new Date(value).toLocaleDateString("en-US", {
+  return new Date(value).toLocaleDateString("es-ES", {
     month: "short",
     day: "numeric",
     year: "numeric",
@@ -20,15 +20,22 @@ function formatDate(value: string): string {
 }
 
 const statusConfig: Record<string, { label: string; color: string }> = {
-  completed: { label: "Completed", color: "bg-green-500" },
-  cancelled: { label: "Cancelled", color: "bg-red-500" },
-  pending: { label: "Pending", color: "bg-yellow-500" },
+  completed: { label: "Completada", color: "bg-green-500" },
+  cancelled: { label: "Cancelada", color: "bg-red-500" },
+  pending: { label: "Pendiente", color: "bg-yellow-500" },
+}
+
+const paymentMethodLabels: Record<string, string> = {
+  cash: "Efectivo",
+  card: "Tarjeta",
+  transfer: "Transferencia",
+  other: "Otro",
 }
 
 export const saleColumns: ColumnDef<SalePublic>[] = [
   {
     accessorKey: "invoice_number",
-    header: "Invoice #",
+    header: "Factura #",
     enableSorting: true,
     cell: ({ row }) => (
       <span className="font-mono text-sm">{row.original.invoice_number}</span>
@@ -36,7 +43,7 @@ export const saleColumns: ColumnDef<SalePublic>[] = [
   },
   {
     accessorKey: "sale_date",
-    header: "Date",
+    header: "Fecha",
     enableSorting: true,
     sortingFn: "datetime",
     cell: ({ row }) => (
@@ -47,7 +54,7 @@ export const saleColumns: ColumnDef<SalePublic>[] = [
   },
   {
     id: "items_count",
-    header: "Items",
+    header: "Productos",
     enableSorting: false,
     cell: ({ row }) => <span>{row.original.items?.length ?? 0}</span>,
   },
@@ -64,19 +71,20 @@ export const saleColumns: ColumnDef<SalePublic>[] = [
   },
   {
     accessorKey: "payment_method",
-    header: "Payment",
+    header: "Pago",
     enableSorting: false,
     filterFn: (row, _columnId, filterValue) =>
       row.original.payment_method === filterValue,
     cell: ({ row }) => (
       <Badge variant="secondary" className="capitalize">
-        {row.original.payment_method}
+        {paymentMethodLabels[row.original.payment_method] ??
+          row.original.payment_method}
       </Badge>
     ),
   },
   {
     accessorKey: "status",
-    header: "Status",
+    header: "Estado",
     enableSorting: false,
     filterFn: (row, _columnId, filterValue) =>
       row.original.status === filterValue,
@@ -102,7 +110,7 @@ export const saleColumns: ColumnDef<SalePublic>[] = [
   },
   {
     id: "actions",
-    header: () => <span className="sr-only">Actions</span>,
+    header: () => <span className="sr-only">Acciones</span>,
     enableSorting: false,
     cell: ({ row }) => (
       <div className="flex justify-end">

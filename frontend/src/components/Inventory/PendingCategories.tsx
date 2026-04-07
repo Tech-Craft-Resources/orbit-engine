@@ -12,12 +12,12 @@ const PendingCategories = () => (
   <Table>
     <TableHeader>
       <TableRow>
-        <TableHead>Name</TableHead>
-        <TableHead>Description</TableHead>
-        <TableHead>Status</TableHead>
-        <TableHead>Created</TableHead>
+        <TableHead>Nombre</TableHead>
+        <TableHead>Descripción</TableHead>
+        <TableHead>Estado</TableHead>
+        <TableHead>Creado</TableHead>
         <TableHead>
-          <span className="sr-only">Actions</span>
+          <span className="sr-only">Acciones</span>
         </TableHead>
       </TableRow>
     </TableHeader>

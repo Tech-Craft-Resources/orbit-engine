@@ -22,9 +22,9 @@ import { cn } from "@/lib/utils"
 import { handleError } from "@/utils"
 
 const formSchema = z.object({
-  first_name: z.string().min(1, { message: "First name is required" }),
-  last_name: z.string().min(1, { message: "Last name is required" }),
-  email: z.email({ message: "Invalid email address" }),
+  first_name: z.string().min(1, { message: "El nombre es obligatorio" }),
+  last_name: z.string().min(1, { message: "El apellido es obligatorio" }),
+  email: z.email({ message: "Ingresa un correo electronico valido" }),
   phone: z.string().optional(),
 })
 
@@ -56,7 +56,7 @@ const UserInformation = () => {
     mutationFn: (data: UserUpdateMe) =>
       UsersService.updateUserMe({ requestBody: data }),
     onSuccess: () => {
-      showSuccessToast("User updated successfully")
+      showSuccessToast("Usuario actualizado correctamente")
       toggleEditMode()
     },
     onError: handleError.bind(showErrorToast),
@@ -92,7 +92,7 @@ const UserInformation = () => {
 
   return (
     <div className="max-w-md">
-      <h3 className="text-lg font-semibold py-4">User Information</h3>
+      <h3 className="text-lg font-semibold py-4">Informacion de usuario</h3>
       <Form {...form}>
         <form
           onSubmit={form.handleSubmit(onSubmit)}
@@ -104,7 +104,7 @@ const UserInformation = () => {
             render={({ field }) =>
               editMode ? (
                 <FormItem>
-                  <FormLabel>First name</FormLabel>
+                  <FormLabel>Nombre</FormLabel>
                   <FormControl>
                     <Input type="text" {...field} />
                   </FormControl>
@@ -112,9 +112,9 @@ const UserInformation = () => {
                 </FormItem>
               ) : (
                 <FormItem>
-                  <FormLabel>First name</FormLabel>
+                  <FormLabel>Nombre</FormLabel>
                   <p className="py-2 truncate max-w-sm">
-                    {field.value || "N/A"}
+                    {field.value || "No disponible"}
                   </p>
                 </FormItem>
               )
@@ -127,7 +127,7 @@ const UserInformation = () => {
             render={({ field }) =>
               editMode ? (
                 <FormItem>
-                  <FormLabel>Last name</FormLabel>
+                  <FormLabel>Apellido</FormLabel>
                   <FormControl>
                     <Input type="text" {...field} />
                   </FormControl>
@@ -135,9 +135,9 @@ const UserInformation = () => {
                 </FormItem>
               ) : (
                 <FormItem>
-                  <FormLabel>Last name</FormLabel>
+                  <FormLabel>Apellido</FormLabel>
                   <p className="py-2 truncate max-w-sm">
-                    {field.value || "N/A"}
+                    {field.value || "No disponible"}
                   </p>
                 </FormItem>
               )
@@ -150,7 +150,7 @@ const UserInformation = () => {
             render={({ field }) =>
               editMode ? (
                 <FormItem>
-                  <FormLabel>Email</FormLabel>
+                  <FormLabel>Correo electronico</FormLabel>
                   <FormControl>
                     <Input type="email" {...field} />
                   </FormControl>
@@ -158,7 +158,7 @@ const UserInformation = () => {
                 </FormItem>
               ) : (
                 <FormItem>
-                  <FormLabel>Email</FormLabel>
+                  <FormLabel>Correo electronico</FormLabel>
                   <p className="py-2 truncate max-w-sm">{field.value}</p>
                 </FormItem>
               )
@@ -171,7 +171,7 @@ const UserInformation = () => {
             render={({ field }) =>
               editMode ? (
                 <FormItem>
-                  <FormLabel>Phone</FormLabel>
+                  <FormLabel>Telefono</FormLabel>
                   <FormControl>
                     <Input type="tel" placeholder="+1234567890" {...field} />
                   </FormControl>
@@ -179,14 +179,14 @@ const UserInformation = () => {
                 </FormItem>
               ) : (
                 <FormItem>
-                  <FormLabel>Phone</FormLabel>
+                  <FormLabel>Telefono</FormLabel>
                   <p
                     className={cn(
                       "py-2 truncate max-w-sm",
                       !field.value && "text-muted-foreground",
                     )}
                   >
-                    {field.value || "N/A"}
+                    {field.value || "No disponible"}
                   </p>
                 </FormItem>
               )
@@ -201,7 +201,7 @@ const UserInformation = () => {
                   loading={mutation.isPending}
                   disabled={!form.formState.isDirty}
                 >
-                  Save
+                  Guardar
                 </LoadingButton>
                 <Button
                   type="button"
@@ -209,12 +209,12 @@ const UserInformation = () => {
                   onClick={onCancel}
                   disabled={mutation.isPending}
                 >
-                  Cancel
+                  Cancelar
                 </Button>
               </>
             ) : (
               <Button type="button" onClick={toggleEditMode}>
-                Edit
+                Editar
               </Button>
             )}
           </div>

@@ -39,9 +39,9 @@ import useCustomToast from "@/hooks/useCustomToast"
 import { handleError } from "@/utils"
 
 const formSchema = z.object({
-  email: z.email({ message: "Invalid email address" }),
-  first_name: z.string().min(1, { message: "First name is required" }),
-  last_name: z.string().min(1, { message: "Last name is required" }),
+  email: z.email({ message: "Ingresa un correo electronico valido" }),
+  first_name: z.string().min(1, { message: "El nombre es obligatorio" }),
+  last_name: z.string().min(1, { message: "El apellido es obligatorio" }),
   phone: z.string().optional(),
   role_id: z.number().int().positive().optional(),
   is_active: z.boolean().optional(),
@@ -82,7 +82,7 @@ const EditUser = ({ user, onSuccess }: EditUserProps) => {
     mutationFn: (data: FormData) =>
       UsersService.updateUser({ userId: user.id, requestBody: data }),
     onSuccess: () => {
-      showSuccessToast("User updated successfully")
+      showSuccessToast("Usuario actualizado correctamente")
       setIsOpen(false)
       onSuccess()
     },
@@ -103,15 +103,15 @@ const EditUser = ({ user, onSuccess }: EditUserProps) => {
         onClick={() => setIsOpen(true)}
       >
         <Pencil />
-        Edit User
+        Editar usuario
       </DropdownMenuItem>
       <DialogContent className="sm:max-w-md">
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)}>
             <DialogHeader>
-              <DialogTitle>Edit User</DialogTitle>
+              <DialogTitle>Editar usuario</DialogTitle>
               <DialogDescription>
-                Update the user details below.
+                Actualiza la informacion del usuario.
               </DialogDescription>
             </DialogHeader>
             <div className="grid gap-4 py-4">
@@ -121,11 +121,12 @@ const EditUser = ({ user, onSuccess }: EditUserProps) => {
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel>
-                      Email <span className="text-destructive">*</span>
+                      Correo electronico{" "}
+                      <span className="text-destructive">*</span>
                     </FormLabel>
                     <FormControl>
                       <Input
-                        placeholder="Email"
+                        placeholder="correo@empresa.com"
                         type="email"
                         {...field}
                         required
@@ -142,11 +143,11 @@ const EditUser = ({ user, onSuccess }: EditUserProps) => {
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel>
-                      First Name <span className="text-destructive">*</span>
+                      Nombre <span className="text-destructive">*</span>
                     </FormLabel>
                     <FormControl>
                       <Input
-                        placeholder="First name"
+                        placeholder="Nombre"
                         type="text"
                         {...field}
                         required
@@ -163,11 +164,11 @@ const EditUser = ({ user, onSuccess }: EditUserProps) => {
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel>
-                      Last Name <span className="text-destructive">*</span>
+                      Apellido <span className="text-destructive">*</span>
                     </FormLabel>
                     <FormControl>
                       <Input
-                        placeholder="Last name"
+                        placeholder="Apellido"
                         type="text"
                         {...field}
                         required
@@ -183,7 +184,7 @@ const EditUser = ({ user, onSuccess }: EditUserProps) => {
                 name="phone"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Phone</FormLabel>
+                    <FormLabel>Telefono</FormLabel>
                     <FormControl>
                       <Input placeholder="+1234567890" type="tel" {...field} />
                     </FormControl>
@@ -197,7 +198,7 @@ const EditUser = ({ user, onSuccess }: EditUserProps) => {
                 name="role_id"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Role</FormLabel>
+                    <FormLabel>Rol</FormLabel>
                     <Select
                       onValueChange={(value) =>
                         field.onChange(parseInt(value, 10))
@@ -206,7 +207,7 @@ const EditUser = ({ user, onSuccess }: EditUserProps) => {
                     >
                       <FormControl>
                         <SelectTrigger>
-                          <SelectValue placeholder="Select a role" />
+                          <SelectValue placeholder="Seleccionar rol" />
                         </SelectTrigger>
                       </FormControl>
                       <SelectContent>
@@ -234,7 +235,7 @@ const EditUser = ({ user, onSuccess }: EditUserProps) => {
                         onCheckedChange={field.onChange}
                       />
                     </FormControl>
-                    <FormLabel className="font-normal">Is active?</FormLabel>
+                    <FormLabel className="font-normal">Activo</FormLabel>
                   </FormItem>
                 )}
               />
@@ -243,11 +244,11 @@ const EditUser = ({ user, onSuccess }: EditUserProps) => {
             <DialogFooter>
               <DialogClose asChild>
                 <Button variant="outline" disabled={mutation.isPending}>
-                  Cancel
+                  Cancelar
                 </Button>
               </DialogClose>
               <LoadingButton type="submit" loading={mutation.isPending}>
-                Save
+                Guardar
               </LoadingButton>
             </DialogFooter>
           </form>

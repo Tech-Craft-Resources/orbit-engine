@@ -12,14 +12,14 @@ const PendingCustomers = () => (
   <Table>
     <TableHeader>
       <TableRow>
-        <TableHead>Name</TableHead>
-        <TableHead>Document</TableHead>
-        <TableHead>Contact</TableHead>
-        <TableHead>Purchases</TableHead>
-        <TableHead>Total Spent</TableHead>
-        <TableHead>Status</TableHead>
+        <TableHead>Nombre</TableHead>
+        <TableHead>Documento</TableHead>
+        <TableHead>Contacto</TableHead>
+        <TableHead>Compras</TableHead>
+        <TableHead>Total comprado</TableHead>
+        <TableHead>Estado</TableHead>
         <TableHead>
-          <span className="sr-only">Actions</span>
+          <span className="sr-only">Acciones</span>
         </TableHead>
       </TableRow>
     </TableHeader>

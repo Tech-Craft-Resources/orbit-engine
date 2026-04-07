@@ -43,8 +43,8 @@ import useCustomToast from "@/hooks/useCustomToast"
 import { handleError } from "@/utils"
 
 const formSchema = z.object({
-  name: z.string().min(1, { message: "Name is required" }),
-  sku: z.string().min(1, { message: "SKU is required" }),
+  name: z.string().min(1, { message: "El nombre es obligatorio" }),
+  sku: z.string().min(1, { message: "El SKU es obligatorio" }),
   description: z.string().optional(),
   category_id: z.string().optional(),
   cost_price: z.string().optional(),
@@ -113,7 +113,7 @@ const EditProduct = ({ product, onSuccess }: EditProductProps) => {
       })
     },
     onSuccess: () => {
-      showSuccessToast("Product updated successfully")
+      showSuccessToast("Producto actualizado correctamente")
       setIsOpen(false)
       onSuccess()
     },
@@ -134,15 +134,15 @@ const EditProduct = ({ product, onSuccess }: EditProductProps) => {
         onClick={() => setIsOpen(true)}
       >
         <Pencil />
-        Edit Product
+        Editar producto
       </DropdownMenuItem>
       <DialogContent className="sm:max-w-lg max-h-[90vh] overflow-y-auto">
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)}>
             <DialogHeader>
-              <DialogTitle>Edit Product</DialogTitle>
+              <DialogTitle>Editar producto</DialogTitle>
               <DialogDescription>
-                Update the product details below.
+                Actualiza los datos del producto.
               </DialogDescription>
             </DialogHeader>
             <div className="grid gap-4 py-4">
@@ -153,10 +153,14 @@ const EditProduct = ({ product, onSuccess }: EditProductProps) => {
                   render={({ field }) => (
                     <FormItem>
                       <FormLabel>
-                        Name <span className="text-destructive">*</span>
+                        Nombre <span className="text-destructive">*</span>
                       </FormLabel>
                       <FormControl>
-                        <Input placeholder="Product name" {...field} required />
+                        <Input
+                          placeholder="Nombre del producto"
+                          {...field}
+                          required
+                        />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -185,9 +189,12 @@ const EditProduct = ({ product, onSuccess }: EditProductProps) => {
                 name="description"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Description</FormLabel>
+                    <FormLabel>Descripción</FormLabel>
                     <FormControl>
-                      <Input placeholder="Product description" {...field} />
+                      <Input
+                        placeholder="Descripción del producto"
+                        {...field}
+                      />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -199,14 +206,14 @@ const EditProduct = ({ product, onSuccess }: EditProductProps) => {
                 name="category_id"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Category</FormLabel>
+                    <FormLabel>Categoría</FormLabel>
                     <Select
                       onValueChange={field.onChange}
                       value={field.value ?? ""}
                     >
                       <FormControl>
                         <SelectTrigger>
-                          <SelectValue placeholder="Select a category" />
+                          <SelectValue placeholder="Selecciona una categoría" />
                         </SelectTrigger>
                       </FormControl>
                       <SelectContent>
@@ -228,7 +235,7 @@ const EditProduct = ({ product, onSuccess }: EditProductProps) => {
                   name="cost_price"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Cost Price</FormLabel>
+                      <FormLabel>Precio de costo</FormLabel>
                       <FormControl>
                         <Input
                           placeholder="0.00"
@@ -248,7 +255,7 @@ const EditProduct = ({ product, onSuccess }: EditProductProps) => {
                   name="sale_price"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Sale Price</FormLabel>
+                      <FormLabel>Precio de venta</FormLabel>
                       <FormControl>
                         <Input
                           placeholder="0.00"
@@ -270,7 +277,7 @@ const EditProduct = ({ product, onSuccess }: EditProductProps) => {
                   name="stock_min"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Min Stock</FormLabel>
+                      <FormLabel>Stock mínimo</FormLabel>
                       <FormControl>
                         <Input
                           placeholder="0"
@@ -289,7 +296,7 @@ const EditProduct = ({ product, onSuccess }: EditProductProps) => {
                   name="stock_max"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Max Stock</FormLabel>
+                      <FormLabel>Stock máximo</FormLabel>
                       <FormControl>
                         <Input
                           placeholder="0"
@@ -310,9 +317,9 @@ const EditProduct = ({ product, onSuccess }: EditProductProps) => {
                   name="unit"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Unit</FormLabel>
+                      <FormLabel>Unidad</FormLabel>
                       <FormControl>
-                        <Input placeholder="pcs, kg, etc." {...field} />
+                        <Input placeholder="und, kg, etc." {...field} />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -324,9 +331,9 @@ const EditProduct = ({ product, onSuccess }: EditProductProps) => {
                   name="barcode"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Barcode</FormLabel>
+                      <FormLabel>Codigo de barras</FormLabel>
                       <FormControl>
-                        <Input placeholder="Barcode" {...field} />
+                        <Input placeholder="Codigo de barras" {...field} />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -345,7 +352,7 @@ const EditProduct = ({ product, onSuccess }: EditProductProps) => {
                         onCheckedChange={field.onChange}
                       />
                     </FormControl>
-                    <FormLabel className="font-normal">Is active?</FormLabel>
+                    <FormLabel className="font-normal">Activo</FormLabel>
                   </FormItem>
                 )}
               />
@@ -354,11 +361,11 @@ const EditProduct = ({ product, onSuccess }: EditProductProps) => {
             <DialogFooter>
               <DialogClose asChild>
                 <Button variant="outline" disabled={mutation.isPending}>
-                  Cancel
+                  Cancelar
                 </Button>
               </DialogClose>
               <LoadingButton type="submit" loading={mutation.isPending}>
-                Save
+                Guardar
               </LoadingButton>
             </DialogFooter>
           </form>

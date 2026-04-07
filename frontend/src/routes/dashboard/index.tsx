@@ -42,7 +42,7 @@ export const Route = createFileRoute("/dashboard/")({
   head: () => ({
     meta: [
       {
-        title: "Dashboard - OrbitEngine",
+        title: "Panel - OrbitEngine",
       },
     ],
   }),
@@ -80,18 +80,18 @@ const CHART_COLORS = [
 
 const salesChartConfig = {
   total: {
-    label: "Revenue",
+    label: "Ingresos",
     color: "var(--chart-1)",
   },
   count: {
-    label: "Transactions",
+    label: "Transacciones",
     color: "var(--chart-2)",
   },
 } satisfies ChartConfig
 
 const productsChartConfig = {
   revenue: {
-    label: "Revenue",
+    label: "Ingresos",
     color: "var(--chart-1)",
   },
 } satisfies ChartConfig
@@ -184,10 +184,10 @@ function Dashboard() {
       {/* Header */}
       <div className="flex flex-col gap-1.5">
         <h1 className="text-3xl font-bold tracking-tight">
-          Hi, <span className="text-primary">{displayName}</span>
+          Hola, <span className="text-primary">{displayName}</span>
         </h1>
         <p className="text-muted-foreground text-sm font-medium">
-          Here&apos;s an overview of your business today
+          Este es el resumen de tu negocio hoy
         </p>
       </div>
 
@@ -204,7 +204,7 @@ function Dashboard() {
           <Card className="transition-shadow hover:shadow-md">
             <CardHeader className="flex flex-row items-center justify-between pb-2 space-y-0">
               <CardDescription className="text-sm font-semibold tracking-tight">
-                Today&apos;s Sales
+                Ventas de hoy
               </CardDescription>
               <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-blue-500/10 dark:bg-blue-500/15 ring-1 ring-blue-500/20">
                 <ShoppingCart className="size-4 text-blue-500 dark:text-blue-400" />
@@ -215,7 +215,7 @@ function Dashboard() {
                 {formatCurrency(stats.sales_today.total)}
               </div>
               <p className="text-xs text-muted-foreground mt-1 font-medium">
-                {formatCount(stats.sales_today.count)} transactions today
+                {formatCount(stats.sales_today.count)} transacciones hoy
               </p>
             </CardContent>
           </Card>
@@ -224,7 +224,7 @@ function Dashboard() {
           <Card className="transition-shadow hover:shadow-md">
             <CardHeader className="flex flex-row items-center justify-between pb-2 space-y-0">
               <CardDescription className="text-sm font-semibold tracking-tight">
-                Monthly Sales
+                Ventas del mes
               </CardDescription>
               <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-emerald-500/10 dark:bg-emerald-500/15 ring-1 ring-emerald-500/20">
                 <DollarSign className="size-4 text-emerald-500 dark:text-emerald-400" />
@@ -235,7 +235,7 @@ function Dashboard() {
                 {formatCurrency(stats.sales_month.total)}
               </div>
               <p className="text-xs text-muted-foreground mt-1 font-medium">
-                {formatCount(stats.sales_month.count)} transactions this month
+                {formatCount(stats.sales_month.count)} transacciones este mes
               </p>
             </CardContent>
           </Card>
@@ -244,7 +244,7 @@ function Dashboard() {
           <Card className="transition-shadow hover:shadow-md">
             <CardHeader className="flex flex-row items-center justify-between pb-2 space-y-0">
               <CardDescription className="text-sm font-semibold tracking-tight">
-                Average Ticket
+                Ticket promedio
               </CardDescription>
               <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-teal-500/10 dark:bg-teal-500/15 ring-1 ring-teal-500/20">
                 <TrendingUp className="size-4 text-teal-500 dark:text-teal-400" />
@@ -255,7 +255,7 @@ function Dashboard() {
                 {formatCurrency(stats.average_ticket)}
               </div>
               <p className="text-xs text-muted-foreground mt-1 font-medium">
-                Per transaction average
+                Promedio por transaccion
               </p>
             </CardContent>
           </Card>
@@ -274,7 +274,7 @@ function Dashboard() {
             >
               <CardHeader className="flex flex-row items-center justify-between pb-2 space-y-0">
                 <CardDescription className="text-sm font-semibold tracking-tight">
-                  Low Stock
+                  Stock bajo
                 </CardDescription>
                 <div
                   className={`flex h-8 w-8 items-center justify-center rounded-lg ring-1 ${
@@ -295,7 +295,7 @@ function Dashboard() {
                   {formatCount(stats.low_stock_count)}
                 </div>
                 <p className="text-xs text-muted-foreground mt-1 flex items-center gap-1 font-medium">
-                  Products below minimum
+                  Productos por debajo del mínimo
                   <ArrowUpRight className="size-3" />
                 </p>
               </CardContent>
@@ -309,10 +309,10 @@ function Dashboard() {
         <CardHeader>
           <CardTitle className="flex items-center gap-2 text-base font-semibold tracking-tight">
             <Receipt className="size-4 text-primary" />
-            Sales This Week
+            Ventas de esta semana
           </CardTitle>
           <CardDescription className="text-xs font-medium">
-            Daily revenue — Mon to Sun this week, hover to see details
+            Ingresos diarios de lunes a domingo
           </CardDescription>
         </CardHeader>
         <CardContent>
@@ -359,7 +359,7 @@ function Dashboard() {
                         }
                         return (
                           <span className="tabular-nums">
-                            {formatCount(value as number)} sales
+                            {formatCount(value as number)} ventas
                           </span>
                         )
                       }}
@@ -386,7 +386,9 @@ function Dashboard() {
           ) : (
             <div className="flex h-56 flex-col items-center justify-center gap-2 text-muted-foreground">
               <TrendingUp className="size-8 opacity-30" />
-              <p className="text-sm">No sales data for this week yet</p>
+              <p className="text-sm">
+                Aún no hay ventas registradas esta semana
+              </p>
             </div>
           )}
         </CardContent>
@@ -399,10 +401,10 @@ function Dashboard() {
           <CardHeader>
             <CardTitle className="flex items-center gap-2 text-base font-semibold tracking-tight">
               <PackageSearch className="size-4 text-primary" />
-              Top Products
+              Productos más vendidos
             </CardTitle>
             <CardDescription className="text-xs font-medium">
-              Best selling products this month
+              Productos con mayor venta este mes
             </CardDescription>
           </CardHeader>
           <CardContent>
@@ -431,7 +433,7 @@ function Dashboard() {
                       </div>
                       <div className="flex items-center gap-3 shrink-0">
                         <span className="text-xs text-muted-foreground">
-                          {formatCount(product.quantity_sold)} units
+                          {formatCount(product.quantity_sold)} unidades
                         </span>
                         <span className="font-semibold tabular-nums">
                           {formatCurrency(product.revenue)}
@@ -455,7 +457,7 @@ function Dashboard() {
               <div className="flex flex-col items-center justify-center gap-2 py-8 text-muted-foreground">
                 <PackageSearch className="size-8 opacity-30" />
                 <p className="text-sm">
-                  Aun no tienes ventas registradas en este mes
+                  Aún no tienes ventas registradas en este mes
                 </p>
               </div>
             )}
@@ -467,10 +469,10 @@ function Dashboard() {
           <CardHeader>
             <CardTitle className="flex items-center gap-2 text-base font-semibold tracking-tight">
               <DollarSign className="size-4 text-primary" />
-              Revenue by Product
+              Ingresos por producto
             </CardTitle>
             <CardDescription className="text-xs font-medium">
-              Comparative revenue — hover bars for details
+              Comparativo de ingresos por producto
             </CardDescription>
           </CardHeader>
           <CardContent>
@@ -542,7 +544,7 @@ function Dashboard() {
               <div className="flex h-56 flex-col items-center justify-center gap-2 text-muted-foreground">
                 <DollarSign className="size-8 opacity-30" />
                 <p className="text-sm">
-                  Aun no tienes ventas registradas en este mes
+                  Aún no tienes ventas registradas en este mes
                 </p>
               </div>
             )}

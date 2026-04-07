@@ -41,11 +41,11 @@ const formSchema = z.object({
   type: z.enum(["add", "remove"]),
   quantity: z
     .string()
-    .min(1, { message: "Quantity is required" })
+    .min(1, { message: "La cantidad es obligatoria" })
     .refine((val) => !Number.isNaN(Number(val)) && Number(val) > 0, {
-      message: "Quantity must be a positive number",
+      message: "La cantidad debe ser un numero positivo",
     }),
-  reason: z.string().min(1, { message: "Reason is required" }),
+  reason: z.string().min(1, { message: "El motivo es obligatorio" }),
 })
 
 type FormData = z.infer<typeof formSchema>
@@ -78,7 +78,7 @@ const StockAdjustment = ({ product, onSuccess }: StockAdjustmentProps) => {
         requestBody: data,
       }),
     onSuccess: () => {
-      showSuccessToast("Stock adjusted successfully")
+      showSuccessToast("Stock ajustado correctamente")
       form.reset()
       setIsOpen(false)
       onSuccess()
@@ -102,16 +102,16 @@ const StockAdjustment = ({ product, onSuccess }: StockAdjustmentProps) => {
         onClick={() => setIsOpen(true)}
       >
         <PackagePlus />
-        Adjust Stock
+        Ajustar stock
       </DropdownMenuItem>
       <DialogContent className="sm:max-w-md">
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)}>
             <DialogHeader>
-              <DialogTitle>Adjust Stock</DialogTitle>
+              <DialogTitle>Ajustar stock</DialogTitle>
               <DialogDescription>
-                Current stock for <strong>{product.name}</strong>:{" "}
-                <strong>{product.stock_quantity ?? 0}</strong> units
+                Stock actual de <strong>{product.name}</strong>:{" "}
+                <strong>{product.stock_quantity ?? 0}</strong> unidades
               </DialogDescription>
             </DialogHeader>
             <div className="grid gap-4 py-4">
@@ -121,8 +121,7 @@ const StockAdjustment = ({ product, onSuccess }: StockAdjustmentProps) => {
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel>
-                      Adjustment Type{" "}
-                      <span className="text-destructive">*</span>
+                      Tipo de ajuste <span className="text-destructive">*</span>
                     </FormLabel>
                     <Select
                       onValueChange={field.onChange}
@@ -130,12 +129,12 @@ const StockAdjustment = ({ product, onSuccess }: StockAdjustmentProps) => {
                     >
                       <FormControl>
                         <SelectTrigger>
-                          <SelectValue placeholder="Select type" />
+                          <SelectValue placeholder="Selecciona el tipo" />
                         </SelectTrigger>
                       </FormControl>
                       <SelectContent>
-                        <SelectItem value="add">Add Stock</SelectItem>
-                        <SelectItem value="remove">Remove Stock</SelectItem>
+                        <SelectItem value="add">Agregar stock</SelectItem>
+                        <SelectItem value="remove">Retirar stock</SelectItem>
                       </SelectContent>
                     </Select>
                     <FormMessage />
@@ -149,11 +148,11 @@ const StockAdjustment = ({ product, onSuccess }: StockAdjustmentProps) => {
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel>
-                      Quantity <span className="text-destructive">*</span>
+                      Cantidad <span className="text-destructive">*</span>
                     </FormLabel>
                     <FormControl>
                       <Input
-                        placeholder="Enter quantity"
+                        placeholder="Ingresa la cantidad"
                         type="number"
                         min={1}
                         {...field}
@@ -170,11 +169,11 @@ const StockAdjustment = ({ product, onSuccess }: StockAdjustmentProps) => {
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel>
-                      Reason <span className="text-destructive">*</span>
+                      Motivo <span className="text-destructive">*</span>
                     </FormLabel>
                     <FormControl>
                       <Input
-                        placeholder="Reason for stock adjustment"
+                        placeholder="Motivo del ajuste de stock"
                         {...field}
                       />
                     </FormControl>
@@ -187,11 +186,11 @@ const StockAdjustment = ({ product, onSuccess }: StockAdjustmentProps) => {
             <DialogFooter>
               <DialogClose asChild>
                 <Button variant="outline" disabled={mutation.isPending}>
-                  Cancel
+                  Cancelar
                 </Button>
               </DialogClose>
               <LoadingButton type="submit" loading={mutation.isPending}>
-                Adjust Stock
+                Guardar
               </LoadingButton>
             </DialogFooter>
           </form>

@@ -49,7 +49,7 @@ export function Main({ items }: MainProps) {
                   isActive={isActive}
                   asChild
                 >
-                  <RouterLink to={item.path} onClick={handleMenuClick}>
+                  <RouterLink to={item.path as never} onClick={handleMenuClick}>
                     <item.icon />
                     <span>{item.title}</span>
                   </RouterLink>

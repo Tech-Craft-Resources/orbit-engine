@@ -28,6 +28,19 @@ function formatCurrency(value: string): string {
   return `$${Number(value).toFixed(2)}`
 }
 
+const statusLabels: Record<string, string> = {
+  completed: "Completada",
+  cancelled: "Cancelada",
+  pending: "Pendiente",
+}
+
+const paymentMethodLabels: Record<string, string> = {
+  cash: "Efectivo",
+  card: "Tarjeta",
+  transfer: "Transferencia",
+  other: "Otro",
+}
+
 interface SaleDetailProps {
   sale: SalePublic
 }
@@ -50,13 +63,13 @@ const SaleDetail = ({ sale }: SaleDetailProps) => {
         onClick={() => setIsOpen(true)}
       >
         <Eye />
-        View Details
+        Ver detalles
       </DropdownMenuItem>
       <DialogContent className="sm:max-w-lg">
         <DialogHeader>
-          <DialogTitle>Sale {displaySale.invoice_number}</DialogTitle>
+          <DialogTitle>Venta {displaySale.invoice_number}</DialogTitle>
           <DialogDescription>
-            {new Date(displaySale.sale_date).toLocaleDateString("en-US", {
+            {new Date(displaySale.sale_date).toLocaleDateString("es-ES", {
               weekday: "long",
               year: "numeric",
               month: "long",
@@ -75,16 +88,17 @@ const SaleDetail = ({ sale }: SaleDetailProps) => {
               }
               className="capitalize"
             >
-              {displaySale.status}
+              {statusLabels[displaySale.status] ?? displaySale.status}
             </Badge>
             <Badge variant="secondary" className="capitalize">
-              {displaySale.payment_method}
+              {paymentMethodLabels[displaySale.payment_method] ??
+                displaySale.payment_method}
             </Badge>
           </div>
 
           {displaySale.cancellation_reason && (
             <div className="rounded-md bg-destructive/10 p-3 text-sm text-destructive">
-              <strong>Cancellation reason:</strong>{" "}
+              <strong>Motivo de cancelacion:</strong>{" "}
               {displaySale.cancellation_reason}
             </div>
           )}
@@ -99,9 +113,9 @@ const SaleDetail = ({ sale }: SaleDetailProps) => {
             <Table>
               <TableHeader>
                 <TableRow>
-                  <TableHead>Product</TableHead>
-                  <TableHead className="text-right">Qty</TableHead>
-                  <TableHead className="text-right">Unit Price</TableHead>
+                  <TableHead>Producto</TableHead>
+                  <TableHead className="text-right">Cant.</TableHead>
+                  <TableHead className="text-right">Precio unitario</TableHead>
                   <TableHead className="text-right">Subtotal</TableHead>
                 </TableRow>
               </TableHeader>
@@ -138,7 +152,7 @@ const SaleDetail = ({ sale }: SaleDetailProps) => {
             </div>
             {Number(displaySale.discount) > 0 && (
               <div className="flex justify-between">
-                <span className="text-muted-foreground">Discount</span>
+                <span className="text-muted-foreground">Descuento</span>
                 <span className="text-destructive">
                   -{formatCurrency(displaySale.discount)}
                 </span>
@@ -146,7 +160,7 @@ const SaleDetail = ({ sale }: SaleDetailProps) => {
             )}
             {Number(displaySale.tax) > 0 && (
               <div className="flex justify-between">
-                <span className="text-muted-foreground">Tax</span>
+                <span className="text-muted-foreground">Impuesto</span>
                 <span>{formatCurrency(displaySale.tax)}</span>
               </div>
             )}
@@ -158,14 +172,14 @@ const SaleDetail = ({ sale }: SaleDetailProps) => {
 
           {displaySale.notes && (
             <div className="text-sm text-muted-foreground">
-              <strong>Notes:</strong> {displaySale.notes}
+              <strong>Notas:</strong> {displaySale.notes}
             </div>
           )}
         </div>
 
         <DialogFooter>
           <DialogClose asChild>
-            <Button variant="outline">Close</Button>
+            <Button variant="outline">Cerrar</Button>
           </DialogClose>
         </DialogFooter>
       </DialogContent>

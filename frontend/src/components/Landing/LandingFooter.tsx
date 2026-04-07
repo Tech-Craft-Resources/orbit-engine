@@ -16,46 +16,46 @@ interface FooterSection {
 
 const footerSections: FooterSection[] = [
   {
-    title: "Product",
+    title: "Producto",
     links: [
-      { label: "Modules", href: "#features" },
-      { label: "Approach", href: "#benefits" },
-      { label: "Proof", href: "#stats" },
-      { label: "Create Workspace", href: "/signup" },
+      { label: "Cómo funciona", href: "#features" },
+      { label: "Roles", href: "#benefits" },
+      { label: "Beneficios", href: "#stats" },
+      { label: "Comenzar prueba gratis", href: "/signup" },
     ],
   },
   {
-    title: "Company",
+    title: "Empresa",
     links: [
       {
-        label: "Repository",
+        label: "Repositorio",
         href: "https://github.com/Tech-Craft-Resources/orbit-engine",
         external: true,
       },
       {
-        label: "Documentation",
+        label: "Documentación",
         href: "https://github.com/Tech-Craft-Resources/orbit-engine#readme",
         external: true,
       },
       {
-        label: "License",
+        label: "Licencia",
         href: "https://github.com/Tech-Craft-Resources/orbit-engine/blob/main/LICENSE",
         external: true,
       },
       {
-        label: "Support",
+        label: "Soporte",
         href: "https://github.com/Tech-Craft-Resources/orbit-engine/issues",
         external: true,
       },
     ],
   },
   {
-    title: "Access",
+    title: "Acceso",
     links: [
-      { label: "Log In", href: "/login" },
-      { label: "Sign Up", href: "/signup" },
+      { label: "Iniciar sesión", href: "/login" },
+      { label: "Crear cuenta", href: "/signup" },
       {
-        label: "API Notes",
+        label: "Notas del proyecto",
         href: "https://github.com/Tech-Craft-Resources/orbit-engine/blob/main/README.md",
         external: true,
       },
@@ -65,14 +65,12 @@ const footerSections: FooterSection[] = [
 
 const legalLinks: FooterLink[] = [
   {
-    label: "Privacy",
-    href: "https://github.com/Tech-Craft-Resources/orbit-engine/blob/main/LICENSE",
-    external: true,
+    label: "Privacidad",
+    href: "/privacidad",
   },
   {
-    label: "Terms",
-    href: "https://github.com/Tech-Craft-Resources/orbit-engine/blob/main/LICENSE",
-    external: true,
+    label: "Términos",
+    href: "/terminos",
   },
 ]
 
@@ -102,12 +100,12 @@ function FooterLinkItem({ link }: { link: FooterLink }) {
   }
 
   return (
-    <RouterLink
-      to={link.href}
+    <a
+      href={link.href}
       className="text-muted-foreground transition-colors hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/60"
     >
       {link.label}
-    </RouterLink>
+    </a>
   )
 }
 
@@ -137,14 +135,14 @@ export function LandingFooter() {
               </span>
             </RouterLink>
             <p className="mt-4 max-w-sm text-sm leading-6 text-muted-foreground">
-              Operational software for modern SMEs that want cleaner process
-              control, faster execution, and dependable planning signals.
+              Centraliza inventario, ventas y control operativo en un solo lugar
+              para crecer con procesos ordenados.
             </p>
             <a
               href="https://github.com/Tech-Craft-Resources/orbit-engine"
               target="_blank"
               rel="noopener noreferrer"
-              aria-label="Open OrbitEngine GitHub Repository"
+              aria-label="Abrir repositorio de OrbitEngine en GitHub"
               className="mt-5 inline-flex items-center gap-2 text-muted-foreground transition-colors hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/60"
             >
               <FaGithub className="h-4 w-4" aria-hidden="true" />
@@ -171,20 +169,12 @@ export function LandingFooter() {
         <Separator className="my-8" />
         <div className="flex flex-col gap-3 text-sm text-muted-foreground sm:flex-row sm:items-center sm:justify-between">
           <p>
-            Copyright {new Date().getFullYear()} OrbitEngine. All rights
-            reserved.
+            Copyright {new Date().getFullYear()} OrbitEngine. Todos los derechos
+            reservados.
           </p>
           <div className="flex items-center gap-6">
             {legalLinks.map((link) => (
-              <a
-                key={link.label}
-                href={link.href}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="transition-colors hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/60"
-              >
-                {link.label}
-              </a>
+              <FooterLinkItem key={link.label} link={link} />
             ))}
           </div>
         </div>

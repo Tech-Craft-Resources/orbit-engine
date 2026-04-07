@@ -16,15 +16,15 @@ interface TabConfig {
 }
 
 const tabsConfig: TabConfig[] = [
-  { value: "my-profile", title: "My profile", component: UserInformation },
-  { value: "password", title: "Password", component: ChangePassword },
+  { value: "my-profile", title: "Mi perfil", component: UserInformation },
+  { value: "password", title: "Contraseña", component: ChangePassword },
   {
     value: "organization",
-    title: "Organization",
+    title: "Organización",
     component: OrganizationSettings,
     roles: ["admin"],
   },
-  { value: "danger-zone", title: "Danger zone", component: DeleteAccount },
+  { value: "danger-zone", title: "Zona de riesgo", component: DeleteAccount },
 ]
 
 export const Route = createFileRoute("/dashboard/settings")({
@@ -32,7 +32,7 @@ export const Route = createFileRoute("/dashboard/settings")({
   head: () => ({
     meta: [
       {
-        title: "Settings - FastAPI Cloud",
+        title: "Configuración - OrbitEngine",
       },
     ],
   }),
@@ -53,9 +53,11 @@ function UserSettings() {
   return (
     <div className="flex flex-col gap-6">
       <div>
-        <h1 className="text-2xl font-bold tracking-tight">User Settings</h1>
+        <h1 className="text-2xl font-bold tracking-tight">
+          Configuración de usuario
+        </h1>
         <p className="text-muted-foreground">
-          Manage your account settings and preferences
+          Gestiona la configuración y preferencias de tu cuenta
         </p>
       </div>
 

@@ -22,11 +22,13 @@ import { cn } from "@/lib/utils"
 import { handleError } from "@/utils"
 
 const formSchema = z.object({
-  name: z.string().min(1, { message: "Organization name is required" }),
+  name: z
+    .string()
+    .min(1, { message: "El nombre de la organizacion es obligatorio" }),
   description: z.string().optional(),
   logo_url: z
     .string()
-    .url({ message: "Must be a valid URL" })
+    .url({ message: "Ingresa una URL valida" })
     .optional()
     .or(z.literal("")),
 })
@@ -58,7 +60,7 @@ const OrganizationSettings = () => {
     mutationFn: (data: OrganizationUpdate) =>
       OrganizationsService.updateMyOrganization({ requestBody: data }),
     onSuccess: () => {
-      showSuccessToast("Organization updated successfully")
+      showSuccessToast("Organizacion actualizada correctamente")
       toggleEditMode()
     },
     onError: handleError.bind(showErrorToast),
@@ -91,7 +93,9 @@ const OrganizationSettings = () => {
 
   return (
     <div className="max-w-md">
-      <h3 className="text-lg font-semibold py-4">Organization Settings</h3>
+      <h3 className="text-lg font-semibold py-4">
+        Configuracion de organizacion
+      </h3>
       <Form {...form}>
         <form
           onSubmit={form.handleSubmit(onSubmit)}
@@ -103,7 +107,7 @@ const OrganizationSettings = () => {
             render={({ field }) =>
               editMode ? (
                 <FormItem>
-                  <FormLabel>Organization name</FormLabel>
+                  <FormLabel>Nombre de la organizacion</FormLabel>
                   <FormControl>
                     <Input type="text" {...field} />
                   </FormControl>
@@ -111,9 +115,9 @@ const OrganizationSettings = () => {
                 </FormItem>
               ) : (
                 <FormItem>
-                  <FormLabel>Organization name</FormLabel>
+                  <FormLabel>Nombre de la organizacion</FormLabel>
                   <p className="py-2 truncate max-w-sm">
-                    {field.value || "N/A"}
+                    {field.value || "No disponible"}
                   </p>
                 </FormItem>
               )
@@ -126,11 +130,11 @@ const OrganizationSettings = () => {
             render={({ field }) =>
               editMode ? (
                 <FormItem>
-                  <FormLabel>Description</FormLabel>
+                  <FormLabel>Descripcion</FormLabel>
                   <FormControl>
                     <Input
                       type="text"
-                      placeholder="Brief description of your organization"
+                      placeholder="Breve descripcion de tu organizacion"
                       {...field}
                     />
                   </FormControl>
@@ -138,14 +142,14 @@ const OrganizationSettings = () => {
                 </FormItem>
               ) : (
                 <FormItem>
-                  <FormLabel>Description</FormLabel>
+                  <FormLabel>Descripcion</FormLabel>
                   <p
                     className={cn(
                       "py-2 truncate max-w-sm",
                       !field.value && "text-muted-foreground",
                     )}
                   >
-                    {field.value || "N/A"}
+                    {field.value || "No disponible"}
                   </p>
                 </FormItem>
               )
@@ -158,7 +162,7 @@ const OrganizationSettings = () => {
             render={({ field }) =>
               editMode ? (
                 <FormItem>
-                  <FormLabel>Logo URL</FormLabel>
+                  <FormLabel>URL del logo</FormLabel>
                   <FormControl>
                     <Input
                       type="url"
@@ -170,14 +174,14 @@ const OrganizationSettings = () => {
                 </FormItem>
               ) : (
                 <FormItem>
-                  <FormLabel>Logo URL</FormLabel>
+                  <FormLabel>URL del logo</FormLabel>
                   <p
                     className={cn(
                       "py-2 truncate max-w-sm",
                       !field.value && "text-muted-foreground",
                     )}
                   >
-                    {field.value || "N/A"}
+                    {field.value || "No disponible"}
                   </p>
                 </FormItem>
               )
@@ -192,7 +196,7 @@ const OrganizationSettings = () => {
                   loading={mutation.isPending}
                   disabled={!form.formState.isDirty}
                 >
-                  Save
+                  Guardar
                 </LoadingButton>
                 <Button
                   type="button"
@@ -200,12 +204,12 @@ const OrganizationSettings = () => {
                   onClick={onCancel}
                   disabled={mutation.isPending}
                 >
-                  Cancel
+                  Cancelar
                 </Button>
               </>
             ) : (
               <Button type="button" onClick={toggleEditMode}>
-                Edit
+                Editar
               </Button>
             )}
           </div>

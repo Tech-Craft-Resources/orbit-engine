@@ -11,7 +11,7 @@ function formatCurrency(value: string): string {
 export const customerColumns: ColumnDef<CustomerPublic>[] = [
   {
     accessorKey: "first_name",
-    header: "Name",
+    header: "Nombre",
     enableSorting: true,
     cell: ({ row }) => {
       const { first_name, last_name } = row.original
@@ -24,7 +24,7 @@ export const customerColumns: ColumnDef<CustomerPublic>[] = [
   },
   {
     accessorKey: "document_number",
-    header: "Document",
+    header: "Documento",
     enableSorting: true,
     cell: ({ row }) => (
       <div>
@@ -39,7 +39,7 @@ export const customerColumns: ColumnDef<CustomerPublic>[] = [
   },
   {
     accessorKey: "email",
-    header: "Contact",
+    header: "Contacto",
     enableSorting: false,
     cell: ({ row }) => (
       <div className="text-sm">
@@ -57,14 +57,14 @@ export const customerColumns: ColumnDef<CustomerPublic>[] = [
   },
   {
     accessorKey: "purchases_count",
-    header: "Purchases",
+    header: "Compras",
     enableSorting: true,
     sortingFn: "alphanumeric",
     cell: ({ row }) => <span>{row.original.purchases_count}</span>,
   },
   {
     accessorKey: "total_purchases",
-    header: "Total Spent",
+    header: "Total comprado",
     enableSorting: true,
     sortingFn: "alphanumeric",
     cell: ({ row }) => (
@@ -75,7 +75,7 @@ export const customerColumns: ColumnDef<CustomerPublic>[] = [
   },
   {
     accessorKey: "is_active",
-    header: "Status",
+    header: "Estado",
     enableSorting: false,
     filterFn: (row, _columnId, filterValue) =>
       String(row.original.is_active) === filterValue,
@@ -88,14 +88,14 @@ export const customerColumns: ColumnDef<CustomerPublic>[] = [
           )}
         />
         <span className={row.original.is_active ? "" : "text-muted-foreground"}>
-          {row.original.is_active ? "Active" : "Inactive"}
+          {row.original.is_active ? "Activo" : "Inactivo"}
         </span>
       </div>
     ),
   },
   {
     id: "actions",
-    header: () => <span className="sr-only">Actions</span>,
+    header: () => <span className="sr-only">Acciones</span>,
     enableSorting: false,
     cell: ({ row }) => (
       <div className="flex justify-end">

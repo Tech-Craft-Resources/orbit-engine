@@ -12,17 +12,19 @@ export type UserTableData = UserPublic & {
 export const columns: ColumnDef<UserTableData>[] = [
   {
     accessorKey: "first_name",
-    header: "Name",
+    header: "Nombre",
     cell: ({ row }) => {
       const firstName = row.original.first_name
       const lastName = row.original.last_name
       const fullName = `${firstName} ${lastName}`.trim()
       return (
         <div className="flex items-center gap-2">
-          <span className={cn("font-medium")}>{fullName || "N/A"}</span>
+          <span className={cn("font-medium")}>
+            {fullName || "No disponible"}
+          </span>
           {row.original.isCurrentUser && (
             <Badge variant="outline" className="text-xs">
-              You
+              Tu
             </Badge>
           )}
         </div>
@@ -31,22 +33,22 @@ export const columns: ColumnDef<UserTableData>[] = [
   },
   {
     accessorKey: "email",
-    header: "Email",
+    header: "Correo electronico",
     cell: ({ row }) => (
       <span className="text-muted-foreground">{row.original.email}</span>
     ),
   },
   {
     accessorKey: "role_id",
-    header: "Role",
+    header: "Rol",
     cell: ({ row }) => {
       const roleNames = {
-        1: "Admin",
-        2: "Seller",
-        3: "Viewer",
+        1: "Administrador",
+        2: "Vendedor",
+        3: "Consulta",
       } as const
       const roleId = row.original.role_id as 1 | 2 | 3
-      const roleName = roleNames[roleId] || "Unknown"
+      const roleName = roleNames[roleId] || "Desconocido"
       return (
         <Badge variant={roleId === 1 ? "default" : "secondary"}>
           {roleName}
@@ -56,7 +58,7 @@ export const columns: ColumnDef<UserTableData>[] = [
   },
   {
     accessorKey: "is_active",
-    header: "Status",
+    header: "Estado",
     cell: ({ row }) => (
       <div className="flex items-center gap-2">
         <span
@@ -66,14 +68,14 @@ export const columns: ColumnDef<UserTableData>[] = [
           )}
         />
         <span className={row.original.is_active ? "" : "text-muted-foreground"}>
-          {row.original.is_active ? "Active" : "Inactive"}
+          {row.original.is_active ? "Activo" : "Inactivo"}
         </span>
       </div>
     ),
   },
   {
     id: "actions",
-    header: () => <span className="sr-only">Actions</span>,
+    header: () => <span className="sr-only">Acciones</span>,
     cell: ({ row }) => (
       <div className="flex justify-end">
         <UserActionsMenu user={row.original} />

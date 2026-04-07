@@ -38,12 +38,14 @@ import useCustomToast from "@/hooks/useCustomToast"
 import { handleError } from "@/utils"
 
 const formSchema = z.object({
-  document_type: z.string().min(1, { message: "Document type is required" }),
+  document_type: z
+    .string()
+    .min(1, { message: "El tipo de documento es obligatorio" }),
   document_number: z
     .string()
-    .min(1, { message: "Document number is required" }),
-  first_name: z.string().min(1, { message: "First name is required" }),
-  last_name: z.string().min(1, { message: "Last name is required" }),
+    .min(1, { message: "El numero de documento es obligatorio" }),
+  first_name: z.string().min(1, { message: "El nombre es obligatorio" }),
+  last_name: z.string().min(1, { message: "El apellido es obligatorio" }),
   email: z.string().email().optional().or(z.literal("")),
   phone: z.string().optional(),
   address: z.string().optional(),
@@ -81,7 +83,7 @@ const AddCustomer = () => {
     mutationFn: (data: CustomerCreate) =>
       CustomersService.createCustomer({ requestBody: data }),
     onSuccess: () => {
-      showSuccessToast("Customer created successfully")
+      showSuccessToast("Cliente creado correctamente")
       form.reset()
       setIsOpen(false)
     },
@@ -111,14 +113,14 @@ const AddCustomer = () => {
       <DialogTrigger asChild>
         <Button>
           <Plus className="mr-2" />
-          Add Customer
+          Agregar cliente
         </Button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-md">
         <DialogHeader>
-          <DialogTitle>Add Customer</DialogTitle>
+          <DialogTitle>Agregar cliente</DialogTitle>
           <DialogDescription>
-            Fill in the form below to register a new customer.
+            Completa el formulario para registrar un nuevo cliente.
           </DialogDescription>
         </DialogHeader>
         <Form {...form}>
@@ -131,7 +133,7 @@ const AddCustomer = () => {
                   render={({ field }) => (
                     <FormItem>
                       <FormLabel>
-                        Document Type{" "}
+                        Tipo de documento{" "}
                         <span className="text-destructive">*</span>
                       </FormLabel>
                       <Select
@@ -140,15 +142,15 @@ const AddCustomer = () => {
                       >
                         <FormControl>
                           <SelectTrigger>
-                            <SelectValue placeholder="Type" />
+                            <SelectValue placeholder="Seleccionar" />
                           </SelectTrigger>
                         </FormControl>
                         <SelectContent>
                           <SelectItem value="CC">CC</SelectItem>
                           <SelectItem value="NIT">NIT</SelectItem>
                           <SelectItem value="CE">CE</SelectItem>
-                          <SelectItem value="PP">Passport</SelectItem>
-                          <SelectItem value="OTHER">Other</SelectItem>
+                          <SelectItem value="PP">Pasaporte</SelectItem>
+                          <SelectItem value="OTHER">Otro</SelectItem>
                         </SelectContent>
                       </Select>
                       <FormMessage />
@@ -162,10 +164,10 @@ const AddCustomer = () => {
                   render={({ field }) => (
                     <FormItem>
                       <FormLabel>
-                        Document # <span className="text-destructive">*</span>
+                        Documento # <span className="text-destructive">*</span>
                       </FormLabel>
                       <FormControl>
-                        <Input placeholder="Document number" {...field} />
+                        <Input placeholder="Numero de documento" {...field} />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -180,10 +182,10 @@ const AddCustomer = () => {
                   render={({ field }) => (
                     <FormItem>
                       <FormLabel>
-                        First Name <span className="text-destructive">*</span>
+                        Nombre <span className="text-destructive">*</span>
                       </FormLabel>
                       <FormControl>
-                        <Input placeholder="First name" {...field} />
+                        <Input placeholder="Nombre" {...field} />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -196,10 +198,10 @@ const AddCustomer = () => {
                   render={({ field }) => (
                     <FormItem>
                       <FormLabel>
-                        Last Name <span className="text-destructive">*</span>
+                        Apellido <span className="text-destructive">*</span>
                       </FormLabel>
                       <FormControl>
-                        <Input placeholder="Last name" {...field} />
+                        <Input placeholder="Apellido" {...field} />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -213,7 +215,7 @@ const AddCustomer = () => {
                   name="email"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Email</FormLabel>
+                      <FormLabel>Correo electronico</FormLabel>
                       <FormControl>
                         <Input
                           placeholder="email@example.com"
@@ -231,7 +233,7 @@ const AddCustomer = () => {
                   name="phone"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Phone</FormLabel>
+                      <FormLabel>Telefono</FormLabel>
                       <FormControl>
                         <Input
                           placeholder="+1234567890"
@@ -250,9 +252,9 @@ const AddCustomer = () => {
                 name="address"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Address</FormLabel>
+                    <FormLabel>Direccion</FormLabel>
                     <FormControl>
-                      <Input placeholder="Street address" {...field} />
+                      <Input placeholder="Direccion" {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -265,9 +267,9 @@ const AddCustomer = () => {
                   name="city"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>City</FormLabel>
+                      <FormLabel>Ciudad</FormLabel>
                       <FormControl>
-                        <Input placeholder="City" {...field} />
+                        <Input placeholder="Ciudad" {...field} />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -279,9 +281,9 @@ const AddCustomer = () => {
                   name="country"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Country</FormLabel>
+                      <FormLabel>Pais</FormLabel>
                       <FormControl>
-                        <Input placeholder="Country" {...field} />
+                        <Input placeholder="Pais" {...field} />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -294,9 +296,9 @@ const AddCustomer = () => {
                 name="notes"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Notes</FormLabel>
+                    <FormLabel>Notas</FormLabel>
                     <FormControl>
-                      <Input placeholder="Optional notes" {...field} />
+                      <Input placeholder="Notas opcionales" {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -307,11 +309,11 @@ const AddCustomer = () => {
             <DialogFooter>
               <DialogClose asChild>
                 <Button variant="outline" disabled={mutation.isPending}>
-                  Cancel
+                  Cancelar
                 </Button>
               </DialogClose>
               <LoadingButton type="submit" loading={mutation.isPending}>
-                Save
+                Guardar
               </LoadingButton>
             </DialogFooter>
           </form>

@@ -30,7 +30,7 @@ function UserInfo({ fullName, email }: UserInfoProps) {
     <div className="flex items-center gap-2.5 w-full min-w-0">
       <Avatar className="size-8">
         <AvatarFallback className="bg-muted text-muted-foreground border border-sidebar">
-          {getInitials(fullName || "User")}
+          {getInitials(fullName || "Usuario")}
         </AvatarFallback>
       </Avatar>
       <div className="flex flex-col items-start min-w-0">
@@ -89,17 +89,17 @@ export function User({ user }: { user: UserPublic | null | undefined }) {
             <RouterLink to="/dashboard/settings" onClick={handleMenuClick}>
               <DropdownMenuItem>
                 <Settings />
-                User Settings
+                Configuración
               </DropdownMenuItem>
             </RouterLink>
             <DropdownMenuItem onClick={handleLogout}>
               <LogOut />
-              Log Out
+              Cerrar sesión
             </DropdownMenuItem>
             <Link to="/">
               <DropdownMenuItem>
                 <Home />
-                Go to main page
+                Ir a la página principal
               </DropdownMenuItem>
             </Link>
           </DropdownMenuContent>

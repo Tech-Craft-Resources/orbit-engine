@@ -9,24 +9,24 @@ interface Stat {
 
 const stats: Stat[] = [
   {
-    metric: "-32%",
-    label: "Admin Rework",
-    context: "Fewer back-office corrections after process rollout",
+    metric: "Más control",
+    label: "Visibilidad diaria",
+    context: "Estado operativo claro para todo tu negocio",
   },
   {
-    metric: "+47%",
-    label: "Order Throughput",
-    context: "More completed orders per operator per day",
+    metric: "Más velocidad",
+    label: "Ventas y atención",
+    context: "Menos fricción comercial en la operación diaria",
   },
   {
-    metric: "94.2%",
-    label: "Forecast Precision",
-    context: "Average demand signal quality across active catalogs",
+    metric: "Más confianza",
+    label: "Reportes y métricas",
+    context: "Datos confiables para tomar mejores decisiones",
   },
   {
-    metric: "4.6 d",
-    label: "Onboarding Time",
-    context: "Median days to team-level adoption",
+    metric: "Más tiempo",
+    label: "Menos tareas manuales",
+    context: "Automatiza procesos operativos y lidera con foco",
   },
 ]
 
@@ -41,7 +41,7 @@ export function Stats() {
       className="scroll-mt-24 border-b border-border/70 py-14 md:py-16"
     >
       <div className="mx-auto max-w-6xl px-6">
-        <h2 className="sr-only">Performance Proof</h2>
+        <h2 className="sr-only">Beneficios clave</h2>
         <div ref={ref} className="grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
           {stats.map((stat, index) => (
             <article

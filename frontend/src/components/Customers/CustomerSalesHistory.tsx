@@ -30,11 +30,11 @@ function formatCurrency(value: string): string {
 
 const statusStyles: Record<
   string,
-  { variant: "default" | "destructive" | "secondary" }
+  { variant: "default" | "destructive" | "secondary"; label: string }
 > = {
-  completed: { variant: "default" },
-  cancelled: { variant: "destructive" },
-  pending: { variant: "secondary" },
+  completed: { variant: "default", label: "Completada" },
+  cancelled: { variant: "destructive", label: "Cancelada" },
+  pending: { variant: "secondary", label: "Pendiente" },
 }
 
 interface CustomerSalesHistoryProps {
@@ -62,13 +62,13 @@ const CustomerSalesHistory = ({ customer }: CustomerSalesHistoryProps) => {
         onClick={() => setIsOpen(true)}
       >
         <ShoppingCart />
-        Purchase History
+        Historial de compras
       </DropdownMenuItem>
       <DialogContent className="sm:max-w-lg">
         <DialogHeader>
-          <DialogTitle>Purchase History</DialogTitle>
+          <DialogTitle>Historial de compras</DialogTitle>
           <DialogDescription>
-            Sales for{" "}
+            Ventas de{" "}
             <strong>
               {customer.first_name} {customer.last_name}
             </strong>
@@ -86,17 +86,18 @@ const CustomerSalesHistory = ({ customer }: CustomerSalesHistoryProps) => {
             <Table>
               <TableHeader>
                 <TableRow>
-                  <TableHead>Invoice #</TableHead>
-                  <TableHead>Date</TableHead>
-                  <TableHead className="text-right">Items</TableHead>
+                  <TableHead>Factura #</TableHead>
+                  <TableHead>Fecha</TableHead>
+                  <TableHead className="text-right">Productos</TableHead>
                   <TableHead className="text-right">Total</TableHead>
-                  <TableHead>Status</TableHead>
+                  <TableHead>Estado</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
                 {sales.data.map((sale) => {
                   const style = statusStyles[sale.status] ?? {
                     variant: "secondary" as const,
+                    label: sale.status,
                   }
                   return (
                     <TableRow key={sale.id}>
@@ -104,7 +105,7 @@ const CustomerSalesHistory = ({ customer }: CustomerSalesHistoryProps) => {
                         {sale.invoice_number}
                       </TableCell>
                       <TableCell className="text-xs text-muted-foreground whitespace-nowrap">
-                        {new Date(sale.sale_date).toLocaleDateString("en-US", {
+                        {new Date(sale.sale_date).toLocaleDateString("es-ES", {
                           month: "short",
                           day: "numeric",
                           year: "numeric",
@@ -121,7 +122,7 @@ const CustomerSalesHistory = ({ customer }: CustomerSalesHistoryProps) => {
                           variant={style.variant}
                           className="capitalize text-xs"
                         >
-                          {sale.status}
+                          {style.label}
                         </Badge>
                       </TableCell>
                     </TableRow>
@@ -131,20 +132,20 @@ const CustomerSalesHistory = ({ customer }: CustomerSalesHistoryProps) => {
             </Table>
           ) : (
             <p className="text-sm text-muted-foreground text-center py-8">
-              No purchases recorded for this customer
+              Este cliente no tiene compras registradas
             </p>
           )}
         </div>
 
         {sales?.count != null && sales.count > 0 && (
           <p className="text-xs text-muted-foreground text-right">
-            Showing {sales.data.length} of {sales.count} purchases
+            Mostrando {sales.data.length} de {sales.count} compras
           </p>
         )}
 
         <DialogFooter>
           <DialogClose asChild>
-            <Button variant="outline">Close</Button>
+            <Button variant="outline">Cerrar</Button>
           </DialogClose>
         </DialogFooter>
       </DialogContent>

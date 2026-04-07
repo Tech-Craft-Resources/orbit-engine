@@ -1,7 +1,6 @@
 import type { LucideIcon } from "lucide-react"
 import {
   BarChart3,
-  Bot,
   Package,
   ShieldCheck,
   ShoppingCart,
@@ -29,45 +28,44 @@ interface Feature {
 const features: Feature[] = [
   {
     icon: Package,
-    title: "Inventory Control",
+    title: "Configura tu operación",
     detail:
-      "Track SKU movement, low-stock thresholds, and replenishment windows from one ledger.",
-    dataPoint: "Stock Drift: -41%",
+      "Organiza productos, flujos y usuarios según la realidad de tu negocio.",
+    dataPoint: "Paso 1",
   },
   {
     icon: ShoppingCart,
-    title: "Sales Workspace",
+    title: "Centraliza la ejecución diaria",
     detail:
-      "Create invoices, monitor pending orders, and map revenue trends without switching tools.",
-    dataPoint: "Checkout Time: 58s",
+      "Registra ventas, movimientos y actividades operativas en un mismo lugar.",
+    dataPoint: "Paso 2",
   },
   {
     icon: Users,
-    title: "Customer Registry",
+    title: "Monitorea en tiempo real",
     detail:
-      "Maintain complete profiles with order history, segmentation, and lifecycle signals.",
-    dataPoint: "Retention Lift: +18%",
+      "Visualiza indicadores clave por área y por rol para actuar a tiempo.",
+    dataPoint: "Paso 3",
   },
   {
     icon: BarChart3,
-    title: "Operational Analytics",
-    detail:
-      "See margin, volume, and conversion in a shared source of truth for every role.",
-    dataPoint: "Report Prep: 1.4h",
-  },
-  {
-    icon: Bot,
-    title: "Forecast Automation",
-    detail:
-      "Use built-in demand modeling to prioritize purchase timing and reduce overstock.",
-    dataPoint: "Forecast Confidence: 94.2%",
+    title: "Decide y mejora",
+    detail: "Usa reportes y exportaciones para optimizar cada ciclo operativo.",
+    dataPoint: "Paso 4",
   },
   {
     icon: ShieldCheck,
-    title: "Role Guardrails",
+    title: "Procesos estandarizados",
     detail:
-      "Apply precise access controls so operators, managers, and finance teams only see what they need.",
-    dataPoint: "Policy Coverage: 100%",
+      "Opera con consistencia, control de acceso y trazabilidad en cada área.",
+    dataPoint: "Operación ordenada",
+  },
+  {
+    icon: BarChart3,
+    title: "Reportes consolidados",
+    detail:
+      "Consolida inventario, ventas y gestión para seguimiento financiero y operativo.",
+    dataPoint: "Listo para escalar",
   },
 ]
 
@@ -98,14 +96,14 @@ export function Features() {
             variant="outline"
             className="mb-4 rounded-full border-primary/25 bg-primary/8 text-primary font-medium px-3"
           >
-            Product Surface
+            Cómo funciona
           </Badge>
           <h2 className="text-balance text-3xl font-bold tracking-tight sm:text-4xl">
-            Every Core Workflow, Composed Into One Operating Layer
+            De procesos dispersos a una operación centralizada
           </h2>
           <p className="mt-4 text-pretty text-muted-foreground">
-            OrbitEngine keeps teams aligned by combining critical modules under
-            a shared model, shared data, and shared accountability.
+            OrbitEngine centraliza inventario, ventas y control operativo para
+            que cada área ejecute más rápido y reporte con confianza.
           </p>
         </div>
 

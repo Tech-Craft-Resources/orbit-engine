@@ -15,45 +15,45 @@ interface Benefit {
 const benefits: Benefit[] = [
   {
     icon: Zap,
-    title: "Fast Team Adoption",
+    title: "Administrador de pyme",
     description:
-      "Interface patterns stay simple enough for non-technical operators and robust enough for managers.",
+      "Control total de inventario, ventas y operación en una sola vista.",
   },
   {
     icon: Layers,
-    title: "Composable By Design",
+    title: "Vendedor",
     description:
-      "Start with essential modules, then expand as your operation adds complexity.",
+      "Ventas más rápidas con información clave al momento y mejor atención.",
   },
   {
     icon: Globe,
-    title: "Cloud-Ready Access",
+    title: "Contador / visualizador",
     description:
-      "Run workflows from desktop or mobile with consistent access and control.",
+      "Reportes y exportaciones para seguimiento financiero y control documental.",
   },
   {
     icon: TrendingUp,
-    title: "Decision-Grade Signals",
+    title: "Escalabilidad real",
     description:
-      "Move from static reports to prediction-supported planning and prioritization.",
+      "Agrega usuarios y volumen sin perder trazabilidad ni visibilidad.",
   },
 ]
 
 const rolloutSteps = [
   {
     step: "01",
-    title: "Map Current Flow",
-    detail: "Capture current inventory, sales, and customer touchpoints.",
+    title: "Empieza con lo que ya tienes",
+    detail: "Ordena tus procesos actuales sin frenar la operación.",
   },
   {
     step: "02",
-    title: "Activate Shared Modules",
-    detail: "Launch a common workspace for operators and decision-makers.",
+    title: "Conecta áreas y equipos",
+    detail: "Comparte información en tiempo real entre roles clave.",
   },
   {
     step: "03",
-    title: "Scale With Confidence",
-    detail: "Use forecasting and analytics to guide monthly planning.",
+    title: "Escala con control",
+    detail: "Mantiene control operativo y reportes claros al crecer.",
   },
 ]
 
@@ -81,14 +81,14 @@ export function Benefits() {
               variant="outline"
               className="mb-4 rounded-full border-primary/25 bg-primary/8 text-primary font-medium px-3"
             >
-              Why OrbitEngine
+              Valor por rol
             </Badge>
             <h2 className="text-balance text-3xl font-bold tracking-tight sm:text-4xl">
-              Minimal Surface, High Operational Depth
+              Una plataforma pensada para pymes en crecimiento
             </h2>
             <p className="mt-4 max-w-2xl text-pretty text-muted-foreground">
-              You get a clean interface that still supports dense workflows,
-              role-based control, and measurable process discipline.
+              Cada rol ve lo que necesita para ejecutar rápido, colaborar mejor
+              y decidir con datos confiables.
             </p>
             <div className="mt-8 grid gap-4 sm:grid-cols-2">
               {benefits.map((benefit, index) => (
@@ -120,14 +120,14 @@ export function Benefits() {
               "rounded-xl border border-border/75 bg-card p-6 shadow-sm scroll-hidden",
               right.isVisible && "animate-fade-in-right",
             )}
-            aria-label="Implementation Path"
+            aria-label="Ruta de implementación"
           >
             <h3 className="text-base font-semibold tracking-tight">
-              Implementation Path
+              Implementación por etapas
             </h3>
             <p className="mt-2 text-sm text-muted-foreground">
-              Roll out in short cycles while keeping governance and reporting
-              intact.
+              Activa OrbitEngine en ciclos cortos y mantén el control desde el
+              primer día.
             </p>
             <Separator className="my-5" />
             <div className="space-y-5">
@@ -141,7 +141,7 @@ export function Benefits() {
                   )}
                 >
                   <p className="font-mono text-xs tabular-nums font-semibold text-primary">
-                    Step {item.step}
+                    Paso {item.step}
                   </p>
                   <p className="mt-1 text-sm font-medium text-foreground">
                     {item.title}

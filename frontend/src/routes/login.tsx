@@ -26,8 +26,8 @@ const formSchema = z.object({
   username: z.email(),
   password: z
     .string()
-    .min(1, { message: "Password is required" })
-    .min(8, { message: "Password must be at least 8 characters" }),
+    .min(1, { message: "La contraseña es obligatoria" })
+    .min(8, { message: "La contraseña debe tener al menos 8 caracteres" }),
 }) satisfies z.ZodType<AccessToken>
 
 type FormData = z.infer<typeof formSchema>
@@ -45,7 +45,7 @@ export const Route = createFileRoute("/login")({
   head: () => ({
     meta: [
       {
-        title: "Log In - OrbitEngine",
+        title: "Iniciar sesión - OrbitEngine",
       },
     ],
   }),
@@ -78,16 +78,16 @@ function Login() {
           className="flex flex-col gap-6"
         >
           <div className="flex flex-col items-center gap-2 text-center">
-            <h1 className="text-2xl font-bold">Login to your account</h1>
+            <h1 className="text-2xl font-bold">Inicia sesión en tu cuenta</h1>
           </div>
 
           {reason === "session-invalid" ? (
             <Alert variant="destructive">
               <CircleAlert />
-              <AlertTitle>Session no longer valid</AlertTitle>
+              <AlertTitle>La sesión ya no es válida</AlertTitle>
               <AlertDescription>
-                Your account session expired or is no longer available. Please
-                log in again to continue.
+                Tu sesión expiró o ya no está disponible. Inicia sesión
+                nuevamente para continuar.
               </AlertDescription>
             </Alert>
           ) : null}
@@ -98,7 +98,7 @@ function Login() {
               name="username"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Email</FormLabel>
+                  <FormLabel>Correo electronico</FormLabel>
                   <FormControl>
                     <Input
                       data-testid="email-input"
@@ -118,18 +118,18 @@ function Login() {
               render={({ field }) => (
                 <FormItem>
                   <div className="flex items-center">
-                    <FormLabel>Password</FormLabel>
+                    <FormLabel>Contraseña</FormLabel>
                     <RouterLink
                       to="/recover-password"
                       className="ml-auto text-sm underline-offset-4 hover:underline"
                     >
-                      Forgot your password?
+                      ¿Olvidaste tu contraseña?
                     </RouterLink>
                   </div>
                   <FormControl>
                     <PasswordInput
                       data-testid="password-input"
-                      placeholder="Password"
+                      placeholder="Contraseña"
                       {...field}
                     />
                   </FormControl>
@@ -139,23 +139,23 @@ function Login() {
             />
 
             <LoadingButton type="submit" loading={loginMutation.isPending}>
-              Log In
+              Iniciar sesión
             </LoadingButton>
           </div>
 
           <div className="text-center text-sm">
-            Don't have an account yet?{" "}
+            ¿No tienes una cuenta todavía?{" "}
             <RouterLink
               to="/signup-org"
               className="underline underline-offset-4"
             >
-              Create an organization
+              Crear una organización
             </RouterLink>
           </div>
 
           <div className="text-center text-sm text-muted-foreground">
             <RouterLink to="/" className="underline underline-offset-4">
-              Back to main page
+              Volver a la página principal
             </RouterLink>
           </div>
         </form>

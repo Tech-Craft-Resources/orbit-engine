@@ -31,7 +31,7 @@ import useCustomToast from "@/hooks/useCustomToast"
 import { handleError } from "@/utils"
 
 const formSchema = z.object({
-  name: z.string().min(1, { message: "Name is required" }),
+  name: z.string().min(1, { message: "El nombre es obligatorio" }),
   description: z.string().optional(),
 })
 
@@ -56,7 +56,7 @@ const AddCategory = () => {
     mutationFn: (data: CategoryCreate) =>
       CategoriesService.createCategory({ requestBody: data }),
     onSuccess: () => {
-      showSuccessToast("Category created successfully")
+      showSuccessToast("Categoría creada correctamente")
       form.reset()
       setIsOpen(false)
     },
@@ -79,14 +79,14 @@ const AddCategory = () => {
       <DialogTrigger asChild>
         <Button className="my-0">
           <Plus className="mr-2" />
-          Add Category
+          Agregar categoría
         </Button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-md">
         <DialogHeader>
-          <DialogTitle>Add Category</DialogTitle>
+          <DialogTitle>Agregar categoría</DialogTitle>
           <DialogDescription>
-            Create a new product category for your inventory.
+            Crea una nueva categoría para tu inventario.
           </DialogDescription>
         </DialogHeader>
         <Form {...form}>
@@ -98,10 +98,14 @@ const AddCategory = () => {
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel>
-                      Name <span className="text-destructive">*</span>
+                      Nombre <span className="text-destructive">*</span>
                     </FormLabel>
                     <FormControl>
-                      <Input placeholder="Category name" {...field} required />
+                      <Input
+                        placeholder="Nombre de la categoría"
+                        {...field}
+                        required
+                      />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -113,9 +117,12 @@ const AddCategory = () => {
                 name="description"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Description</FormLabel>
+                    <FormLabel>Descripción</FormLabel>
                     <FormControl>
-                      <Input placeholder="Category description" {...field} />
+                      <Input
+                        placeholder="Descripción de la categoría"
+                        {...field}
+                      />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -126,11 +133,11 @@ const AddCategory = () => {
             <DialogFooter>
               <DialogClose asChild>
                 <Button variant="outline" disabled={mutation.isPending}>
-                  Cancel
+                  Cancelar
                 </Button>
               </DialogClose>
               <LoadingButton type="submit" loading={mutation.isPending}>
-                Save
+                Guardar
               </LoadingButton>
             </DialogFooter>
           </form>

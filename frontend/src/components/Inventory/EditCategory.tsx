@@ -32,7 +32,7 @@ import useCustomToast from "@/hooks/useCustomToast"
 import { handleError } from "@/utils"
 
 const formSchema = z.object({
-  name: z.string().min(1, { message: "Name is required" }),
+  name: z.string().min(1, { message: "El nombre es obligatorio" }),
   description: z.string().optional(),
   is_active: z.boolean(),
 })
@@ -71,7 +71,7 @@ const EditCategory = ({ category, onSuccess }: EditCategoryProps) => {
         },
       }),
     onSuccess: () => {
-      showSuccessToast("Category updated successfully")
+      showSuccessToast("Categoría actualizada correctamente")
       setIsOpen(false)
       onSuccess()
     },
@@ -92,15 +92,15 @@ const EditCategory = ({ category, onSuccess }: EditCategoryProps) => {
         onClick={() => setIsOpen(true)}
       >
         <Pencil />
-        Edit Category
+        Editar categoría
       </DropdownMenuItem>
       <DialogContent className="sm:max-w-md">
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)}>
             <DialogHeader>
-              <DialogTitle>Edit Category</DialogTitle>
+              <DialogTitle>Editar categoría</DialogTitle>
               <DialogDescription>
-                Update the category details below.
+                Actualiza los datos de la categoría.
               </DialogDescription>
             </DialogHeader>
             <div className="grid gap-4 py-4">
@@ -110,10 +110,14 @@ const EditCategory = ({ category, onSuccess }: EditCategoryProps) => {
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel>
-                      Name <span className="text-destructive">*</span>
+                      Nombre <span className="text-destructive">*</span>
                     </FormLabel>
                     <FormControl>
-                      <Input placeholder="Category name" {...field} required />
+                      <Input
+                        placeholder="Nombre de la categoría"
+                        {...field}
+                        required
+                      />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -125,9 +129,12 @@ const EditCategory = ({ category, onSuccess }: EditCategoryProps) => {
                 name="description"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Description</FormLabel>
+                    <FormLabel>Descripción</FormLabel>
                     <FormControl>
-                      <Input placeholder="Category description" {...field} />
+                      <Input
+                        placeholder="Descripción de la categoría"
+                        {...field}
+                      />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -145,7 +152,7 @@ const EditCategory = ({ category, onSuccess }: EditCategoryProps) => {
                         onCheckedChange={field.onChange}
                       />
                     </FormControl>
-                    <FormLabel className="font-normal">Is active?</FormLabel>
+                    <FormLabel className="font-normal">Activo</FormLabel>
                   </FormItem>
                 )}
               />
@@ -154,11 +161,11 @@ const EditCategory = ({ category, onSuccess }: EditCategoryProps) => {
             <DialogFooter>
               <DialogClose asChild>
                 <Button variant="outline" disabled={mutation.isPending}>
-                  Cancel
+                  Cancelar
                 </Button>
               </DialogClose>
               <LoadingButton type="submit" loading={mutation.isPending}>
-                Save
+                Guardar
               </LoadingButton>
             </DialogFooter>
           </form>

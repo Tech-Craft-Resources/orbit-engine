@@ -30,10 +30,11 @@ export function Hero() {
             variant="secondary"
             className="mb-5 rounded-full border border-primary/20 bg-primary/8 text-primary font-medium px-3"
           >
-            Operations Intelligence for SME Teams
+            1 mes gratis con acceso completo al plan Pro
           </Badge>
           <h1 className="text-balance text-4xl font-bold tracking-tight sm:text-5xl lg:text-6xl">
-            Build a Clear Operating System for Your Business
+            Controla inventario, ventas y operación de tu pyme desde un solo
+            lugar.
           </h1>
           <p
             className={cn(
@@ -41,9 +42,9 @@ export function Hero() {
               isVisible && "animate-fade-in stagger-2",
             )}
           >
-            OrbitEngine centralizes inventory, sales, customers, and forecasting
-            into one deliberate workspace. Your team works faster, with fewer
-            handoffs, better visibility, and AI-backed next actions.
+            OrbitEngine digitaliza y automatiza tus procesos internos para que
+            tu equipo trabaje con orden, rapidez y métricas confiables desde el
+            primer día.
           </p>
           <div
             className={cn(
@@ -53,13 +54,13 @@ export function Hero() {
           >
             <Button size="lg" asChild className="touch-manipulation">
               <RouterLink to="/signup-org">
-                Start Free
+                Comenzar prueba gratis
                 <ArrowRight className="ml-2 h-4 w-4" aria-hidden="true" />
               </RouterLink>
             </Button>
             <Button variant="outline" size="lg" asChild>
               <a href="#features">
-                Explore Modules
+                Ver cómo funciona
                 <ChevronRight className="ml-1 h-4 w-4" aria-hidden="true" />
               </a>
             </Button>
@@ -69,19 +70,19 @@ export function Hero() {
               <span className="font-mono tabular-nums font-semibold text-primary">
                 99.95%
               </span>{" "}
-              Uptime
+              Operación estable
             </p>
             <p>
               <span className="font-mono tabular-nums font-semibold text-primary">
                 3.8x
               </span>{" "}
-              Faster Monthly Close
+              Menos tareas manuales
             </p>
             <p>
               <span className="font-mono tabular-nums font-semibold text-primary">
                 24/7
               </span>{" "}
-              Audit Trail
+              Trazabilidad operativa
             </p>
           </div>
         </div>
@@ -98,19 +99,23 @@ export function Hero() {
           />
           <CardHeader className="pb-3">
             <CardTitle className="text-xs font-semibold uppercase tracking-[0.12em] text-muted-foreground">
-              Live Operations Snapshot
+              Estado operativo en tiempo real
             </CardTitle>
           </CardHeader>
           <CardContent className="space-y-5">
             <div className="grid grid-cols-2 gap-3">
               <div className="rounded-lg border border-border/70 bg-muted/40 p-3">
-                <p className="text-xs text-muted-foreground">Open Orders</p>
+                <p className="text-xs text-muted-foreground">
+                  Ordenes abiertas
+                </p>
                 <p className="mt-2 font-mono text-2xl font-bold tabular-nums tracking-tight">
                   128
                 </p>
               </div>
               <div className="rounded-lg border border-primary/20 bg-primary/5 p-3">
-                <p className="text-xs text-muted-foreground">Low Stock SKUs</p>
+                <p className="text-xs text-muted-foreground">
+                  SKU con stock bajo
+                </p>
                 <p className="mt-2 font-mono text-2xl font-bold tabular-nums tracking-tight text-primary">
                   09
                 </p>
@@ -118,15 +123,15 @@ export function Hero() {
             </div>
             <div className="rounded-lg border border-border/70 bg-muted/20 p-4">
               <p className="text-xs uppercase tracking-[0.08em] text-muted-foreground">
-                Forecast Engine
+                Recomendación operativa
               </p>
               <p className="mt-2 font-mono text-sm text-primary">
-                model://demand-weekly-v3
+                seguimiento://inventario-semanal
               </p>
               <p className="mt-3 text-sm text-muted-foreground">
-                Next recommendation: Reorder{" "}
-                <span className="font-semibold text-foreground">42</span> units
-                of "Premium Beans" by Friday.
+                Siguiente acción sugerida: reponer{" "}
+                <span className="font-semibold text-foreground">42</span>{" "}
+                unidades de "Café Premium" antes del viernes.
               </p>
             </div>
           </CardContent>

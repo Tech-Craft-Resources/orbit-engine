@@ -26,7 +26,7 @@ export const Route = createFileRoute("/dashboard/admin")({
   head: () => ({
     meta: [
       {
-        title: "Admin - FastAPI Cloud",
+        title: "Administración - OrbitEngine",
       },
     ],
   }),
@@ -57,9 +57,9 @@ function Admin() {
     <div className="flex flex-col gap-6">
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-2xl font-bold tracking-tight">Users</h1>
+          <h1 className="text-2xl font-bold tracking-tight">Usuarios</h1>
           <p className="text-muted-foreground">
-            Manage user accounts and permissions
+            Gestiona cuentas de usuario y permisos
           </p>
         </div>
         <AddUser />

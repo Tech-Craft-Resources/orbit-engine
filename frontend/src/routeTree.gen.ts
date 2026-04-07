@@ -9,10 +9,12 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as TerminosRouteImport } from './routes/terminos'
 import { Route as SignupOrgRouteImport } from './routes/signup-org'
 import { Route as SignupRouteImport } from './routes/signup'
 import { Route as ResetPasswordRouteImport } from './routes/reset-password'
 import { Route as RecoverPasswordRouteImport } from './routes/recover-password'
+import { Route as PrivacidadRouteImport } from './routes/privacidad'
 import { Route as LoginRouteImport } from './routes/login'
 import { Route as DashboardRouteImport } from './routes/dashboard'
 import { Route as IndexRouteImport } from './routes/index'
@@ -23,6 +25,11 @@ import { Route as DashboardInventoryRouteImport } from './routes/dashboard/inven
 import { Route as DashboardCustomersRouteImport } from './routes/dashboard/customers'
 import { Route as DashboardAdminRouteImport } from './routes/dashboard/admin'
 
+const TerminosRoute = TerminosRouteImport.update({
+  id: '/terminos',
+  path: '/terminos',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const SignupOrgRoute = SignupOrgRouteImport.update({
   id: '/signup-org',
   path: '/signup-org',
@@ -41,6 +48,11 @@ const ResetPasswordRoute = ResetPasswordRouteImport.update({
 const RecoverPasswordRoute = RecoverPasswordRouteImport.update({
   id: '/recover-password',
   path: '/recover-password',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PrivacidadRoute = PrivacidadRouteImport.update({
+  id: '/privacidad',
+  path: '/privacidad',
   getParentRoute: () => rootRouteImport,
 } as any)
 const LoginRoute = LoginRouteImport.update({
@@ -93,10 +105,12 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/dashboard': typeof DashboardRouteWithChildren
   '/login': typeof LoginRoute
+  '/privacidad': typeof PrivacidadRoute
   '/recover-password': typeof RecoverPasswordRoute
   '/reset-password': typeof ResetPasswordRoute
   '/signup': typeof SignupRoute
   '/signup-org': typeof SignupOrgRoute
+  '/terminos': typeof TerminosRoute
   '/dashboard/admin': typeof DashboardAdminRoute
   '/dashboard/customers': typeof DashboardCustomersRoute
   '/dashboard/inventory': typeof DashboardInventoryRoute
@@ -107,10 +121,12 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/login': typeof LoginRoute
+  '/privacidad': typeof PrivacidadRoute
   '/recover-password': typeof RecoverPasswordRoute
   '/reset-password': typeof ResetPasswordRoute
   '/signup': typeof SignupRoute
   '/signup-org': typeof SignupOrgRoute
+  '/terminos': typeof TerminosRoute
   '/dashboard/admin': typeof DashboardAdminRoute
   '/dashboard/customers': typeof DashboardCustomersRoute
   '/dashboard/inventory': typeof DashboardInventoryRoute
@@ -123,10 +139,12 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/dashboard': typeof DashboardRouteWithChildren
   '/login': typeof LoginRoute
+  '/privacidad': typeof PrivacidadRoute
   '/recover-password': typeof RecoverPasswordRoute
   '/reset-password': typeof ResetPasswordRoute
   '/signup': typeof SignupRoute
   '/signup-org': typeof SignupOrgRoute
+  '/terminos': typeof TerminosRoute
   '/dashboard/admin': typeof DashboardAdminRoute
   '/dashboard/customers': typeof DashboardCustomersRoute
   '/dashboard/inventory': typeof DashboardInventoryRoute
@@ -140,10 +158,12 @@ export interface FileRouteTypes {
     | '/'
     | '/dashboard'
     | '/login'
+    | '/privacidad'
     | '/recover-password'
     | '/reset-password'
     | '/signup'
     | '/signup-org'
+    | '/terminos'
     | '/dashboard/admin'
     | '/dashboard/customers'
     | '/dashboard/inventory'
@@ -154,10 +174,12 @@ export interface FileRouteTypes {
   to:
     | '/'
     | '/login'
+    | '/privacidad'
     | '/recover-password'
     | '/reset-password'
     | '/signup'
     | '/signup-org'
+    | '/terminos'
     | '/dashboard/admin'
     | '/dashboard/customers'
     | '/dashboard/inventory'
@@ -169,10 +191,12 @@ export interface FileRouteTypes {
     | '/'
     | '/dashboard'
     | '/login'
+    | '/privacidad'
     | '/recover-password'
     | '/reset-password'
     | '/signup'
     | '/signup-org'
+    | '/terminos'
     | '/dashboard/admin'
     | '/dashboard/customers'
     | '/dashboard/inventory'
@@ -185,14 +209,23 @@ export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   DashboardRoute: typeof DashboardRouteWithChildren
   LoginRoute: typeof LoginRoute
+  PrivacidadRoute: typeof PrivacidadRoute
   RecoverPasswordRoute: typeof RecoverPasswordRoute
   ResetPasswordRoute: typeof ResetPasswordRoute
   SignupRoute: typeof SignupRoute
   SignupOrgRoute: typeof SignupOrgRoute
+  TerminosRoute: typeof TerminosRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/terminos': {
+      id: '/terminos'
+      path: '/terminos'
+      fullPath: '/terminos'
+      preLoaderRoute: typeof TerminosRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/signup-org': {
       id: '/signup-org'
       path: '/signup-org'
@@ -219,6 +252,13 @@ declare module '@tanstack/react-router' {
       path: '/recover-password'
       fullPath: '/recover-password'
       preLoaderRoute: typeof RecoverPasswordRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/privacidad': {
+      id: '/privacidad'
+      path: '/privacidad'
+      fullPath: '/privacidad'
+      preLoaderRoute: typeof PrivacidadRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/login': {
@@ -313,10 +353,12 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   DashboardRoute: DashboardRouteWithChildren,
   LoginRoute: LoginRoute,
+  PrivacidadRoute: PrivacidadRoute,
   RecoverPasswordRoute: RecoverPasswordRoute,
   ResetPasswordRoute: ResetPasswordRoute,
   SignupRoute: SignupRoute,
   SignupOrgRoute: SignupOrgRoute,
+  TerminosRoute: TerminosRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

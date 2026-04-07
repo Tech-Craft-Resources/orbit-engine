@@ -40,22 +40,20 @@ import { handleError } from "@/utils"
 
 const formSchema = z
   .object({
-    email: z.email({ message: "Invalid email address" }),
-    first_name: z.string().min(1, { message: "First name is required" }),
-    last_name: z.string().min(1, { message: "Last name is required" }),
+    email: z.email({ message: "Ingresa un correo electronico valido" }),
+    first_name: z.string().min(1, { message: "El nombre es obligatorio" }),
+    last_name: z.string().min(1, { message: "El apellido es obligatorio" }),
     phone: z.string().optional(),
     password: z
       .string()
-      .min(1, { message: "Password is required" })
-      .min(8, { message: "Password must be at least 8 characters" }),
-    confirm_password: z
-      .string()
-      .min(1, { message: "Please confirm your password" }),
-    role_id: z.number().int().positive({ message: "Role is required" }),
+      .min(1, { message: "La contrasena es obligatoria" })
+      .min(8, { message: "La contrasena debe tener al menos 8 caracteres" }),
+    confirm_password: z.string().min(1, { message: "Confirma la contrasena" }),
+    role_id: z.number().int().positive({ message: "El rol es obligatorio" }),
     is_active: z.boolean(),
   })
   .refine((data) => data.password === data.confirm_password, {
-    message: "The passwords don't match",
+    message: "Las contrasenas no coinciden",
     path: ["confirm_password"],
   })
 
@@ -91,7 +89,7 @@ const AddUser = () => {
     mutationFn: (data: UserCreate) =>
       UsersService.createUser({ requestBody: data }),
     onSuccess: () => {
-      showSuccessToast("User created successfully")
+      showSuccessToast("Usuario creado correctamente")
       form.reset()
       setIsOpen(false)
     },
@@ -112,14 +110,14 @@ const AddUser = () => {
       <DialogTrigger asChild>
         <Button className="my-4">
           <Plus className="mr-2" />
-          Add User
+          Agregar usuario
         </Button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-md">
         <DialogHeader>
-          <DialogTitle>Add User</DialogTitle>
+          <DialogTitle>Agregar usuario</DialogTitle>
           <DialogDescription>
-            Fill in the form below to add a new user to the system.
+            Completa el formulario para agregar un nuevo usuario al sistema.
           </DialogDescription>
         </DialogHeader>
         <Form {...form}>
@@ -131,11 +129,12 @@ const AddUser = () => {
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel>
-                      Email <span className="text-destructive">*</span>
+                      Correo electronico{" "}
+                      <span className="text-destructive">*</span>
                     </FormLabel>
                     <FormControl>
                       <Input
-                        placeholder="Email"
+                        placeholder="correo@empresa.com"
                         type="email"
                         {...field}
                         required
@@ -152,11 +151,11 @@ const AddUser = () => {
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel>
-                      First Name <span className="text-destructive">*</span>
+                      Nombre <span className="text-destructive">*</span>
                     </FormLabel>
                     <FormControl>
                       <Input
-                        placeholder="First name"
+                        placeholder="Nombre"
                         type="text"
                         {...field}
                         required
@@ -173,11 +172,11 @@ const AddUser = () => {
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel>
-                      Last Name <span className="text-destructive">*</span>
+                      Apellido <span className="text-destructive">*</span>
                     </FormLabel>
                     <FormControl>
                       <Input
-                        placeholder="Last name"
+                        placeholder="Apellido"
                         type="text"
                         {...field}
                         required
@@ -193,7 +192,7 @@ const AddUser = () => {
                 name="phone"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Phone</FormLabel>
+                    <FormLabel>Telefono</FormLabel>
                     <FormControl>
                       <Input placeholder="+1234567890" type="tel" {...field} />
                     </FormControl>
@@ -208,11 +207,11 @@ const AddUser = () => {
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel>
-                      Set Password <span className="text-destructive">*</span>
+                      Contrasena <span className="text-destructive">*</span>
                     </FormLabel>
                     <FormControl>
                       <Input
-                        placeholder="Password"
+                        placeholder="Contrasena"
                         type="password"
                         {...field}
                         required
@@ -229,12 +228,12 @@ const AddUser = () => {
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel>
-                      Confirm Password{" "}
+                      Confirmar contrasena{" "}
                       <span className="text-destructive">*</span>
                     </FormLabel>
                     <FormControl>
                       <Input
-                        placeholder="Password"
+                        placeholder="Confirmar contrasena"
                         type="password"
                         {...field}
                         required
@@ -251,7 +250,7 @@ const AddUser = () => {
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel>
-                      Role <span className="text-destructive">*</span>
+                      Rol <span className="text-destructive">*</span>
                     </FormLabel>
                     <Select
                       onValueChange={(value) =>
@@ -261,7 +260,7 @@ const AddUser = () => {
                     >
                       <FormControl>
                         <SelectTrigger>
-                          <SelectValue placeholder="Select a role" />
+                          <SelectValue placeholder="Seleccionar rol" />
                         </SelectTrigger>
                       </FormControl>
                       <SelectContent>
@@ -289,7 +288,7 @@ const AddUser = () => {
                         onCheckedChange={field.onChange}
                       />
                     </FormControl>
-                    <FormLabel className="font-normal">Is active?</FormLabel>
+                    <FormLabel className="font-normal">Activo</FormLabel>
                   </FormItem>
                 )}
               />
@@ -298,11 +297,11 @@ const AddUser = () => {
             <DialogFooter>
               <DialogClose asChild>
                 <Button variant="outline" disabled={mutation.isPending}>
-                  Cancel
+                  Cancelar
                 </Button>
               </DialogClose>
               <LoadingButton type="submit" loading={mutation.isPending}>
-                Save
+                Guardar
               </LoadingButton>
             </DialogFooter>
           </form>

@@ -34,7 +34,7 @@ const DeleteCustomer = ({ id, name, onSuccess }: DeleteCustomerProps) => {
   const mutation = useMutation({
     mutationFn: () => CustomersService.deleteCustomer({ customerId: id }),
     onSuccess: () => {
-      showSuccessToast("Customer deleted successfully")
+      showSuccessToast("Cliente eliminado correctamente")
       setIsOpen(false)
       onSuccess()
     },
@@ -56,23 +56,23 @@ const DeleteCustomer = ({ id, name, onSuccess }: DeleteCustomerProps) => {
         onClick={() => setIsOpen(true)}
       >
         <Trash2 />
-        Delete Customer
+        Eliminar cliente
       </DropdownMenuItem>
       <DialogContent className="sm:max-w-md">
         <form onSubmit={handleSubmit(onSubmit)}>
           <DialogHeader>
-            <DialogTitle>Delete Customer</DialogTitle>
+            <DialogTitle>Eliminar cliente</DialogTitle>
             <DialogDescription>
-              Are you sure you want to delete <strong>{name}</strong>? This
-              action cannot be undone. Sales history associated with this
-              customer will remain in the system.
+              ¿Seguro que deseas eliminar a <strong>{name}</strong>? Esta accion
+              no se puede deshacer. El historial de ventas de este cliente se
+              conservara en el sistema.
             </DialogDescription>
           </DialogHeader>
 
           <DialogFooter className="mt-4">
             <DialogClose asChild>
               <Button variant="outline" disabled={mutation.isPending}>
-                Cancel
+                Cancelar
               </Button>
             </DialogClose>
             <LoadingButton
@@ -80,7 +80,7 @@ const DeleteCustomer = ({ id, name, onSuccess }: DeleteCustomerProps) => {
               type="submit"
               loading={mutation.isPending}
             >
-              Delete
+              Eliminar
             </LoadingButton>
           </DialogFooter>
         </form>

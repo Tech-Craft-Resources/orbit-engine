@@ -33,31 +33,36 @@ const slugRegex = /^[a-z0-9]+(?:-[a-z0-9]+)*$/
 
 const formSchema = z
   .object({
-    organization_name: z
-      .string()
-      .min(2, { message: "Organization name must be at least 2 characters" }),
+    organization_name: z.string().min(2, {
+      message: "El nombre de la organización debe tener al menos 2 caracteres",
+    }),
     organization_slug: z
       .string()
-      .min(3, { message: "Slug must be at least 3 characters" })
-      .max(50, { message: "Slug must be at most 50 characters" })
+      .min(3, { message: "El slug debe tener al menos 3 caracteres" })
+      .max(50, { message: "El slug debe tener máximo 50 caracteres" })
       .regex(slugRegex, {
-        message:
-          "Slug must contain only lowercase letters, numbers, and hyphens",
+        message: "El slug solo puede contener minúsculas, números y guiones",
       }),
     organization_description: z.string().optional(),
-    admin_email: z.string().email({ message: "Please enter a valid email" }),
-    admin_first_name: z.string().min(1, { message: "First name is required" }),
-    admin_last_name: z.string().min(1, { message: "Last name is required" }),
+    admin_email: z
+      .string()
+      .email({ message: "Ingresa un correo electrónico válido" }),
+    admin_first_name: z
+      .string()
+      .min(1, { message: "El nombre es obligatorio" }),
+    admin_last_name: z
+      .string()
+      .min(1, { message: "El apellido es obligatorio" }),
     admin_phone: z.string().optional(),
     admin_password: z
       .string()
-      .min(8, { message: "Password must be at least 8 characters" }),
+      .min(8, { message: "La contraseña debe tener al menos 8 caracteres" }),
     confirm_password: z
       .string()
-      .min(1, { message: "Password confirmation is required" }),
+      .min(1, { message: "Debes confirmar la contraseña" }),
   })
   .refine((data) => data.admin_password === data.confirm_password, {
-    message: "Passwords don't match",
+    message: "Las contraseñas no coinciden",
     path: ["confirm_password"],
   })
 
@@ -69,7 +74,7 @@ export const Route = createFileRoute("/signup-org")({
     await redirectIfAuthenticated(queryClient)
   },
   head: () => ({
-    meta: [{ title: "Create Organization - OrbitEngine" }],
+    meta: [{ title: "Crear organización - OrbitEngine" }],
   }),
 })
 
@@ -110,7 +115,7 @@ function SignUpOrg() {
       }),
     onSuccess: (response) => {
       setAccessToken(response.access_token)
-      showSuccessToast("Organization created successfully!")
+      showSuccessToast("Organización creada correctamente")
       navigate({ to: "/dashboard" })
     },
     onError: handleError.bind(showErrorToast),
@@ -151,16 +156,16 @@ function SignUpOrg() {
           className="flex flex-col gap-6"
         >
           <div className="flex flex-col items-center gap-2 text-center">
-            <h1 className="text-2xl font-bold">Create your organization</h1>
+            <h1 className="text-2xl font-bold">Crea tu organización</h1>
             <p className="text-sm text-muted-foreground">
-              Set up your organization and admin account
+              Configura tu organización y la cuenta administradora
             </p>
           </div>
 
           <div className="grid gap-4">
             {/* Organization section */}
             <p className="text-sm font-medium text-muted-foreground">
-              Organization details
+              Datos de la organización
             </p>
 
             <FormField
@@ -168,11 +173,11 @@ function SignUpOrg() {
               name="organization_name"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Organization Name</FormLabel>
+                  <FormLabel>Nombre de la organización</FormLabel>
                   <FormControl>
                     <Input
                       data-testid="org-name-input"
-                      placeholder="My Company"
+                      placeholder="Mi empresa"
                       {...field}
                       onChange={(e) =>
                         handleNameChange(e.target.value, field.onChange)
@@ -198,7 +203,7 @@ function SignUpOrg() {
                     />
                   </FormControl>
                   <FormDescription>
-                    Unique identifier for your organization
+                    Identificador único de tu organización
                   </FormDescription>
                   <FormMessage />
                 </FormItem>
@@ -211,13 +216,13 @@ function SignUpOrg() {
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>
-                    Description{" "}
-                    <span className="text-muted-foreground">(optional)</span>
+                    Descripción{" "}
+                    <span className="text-muted-foreground">(opcional)</span>
                   </FormLabel>
                   <FormControl>
                     <Input
                       data-testid="org-description-input"
-                      placeholder="Brief description of your organization"
+                      placeholder="Descripción breve de tu organización"
                       {...field}
                     />
                   </FormControl>
@@ -230,7 +235,7 @@ function SignUpOrg() {
 
             {/* Admin user section */}
             <p className="text-sm font-medium text-muted-foreground">
-              Admin account
+              Cuenta administradora
             </p>
 
             <div className="grid grid-cols-2 gap-3">
@@ -239,11 +244,11 @@ function SignUpOrg() {
                 name="admin_first_name"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>First Name</FormLabel>
+                    <FormLabel>Nombre</FormLabel>
                     <FormControl>
                       <Input
                         data-testid="first-name-input"
-                        placeholder="John"
+                        placeholder="Juan"
                         {...field}
                       />
                     </FormControl>
@@ -257,11 +262,11 @@ function SignUpOrg() {
                 name="admin_last_name"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Last Name</FormLabel>
+                    <FormLabel>Apellido</FormLabel>
                     <FormControl>
                       <Input
                         data-testid="last-name-input"
-                        placeholder="Doe"
+                        placeholder="Perez"
                         {...field}
                       />
                     </FormControl>
@@ -276,7 +281,7 @@ function SignUpOrg() {
               name="admin_email"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Email</FormLabel>
+                  <FormLabel>Correo electronico</FormLabel>
                   <FormControl>
                     <Input
                       data-testid="email-input"
@@ -296,8 +301,8 @@ function SignUpOrg() {
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>
-                    Phone{" "}
-                    <span className="text-muted-foreground">(optional)</span>
+                    Teléfono{" "}
+                    <span className="text-muted-foreground">(opcional)</span>
                   </FormLabel>
                   <FormControl>
                     <Input
@@ -317,11 +322,11 @@ function SignUpOrg() {
               name="admin_password"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Password</FormLabel>
+                  <FormLabel>Contraseña</FormLabel>
                   <FormControl>
                     <PasswordInput
                       data-testid="password-input"
-                      placeholder="Password"
+                      placeholder="Contraseña"
                       {...field}
                     />
                   </FormControl>
@@ -335,11 +340,11 @@ function SignUpOrg() {
               name="confirm_password"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Confirm Password</FormLabel>
+                  <FormLabel>Confirmar contraseña</FormLabel>
                   <FormControl>
                     <PasswordInput
                       data-testid="confirm-password-input"
-                      placeholder="Confirm Password"
+                      placeholder="Confirmar contraseña"
                       {...field}
                     />
                   </FormControl>
@@ -353,20 +358,20 @@ function SignUpOrg() {
               className="w-full"
               loading={signupMutation.isPending}
             >
-              Create Organization
+              Crear organización
             </LoadingButton>
           </div>
 
           <div className="text-center text-sm">
-            Already have an account?{" "}
+            ¿Ya tienes una cuenta?{" "}
             <RouterLink to="/login" className="underline underline-offset-4">
-              Log in
+              Iniciar sesión
             </RouterLink>
           </div>
 
           <div className="text-center text-sm text-muted-foreground">
             <RouterLink to="/" className="underline underline-offset-4">
-              Back to main page
+              Volver a la página principal
             </RouterLink>
           </div>
         </form>

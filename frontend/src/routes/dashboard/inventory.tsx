@@ -18,10 +18,10 @@ import { queryClient } from "@/lib/queryClient"
 
 const STATUS_FILTER: FilterableColumn = {
   id: "is_active",
-  label: "Status",
+  label: "Estado",
   options: [
-    { label: "Active", value: "true" },
-    { label: "Inactive", value: "false" },
+    { label: "Activo", value: "true" },
+    { label: "Inactivo", value: "false" },
   ],
 }
 
@@ -48,7 +48,7 @@ export const Route = createFileRoute("/dashboard/inventory")({
   head: () => ({
     meta: [
       {
-        title: "Inventory - OrbitEngine",
+        title: "Inventario - OrbitEngine",
       },
     ],
   }),
@@ -93,7 +93,7 @@ function ProductsTableContent({
     () => [
       {
         id: "category_id",
-        label: "Category",
+        label: "Categoría",
         options: categoryFilterOptions,
       },
       STATUS_FILTER,
@@ -109,7 +109,7 @@ function ProductsTableContent({
       data={products?.data ?? []}
       searchValue={search}
       onSearchChange={onSearchChange}
-      searchPlaceholder="Search by name or SKU…"
+      searchPlaceholder="Buscar por nombre o SKU…"
       filterableColumns={filterableColumns}
     />
   )
@@ -154,7 +154,7 @@ function CategoriesTableContent({
       data={filtered}
       searchValue={search}
       onSearchChange={onSearchChange}
-      searchPlaceholder="Search by name…"
+      searchPlaceholder="Buscar por nombre…"
       filterableColumns={[STATUS_FILTER]}
     />
   )
@@ -202,7 +202,7 @@ function LowStockTableContent({
     () => [
       {
         id: "category_id",
-        label: "Category",
+        label: "Categoría",
         options: categoryFilterOptions,
       },
     ],
@@ -225,7 +225,7 @@ function LowStockTableContent({
       data={filtered}
       searchValue={search}
       onSearchChange={onSearchChange}
-      searchPlaceholder="Search by name or SKU…"
+      searchPlaceholder="Buscar por nombre o SKU…"
       filterableColumns={filterableColumns}
     />
   )
@@ -263,18 +263,18 @@ function Inventory() {
   return (
     <div className="flex flex-col gap-6">
       <div>
-        <h1 className="text-2xl font-bold tracking-tight">Inventory</h1>
+        <h1 className="text-2xl font-bold tracking-tight">Inventario</h1>
         <p className="text-muted-foreground">
-          Manage your product catalog and categories
+          Gestiona tu catálogo de productos y categorías
         </p>
       </div>
       <Tabs defaultValue="products">
         <div className="flex items-center justify-between">
           <TabsList>
-            <TabsTrigger value="products">Products</TabsTrigger>
-            <TabsTrigger value="categories">Categories</TabsTrigger>
+            <TabsTrigger value="products">Productos</TabsTrigger>
+            <TabsTrigger value="categories">Categorías</TabsTrigger>
             <TabsTrigger value="low-stock" className="gap-1">
-              Low Stock
+              Stock bajo
               <Suspense>
                 <LowStockBadge />
               </Suspense>

@@ -34,7 +34,7 @@ const DeleteCategory = ({ id, onSuccess }: DeleteCategoryProps) => {
     mutationFn: (categoryId: string) =>
       CategoriesService.deleteCategory({ categoryId }),
     onSuccess: () => {
-      showSuccessToast("Category deleted successfully")
+      showSuccessToast("Categoría eliminada correctamente")
       setIsOpen(false)
       onSuccess()
     },
@@ -56,22 +56,22 @@ const DeleteCategory = ({ id, onSuccess }: DeleteCategoryProps) => {
         onClick={() => setIsOpen(true)}
       >
         <Trash2 />
-        Delete Category
+        Eliminar categoría
       </DropdownMenuItem>
       <DialogContent className="sm:max-w-md">
         <form onSubmit={handleSubmit(onSubmit)}>
           <DialogHeader>
-            <DialogTitle>Delete Category</DialogTitle>
+            <DialogTitle>Eliminar categoría</DialogTitle>
             <DialogDescription>
-              Products in this category will become uncategorized. Are you sure?
-              You will not be able to undo this action.
+              Los productos de esta categoría quedarán sin categoría. Esta
+              acción no se puede deshacer.
             </DialogDescription>
           </DialogHeader>
 
           <DialogFooter className="mt-4">
             <DialogClose asChild>
               <Button variant="outline" disabled={mutation.isPending}>
-                Cancel
+                Cancelar
               </Button>
             </DialogClose>
             <LoadingButton
@@ -79,7 +79,7 @@ const DeleteCategory = ({ id, onSuccess }: DeleteCategoryProps) => {
               type="submit"
               loading={mutation.isPending}
             >
-              Delete
+              Eliminar
             </LoadingButton>
           </DialogFooter>
         </form>

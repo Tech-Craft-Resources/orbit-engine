@@ -14,10 +14,10 @@ import { queryClient } from "@/lib/queryClient"
 const CUSTOMERS_FILTER_COLUMNS: FilterableColumn[] = [
   {
     id: "is_active",
-    label: "Status",
+    label: "Estado",
     options: [
-      { label: "Active", value: "true" },
-      { label: "Inactive", value: "false" },
+      { label: "Activo", value: "true" },
+      { label: "Inactivo", value: "false" },
     ],
   },
 ]
@@ -30,7 +30,7 @@ export const Route = createFileRoute("/dashboard/customers")({
   head: () => ({
     meta: [
       {
-        title: "Customers - OrbitEngine",
+        title: "Clientes - OrbitEngine",
       },
     ],
   }),
@@ -64,7 +64,7 @@ function CustomersTableContent({
       data={customers?.data ?? []}
       searchValue={search}
       onSearchChange={onSearchChange}
-      searchPlaceholder="Search by name, email, document…"
+      searchPlaceholder="Buscar por nombre, correo o documento…"
       filterableColumns={CUSTOMERS_FILTER_COLUMNS}
     />
   )
@@ -77,8 +77,10 @@ function Customers() {
     <div className="flex flex-col gap-6">
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-2xl font-bold tracking-tight">Customers</h1>
-          <p className="text-muted-foreground">Manage your customer database</p>
+          <h1 className="text-2xl font-bold tracking-tight">Clientes</h1>
+          <p className="text-muted-foreground">
+            Gestiona la base de datos de clientes
+          </p>
         </div>
         <AddCustomer />
       </div>

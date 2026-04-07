@@ -7,13 +7,13 @@ import { CategoryActionsMenu } from "./CategoryActionsMenu"
 export const categoryColumns: ColumnDef<CategoryPublic>[] = [
   {
     accessorKey: "name",
-    header: "Name",
+    header: "Nombre",
     enableSorting: true,
     cell: ({ row }) => <span className="font-medium">{row.original.name}</span>,
   },
   {
     accessorKey: "description",
-    header: "Description",
+    header: "Descripción",
     enableSorting: false,
     cell: ({ row }) => (
       <span className="text-muted-foreground">
@@ -23,7 +23,7 @@ export const categoryColumns: ColumnDef<CategoryPublic>[] = [
   },
   {
     accessorKey: "is_active",
-    header: "Status",
+    header: "Estado",
     enableSorting: false,
     filterFn: (row, _columnId, filterValue) =>
       String(row.original.is_active) === filterValue,
@@ -36,14 +36,14 @@ export const categoryColumns: ColumnDef<CategoryPublic>[] = [
           )}
         />
         <span className={row.original.is_active ? "" : "text-muted-foreground"}>
-          {row.original.is_active ? "Active" : "Inactive"}
+          {row.original.is_active ? "Activo" : "Inactivo"}
         </span>
       </div>
     ),
   },
   {
     accessorKey: "created_at",
-    header: "Created",
+    header: "Creado",
     enableSorting: true,
     sortingFn: "datetime",
     cell: ({ row }) => (
@@ -54,7 +54,7 @@ export const categoryColumns: ColumnDef<CategoryPublic>[] = [
   },
   {
     id: "actions",
-    header: () => <span className="sr-only">Actions</span>,
+    header: () => <span className="sr-only">Acciones</span>,
     enableSorting: false,
     cell: ({ row }) => (
       <div className="flex justify-end">

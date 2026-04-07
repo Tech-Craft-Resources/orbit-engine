@@ -14,21 +14,21 @@ import { queryClient } from "@/lib/queryClient"
 const SALES_FILTER_COLUMNS: FilterableColumn[] = [
   {
     id: "status",
-    label: "Status",
+    label: "Estado",
     options: [
-      { label: "Completed", value: "completed" },
-      { label: "Cancelled", value: "cancelled" },
-      { label: "Pending", value: "pending" },
+      { label: "Completada", value: "completed" },
+      { label: "Cancelada", value: "cancelled" },
+      { label: "Pendiente", value: "pending" },
     ],
   },
   {
     id: "payment_method",
-    label: "Payment",
+    label: "Pago",
     options: [
-      { label: "Cash", value: "cash" },
-      { label: "Card", value: "card" },
-      { label: "Transfer", value: "transfer" },
-      { label: "Other", value: "other" },
+      { label: "Efectivo", value: "cash" },
+      { label: "Tarjeta", value: "card" },
+      { label: "Transferencia", value: "transfer" },
+      { label: "Otro", value: "other" },
     ],
   },
 ]
@@ -41,7 +41,7 @@ export const Route = createFileRoute("/dashboard/sales")({
   head: () => ({
     meta: [
       {
-        title: "Sales - OrbitEngine",
+        title: "Ventas - OrbitEngine",
       },
     ],
   }),
@@ -75,7 +75,7 @@ function SalesTableContent({
       data={sales?.data ?? []}
       searchValue={search}
       onSearchChange={onSearchChange}
-      searchPlaceholder="Search by invoice number…"
+      searchPlaceholder="Buscar por numero de factura..."
       filterableColumns={SALES_FILTER_COLUMNS}
     />
   )
@@ -88,9 +88,9 @@ function Sales() {
     <div className="flex flex-col gap-6">
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-2xl font-bold tracking-tight">Sales</h1>
+          <h1 className="text-2xl font-bold tracking-tight">Ventas</h1>
           <p className="text-muted-foreground">
-            Manage sales and process transactions
+            Gestiona ventas y procesa transacciones
           </p>
         </div>
         <AddSale />

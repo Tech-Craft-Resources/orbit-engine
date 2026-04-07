@@ -16,9 +16,9 @@ import useAuth from "@/hooks/useAuth"
 import { getInitials } from "@/utils"
 
 const navLinks = [
-  { href: "#features", label: "Modules" },
-  { href: "#benefits", label: "Approach" },
-  { href: "#stats", label: "Proof" },
+  { href: "#features", label: "Cómo funciona" },
+  { href: "#benefits", label: "Roles" },
+  { href: "#stats", label: "Beneficios" },
 ]
 
 export function LandingNav() {
@@ -52,7 +52,10 @@ export function LandingNav() {
             className="hidden h-2 w-2 rounded-full bg-primary md:block"
           />
         </RouterLink>
-        <nav className="hidden items-center gap-1 md:flex" aria-label="Primary">
+        <nav
+          className="hidden items-center gap-1 md:flex"
+          aria-label="Principal"
+        >
           {navLinks.map((link) => (
             <a
               key={link.href}
@@ -68,7 +71,7 @@ export function LandingNav() {
           {user ? (
             <>
               <Button size="sm" asChild className="touch-manipulation">
-                <RouterLink to="/dashboard">Go to Dashboard</RouterLink>
+                <RouterLink to="/dashboard">Ingresar</RouterLink>
               </Button>
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
@@ -76,11 +79,11 @@ export function LandingNav() {
                     variant="ghost"
                     size="sm"
                     className="gap-2"
-                    aria-label="Open User Menu"
+                    aria-label="Abrir menú de usuario"
                   >
                     <Avatar className="size-6">
                       <AvatarFallback className="bg-muted text-muted-foreground border border-sidebar text-xs">
-                        {getInitials(fullName || "User")}
+                        {getInitials(fullName || "Usuario")}
                       </AvatarFallback>
                     </Avatar>
                     <ChevronsUpDown className="size-4" aria-hidden="true" />
@@ -99,12 +102,12 @@ export function LandingNav() {
                   <DropdownMenuItem asChild>
                     <RouterLink to="/dashboard/settings">
                       <Settings aria-hidden="true" />
-                      User Settings
+                      Configuración
                     </RouterLink>
                   </DropdownMenuItem>
                   <DropdownMenuItem onClick={logout}>
                     <LogOut aria-hidden="true" />
-                    Log Out
+                    Cerrar sesión
                   </DropdownMenuItem>
                 </DropdownMenuContent>
               </DropdownMenu>
@@ -112,10 +115,10 @@ export function LandingNav() {
           ) : (
             <>
               <Button variant="ghost" size="sm" asChild>
-                <RouterLink to="/login">Log In</RouterLink>
+                <RouterLink to="/login">Iniciar sesión</RouterLink>
               </Button>
               <Button size="sm" asChild className="touch-manipulation">
-                <RouterLink to="/signup">Get Started</RouterLink>
+                <RouterLink to="/signup">Comenzar</RouterLink>
               </Button>
             </>
           )}

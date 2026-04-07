@@ -25,7 +25,7 @@ export function buildProductColumns(
     },
     {
       accessorKey: "name",
-      header: "Name",
+      header: "Nombre",
       enableSorting: true,
       cell: ({ row }) => (
         <span className="font-medium">{row.original.name}</span>
@@ -33,7 +33,7 @@ export function buildProductColumns(
     },
     {
       accessorKey: "category_id",
-      header: "Category",
+      header: "Categoría",
       enableSorting: false,
       filterFn: (row, _columnId, filterValue) =>
         row.original.category_id === filterValue,
@@ -59,7 +59,7 @@ export function buildProductColumns(
             </span>
             {isLow && (
               <Badge variant="destructive" className="text-xs">
-                Low
+                Bajo
               </Badge>
             )}
           </div>
@@ -68,7 +68,7 @@ export function buildProductColumns(
     },
     {
       accessorKey: "sale_price",
-      header: "Sale Price",
+      header: "Precio de venta",
       enableSorting: true,
       sortingFn: "alphanumeric",
       cell: ({ row }) => {
@@ -82,7 +82,7 @@ export function buildProductColumns(
     },
     {
       accessorKey: "is_active",
-      header: "Status",
+      header: "Estado",
       enableSorting: false,
       filterFn: (row, _columnId, filterValue) =>
         String(row.original.is_active) === filterValue,
@@ -97,14 +97,14 @@ export function buildProductColumns(
           <span
             className={row.original.is_active ? "" : "text-muted-foreground"}
           >
-            {row.original.is_active ? "Active" : "Inactive"}
+            {row.original.is_active ? "Activo" : "Inactivo"}
           </span>
         </div>
       ),
     },
     {
       id: "actions",
-      header: () => <span className="sr-only">Actions</span>,
+      header: () => <span className="sr-only">Acciones</span>,
       enableSorting: false,
       cell: ({ row }) => (
         <div className="flex justify-end">

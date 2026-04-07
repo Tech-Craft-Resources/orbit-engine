@@ -31,10 +31,10 @@ const movementTypeStyles: Record<
     variant: "default" | "secondary" | "destructive" | "outline"
   }
 > = {
-  sale: { label: "Sale", variant: "destructive" },
-  purchase: { label: "Purchase", variant: "default" },
-  adjustment: { label: "Adjustment", variant: "secondary" },
-  return: { label: "Return", variant: "outline" },
+  sale: { label: "Venta", variant: "destructive" },
+  purchase: { label: "Compra", variant: "default" },
+  adjustment: { label: "Ajuste", variant: "secondary" },
+  return: { label: "Devolucion", variant: "outline" },
 }
 
 interface MovementHistoryProps {
@@ -62,13 +62,13 @@ const MovementHistory = ({ product }: MovementHistoryProps) => {
         onClick={() => setIsOpen(true)}
       >
         <ArrowDownUp />
-        Movement History
+        Historial de movimientos
       </DropdownMenuItem>
       <DialogContent className="sm:max-w-lg">
         <DialogHeader>
-          <DialogTitle>Movement History</DialogTitle>
+          <DialogTitle>Historial de movimientos</DialogTitle>
           <DialogDescription>
-            Stock movements for <strong>{product.name}</strong>
+            Movimientos de stock de <strong>{product.name}</strong>
           </DialogDescription>
         </DialogHeader>
 
@@ -83,11 +83,11 @@ const MovementHistory = ({ product }: MovementHistoryProps) => {
             <Table>
               <TableHeader>
                 <TableRow>
-                  <TableHead>Date</TableHead>
-                  <TableHead>Type</TableHead>
-                  <TableHead className="text-right">Qty</TableHead>
+                  <TableHead>Fecha</TableHead>
+                  <TableHead>Tipo</TableHead>
+                  <TableHead className="text-right">Cant.</TableHead>
                   <TableHead className="text-right">Stock</TableHead>
-                  <TableHead>Reason</TableHead>
+                  <TableHead>Motivo</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
@@ -100,7 +100,7 @@ const MovementHistory = ({ product }: MovementHistoryProps) => {
                     <TableRow key={movement.id}>
                       <TableCell className="text-xs text-muted-foreground whitespace-nowrap">
                         {new Date(movement.created_at).toLocaleDateString(
-                          "en-US",
+                          "es-CO",
                           {
                             month: "short",
                             day: "numeric",
@@ -142,20 +142,20 @@ const MovementHistory = ({ product }: MovementHistoryProps) => {
             </Table>
           ) : (
             <p className="text-sm text-muted-foreground text-center py-8">
-              No movements recorded for this product
+              No hay movimientos registrados para este producto
             </p>
           )}
         </div>
 
         {movements?.count != null && movements.count > 0 && (
           <p className="text-xs text-muted-foreground text-right">
-            Showing {movements.data.length} of {movements.count} movements
+            Mostrando {movements.data.length} de {movements.count} movimientos
           </p>
         )}
 
         <DialogFooter>
           <DialogClose asChild>
-            <Button variant="outline">Close</Button>
+            <Button variant="outline">Cerrar</Button>
           </DialogClose>
         </DialogFooter>
       </DialogContent>

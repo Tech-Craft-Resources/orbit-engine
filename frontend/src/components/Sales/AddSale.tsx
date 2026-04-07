@@ -51,7 +51,9 @@ interface CartItem {
 
 const formSchema = z.object({
   customer_id: z.string().optional(),
-  payment_method: z.string().min(1, { message: "Payment method is required" }),
+  payment_method: z
+    .string()
+    .min(1, { message: "El metodo de pago es obligatorio" }),
   discount: z.string().optional(),
   tax: z.string().optional(),
   notes: z.string().optional(),
@@ -151,7 +153,7 @@ const AddSale = () => {
   const mutation = useMutation({
     mutationFn: SalesService.createSale,
     onSuccess: () => {
-      showSuccessToast("Sale created successfully")
+      showSuccessToast("Venta registrada correctamente")
       form.reset()
       setCart([])
       setSearch("")
@@ -166,7 +168,7 @@ const AddSale = () => {
 
   const onSubmit = (data: FormData) => {
     if (cart.length === 0) {
-      showErrorToast("Add at least one product to the cart")
+      showErrorToast("Agrega al menos un producto al carrito")
       return
     }
 
@@ -199,14 +201,14 @@ const AddSale = () => {
       <DialogTrigger asChild>
         <Button>
           <Plus className="mr-2" />
-          New Sale
+          Nueva venta
         </Button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-2xl max-h-[90vh] overflow-y-auto">
         <DialogHeader>
-          <DialogTitle>New Sale</DialogTitle>
+          <DialogTitle>Nueva venta</DialogTitle>
           <DialogDescription>
-            Search and add products, then complete the sale.
+            Busca y agrega productos, luego completa la venta.
           </DialogDescription>
         </DialogHeader>
         <Form {...form}>
@@ -214,9 +216,9 @@ const AddSale = () => {
             <div className="space-y-4 py-4">
               {/* Product Search */}
               <div className="space-y-2">
-                <FormLabel>Add Products</FormLabel>
+                <FormLabel>Agregar productos</FormLabel>
                 <Input
-                  placeholder="Search by name, SKU, or barcode..."
+                  placeholder="Buscar por nombre, SKU o codigo de barras..."
                   value={search}
                   onChange={(e) => setSearch(e.target.value)}
                 />
@@ -247,7 +249,7 @@ const AddSale = () => {
                             }
                             className="text-xs"
                           >
-                            Stock: {product.stock_quantity ?? 0}
+                            Existencias: {product.stock_quantity ?? 0}
                           </Badge>
                         </div>
                       </button>
@@ -256,7 +258,7 @@ const AddSale = () => {
                 )}
                 {search.trim() && filteredProducts.length === 0 && (
                   <p className="text-sm text-muted-foreground p-2">
-                    No products found
+                    No se encontraron productos
                   </p>
                 )}
               </div>
@@ -266,7 +268,7 @@ const AddSale = () => {
                 <div className="space-y-2">
                   <FormLabel className="flex items-center gap-2">
                     <ShoppingCart className="size-4" />
-                    Cart ({cart.length} items)
+                    Carrito ({cart.length} productos)
                   </FormLabel>
                   <div className="rounded-md border divide-y">
                     {cart.map((item) => (
@@ -279,7 +281,7 @@ const AddSale = () => {
                             {item.product.name}
                           </span>
                           <span className="text-xs text-muted-foreground">
-                            ${Number(item.product.sale_price).toFixed(2)} each
+                            ${Number(item.product.sale_price).toFixed(2)} c/u
                           </span>
                         </div>
                         <div className="flex items-center gap-2">
@@ -335,14 +337,14 @@ const AddSale = () => {
                   name="customer_id"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Customer</FormLabel>
+                      <FormLabel>Cliente</FormLabel>
                       <Select
                         onValueChange={field.onChange}
                         value={field.value}
                       >
                         <FormControl>
                           <SelectTrigger>
-                            <SelectValue placeholder="Walk-in customer" />
+                            <SelectValue placeholder="Cliente ocasional" />
                           </SelectTrigger>
                         </FormControl>
                         <SelectContent>
@@ -364,7 +366,7 @@ const AddSale = () => {
                   render={({ field }) => (
                     <FormItem>
                       <FormLabel>
-                        Payment Method{" "}
+                        Metodo de pago{" "}
                         <span className="text-destructive">*</span>
                       </FormLabel>
                       <Select
@@ -373,14 +375,16 @@ const AddSale = () => {
                       >
                         <FormControl>
                           <SelectTrigger>
-                            <SelectValue placeholder="Select method" />
+                            <SelectValue placeholder="Selecciona un metodo" />
                           </SelectTrigger>
                         </FormControl>
                         <SelectContent>
-                          <SelectItem value="cash">Cash</SelectItem>
-                          <SelectItem value="card">Card</SelectItem>
-                          <SelectItem value="transfer">Transfer</SelectItem>
-                          <SelectItem value="other">Other</SelectItem>
+                          <SelectItem value="cash">Efectivo</SelectItem>
+                          <SelectItem value="card">Tarjeta</SelectItem>
+                          <SelectItem value="transfer">
+                            Transferencia
+                          </SelectItem>
+                          <SelectItem value="other">Otro</SelectItem>
                         </SelectContent>
                       </Select>
                       <FormMessage />
@@ -393,7 +397,7 @@ const AddSale = () => {
                   name="discount"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Discount ($)</FormLabel>
+                      <FormLabel>Descuento ($)</FormLabel>
                       <FormControl>
                         <Input
                           placeholder="0.00"
@@ -413,7 +417,7 @@ const AddSale = () => {
                   name="tax"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Tax ($)</FormLabel>
+                      <FormLabel>Impuesto ($)</FormLabel>
                       <FormControl>
                         <Input
                           placeholder="0.00"
@@ -434,9 +438,9 @@ const AddSale = () => {
                 name="notes"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Notes</FormLabel>
+                    <FormLabel>Notas</FormLabel>
                     <FormControl>
-                      <Input placeholder="Optional notes" {...field} />
+                      <Input placeholder="Notas opcionales" {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -451,7 +455,7 @@ const AddSale = () => {
                 </div>
                 {discountValue > 0 && (
                   <div className="flex justify-between">
-                    <span className="text-muted-foreground">Discount</span>
+                    <span className="text-muted-foreground">Descuento</span>
                     <span className="text-destructive">
                       -${discountValue.toFixed(2)}
                     </span>
@@ -459,7 +463,7 @@ const AddSale = () => {
                 )}
                 {taxValue > 0 && (
                   <div className="flex justify-between">
-                    <span className="text-muted-foreground">Tax</span>
+                    <span className="text-muted-foreground">Impuesto</span>
                     <span>${taxValue.toFixed(2)}</span>
                   </div>
                 )}
@@ -474,7 +478,7 @@ const AddSale = () => {
             <DialogFooter>
               <DialogClose asChild>
                 <Button variant="outline" disabled={mutation.isPending}>
-                  Cancel
+                  Cancelar
                 </Button>
               </DialogClose>
               <LoadingButton
@@ -482,7 +486,7 @@ const AddSale = () => {
                 loading={mutation.isPending}
                 disabled={cart.length === 0}
               >
-                Complete Sale
+                Guardar
               </LoadingButton>
             </DialogFooter>
           </form>
