@@ -149,7 +149,7 @@ function SignUpOrg() {
   }
 
   return (
-    <AuthLayout>
+    <AuthLayout showHomeLink>
       <Form {...form}>
         <form
           onSubmit={form.handleSubmit(onSubmit)}
@@ -366,12 +366,6 @@ function SignUpOrg() {
             ¿Ya tienes una cuenta?{" "}
             <RouterLink to="/login" className="underline underline-offset-4">
               Iniciar sesión
-            </RouterLink>
-          </div>
-
-          <div className="text-center text-sm text-muted-foreground">
-            <RouterLink to="/" className="underline underline-offset-4">
-              Volver a la página principal
             </RouterLink>
           </div>
         </form>

@@ -71,7 +71,7 @@ function Login() {
   }
 
   return (
-    <AuthLayout>
+    <AuthLayout showHomeLink>
       <Form {...form}>
         <form
           onSubmit={form.handleSubmit(onSubmit)}
@@ -150,12 +150,6 @@ function Login() {
               className="underline underline-offset-4"
             >
               Crear una organización
-            </RouterLink>
-          </div>
-
-          <div className="text-center text-sm text-muted-foreground">
-            <RouterLink to="/" className="underline underline-offset-4">
-              Volver a la página principal
             </RouterLink>
           </div>
         </form>
