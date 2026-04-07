@@ -1,7 +1,8 @@
-import type { ReactNode } from "react"
+import { type ReactNode, useEffect, useState } from "react"
 
 import { LandingFooter } from "@/components/Landing/LandingFooter"
 import { LandingNav } from "@/components/Landing/LandingNav"
+import { cn } from "@/lib/utils"
 
 type LegalPageLayoutProps = {
   title: string
@@ -27,8 +28,97 @@ export function LegalPageLayout({
   sections,
   children,
 }: LegalPageLayoutProps) {
+  const [activeSectionId, setActiveSectionId] = useState(sections[0]?.id ?? "")
+
+  useEffect(() => {
+    if (sections.length === 0) {
+      return
+    }
+
+    const sectionElements = sections
+      .map((section) => document.getElementById(section.id))
+      .filter((element): element is HTMLElement => element !== null)
+
+    if (sectionElements.length === 0) {
+      return
+    }
+
+    const sectionIds = new Set(sections.map((section) => section.id))
+
+    const updateFromHash = () => {
+      const hashId = decodeURIComponent(window.location.hash.replace("#", ""))
+      if (hashId && sectionIds.has(hashId)) {
+        setActiveSectionId(hashId)
+      }
+    }
+
+    const updateFromScrollPosition = () => {
+      const activationLine = window.innerHeight * 0.35
+      let nextActiveId = sectionElements[0]?.id ?? sections[0].id
+
+      for (const sectionElement of sectionElements) {
+        if (sectionElement.getBoundingClientRect().top <= activationLine) {
+          nextActiveId = sectionElement.id
+          continue
+        }
+        break
+      }
+
+      const isNearPageBottom =
+        window.innerHeight + window.scrollY >=
+        document.documentElement.scrollHeight - 4
+
+      if (isNearPageBottom) {
+        nextActiveId = sectionElements[sectionElements.length - 1].id
+      }
+
+      setActiveSectionId(nextActiveId)
+    }
+
+    updateFromHash()
+    updateFromScrollPosition()
+
+    const observer =
+      "IntersectionObserver" in window
+        ? new IntersectionObserver(() => {
+            updateFromScrollPosition()
+          }, {
+            rootMargin: "-18% 0px -60% 0px",
+            threshold: [0, 0.2, 0.4, 0.65, 1],
+          })
+        : null
+
+    if (observer) {
+      for (const sectionElement of sectionElements) {
+        observer.observe(sectionElement)
+      }
+    } else {
+      window.addEventListener("scroll", updateFromScrollPosition, {
+        passive: true,
+      })
+      window.addEventListener("resize", updateFromScrollPosition)
+    }
+
+    window.addEventListener("hashchange", updateFromHash)
+
+    return () => {
+      window.removeEventListener("hashchange", updateFromHash)
+      window.removeEventListener("scroll", updateFromScrollPosition)
+      window.removeEventListener("resize", updateFromScrollPosition)
+      observer?.disconnect()
+    }
+  }, [sections])
+
+  const getTocLinkClassName = (sectionId: string) =>
+    cn(
+      "block rounded-sm text-sm transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-background",
+      activeSectionId === sectionId
+        ? "font-semibold text-primary"
+        : "text-foreground/80 hover:text-foreground",
+    )
+
   return (
-    <div className="relative min-h-svh overflow-x-hidden bg-background text-foreground landing-bg">
+    <div className="relative min-h-svh bg-background text-foreground landing-bg">
       <LandingNav />
       <main className="mx-auto w-full max-w-6xl px-4 pb-16 pt-24 sm:px-6 lg:px-8">
         <div className="grid items-start gap-8 lg:grid-cols-[minmax(0,1fr)_16rem] lg:gap-10">
@@ -51,7 +141,10 @@ export function LegalPageLayout({
                     <li key={section.id}>
                       <a
                         href={`#${section.id}`}
-                        className="text-sm text-foreground/80 transition-colors hover:text-foreground focus-visible:rounded-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-background"
+                        aria-current={
+                          activeSectionId === section.id ? "location" : undefined
+                        }
+                        className={getTocLinkClassName(section.id)}
                       >
                         {section.title}
                       </a>
@@ -63,10 +156,10 @@ export function LegalPageLayout({
             <div className="mt-8 space-y-8">{children}</div>
           </article>
 
-          <aside className="hidden self-start lg:block">
+          <aside className="hidden self-start lg:sticky lg:top-20 lg:block">
             <nav
               aria-label="Indice de contenidos"
-              className="sticky top-24 max-h-[calc(100svh-7rem)] overflow-y-auto rounded-xl border border-border/70 bg-background/95 p-4 shadow-sm backdrop-blur"
+              className="max-h-[calc(100svh-5.5rem)] overflow-y-auto rounded-xl border border-border/70 bg-background/95 p-4 shadow-sm backdrop-blur"
             >
               <h2 className="text-sm font-semibold text-foreground">
                 Índice de contenidos
@@ -76,7 +169,10 @@ export function LegalPageLayout({
                   <li key={section.id}>
                     <a
                       href={`#${section.id}`}
-                      className="text-sm leading-6 text-foreground/80 transition-colors hover:text-foreground focus-visible:rounded-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-background"
+                      aria-current={
+                        activeSectionId === section.id ? "location" : undefined
+                      }
+                      className={cn(getTocLinkClassName(section.id), "leading-6")}
                     >
                       {section.title}
                     </a>
