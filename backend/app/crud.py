@@ -445,9 +445,7 @@ def get_low_stock_products(
     return list(session.exec(statement).all())
 
 
-def count_low_stock_products(
-    *, session: Session, organization_id: uuid.UUID
-) -> int:
+def count_low_stock_products(*, session: Session, organization_id: uuid.UUID) -> int:
     """Count products where stock_quantity <= stock_min"""
     from sqlalchemy import func
 
@@ -773,9 +771,7 @@ def count_movements_by_product(
 # ============================================================================
 
 
-def generate_invoice_number(
-    *, session: Session, organization_id: uuid.UUID
-) -> str:
+def generate_invoice_number(*, session: Session, organization_id: uuid.UUID) -> str:
     """Generate the next invoice number for an organization."""
     from sqlalchemy import func
 
@@ -928,14 +924,9 @@ def count_sales_by_organization(
     return session.exec(statement).one()
 
 
-def get_sale_items(
-    *, session: Session, sale_id: uuid.UUID
-) -> list[SaleItem]:
+def get_sale_items(*, session: Session, sale_id: uuid.UUID) -> list[SaleItem]:
     """Get all items for a sale."""
-    statement = (
-        select(SaleItem)
-        .where(SaleItem.sale_id == sale_id)
-    )
+    statement = select(SaleItem).where(SaleItem.sale_id == sale_id)
     return list(session.exec(statement).all())
 
 
@@ -985,9 +976,7 @@ def get_sales_today(
     return list(session.exec(statement).all())
 
 
-def count_sales_today(
-    *, session: Session, organization_id: uuid.UUID
-) -> int:
+def count_sales_today(*, session: Session, organization_id: uuid.UUID) -> int:
     """Count today's completed sales in an organization."""
     from datetime import datetime, time, timezone
 
@@ -1006,9 +995,7 @@ def count_sales_today(
     return session.exec(statement).one()
 
 
-def get_sales_stats(
-    *, session: Session, organization_id: uuid.UUID
-) -> dict[str, Any]:
+def get_sales_stats(*, session: Session, organization_id: uuid.UUID) -> dict[str, Any]:
     """Get sales statistics for an organization."""
     from datetime import datetime, time, timezone
     from decimal import Decimal
@@ -1017,7 +1004,7 @@ def get_sales_stats(
 
     now = datetime.now(timezone.utc)
     today_start = datetime.combine(now.date(), time.min, tzinfo=timezone.utc)
-    month_start = now.replace(day=1, hour=0, minute=0, second=0, microsecond=0)
+    month_start, next_month_start = _get_current_month_range_utc()
 
     # Today stats
     today_result = session.exec(
@@ -1035,6 +1022,7 @@ def get_sales_stats(
         .where(Sale.organization_id == organization_id)
         .where(Sale.status == "completed")
         .where(Sale.sale_date >= month_start)
+        .where(Sale.sale_date < next_month_start)
     ).one()
 
     sales_today_count = today_result[0]
@@ -1067,7 +1055,9 @@ def update_customer_purchase_stats(
     from datetime import datetime, timezone
     from decimal import Decimal
 
-    db_customer.total_purchases = Decimal(str(db_customer.total_purchases)) + Decimal(str(sale_total))
+    db_customer.total_purchases = Decimal(str(db_customer.total_purchases)) + Decimal(
+        str(sale_total)
+    )
     db_customer.purchases_count += 1
     db_customer.last_purchase_at = datetime.now(timezone.utc)
     db_customer.updated_at = datetime.now(timezone.utc)
@@ -1087,7 +1077,9 @@ def revert_customer_purchase_stats(
     from datetime import datetime, timezone
     from decimal import Decimal
 
-    db_customer.total_purchases = Decimal(str(db_customer.total_purchases)) - Decimal(str(sale_total))
+    db_customer.total_purchases = Decimal(str(db_customer.total_purchases)) - Decimal(
+        str(sale_total)
+    )
     if db_customer.total_purchases < 0:
         db_customer.total_purchases = Decimal("0")
     db_customer.purchases_count = max(0, db_customer.purchases_count - 1)
@@ -1141,29 +1133,62 @@ def count_sales_by_customer(
 # ============================================================================
 
 
-def get_top_products(
+def _get_current_month_range_utc() -> tuple[Any, Any]:
+    """Get inclusive/exclusive UTC datetime boundaries for current month."""
+    from datetime import datetime, timezone
+
+    month_start = datetime.now(timezone.utc).replace(
+        day=1,
+        hour=0,
+        minute=0,
+        second=0,
+        microsecond=0,
+    )
+    if month_start.month == 12:
+        next_month_start = month_start.replace(
+            year=month_start.year + 1,
+            month=1,
+        )
+    else:
+        next_month_start = month_start.replace(month=month_start.month + 1)
+    return month_start, next_month_start
+
+
+def _get_top_products_for_current_month(
     *,
     session: Session,
     organization_id: uuid.UUID,
+    order_by: str,
     limit: int = 5,
 ) -> list[dict[str, Any]]:
-    """Get top-selling products by quantity sold for completed sales."""
+    """Get top-selling products from completed sales in current month."""
     from decimal import Decimal
 
     from sqlalchemy import func
+
+    month_start, next_month_start = _get_current_month_range_utc()
+    quantity_sum = func.sum(SaleItem.quantity)
+    revenue_sum = func.sum(SaleItem.subtotal)
+
+    if order_by == "quantity":
+        order_column = quantity_sum
+    else:
+        order_column = revenue_sum
 
     statement = (
         select(
             SaleItem.product_id,
             SaleItem.product_name,
-            func.sum(SaleItem.quantity).label("quantity_sold"),
-            func.sum(SaleItem.subtotal).label("revenue"),
+            quantity_sum.label("quantity_sold"),
+            revenue_sum.label("revenue"),
         )
         .join(Sale, SaleItem.sale_id == Sale.id)
         .where(Sale.organization_id == organization_id)
         .where(Sale.status == "completed")
+        .where(Sale.sale_date >= month_start)
+        .where(Sale.sale_date < next_month_start)
         .group_by(SaleItem.product_id, SaleItem.product_name)
-        .order_by(func.sum(SaleItem.quantity).desc())
+        .order_by(order_column.desc())
         .limit(limit)
     )
     results = session.exec(statement).all()
@@ -1176,6 +1201,50 @@ def get_top_products(
         }
         for row in results
     ]
+
+
+def get_top_products_by_quantity(
+    *,
+    session: Session,
+    organization_id: uuid.UUID,
+    limit: int = 5,
+) -> list[dict[str, Any]]:
+    """Get top products of current month ordered by quantity sold."""
+    return _get_top_products_for_current_month(
+        session=session,
+        organization_id=organization_id,
+        order_by="quantity",
+        limit=limit,
+    )
+
+
+def get_top_products_by_revenue(
+    *,
+    session: Session,
+    organization_id: uuid.UUID,
+    limit: int = 5,
+) -> list[dict[str, Any]]:
+    """Get top products of current month ordered by total revenue."""
+    return _get_top_products_for_current_month(
+        session=session,
+        organization_id=organization_id,
+        order_by="revenue",
+        limit=limit,
+    )
+
+
+def get_top_products(
+    *,
+    session: Session,
+    organization_id: uuid.UUID,
+    limit: int = 5,
+) -> list[dict[str, Any]]:
+    """Backward-compatible alias for quantity-ordered top products."""
+    return get_top_products_by_quantity(
+        session=session,
+        organization_id=organization_id,
+        limit=limit,
+    )
 
 
 def get_sales_by_day(
@@ -1211,7 +1280,10 @@ def get_sales_by_day(
         .group_by(cast(Sale.sale_date, Date))
         .order_by(cast(Sale.sale_date, Date))
     )
-    rows = {str(row[0]): (int(row[1]), Decimal(str(row[2]))) for row in session.exec(statement).all()}
+    rows = {
+        str(row[0]): (int(row[1]), Decimal(str(row[2])))
+        for row in session.exec(statement).all()
+    }
 
     # Build a complete 7-day series, inserting zeros for days with no sales
     result: list[dict[str, Any]] = []
@@ -1231,8 +1303,19 @@ def get_dashboard_stats(
     """Get unified dashboard statistics for an organization."""
     # Reuse existing functions
     sales_stats = get_sales_stats(session=session, organization_id=organization_id)
-    low_stock = count_low_stock_products(session=session, organization_id=organization_id)
-    top_products = get_top_products(session=session, organization_id=organization_id)
+    low_stock = count_low_stock_products(
+        session=session, organization_id=organization_id
+    )
+    top_products_by_quantity = get_top_products_by_quantity(
+        session=session,
+        organization_id=organization_id,
+        limit=5,
+    )
+    top_products_by_revenue = get_top_products_by_revenue(
+        session=session,
+        organization_id=organization_id,
+        limit=5,
+    )
     sales_by_day = get_sales_by_day(session=session, organization_id=organization_id)
 
     return {
@@ -1246,7 +1329,8 @@ def get_dashboard_stats(
         },
         "low_stock_count": low_stock,
         "average_ticket": sales_stats["average_ticket"],
-        "top_products": top_products,
+        "top_products_by_quantity": top_products_by_quantity,
+        "top_products_by_revenue": top_products_by_revenue,
         "sales_by_day": sales_by_day,
     }
 

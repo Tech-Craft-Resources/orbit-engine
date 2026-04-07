@@ -158,14 +158,24 @@ function Dashboard() {
       count: d.count,
     })) ?? []
 
-  const topProductsData =
-    stats?.top_products.map((p) => ({
+  const topProductsByQuantityData =
+    stats?.top_products_by_quantity.map((p) => ({
       name: p.product_name,
       revenue: Number(p.revenue),
       quantity_sold: p.quantity_sold,
     })) ?? []
 
-  const maxRevenue = Math.max(...topProductsData.map((p) => p.revenue), 1)
+  const topProductsByRevenueData =
+    stats?.top_products_by_revenue.map((p) => ({
+      name: p.product_name,
+      revenue: Number(p.revenue),
+      quantity_sold: p.quantity_sold,
+    })) ?? []
+
+  const maxQuantity = Math.max(
+    ...topProductsByQuantityData.map((p) => p.quantity_sold),
+    1,
+  )
 
   const hasLowStock = (stats?.low_stock_count ?? 0) > 0
 
@@ -406,9 +416,9 @@ function Dashboard() {
                   </div>
                 ))}
               </div>
-            ) : topProductsData.length > 0 ? (
+            ) : topProductsByQuantityData.length > 0 ? (
               <div className="space-y-3">
-                {topProductsData.map((product, idx) => (
+                {topProductsByQuantityData.map((product, idx) => (
                   <div key={product.name} className="space-y-1.5">
                     <div className="flex items-center justify-between gap-2 text-sm">
                       <div className="flex items-center gap-2 min-w-0">
@@ -432,7 +442,7 @@ function Dashboard() {
                       <div
                         className="h-full rounded-full transition-all duration-500"
                         style={{
-                          width: `${(product.revenue / maxRevenue) * 100}%`,
+                          width: `${(product.quantity_sold / maxQuantity) * 100}%`,
                           backgroundColor:
                             CHART_COLORS[idx % CHART_COLORS.length],
                         }}
@@ -444,7 +454,9 @@ function Dashboard() {
             ) : (
               <div className="flex flex-col items-center justify-center gap-2 py-8 text-muted-foreground">
                 <PackageSearch className="size-8 opacity-30" />
-                <p className="text-sm">No sales data yet</p>
+                <p className="text-sm">
+                  Aun no tienes ventas registradas en este mes
+                </p>
               </div>
             )}
           </CardContent>
@@ -464,13 +476,13 @@ function Dashboard() {
           <CardContent>
             {isLoading ? (
               <ChartSkeleton />
-            ) : topProductsData.length > 0 ? (
+            ) : topProductsByRevenueData.length > 0 ? (
               <ChartContainer
                 config={productsChartConfig}
                 className="h-56 w-full"
               >
                 <BarChart
-                  data={topProductsData}
+                  data={topProductsByRevenueData}
                   layout="vertical"
                   margin={{ top: 0, right: 8, left: 8, bottom: 0 }}
                   barCategoryGap="25%"
@@ -517,7 +529,7 @@ function Dashboard() {
                     radius={[0, 4, 4, 0]}
                     maxBarSize={32}
                   >
-                    {topProductsData.map((_, index) => (
+                    {topProductsByRevenueData.map((_, index) => (
                       <Cell
                         key={`cell-${index}`}
                         fill={CHART_COLORS[index % CHART_COLORS.length]}
@@ -529,7 +541,9 @@ function Dashboard() {
             ) : (
               <div className="flex h-56 flex-col items-center justify-center gap-2 text-muted-foreground">
                 <DollarSign className="size-8 opacity-30" />
-                <p className="text-sm">No product revenue data yet</p>
+                <p className="text-sm">
+                  Aun no tienes ventas registradas en este mes
+                </p>
               </div>
             )}
           </CardContent>

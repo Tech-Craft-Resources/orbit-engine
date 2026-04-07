@@ -9,15 +9,18 @@ from tests.utils.user import _get_default_org_id
 
 
 # ---------------------------------------------------------------------------
-# get_top_products
+# get_top_products_by_quantity / get_top_products_by_revenue
 # ---------------------------------------------------------------------------
 
 
-def test_get_top_products(db: Session) -> None:
+def test_get_top_products_by_quantity(db: Session) -> None:
     """Top products should include products from completed sales."""
     organization_id = _get_default_org_id(db)
     create_random_sale(db, organization_id=organization_id, num_items=2)
-    top = crud.get_top_products(session=db, organization_id=organization_id)
+    top = crud.get_top_products_by_quantity(
+        session=db,
+        organization_id=organization_id,
+    )
     assert isinstance(top, list)
     assert len(top) >= 1
     item = top[0]
@@ -29,34 +32,52 @@ def test_get_top_products(db: Session) -> None:
     assert item["revenue"] > Decimal("0")
 
 
-def test_get_top_products_empty(db: Session) -> None:
+def test_get_top_products_by_quantity_empty(db: Session) -> None:
     """Top products for an org with no sales should return an empty list."""
     import uuid
 
     # Use a random UUID that doesn't match any organization
     fake_org_id = uuid.uuid4()
-    top = crud.get_top_products(session=db, organization_id=fake_org_id)
+    top = crud.get_top_products_by_quantity(
+        session=db,
+        organization_id=fake_org_id,
+    )
     assert top == []
 
 
-def test_get_top_products_limit(db: Session) -> None:
+def test_get_top_products_by_quantity_limit(db: Session) -> None:
     """Top products should respect the limit parameter."""
     organization_id = _get_default_org_id(db)
     # Create multiple sales to ensure we have products
     create_random_sale(db, organization_id=organization_id, num_items=3)
-    top = crud.get_top_products(
+    top = crud.get_top_products_by_quantity(
         session=db, organization_id=organization_id, limit=2
     )
     assert len(top) <= 2
 
 
-def test_get_top_products_ordered_by_quantity(db: Session) -> None:
+def test_get_top_products_by_quantity_ordered_by_quantity(db: Session) -> None:
     """Top products should be ordered by quantity sold descending."""
     organization_id = _get_default_org_id(db)
     create_random_sale(db, organization_id=organization_id, num_items=2)
-    top = crud.get_top_products(session=db, organization_id=organization_id)
+    top = crud.get_top_products_by_quantity(
+        session=db,
+        organization_id=organization_id,
+    )
     if len(top) >= 2:
         assert top[0]["quantity_sold"] >= top[1]["quantity_sold"]
+
+
+def test_get_top_products_by_revenue_ordered_by_revenue(db: Session) -> None:
+    """Top products by revenue should be ordered descending."""
+    organization_id = _get_default_org_id(db)
+    create_random_sale(db, organization_id=organization_id, num_items=2)
+    top = crud.get_top_products_by_revenue(
+        session=db,
+        organization_id=organization_id,
+    )
+    if len(top) >= 2:
+        assert top[0]["revenue"] >= top[1]["revenue"]
 
 
 # ---------------------------------------------------------------------------
@@ -71,21 +92,23 @@ def test_get_sales_by_day(db: Session) -> None:
     by_day = crud.get_sales_by_day(session=db, organization_id=organization_id)
     assert isinstance(by_day, list)
     assert len(by_day) >= 1
-    item = by_day[-1]  # Most recent day should be last (ordered by date)
+    item = by_day[-1]
     assert "date" in item
     assert "count" in item
     assert "total" in item
-    assert item["count"] >= 1
-    assert item["total"] > Decimal("0")
+    assert any(day["count"] >= 1 for day in by_day)
+    assert any(day["total"] > Decimal("0") for day in by_day)
 
 
 def test_get_sales_by_day_empty(db: Session) -> None:
-    """Sales by day for an org with no sales should return an empty list."""
+    """Sales by day should return a zero-filled current week series."""
     import uuid
 
     fake_org_id = uuid.uuid4()
     by_day = crud.get_sales_by_day(session=db, organization_id=fake_org_id)
-    assert by_day == []
+    assert len(by_day) == 7
+    assert all(item["count"] == 0 for item in by_day)
+    assert all(item["total"] == Decimal("0") for item in by_day)
 
 
 def test_get_sales_by_day_format(db: Session) -> None:
@@ -110,15 +133,14 @@ def test_get_dashboard_stats(db: Session) -> None:
     """Dashboard stats should return the full unified structure."""
     organization_id = _get_default_org_id(db)
     create_random_sale(db, organization_id=organization_id)
-    stats = crud.get_dashboard_stats(
-        session=db, organization_id=organization_id
-    )
+    stats = crud.get_dashboard_stats(session=db, organization_id=organization_id)
     # Verify top-level keys
     assert "sales_today" in stats
     assert "sales_month" in stats
     assert "low_stock_count" in stats
     assert "average_ticket" in stats
-    assert "top_products" in stats
+    assert "top_products_by_quantity" in stats
+    assert "top_products_by_revenue" in stats
     assert "sales_by_day" in stats
 
     # Verify nested structure
@@ -128,7 +150,8 @@ def test_get_dashboard_stats(db: Session) -> None:
     assert "total" in stats["sales_month"]
     assert stats["sales_today"]["count"] >= 1
     assert stats["sales_month"]["count"] >= 1
-    assert isinstance(stats["top_products"], list)
+    assert isinstance(stats["top_products_by_quantity"], list)
+    assert isinstance(stats["top_products_by_revenue"], list)
     assert isinstance(stats["sales_by_day"], list)
 
 
@@ -139,9 +162,7 @@ def test_get_dashboard_stats_low_stock(db: Session) -> None:
     create_random_product(
         db, organization_id=organization_id, stock_quantity=5, stock_min=10
     )
-    stats = crud.get_dashboard_stats(
-        session=db, organization_id=organization_id
-    )
+    stats = crud.get_dashboard_stats(session=db, organization_id=organization_id)
     assert stats["low_stock_count"] >= 1
 
 
@@ -149,7 +170,5 @@ def test_get_dashboard_stats_average_ticket(db: Session) -> None:
     """Average ticket should be non-negative when there are sales."""
     organization_id = _get_default_org_id(db)
     create_random_sale(db, organization_id=organization_id)
-    stats = crud.get_dashboard_stats(
-        session=db, organization_id=organization_id
-    )
+    stats = crud.get_dashboard_stats(session=db, organization_id=organization_id)
     assert stats["average_ticket"] >= Decimal("0")

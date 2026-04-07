@@ -51,7 +51,8 @@ def test_read_dashboard_stats(
     assert "sales_month" in data
     assert "low_stock_count" in data
     assert "average_ticket" in data
-    assert "top_products" in data
+    assert "top_products_by_quantity" in data
+    assert "top_products_by_revenue" in data
     assert "sales_by_day" in data
 
 
@@ -92,7 +93,7 @@ def test_read_dashboard_stats_sales_month(
 def test_read_dashboard_stats_top_products(
     client: TestClient, superuser_token_headers: dict[str, str], db: Session
 ) -> None:
-    """Top products should be a list with product details."""
+    """Top products datasets should include product details."""
     create_random_sale(db, num_items=2)
     r = client.get(
         f"{settings.API_V1_STR}/dashboard/stats",
@@ -100,9 +101,12 @@ def test_read_dashboard_stats_top_products(
     )
     assert r.status_code == 200
     data = r.json()
-    assert isinstance(data["top_products"], list)
-    assert len(data["top_products"]) >= 1
-    product = data["top_products"][0]
+    assert isinstance(data["top_products_by_quantity"], list)
+    assert isinstance(data["top_products_by_revenue"], list)
+    assert len(data["top_products_by_quantity"]) >= 1
+    assert len(data["top_products_by_revenue"]) >= 1
+
+    product = data["top_products_by_quantity"][0]
     assert "product_id" in product
     assert "product_name" in product
     assert "quantity_sold" in product
@@ -143,13 +147,12 @@ def test_read_dashboard_stats_normal_user(
     assert "sales_month" in data
     assert "low_stock_count" in data
     assert "average_ticket" in data
-    assert "top_products" in data
+    assert "top_products_by_quantity" in data
+    assert "top_products_by_revenue" in data
     assert "sales_by_day" in data
 
 
-def test_read_dashboard_stats_seller(
-    client: TestClient, db: Session
-) -> None:
+def test_read_dashboard_stats_seller(client: TestClient, db: Session) -> None:
     """Seller role can view dashboard stats."""
     headers = _create_seller_headers(client, db)
     r = client.get(

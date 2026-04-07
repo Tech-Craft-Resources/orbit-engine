@@ -99,7 +99,8 @@ export type DashboardStatsPublic = {
     sales_month: SalesMonthStats;
     low_stock_count: number;
     average_ticket: string;
-    top_products: Array<TopProductItem>;
+    top_products_by_quantity: Array<TopProductItem>;
+    top_products_by_revenue: Array<TopProductItem>;
     sales_by_day: Array<SalesByDayItem>;
 };
 

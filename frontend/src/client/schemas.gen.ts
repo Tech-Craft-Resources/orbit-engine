@@ -640,12 +640,19 @@ export const DashboardStatsPublicSchema = {
             pattern: '^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$',
             title: 'Average Ticket'
         },
-        top_products: {
+        top_products_by_quantity: {
             items: {
                 '$ref': '#/components/schemas/TopProductItem'
             },
             type: 'array',
-            title: 'Top Products'
+            title: 'Top Products By Quantity'
+        },
+        top_products_by_revenue: {
+            items: {
+                '$ref': '#/components/schemas/TopProductItem'
+            },
+            type: 'array',
+            title: 'Top Products By Revenue'
         },
         sales_by_day: {
             items: {
@@ -656,7 +663,7 @@ export const DashboardStatsPublicSchema = {
         }
     },
     type: 'object',
-    required: ['sales_today', 'sales_month', 'low_stock_count', 'average_ticket', 'top_products', 'sales_by_day'],
+    required: ['sales_today', 'sales_month', 'low_stock_count', 'average_ticket', 'top_products_by_quantity', 'top_products_by_revenue', 'sales_by_day'],
     title: 'DashboardStatsPublic',
     description: 'Unified dashboard statistics response.'
 } as const;

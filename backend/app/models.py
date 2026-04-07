@@ -780,7 +780,8 @@ class DashboardStatsPublic(SQLModel):
     sales_month: SalesMonthStats
     low_stock_count: int
     average_ticket: Decimal
-    top_products: list[TopProductItem]
+    top_products_by_quantity: list[TopProductItem]
+    top_products_by_revenue: list[TopProductItem]
     sales_by_day: list[SalesByDayItem]
 
 
