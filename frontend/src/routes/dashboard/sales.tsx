@@ -4,6 +4,7 @@ import { Suspense, useState } from "react"
 
 import { SalesService } from "@/client"
 import { DataTable, type FilterableColumn } from "@/components/Common/DataTable"
+import ExportDashboardDialog from "@/components/Dashboard/ExportDashboardDialog"
 import AddSale from "@/components/Sales/AddSale"
 import { saleColumns } from "@/components/Sales/columns"
 import PendingSales from "@/components/Sales/PendingSales"
@@ -36,7 +37,7 @@ const SALES_FILTER_COLUMNS: FilterableColumn[] = [
 export const Route = createFileRoute("/dashboard/sales")({
   component: Sales,
   beforeLoad: async () => {
-    await requireUserWithRoles(queryClient, ["admin", "seller"])
+    await requireUserWithRoles(queryClient, ["admin", "seller", "contador"])
   },
   head: () => ({
     meta: [
@@ -93,7 +94,10 @@ function Sales() {
             Gestiona ventas y procesa transacciones
           </p>
         </div>
-        <AddSale />
+        <div className="flex items-center gap-2">
+          <ExportDashboardDialog dataset="sales" search={search} />
+          <AddSale />
+        </div>
       </div>
       <Suspense fallback={<PendingSales />}>
         <SalesTableContent search={search} onSearchChange={setSearch} />

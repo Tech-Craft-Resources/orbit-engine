@@ -1,5 +1,5 @@
 import uuid
-from datetime import datetime, timezone
+from datetime import date, datetime, timezone
 from decimal import Decimal
 from typing import TYPE_CHECKING, Optional
 
@@ -783,6 +783,27 @@ class DashboardStatsPublic(SQLModel):
     top_products_by_quantity: list[TopProductItem]
     top_products_by_revenue: list[TopProductItem]
     sales_by_day: list[SalesByDayItem]
+
+
+class DashboardExportRequest(SQLModel):
+    """Request payload for dashboard Excel export."""
+
+    dataset: str
+    timezone: str = Field(default="UTC", max_length=100)
+    search: str | None = None
+    status: str | None = None
+    payment_method: str | None = None
+    is_active: bool | None = None
+    category_id: uuid.UUID | None = None
+    date_from: date | None = None
+    date_to: date | None = None
+
+    @field_validator("dataset")
+    @classmethod
+    def validate_dataset(cls, value: str) -> str:
+        if value not in {"inventory", "sales", "customers"}:
+            raise ValueError("dataset must be inventory, sales or customers")
+        return value
 
 
 # ============================================================================

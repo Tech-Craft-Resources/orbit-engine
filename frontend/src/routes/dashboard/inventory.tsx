@@ -4,6 +4,7 @@ import { Suspense, useMemo, useState } from "react"
 
 import { CategoriesService, ProductsService } from "@/client"
 import { DataTable, type FilterableColumn } from "@/components/Common/DataTable"
+import ExportInventoryButton from "@/components/Dashboard/ExportInventoryButton"
 import AddCategory from "@/components/Inventory/AddCategory"
 import AddProduct from "@/components/Inventory/AddProduct"
 import { categoryColumns } from "@/components/Inventory/categoryColumns"
@@ -43,7 +44,7 @@ function getLowStockQueryOptions() {
 export const Route = createFileRoute("/dashboard/inventory")({
   component: Inventory,
   beforeLoad: async () => {
-    await requireUserWithRoles(queryClient, ["admin", "seller"])
+    await requireUserWithRoles(queryClient, ["admin", "seller", "contador"])
   },
   head: () => ({
     meta: [
@@ -263,10 +264,15 @@ function Inventory() {
   return (
     <div className="flex flex-col gap-6">
       <div>
-        <h1 className="text-2xl font-bold tracking-tight">Inventario</h1>
-        <p className="text-muted-foreground">
-          Gestiona tu catálogo de productos y categorías
-        </p>
+        <div className="flex items-center justify-between gap-2">
+          <div>
+            <h1 className="text-2xl font-bold tracking-tight">Inventario</h1>
+            <p className="text-muted-foreground">
+              Gestiona tu catálogo de productos y categorías
+            </p>
+          </div>
+          <ExportInventoryButton search={productSearch} />
+        </div>
       </div>
       <Tabs defaultValue="products">
         <div className="flex items-center justify-between">

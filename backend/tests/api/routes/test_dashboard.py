@@ -1,9 +1,10 @@
 from fastapi.testclient import TestClient
 from sqlmodel import Session
 
-from app.core.config import settings
 from app import crud
-from app.models import UserCreate
+from app.core.config import settings
+from app.models import Role, UserCreate
+from tests.utils.product import create_random_product
 from tests.utils.sale import create_random_sale
 from tests.utils.user import (
     _get_default_org_id,
@@ -25,6 +26,34 @@ def _create_seller_headers(client: TestClient, db: Session) -> dict[str, str]:
         first_name="Seller",
         last_name="User",
         role_id=role_id,
+    )
+    crud.create_user(session=db, user_create=user_in, organization_id=org_id)
+    return user_authentication_headers(client=client, email=email, password=password)
+
+
+def _create_accountant_headers(client: TestClient, db: Session) -> dict[str, str]:
+    """Create or reuse contador role and return auth headers."""
+    org_id = _get_default_org_id(db)
+    role = crud.get_role_by_name(session=db, name="contador")
+    if role is None:
+        role = Role(
+            id=4,
+            name="contador",
+            description="Contador",
+            permissions=["dashboard.export"],
+        )
+        db.add(role)
+        db.commit()
+        db.refresh(role)
+
+    password = random_lower_string()
+    email = random_email()
+    user_in = UserCreate(
+        email=email,
+        password=password,
+        first_name="Conta",
+        last_name="User",
+        role_id=role.id,
     )
     crud.create_user(session=db, user_create=user_in, organization_id=org_id)
     return user_authentication_headers(client=client, email=email, password=password)
@@ -170,3 +199,62 @@ def test_read_dashboard_stats_unauthenticated(
     """Unauthenticated requests should be rejected."""
     r = client.get(f"{settings.API_V1_STR}/dashboard/stats")
     assert r.status_code == 401
+
+
+def test_export_dashboard_excel_inventory_admin(
+    client: TestClient, superuser_token_headers: dict[str, str], db: Session
+) -> None:
+    create_random_product(db)
+
+    r = client.post(
+        f"{settings.API_V1_STR}/dashboard/export-excel",
+        headers=superuser_token_headers,
+        json={
+            "dataset": "inventory",
+            "timezone": "America/Bogota",
+        },
+    )
+
+    assert r.status_code == 200
+    assert r.headers["content-type"].startswith(
+        "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+    )
+    assert r.content[:2] == b"PK"
+
+
+def test_export_dashboard_excel_sales_accountant(
+    client: TestClient,
+    db: Session,
+) -> None:
+    create_random_sale(db)
+    accountant_headers = _create_accountant_headers(client, db)
+
+    r = client.post(
+        f"{settings.API_V1_STR}/dashboard/export-excel",
+        headers=accountant_headers,
+        json={
+            "dataset": "sales",
+            "timezone": "America/Bogota",
+            "status": "completed",
+        },
+    )
+
+    assert r.status_code == 200
+    assert r.content[:2] == b"PK"
+
+
+def test_export_dashboard_excel_forbidden_for_seller(
+    client: TestClient,
+    db: Session,
+) -> None:
+    seller_headers = _create_seller_headers(client, db)
+    r = client.post(
+        f"{settings.API_V1_STR}/dashboard/export-excel",
+        headers=seller_headers,
+        json={
+            "dataset": "customers",
+            "timezone": "UTC",
+        },
+    )
+
+    assert r.status_code == 403

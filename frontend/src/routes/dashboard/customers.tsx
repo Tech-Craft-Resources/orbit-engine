@@ -7,6 +7,7 @@ import { DataTable, type FilterableColumn } from "@/components/Common/DataTable"
 import AddCustomer from "@/components/Customers/AddCustomer"
 import { customerColumns } from "@/components/Customers/columns"
 import PendingCustomers from "@/components/Customers/PendingCustomers"
+import ExportDashboardDialog from "@/components/Dashboard/ExportDashboardDialog"
 import { useDebounce } from "@/hooks/useDebounce"
 import { requireUserWithRoles } from "@/lib/auth-guards"
 import { queryClient } from "@/lib/queryClient"
@@ -25,7 +26,7 @@ const CUSTOMERS_FILTER_COLUMNS: FilterableColumn[] = [
 export const Route = createFileRoute("/dashboard/customers")({
   component: Customers,
   beforeLoad: async () => {
-    await requireUserWithRoles(queryClient, ["admin", "seller"])
+    await requireUserWithRoles(queryClient, ["admin", "seller", "contador"])
   },
   head: () => ({
     meta: [
@@ -82,7 +83,10 @@ function Customers() {
             Gestiona la base de datos de clientes
           </p>
         </div>
-        <AddCustomer />
+        <div className="flex items-center gap-2">
+          <ExportDashboardDialog dataset="customers" search={search} />
+          <AddCustomer />
+        </div>
       </div>
       <Suspense fallback={<PendingCustomers />}>
         <CustomersTableContent search={search} onSearchChange={setSearch} />

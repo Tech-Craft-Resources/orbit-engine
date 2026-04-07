@@ -24,6 +24,7 @@ export const ROLE_IDS = {
   admin: 1,
   seller: 2,
   viewer: 3,
+  contador: 4,
 } as const
 
 export type RoleName = keyof typeof ROLE_IDS
@@ -32,6 +33,7 @@ const ROLE_NAMES: Record<number, RoleName> = {
   [ROLE_IDS.admin]: "admin",
   [ROLE_IDS.seller]: "seller",
   [ROLE_IDS.viewer]: "viewer",
+  [ROLE_IDS.contador]: "contador",
 }
 
 const isLoggedIn = () => {
