@@ -80,12 +80,15 @@ export function LegalPageLayout({
 
     const observer =
       "IntersectionObserver" in window
-        ? new IntersectionObserver(() => {
-            updateFromScrollPosition()
-          }, {
-            rootMargin: "-18% 0px -60% 0px",
-            threshold: [0, 0.2, 0.4, 0.65, 1],
-          })
+        ? new IntersectionObserver(
+            () => {
+              updateFromScrollPosition()
+            },
+            {
+              rootMargin: "-18% 0px -60% 0px",
+              threshold: [0, 0.2, 0.4, 0.65, 1],
+            },
+          )
         : null
 
     if (observer) {
@@ -142,7 +145,9 @@ export function LegalPageLayout({
                       <a
                         href={`#${section.id}`}
                         aria-current={
-                          activeSectionId === section.id ? "location" : undefined
+                          activeSectionId === section.id
+                            ? "location"
+                            : undefined
                         }
                         className={getTocLinkClassName(section.id)}
                       >
@@ -172,7 +177,10 @@ export function LegalPageLayout({
                       aria-current={
                         activeSectionId === section.id ? "location" : undefined
                       }
-                      className={cn(getTocLinkClassName(section.id), "leading-6")}
+                      className={cn(
+                        getTocLinkClassName(section.id),
+                        "leading-6",
+                      )}
                     >
                       {section.title}
                     </a>
