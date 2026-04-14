@@ -1,20 +1,17 @@
 from typing import Any
 
 from fastapi import APIRouter, HTTPException
-from sqlmodel import select
 
 from app import crud
 from app.api.deps import CurrentUser, SessionDep
+from app.core.security import create_access_token
 from app.models import (
-    Message,
-    Organization,
+    LoginResponse,
     OrganizationPublic,
     OrganizationSignup,
     OrganizationUpdate,
     UserPublicWithRelations,
-    LoginResponse,
 )
-from app.core.security import create_access_token
 
 router = APIRouter()
 
@@ -93,7 +90,6 @@ def signup_organization(
     session.refresh(user, ["organization", "role"])
 
     # Create access token
-    from app.models import TokenPayload
 
     access_token = create_access_token(
         subject=str(user.id),
@@ -102,7 +98,7 @@ def signup_organization(
     )
 
     # Build response
-    from app.models import UserPublic, OrganizationPublic, RolePublic
+    from app.models import OrganizationPublic, RolePublic
 
     return LoginResponse(
         access_token=access_token,
@@ -168,8 +164,6 @@ def update_my_organization(
     Only admin users can update organization settings.
     """
     # Check if user is admin
-    from app.api.deps import require_role
-    from fastapi import Depends
 
     # Get current organization
     organization = crud.get_organization_by_id(

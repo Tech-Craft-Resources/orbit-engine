@@ -12,13 +12,13 @@ from app.api.deps import (
 )
 from app.models import (
     InventoryMovementCreate,
+    InventoryMovementsPublic,
     Message,
     ProductCreate,
     ProductPublic,
     ProductsPublic,
     ProductUpdate,
     StockAdjustment,
-    InventoryMovementsPublic,
 )
 
 router = APIRouter()

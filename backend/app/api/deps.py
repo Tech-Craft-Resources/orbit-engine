@@ -1,6 +1,6 @@
+import uuid
 from collections.abc import Generator
 from typing import Annotated
-import uuid
 
 import jwt
 from fastapi import Depends, HTTPException, status
@@ -12,7 +12,7 @@ from sqlmodel import Session, select
 from app.core import security
 from app.core.config import settings
 from app.core.db import engine
-from app.models import TokenPayload, User, Organization, Role
+from app.models import Role, TokenPayload, User
 
 reusable_oauth2 = OAuth2PasswordBearer(
     tokenUrl=f"{settings.API_V1_STR}/login/access-token"

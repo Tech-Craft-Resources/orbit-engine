@@ -4,12 +4,12 @@ from decimal import Decimal
 from typing import TYPE_CHECKING, Optional
 
 from pydantic import EmailStr, field_validator
-from sqlalchemy import Column, DateTime, Index, Numeric, String, UniqueConstraint
+from sqlalchemy import Column, DateTime, Index, Numeric, UniqueConstraint
 from sqlalchemy.dialects.postgresql import JSONB
 from sqlmodel import Field, Relationship, SQLModel
 
 if TYPE_CHECKING:
-    from collections.abc import Sequence
+    pass
 
 
 def get_datetime_utc() -> datetime:

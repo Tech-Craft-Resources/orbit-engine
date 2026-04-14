@@ -4,8 +4,8 @@ from datetime import datetime, timedelta, timezone
 from pathlib import Path
 from typing import Any
 
-import emails  # type: ignore
 import jwt
+import resend
 from jinja2 import Template
 from jwt.exceptions import InvalidTokenError
 
@@ -31,33 +31,30 @@ def render_email_template(*, template_name: str, context: dict[str, Any]) -> str
 
 
 def send_email(
-    *,
     email_to: str,
     subject: str = "",
     html_content: str = "",
+    idempotency_key: str | None = None,
 ) -> None:
     assert settings.emails_enabled, "no provided configuration for email variables"
-    message = emails.Message(
-        subject=subject,
-        html=html_content,
-        mail_from=(settings.EMAILS_FROM_NAME, settings.EMAILS_FROM_EMAIL),
+    assert settings.RESEND_API_KEY, "RESEND_API_KEY not set"
+
+    resend.api_key = settings.RESEND_API_KEY
+
+    response = resend.Emails.send(
+        params={
+            "from": f"{settings.EMAILS_FROM_NAME} <{settings.EMAILS_FROM_EMAIL}>",
+            "to": [email_to],
+            "subject": subject,
+            "html": html_content,
+        },
+        options={"idempotency_key": idempotency_key} if idempotency_key else None,
     )
-    smtp_options = {"host": settings.SMTP_HOST, "port": settings.SMTP_PORT}
-    if settings.SMTP_TLS:
-        smtp_options["tls"] = True
-    if settings.SMTP_SSL:
-        smtp_options["ssl"] = True
-    if settings.SMTP_USER:
-        smtp_options["user"] = settings.SMTP_USER
-    if settings.SMTP_PASSWORD:
-        smtp_options["password"] = settings.SMTP_PASSWORD
-        
-    logger.info(f"Sending email to {email_to} via {settings.SMTP_HOST}:{settings.SMTP_PORT} ssl={settings.SMTP_SSL} tls={settings.SMTP_TLS}")
-    response = message.send(to=email_to, smtp=smtp_options)
-    logger.info(f"send email result: {response}")
-    
-    if response.status_code not in (200, 250):
-        logger.error(f"Email failed — status: {response.status_code}, error: {response.error}")
+
+    if response.get("error"):
+        logger.error(f"Email to {email_to} failed: {response['error']}")
+    else:
+        logger.info(f"Email sent to {email_to}: {response.get('id')}")
 
 
 def generate_test_email(email_to: str) -> EmailData:

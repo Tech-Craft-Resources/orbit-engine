@@ -1,17 +1,15 @@
 import uuid
-from typing import Any
 from datetime import datetime, timezone
+from typing import Any
 
 from fastapi import APIRouter, HTTPException
 from sqlmodel import select
 
 from app import crud
 from app.api.deps import (
-    CurrentUser,
-    CurrentAdminUser,
     CurrentOrganization,
+    CurrentUser,
     SessionDep,
-    require_role,
 )
 from app.core.config import settings
 from app.core.security import get_password_hash, verify_password
