@@ -57,12 +57,23 @@ def send_email(
         logger.info(f"Email sent to {email_to}: {response.get('id')}")
 
 
+def _email_base_context() -> dict[str, Any]:
+    return {
+        "project_name": settings.PROJECT_NAME,
+        "frontend_host": settings.FRONTEND_HOST,
+        "current_year": datetime.now(timezone.utc).year,
+    }
+
+
 def generate_test_email(email_to: str) -> EmailData:
     project_name = settings.PROJECT_NAME
     subject = f"{project_name} - Test email"
     html_content = render_email_template(
         template_name="test_email.html",
-        context={"project_name": settings.PROJECT_NAME, "email": email_to},
+        context={
+            **_email_base_context(),
+            "email": email_to,
+        },
     )
     return EmailData(html_content=html_content, subject=subject)
 
@@ -74,7 +85,7 @@ def generate_reset_password_email(email_to: str, email: str, token: str) -> Emai
     html_content = render_email_template(
         template_name="reset_password.html",
         context={
-            "project_name": settings.PROJECT_NAME,
+            **_email_base_context(),
             "username": email,
             "email": email_to,
             "valid_hours": settings.EMAIL_RESET_TOKEN_EXPIRE_HOURS,
@@ -92,7 +103,7 @@ def generate_new_account_email(
     html_content = render_email_template(
         template_name="new_account.html",
         context={
-            "project_name": settings.PROJECT_NAME,
+            **_email_base_context(),
             "username": username,
             "password": password,
             "email": email_to,
