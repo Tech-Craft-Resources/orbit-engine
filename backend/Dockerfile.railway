@@ -17,7 +17,7 @@ COPY . .
 
 # Install package and all dependencies from local pyproject.toml
 # No workspace uv.lock needed — uv resolves deps independently
-RUN uv sync --frozen
+RUN uv sync
 
 EXPOSE $PORT
 
