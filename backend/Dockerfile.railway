@@ -34,4 +34,4 @@ RUN uv sync --frozen
 
 WORKDIR /app/
 
-CMD ["sh", "-c", "python app/backend_pre_start.py && alembic upgrade head && exec fastapi run --workers 2 app/main.py"]
+CMD ["sh", "-c", "alembic upgrade head && exec fastapi run --workers 2 app/main.py"]
