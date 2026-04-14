@@ -4,7 +4,7 @@ from fastapi import APIRouter
 
 from app import crud
 from app.api.deps import CurrentUser, SessionDep
-from app.models import RolesPublic, RolePublic
+from app.models import RolesPublic
 
 router = APIRouter()
 

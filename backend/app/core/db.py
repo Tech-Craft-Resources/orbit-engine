@@ -2,7 +2,7 @@ from sqlmodel import Session, create_engine, select
 
 from app import crud
 from app.core.config import settings
-from app.models import User, UserCreate, Organization, OrganizationCreate
+from app.models import OrganizationCreate, User, UserCreate
 
 engine = create_engine(str(settings.SQLALCHEMY_DATABASE_URI))
 
@@ -34,7 +34,9 @@ def init_db(session: Session) -> None:
         select(User).where(User.email == settings.FIRST_SUPERUSER)
     ).first()
 
-    if existing_user and (existing_user.deleted_at is not None or not existing_user.is_active):
+    if existing_user and (
+        existing_user.deleted_at is not None or not existing_user.is_active
+    ):
         # Restore a soft-deleted superuser
         existing_user.deleted_at = None
         existing_user.is_active = True

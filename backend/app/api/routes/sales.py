@@ -13,7 +13,6 @@ from app.api.deps import (
 )
 from app.models import (
     InventoryMovementCreate,
-    Message,
     SaleCancelRequest,
     SaleCreate,
     SalePublic,
@@ -244,9 +243,7 @@ def read_sales_stats(
 
     Any authenticated user can view sales stats.
     """
-    stats = crud.get_sales_stats(
-        session=session, organization_id=current_organization
-    )
+    stats = crud.get_sales_stats(session=session, organization_id=current_organization)
     return SaleStatsPublic(**stats)
 
 

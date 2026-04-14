@@ -8,9 +8,8 @@ This script is idempotent: it checks for existing data before inserting.
 It creates data within the "default" organization using the existing superuser.
 """
 
-import random
-import uuid
 import logging
+import random
 from datetime import datetime, timedelta, timezone
 from decimal import Decimal
 
@@ -19,15 +18,15 @@ from sqlmodel import Session, select
 from app.core.db import engine
 from app.core.security import get_password_hash
 from app.models import (
-    Organization,
-    User,
-    Role,
     Category,
-    Product,
     Customer,
+    InventoryMovement,
+    Organization,
+    Product,
+    Role,
     Sale,
     SaleItem,
-    InventoryMovement,
+    User,
 )
 
 logging.basicConfig(level=logging.INFO)
@@ -77,62 +76,399 @@ CATEGORIES: list[dict] = [
 # (name, sku, category_path, cost, sale_price, stock, stock_min, unit)
 PRODUCTS: list[tuple] = [
     # Electrónica > Smartphones
-    ("iPhone 15 128GB", "ELEC-IP15-128", ("Electrónica", "Smartphones"), 799, 999, 25, 5, "unit"),
-    ("Samsung Galaxy S24", "ELEC-SGS24", ("Electrónica", "Smartphones"), 699, 899, 18, 5, "unit"),
-    ("Xiaomi Redmi Note 13", "ELEC-XRN13", ("Electrónica", "Smartphones"), 199, 299, 40, 10, "unit"),
+    (
+        "iPhone 15 128GB",
+        "ELEC-IP15-128",
+        ("Electrónica", "Smartphones"),
+        799,
+        999,
+        25,
+        5,
+        "unit",
+    ),
+    (
+        "Samsung Galaxy S24",
+        "ELEC-SGS24",
+        ("Electrónica", "Smartphones"),
+        699,
+        899,
+        18,
+        5,
+        "unit",
+    ),
+    (
+        "Xiaomi Redmi Note 13",
+        "ELEC-XRN13",
+        ("Electrónica", "Smartphones"),
+        199,
+        299,
+        40,
+        10,
+        "unit",
+    ),
     # Electrónica > Accesorios
-    ("Cargador USB-C 20W", "ELEC-CHRG20", ("Electrónica", "Accesorios"), 8, 19.99, 150, 30, "unit"),
-    ("Funda Silicona Universal", "ELEC-FUND-U", ("Electrónica", "Accesorios"), 3, 12.99, 200, 50, "unit"),
-    ("Cable Lightning 1m", "ELEC-CBL-LT", ("Electrónica", "Accesorios"), 4, 14.99, 120, 25, "unit"),
+    (
+        "Cargador USB-C 20W",
+        "ELEC-CHRG20",
+        ("Electrónica", "Accesorios"),
+        8,
+        19.99,
+        150,
+        30,
+        "unit",
+    ),
+    (
+        "Funda Silicona Universal",
+        "ELEC-FUND-U",
+        ("Electrónica", "Accesorios"),
+        3,
+        12.99,
+        200,
+        50,
+        "unit",
+    ),
+    (
+        "Cable Lightning 1m",
+        "ELEC-CBL-LT",
+        ("Electrónica", "Accesorios"),
+        4,
+        14.99,
+        120,
+        25,
+        "unit",
+    ),
     # Electrónica > Audio
     ("AirPods Pro 2", "ELEC-APP2", ("Electrónica", "Audio"), 179, 249, 30, 8, "unit"),
     ("JBL Flip 6", "ELEC-JBL-F6", ("Electrónica", "Audio"), 89, 129, 20, 5, "unit"),
-    ("Sony WH-1000XM5", "ELEC-SNYWH5", ("Electrónica", "Audio"), 249, 349, 12, 3, "unit"),
+    (
+        "Sony WH-1000XM5",
+        "ELEC-SNYWH5",
+        ("Electrónica", "Audio"),
+        249,
+        349,
+        12,
+        3,
+        "unit",
+    ),
     # Ropa > Camisetas
-    ("Camiseta Algodón Básica", "ROPA-CAM-BAS", ("Ropa", "Camisetas"), 5, 19.99, 300, 50, "unit"),
-    ("Polo Deportivo Dry-Fit", "ROPA-POLO-DF", ("Ropa", "Camisetas"), 12, 34.99, 150, 30, "unit"),
-    ("Camiseta Estampada Urban", "ROPA-CAM-URB", ("Ropa", "Camisetas"), 8, 24.99, 180, 40, "unit"),
+    (
+        "Camiseta Algodón Básica",
+        "ROPA-CAM-BAS",
+        ("Ropa", "Camisetas"),
+        5,
+        19.99,
+        300,
+        50,
+        "unit",
+    ),
+    (
+        "Polo Deportivo Dry-Fit",
+        "ROPA-POLO-DF",
+        ("Ropa", "Camisetas"),
+        12,
+        34.99,
+        150,
+        30,
+        "unit",
+    ),
+    (
+        "Camiseta Estampada Urban",
+        "ROPA-CAM-URB",
+        ("Ropa", "Camisetas"),
+        8,
+        24.99,
+        180,
+        40,
+        "unit",
+    ),
     # Ropa > Pantalones
-    ("Jean Slim Fit Azul", "ROPA-JEAN-SF", ("Ropa", "Pantalones"), 18, 49.99, 120, 20, "unit"),
-    ("Jogger Deportivo Negro", "ROPA-JOG-NEG", ("Ropa", "Pantalones"), 14, 39.99, 100, 20, "unit"),
+    (
+        "Jean Slim Fit Azul",
+        "ROPA-JEAN-SF",
+        ("Ropa", "Pantalones"),
+        18,
+        49.99,
+        120,
+        20,
+        "unit",
+    ),
+    (
+        "Jogger Deportivo Negro",
+        "ROPA-JOG-NEG",
+        ("Ropa", "Pantalones"),
+        14,
+        39.99,
+        100,
+        20,
+        "unit",
+    ),
     # Ropa > Calzado
-    ("Zapatilla Running Pro", "ROPA-ZAP-RUN", ("Ropa", "Calzado"), 45, 89.99, 60, 10, "unit"),
-    ("Zapato Casual Cuero", "ROPA-ZAP-CAS", ("Ropa", "Calzado"), 35, 69.99, 40, 8, "unit"),
+    (
+        "Zapatilla Running Pro",
+        "ROPA-ZAP-RUN",
+        ("Ropa", "Calzado"),
+        45,
+        89.99,
+        60,
+        10,
+        "unit",
+    ),
+    (
+        "Zapato Casual Cuero",
+        "ROPA-ZAP-CAS",
+        ("Ropa", "Calzado"),
+        35,
+        69.99,
+        40,
+        8,
+        "unit",
+    ),
     # Hogar > Cocina
     ("Licuadora 600W", "HOGR-LIC-600", ("Hogar", "Cocina"), 25, 59.99, 35, 8, "unit"),
     ("Set Cuchillos x6", "HOGR-CUCH-6", ("Hogar", "Cocina"), 12, 34.99, 50, 10, "unit"),
-    ("Sartén Antiadherente 28cm", "HOGR-SART28", ("Hogar", "Cocina"), 10, 29.99, 45, 10, "unit"),
+    (
+        "Sartén Antiadherente 28cm",
+        "HOGR-SART28",
+        ("Hogar", "Cocina"),
+        10,
+        29.99,
+        45,
+        10,
+        "unit",
+    ),
     # Hogar > Decoración
-    ("Lámpara LED Escritorio", "HOGR-LAMP-E", ("Hogar", "Decoración"), 15, 39.99, 40, 8, "unit"),
-    ("Reloj de Pared Moderno", "HOGR-RELOJ", ("Hogar", "Decoración"), 8, 24.99, 30, 5, "unit"),
+    (
+        "Lámpara LED Escritorio",
+        "HOGR-LAMP-E",
+        ("Hogar", "Decoración"),
+        15,
+        39.99,
+        40,
+        8,
+        "unit",
+    ),
+    (
+        "Reloj de Pared Moderno",
+        "HOGR-RELOJ",
+        ("Hogar", "Decoración"),
+        8,
+        24.99,
+        30,
+        5,
+        "unit",
+    ),
     # Alimentos > Bebidas
-    ("Agua Mineral 600ml x12", "ALIM-AGUA-12", ("Alimentos", "Bebidas"), 3, 8.99, 500, 100, "pack"),
-    ("Jugo de Naranja 1L", "ALIM-JUGO-NJ", ("Alimentos", "Bebidas"), 2, 5.99, 200, 50, "unit"),
-    ("Gaseosa Cola 500ml", "ALIM-COLA-500", ("Alimentos", "Bebidas"), 1, 2.99, 400, 80, "unit"),
+    (
+        "Agua Mineral 600ml x12",
+        "ALIM-AGUA-12",
+        ("Alimentos", "Bebidas"),
+        3,
+        8.99,
+        500,
+        100,
+        "pack",
+    ),
+    (
+        "Jugo de Naranja 1L",
+        "ALIM-JUGO-NJ",
+        ("Alimentos", "Bebidas"),
+        2,
+        5.99,
+        200,
+        50,
+        "unit",
+    ),
+    (
+        "Gaseosa Cola 500ml",
+        "ALIM-COLA-500",
+        ("Alimentos", "Bebidas"),
+        1,
+        2.99,
+        400,
+        80,
+        "unit",
+    ),
     # Alimentos > Snacks
-    ("Galletas Chocolate x6", "ALIM-GALL-CH", ("Alimentos", "Snacks"), 1.5, 4.99, 250, 60, "pack"),
-    ("Chips Papas Sal 150g", "ALIM-CHIP-SAL", ("Alimentos", "Snacks"), 1, 3.49, 300, 70, "unit"),
-    ("Barra Cereal x10", "ALIM-BARR-10", ("Alimentos", "Snacks"), 3, 9.99, 150, 30, "pack"),
+    (
+        "Galletas Chocolate x6",
+        "ALIM-GALL-CH",
+        ("Alimentos", "Snacks"),
+        1.5,
+        4.99,
+        250,
+        60,
+        "pack",
+    ),
+    (
+        "Chips Papas Sal 150g",
+        "ALIM-CHIP-SAL",
+        ("Alimentos", "Snacks"),
+        1,
+        3.49,
+        300,
+        70,
+        "unit",
+    ),
+    (
+        "Barra Cereal x10",
+        "ALIM-BARR-10",
+        ("Alimentos", "Snacks"),
+        3,
+        9.99,
+        150,
+        30,
+        "pack",
+    ),
 ]
 
 CUSTOMERS_DATA: list[dict] = [
-    {"first_name": "Carlos", "last_name": "Mendoza", "document_type": "DNI", "document_number": "45678901", "email": "carlos.mendoza@gmail.com", "phone": "+51 987 654 321", "address": "Av. Arequipa 1234, Lima", "city": "Lima", "country": "Perú"},
-    {"first_name": "María", "last_name": "García López", "document_type": "DNI", "document_number": "32145678", "email": "maria.garcia@hotmail.com", "phone": "+51 912 345 678", "address": "Jr. Cusco 567, Miraflores", "city": "Lima", "country": "Perú"},
-    {"first_name": "José", "last_name": "Ramírez Torres", "document_type": "DNI", "document_number": "78901234", "email": "jose.ramirez@outlook.com", "phone": "+51 945 678 123", "address": "Calle Los Olivos 890", "city": "Arequipa", "country": "Perú"},
-    {"first_name": "Ana", "last_name": "Fernández", "document_type": "DNI", "document_number": "56789012", "email": "ana.fernandez@gmail.com", "phone": "+51 923 456 789", "address": "Av. La Marina 456", "city": "Lima", "country": "Perú"},
-    {"first_name": "Luis", "last_name": "Chávez Díaz", "document_type": "DNI", "document_number": "89012345", "email": "luis.chavez@yahoo.com", "phone": "+51 967 890 123", "address": "Calle Tacna 321", "city": "Trujillo", "country": "Perú"},
-    {"first_name": "Rosa", "last_name": "Huamán Quispe", "document_type": "DNI", "document_number": "23456789", "email": "rosa.huaman@gmail.com", "phone": "+51 934 567 890", "address": "Av. Ejército 654", "city": "Cusco", "country": "Perú"},
-    {"first_name": "Pedro", "last_name": "Silva Morales", "document_type": "DNI", "document_number": "67890123", "email": "pedro.silva@gmail.com", "phone": "+51 978 901 234", "address": "Jr. Puno 789", "city": "Lima", "country": "Perú"},
-    {"first_name": "Carmen", "last_name": "López Vega", "document_type": "DNI", "document_number": "34567890", "email": "carmen.lopez@hotmail.com", "phone": "+51 956 789 012", "address": "Av. Brasil 1011", "city": "Lima", "country": "Perú"},
-    {"first_name": "Distribuciones ABC", "last_name": "S.A.C.", "document_type": "RUC", "document_number": "20456789012", "email": "ventas@abc-dist.com", "phone": "+51 1 234 5678", "address": "Zona Industrial Lote 5", "city": "Callao", "country": "Perú"},
-    {"first_name": "Importadora Global", "last_name": "E.I.R.L.", "document_type": "RUC", "document_number": "20567890123", "email": "contacto@importglobal.pe", "phone": "+51 1 345 6789", "address": "Av. Argentina 2500", "city": "Lima", "country": "Perú"},
-    {"first_name": "Diego", "last_name": "Vargas Rojas", "document_type": "DNI", "document_number": "90123456", "email": "diego.vargas@gmail.com", "phone": "+51 989 012 345", "address": "Calle Libertad 432", "city": "Piura", "country": "Perú"},
-    {"first_name": "Sofía", "last_name": "Paredes Castro", "document_type": "DNI", "document_number": "12345679", "email": "sofia.paredes@outlook.com", "phone": "+51 912 345 679", "address": "Av. Salaverry 876", "city": "Lima", "country": "Perú"},
+    {
+        "first_name": "Carlos",
+        "last_name": "Mendoza",
+        "document_type": "DNI",
+        "document_number": "45678901",
+        "email": "carlos.mendoza@gmail.com",
+        "phone": "+51 987 654 321",
+        "address": "Av. Arequipa 1234, Lima",
+        "city": "Lima",
+        "country": "Perú",
+    },
+    {
+        "first_name": "María",
+        "last_name": "García López",
+        "document_type": "DNI",
+        "document_number": "32145678",
+        "email": "maria.garcia@hotmail.com",
+        "phone": "+51 912 345 678",
+        "address": "Jr. Cusco 567, Miraflores",
+        "city": "Lima",
+        "country": "Perú",
+    },
+    {
+        "first_name": "José",
+        "last_name": "Ramírez Torres",
+        "document_type": "DNI",
+        "document_number": "78901234",
+        "email": "jose.ramirez@outlook.com",
+        "phone": "+51 945 678 123",
+        "address": "Calle Los Olivos 890",
+        "city": "Arequipa",
+        "country": "Perú",
+    },
+    {
+        "first_name": "Ana",
+        "last_name": "Fernández",
+        "document_type": "DNI",
+        "document_number": "56789012",
+        "email": "ana.fernandez@gmail.com",
+        "phone": "+51 923 456 789",
+        "address": "Av. La Marina 456",
+        "city": "Lima",
+        "country": "Perú",
+    },
+    {
+        "first_name": "Luis",
+        "last_name": "Chávez Díaz",
+        "document_type": "DNI",
+        "document_number": "89012345",
+        "email": "luis.chavez@yahoo.com",
+        "phone": "+51 967 890 123",
+        "address": "Calle Tacna 321",
+        "city": "Trujillo",
+        "country": "Perú",
+    },
+    {
+        "first_name": "Rosa",
+        "last_name": "Huamán Quispe",
+        "document_type": "DNI",
+        "document_number": "23456789",
+        "email": "rosa.huaman@gmail.com",
+        "phone": "+51 934 567 890",
+        "address": "Av. Ejército 654",
+        "city": "Cusco",
+        "country": "Perú",
+    },
+    {
+        "first_name": "Pedro",
+        "last_name": "Silva Morales",
+        "document_type": "DNI",
+        "document_number": "67890123",
+        "email": "pedro.silva@gmail.com",
+        "phone": "+51 978 901 234",
+        "address": "Jr. Puno 789",
+        "city": "Lima",
+        "country": "Perú",
+    },
+    {
+        "first_name": "Carmen",
+        "last_name": "López Vega",
+        "document_type": "DNI",
+        "document_number": "34567890",
+        "email": "carmen.lopez@hotmail.com",
+        "phone": "+51 956 789 012",
+        "address": "Av. Brasil 1011",
+        "city": "Lima",
+        "country": "Perú",
+    },
+    {
+        "first_name": "Distribuciones ABC",
+        "last_name": "S.A.C.",
+        "document_type": "RUC",
+        "document_number": "20456789012",
+        "email": "ventas@abc-dist.com",
+        "phone": "+51 1 234 5678",
+        "address": "Zona Industrial Lote 5",
+        "city": "Callao",
+        "country": "Perú",
+    },
+    {
+        "first_name": "Importadora Global",
+        "last_name": "E.I.R.L.",
+        "document_type": "RUC",
+        "document_number": "20567890123",
+        "email": "contacto@importglobal.pe",
+        "phone": "+51 1 345 6789",
+        "address": "Av. Argentina 2500",
+        "city": "Lima",
+        "country": "Perú",
+    },
+    {
+        "first_name": "Diego",
+        "last_name": "Vargas Rojas",
+        "document_type": "DNI",
+        "document_number": "90123456",
+        "email": "diego.vargas@gmail.com",
+        "phone": "+51 989 012 345",
+        "address": "Calle Libertad 432",
+        "city": "Piura",
+        "country": "Perú",
+    },
+    {
+        "first_name": "Sofía",
+        "last_name": "Paredes Castro",
+        "document_type": "DNI",
+        "document_number": "12345679",
+        "email": "sofia.paredes@outlook.com",
+        "phone": "+51 912 345 679",
+        "address": "Av. Salaverry 876",
+        "city": "Lima",
+        "country": "Perú",
+    },
 ]
 
 SELLER_USERS: list[dict] = [
-    {"email": "vendedor1@orbitengine.com", "first_name": "Juan", "last_name": "Pérez", "phone": "+51 911 111 111"},
-    {"email": "vendedor2@orbitengine.com", "first_name": "Lucía", "last_name": "Torres", "phone": "+51 922 222 222"},
+    {
+        "email": "vendedor1@orbitengine.com",
+        "first_name": "Juan",
+        "last_name": "Pérez",
+        "phone": "+51 911 111 111",
+    },
+    {
+        "email": "vendedor2@orbitengine.com",
+        "first_name": "Lucía",
+        "last_name": "Torres",
+        "phone": "+51 922 222 222",
+    },
 ]
 
 PAYMENT_METHODS = ["cash", "card", "transfer"]
@@ -153,10 +489,14 @@ def seed(session: Session) -> None:
 
     # Check if data already exists
     existing_products = session.exec(
-        select(Product).where(Product.organization_id == org_id).where(Product.deleted_at.is_(None))
+        select(Product)
+        .where(Product.organization_id == org_id)
+        .where(Product.deleted_at.is_(None))
     ).first()
     if existing_products:
-        logger.warning("Demo data already exists. Skipping seed. Delete existing data first if you want to re-seed.")
+        logger.warning(
+            "Demo data already exists. Skipping seed. Delete existing data first if you want to re-seed."
+        )
         return
 
     # ── 2. Get roles ─────────────────────────────────────────────────
@@ -242,7 +582,11 @@ def seed(session: Session) -> None:
     product_list: list[Product] = []
     for name, sku, cat_path, cost, price, stock, stock_min, unit in PRODUCTS:
         # cat_path is ("Parent", "Child")
-        category = category_map.get(cat_path[1]) if len(cat_path) > 1 else category_map.get(cat_path[0])
+        category = (
+            category_map.get(cat_path[1])
+            if len(cat_path) > 1
+            else category_map.get(cat_path[0])
+        )
         product = Product(
             organization_id=org_id,
             category_id=category.id if category else None,
@@ -333,7 +677,9 @@ def seed(session: Session) -> None:
             sale_hour = random.randint(8, 20)
             sale_minute = random.randint(0, 59)
             sale_date = day.replace(
-                hour=sale_hour, minute=sale_minute, second=random.randint(0, 59),
+                hour=sale_hour,
+                minute=sale_minute,
+                second=random.randint(0, 59),
                 microsecond=0,
             )
 
@@ -344,18 +690,24 @@ def seed(session: Session) -> None:
                 qty = random.randint(1, 4)
                 item_subtotal = prod.sale_price * qty
                 subtotal += item_subtotal
-                items_data.append({
-                    "product_id": prod.id,
-                    "product_name": prod.name,
-                    "product_sku": prod.sku,
-                    "quantity": qty,
-                    "unit_price": prod.sale_price,
-                    "subtotal": item_subtotal,
-                })
+                items_data.append(
+                    {
+                        "product_id": prod.id,
+                        "product_name": prod.name,
+                        "product_sku": prod.sku,
+                        "quantity": qty,
+                        "unit_price": prod.sale_price,
+                        "subtotal": item_subtotal,
+                    }
+                )
 
             # Random discount (0-10% of subtotal)
-            discount = (subtotal * Decimal(str(random.randint(0, 10))) / Decimal("100")).quantize(Decimal("0.01"))
-            tax = ((subtotal - discount) * Decimal("0.18")).quantize(Decimal("0.01"))  # 18% IGV
+            discount = (
+                subtotal * Decimal(str(random.randint(0, 10))) / Decimal("100")
+            ).quantize(Decimal("0.01"))
+            tax = ((subtotal - discount) * Decimal("0.18")).quantize(
+                Decimal("0.01")
+            )  # 18% IGV
             total = subtotal - discount + tax
 
             payment_method = random.choice(PAYMENT_METHODS)
@@ -384,11 +736,13 @@ def seed(session: Session) -> None:
             if is_cancelled:
                 sale.cancelled_at = sale_date + timedelta(hours=random.randint(1, 4))
                 sale.cancelled_by = admin_user.id
-                sale.cancellation_reason = random.choice([
-                    "Cliente cambió de opinión",
-                    "Producto defectuoso",
-                    "Error en la orden",
-                ])
+                sale.cancellation_reason = random.choice(
+                    [
+                        "Cliente cambió de opinión",
+                        "Producto defectuoso",
+                        "Error en la orden",
+                    ]
+                )
 
             session.add(sale)
             session.flush()
@@ -405,9 +759,13 @@ def seed(session: Session) -> None:
             # Create inventory movements for completed sales
             if status == "completed":
                 for item_data in items_data:
-                    prod_obj = next(p for p in product_list if p.id == item_data["product_id"])
+                    prod_obj = next(
+                        p for p in product_list if p.id == item_data["product_id"]
+                    )
                     prev_stock = prod_obj.stock_quantity
-                    prod_obj.stock_quantity = max(0, prod_obj.stock_quantity - item_data["quantity"])
+                    prod_obj.stock_quantity = max(
+                        0, prod_obj.stock_quantity - item_data["quantity"]
+                    )
                     movement = InventoryMovement(
                         organization_id=org_id,
                         product_id=item_data["product_id"],
@@ -478,7 +836,7 @@ def seed(session: Session) -> None:
     logger.info(f"  Sellers:      {len(all_sellers)} (admin + {len(sellers)} sellers)")
     logger.info("")
     logger.info("Login credentials:")
-    logger.info(f"  Admin:    admin@example.com / changethis")
+    logger.info("  Admin:    admin@example.com / changethis")
     for sd in SELLER_USERS:
         logger.info(f"  Seller:   {sd['email']} / seller123")
     logger.info("=" * 60)

@@ -1,4 +1,3 @@
-from datetime import timedelta
 from typing import Annotated, Any
 
 from fastapi import APIRouter, Depends, HTTPException
@@ -8,17 +7,15 @@ from fastapi.security import OAuth2PasswordRequestForm
 from app import crud
 from app.api.deps import CurrentUser, SessionDep
 from app.core import security
-from app.core.config import settings
 from app.models import (
+    LoginResponse,
     Message,
     NewPassword,
-    Token,
+    OrganizationPublic,
+    RolePublic,
     UserPublic,
     UserPublicWithRelations,
     UserUpdate,
-    LoginResponse,
-    OrganizationPublic,
-    RolePublic,
 )
 from app.utils import (
     generate_password_reset_token,
@@ -122,6 +119,7 @@ def recover_password(email: str, session: SessionDep) -> Message:
     """
     Password Recovery
     """
+    
     user = crud.get_user_by_email(session=session, email=email)
 
     # Always return the same response to prevent email enumeration attacks
@@ -177,7 +175,6 @@ def recover_password_html_content(
     Requires authentication (admin only in production, but any user for testing)
     """
     # Check if user is admin
-    from app.api.deps import CurrentAdminUser
 
     user = crud.get_user_by_email(session=session, email=email)
 

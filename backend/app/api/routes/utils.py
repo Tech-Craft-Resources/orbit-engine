@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter
 from pydantic.networks import EmailStr
 
 from app.api.deps import CurrentAdminUser
