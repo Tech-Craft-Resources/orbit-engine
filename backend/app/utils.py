@@ -51,8 +51,13 @@ def send_email(
         smtp_options["user"] = settings.SMTP_USER
     if settings.SMTP_PASSWORD:
         smtp_options["password"] = settings.SMTP_PASSWORD
+        
+    logger.info(f"Sending email to {email_to} via {settings.SMTP_HOST}:{settings.SMTP_PORT} ssl={settings.SMTP_SSL} tls={settings.SMTP_TLS}")
     response = message.send(to=email_to, smtp=smtp_options)
     logger.info(f"send email result: {response}")
+    
+    if response.status_code not in (200, 250):
+        logger.error(f"Email failed — status: {response.status_code}, error: {response.error}")
 
 
 def generate_test_email(email_to: str) -> EmailData:
