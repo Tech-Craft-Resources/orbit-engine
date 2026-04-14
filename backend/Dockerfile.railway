@@ -40,4 +40,5 @@ RUN --mount=type=cache,target=/root/.cache/uv \
 
 WORKDIR /app/
 
-CMD ["fastapi", "run", "--workers", "2", "app/main.py"]
+# Wait for DB, run Alembic migrations, then start the API (exec preserves PID 1 / signals)
+CMD ["sh", "-c", "python app/backend_pre_start.py && alembic upgrade head && exec fastapi run --workers 2 app/main.py"]
