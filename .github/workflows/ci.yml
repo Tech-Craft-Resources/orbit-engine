@@ -1,0 +1,106 @@
+name: CI
+
+on:
+  push:
+    branches: ["main", "feat/**"]
+  pull_request:
+    branches: ["main"]
+
+jobs:
+  # ──────────────────────────────────────────────
+  # Backend — static analysis (no DB needed)
+  # ──────────────────────────────────────────────
+  backend-lint:
+    name: Backend — Lint & Types
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: backend
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: astral-sh/setup-uv@v5
+        with:
+          version: "latest"
+
+      - name: Install dependencies
+        run: uv sync
+
+      - name: mypy + ruff
+        run: uv run bash scripts/lint.sh
+
+  # ──────────────────────────────────────────────
+  # Backend — script unit tests (no DB needed)
+  # Both tests mock the DB engine with MagicMock.
+  # The remaining test suites (api/, crud/, security/)
+  # all depend on a live PostgreSQL session and are
+  # excluded here.
+  # ──────────────────────────────────────────────
+  backend-scripts-tests:
+    name: Backend — Script Tests
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: backend
+    env:
+      PROJECT_NAME: OrbitEngine
+      POSTGRES_SERVER: localhost
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: app
+      FIRST_SUPERUSER: admin@example.com
+      FIRST_SUPERUSER_PASSWORD: adminpass123
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: astral-sh/setup-uv@v5
+        with:
+          version: "latest"
+
+      - name: Install dependencies
+        run: uv sync
+
+      - name: Run script tests
+        run: uv run pytest tests/scripts/ -v
+
+  # ──────────────────────────────────────────────
+  # Frontend — static analysis (no DB needed)
+  # ──────────────────────────────────────────────
+  frontend-lint:
+    name: Frontend — Lint
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: frontend
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: oven-sh/setup-bun@v2
+
+      - name: Install dependencies
+        run: bun install
+
+      - name: Biome lint
+        run: bun run lint
+
+  # ──────────────────────────────────────────────
+  # Frontend — TypeScript check + Vite build
+  # E2E Playwright tests require a running backend
+  # with DB and are excluded here.
+  # ──────────────────────────────────────────────
+  frontend-build:
+    name: Frontend — Build
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: frontend
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: oven-sh/setup-bun@v2
+
+      - name: Install dependencies
+        run: bun install
+
+      - name: TypeScript check + Vite build
+        run: bun run build

@@ -10,7 +10,7 @@ router = APIRouter()
 
 
 @router.get("/", response_model=RolesPublic)
-def list_roles(*, session: SessionDep, current_user: CurrentUser) -> Any:
+def list_roles(*, session: SessionDep, _current_user: CurrentUser) -> Any:
     """
     Get all available roles in the system.
 

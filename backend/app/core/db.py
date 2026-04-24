@@ -74,7 +74,7 @@ def init_db(session: Session) -> None:
             last_name="Admin",
             role_id=admin_role.id,
         )
-        user = crud.create_user(
+        crud.create_user(
             session=session,
             user_create=user_in,
             organization_id=default_org.id,

@@ -1,6 +1,6 @@
 import uuid
 from collections.abc import Generator
-from typing import Annotated
+from typing import Annotated, Any
 
 import jwt
 from fastapi import Depends, HTTPException, status
@@ -45,7 +45,7 @@ def get_current_user(session: SessionDep, token: TokenDep) -> User:
     user = session.exec(
         select(User)
         .where(User.id == uuid.UUID(token_data.sub))
-        .where(User.deleted_at.is_(None))
+        .where(User.deleted_at.is_(None))  # type: ignore[union-attr]
     ).first()
 
     if not user:
@@ -67,7 +67,7 @@ def get_current_organization(current_user: CurrentUser) -> uuid.UUID:
 CurrentOrganization = Annotated[uuid.UUID, Depends(get_current_organization)]
 
 
-def require_role(*allowed_roles: str):
+def require_role(*allowed_roles: str) -> Any:
     """
     Dependency to check if current user has one of the allowed roles.
 

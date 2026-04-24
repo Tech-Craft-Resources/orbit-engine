@@ -166,7 +166,7 @@ def _build_inventory_export(
         session.exec(
             select(Category)
             .where(Category.organization_id == organization_id)
-            .where(Category.deleted_at.is_(None))
+            .where(Category.deleted_at.is_(None))  # type: ignore[union-attr]
         ).all()
     )
     category_map = {str(category.id): category.name for category in categories}
