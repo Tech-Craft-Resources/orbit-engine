@@ -14,19 +14,21 @@ from app.models import (
     CustomerUpdate,
     InventoryMovement,
     InventoryMovementCreate,
-    Organization as Organization,
+    Organization,
     OrganizationCreate,
     OrganizationUpdate,
     Product,
     ProductCreate,
     ProductUpdate,
-    Role as Role,
+    Role,
     Sale,
     SaleItem,
     User,
     UserCreate,
     UserUpdate,
 )
+
+__all__ = ["Organization", "Role"]
 
 # ============================================================================
 # ORGANIZATION CRUD
