@@ -41,7 +41,7 @@ def send_email(
 
     resend.api_key = settings.RESEND_API_KEY
 
-    response = resend.Emails.send(
+    response: Any = resend.Emails.send(
         params={
             "from": f"{settings.EMAILS_FROM_NAME} <{settings.EMAILS_FROM_EMAIL}>",
             "to": [email_to],

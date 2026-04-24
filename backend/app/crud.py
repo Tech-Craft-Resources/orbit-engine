@@ -14,13 +14,13 @@ from app.models import (
     CustomerUpdate,
     InventoryMovement,
     InventoryMovementCreate,
-    Organization,
+    Organization as Organization,
     OrganizationCreate,
     OrganizationUpdate,
     Product,
     ProductCreate,
     ProductUpdate,
-    Role,
+    Role as Role,
     Sale,
     SaleItem,
     User,
@@ -139,7 +139,7 @@ def get_user_by_email(
     Get user by email.
     If organization_id is provided, search within that organization only.
     """
-    statement = select(User).where(User.email == email).where(User.deleted_at.is_(None))
+    statement = select(User).where(User.email == email).where(User.deleted_at.is_(None))  # type: ignore[union-attr]
     if organization_id:
         statement = statement.where(User.organization_id == organization_id)
     return session.exec(statement).first()
@@ -152,7 +152,7 @@ def get_user_by_id(
     Get user by ID.
     If organization_id is provided, ensure the user belongs to that organization.
     """
-    statement = select(User).where(User.id == user_id).where(User.deleted_at.is_(None))
+    statement = select(User).where(User.id == user_id).where(User.deleted_at.is_(None))  # type: ignore[union-attr]
     if organization_id:
         statement = statement.where(User.organization_id == organization_id)
     return session.exec(statement).first()
@@ -165,7 +165,7 @@ def get_users_by_organization(
     statement = (
         select(User)
         .where(User.organization_id == organization_id)
-        .where(User.deleted_at.is_(None))
+        .where(User.deleted_at.is_(None))  # type: ignore[union-attr]
         .offset(skip)
         .limit(limit)
     )
@@ -180,7 +180,7 @@ def count_users_by_organization(*, session: Session, organization_id: uuid.UUID)
         select(func.count())
         .select_from(User)
         .where(User.organization_id == organization_id)
-        .where(User.deleted_at.is_(None))
+        .where(User.deleted_at.is_(None))  # type: ignore[union-attr]
     )
     return session.exec(statement).one()
 
@@ -212,7 +212,7 @@ def get_category_by_id(
         select(Category)
         .where(Category.id == category_id)
         .where(Category.organization_id == organization_id)
-        .where(Category.deleted_at.is_(None))
+        .where(Category.deleted_at.is_(None))  # type: ignore[union-attr]
     )
     return session.exec(statement).first()
 
@@ -228,7 +228,7 @@ def get_categories_by_organization(
     statement = (
         select(Category)
         .where(Category.organization_id == organization_id)
-        .where(Category.deleted_at.is_(None))
+        .where(Category.deleted_at.is_(None))  # type: ignore[union-attr]
         .offset(skip)
         .limit(limit)
     )
@@ -245,7 +245,7 @@ def count_categories_by_organization(
         select(func.count())
         .select_from(Category)
         .where(Category.organization_id == organization_id)
-        .where(Category.deleted_at.is_(None))
+        .where(Category.deleted_at.is_(None))  # type: ignore[union-attr]
     )
     return session.exec(statement).one()
 
@@ -262,12 +262,12 @@ def get_category_by_name(
         select(Category)
         .where(Category.name == name)
         .where(Category.organization_id == organization_id)
-        .where(Category.deleted_at.is_(None))
+        .where(Category.deleted_at.is_(None))  # type: ignore[union-attr]
     )
     if parent_id is not None:
         statement = statement.where(Category.parent_id == parent_id)
     else:
-        statement = statement.where(Category.parent_id.is_(None))
+        statement = statement.where(Category.parent_id.is_(None))  # type: ignore[union-attr]
     return session.exec(statement).first()
 
 
@@ -325,7 +325,7 @@ def get_product_by_id(
         select(Product)
         .where(Product.id == product_id)
         .where(Product.organization_id == organization_id)
-        .where(Product.deleted_at.is_(None))
+        .where(Product.deleted_at.is_(None))  # type: ignore[union-attr]
     )
     return session.exec(statement).first()
 
@@ -356,7 +356,7 @@ def get_products_by_organization(
     statement = (
         select(Product)
         .where(Product.organization_id == organization_id)
-        .where(Product.deleted_at.is_(None))
+        .where(Product.deleted_at.is_(None))  # type: ignore[union-attr]
     )
     if search:
         term = f"%{search}%"
@@ -364,7 +364,7 @@ def get_products_by_organization(
             or_(
                 Product.name.ilike(term),  # type: ignore[attr-defined]
                 Product.sku.ilike(term),  # type: ignore[attr-defined]
-                Product.description.ilike(term),  # type: ignore[attr-defined]
+                Product.description.ilike(term),  # type: ignore[union-attr]
             )
         )
     if is_active is not None:
@@ -395,7 +395,7 @@ def count_products_by_organization(
         select(func.count())
         .select_from(Product)
         .where(Product.organization_id == organization_id)
-        .where(Product.deleted_at.is_(None))
+        .where(Product.deleted_at.is_(None))  # type: ignore[union-attr]
     )
     if search:
         term = f"%{search}%"
@@ -403,7 +403,7 @@ def count_products_by_organization(
             or_(
                 Product.name.ilike(term),  # type: ignore[attr-defined]
                 Product.sku.ilike(term),  # type: ignore[attr-defined]
-                Product.description.ilike(term),  # type: ignore[attr-defined]
+                Product.description.ilike(term),  # type: ignore[union-attr]
             )
         )
     if is_active is not None:
@@ -421,7 +421,7 @@ def get_product_by_sku(
         select(Product)
         .where(Product.sku == sku)
         .where(Product.organization_id == organization_id)
-        .where(Product.deleted_at.is_(None))
+        .where(Product.deleted_at.is_(None))  # type: ignore[union-attr]
     )
     return session.exec(statement).first()
 
@@ -437,7 +437,7 @@ def get_low_stock_products(
     statement = (
         select(Product)
         .where(Product.organization_id == organization_id)
-        .where(Product.deleted_at.is_(None))
+        .where(Product.deleted_at.is_(None))  # type: ignore[union-attr]
         .where(Product.stock_quantity <= Product.stock_min)
         .offset(skip)
         .limit(limit)
@@ -453,7 +453,7 @@ def count_low_stock_products(*, session: Session, organization_id: uuid.UUID) ->
         select(func.count())
         .select_from(Product)
         .where(Product.organization_id == organization_id)
-        .where(Product.deleted_at.is_(None))
+        .where(Product.deleted_at.is_(None))  # type: ignore[union-attr]
         .where(Product.stock_quantity <= Product.stock_min)
     )
     return session.exec(statement).one()
@@ -527,7 +527,7 @@ def get_customer_by_id(
         select(Customer)
         .where(Customer.id == customer_id)
         .where(Customer.organization_id == organization_id)
-        .where(Customer.deleted_at.is_(None))
+        .where(Customer.deleted_at.is_(None))  # type: ignore[union-attr]
     )
     return session.exec(statement).first()
 
@@ -558,7 +558,7 @@ def get_customers_by_organization(
     statement = (
         select(Customer)
         .where(Customer.organization_id == organization_id)
-        .where(Customer.deleted_at.is_(None))
+        .where(Customer.deleted_at.is_(None))  # type: ignore[union-attr]
     )
     if search:
         term = f"%{search}%"
@@ -566,9 +566,9 @@ def get_customers_by_organization(
             or_(
                 Customer.first_name.ilike(term),  # type: ignore[attr-defined]
                 Customer.last_name.ilike(term),  # type: ignore[attr-defined]
-                Customer.email.ilike(term),  # type: ignore[attr-defined]
+                Customer.email.ilike(term),  # type: ignore[union-attr]
                 Customer.document_number.ilike(term),  # type: ignore[attr-defined]
-                Customer.phone.ilike(term),  # type: ignore[attr-defined]
+                Customer.phone.ilike(term),  # type: ignore[union-attr]
             )
         )
     if is_active is not None:
@@ -596,7 +596,7 @@ def count_customers_by_organization(
         select(func.count())
         .select_from(Customer)
         .where(Customer.organization_id == organization_id)
-        .where(Customer.deleted_at.is_(None))
+        .where(Customer.deleted_at.is_(None))  # type: ignore[union-attr]
     )
     if search:
         term = f"%{search}%"
@@ -604,9 +604,9 @@ def count_customers_by_organization(
             or_(
                 Customer.first_name.ilike(term),  # type: ignore[attr-defined]
                 Customer.last_name.ilike(term),  # type: ignore[attr-defined]
-                Customer.email.ilike(term),  # type: ignore[attr-defined]
+                Customer.email.ilike(term),  # type: ignore[union-attr]
                 Customer.document_number.ilike(term),  # type: ignore[attr-defined]
-                Customer.phone.ilike(term),  # type: ignore[attr-defined]
+                Customer.phone.ilike(term),  # type: ignore[union-attr]
             )
         )
     if is_active is not None:
@@ -622,7 +622,7 @@ def get_customer_by_document(
         select(Customer)
         .where(Customer.document_number == document_number)
         .where(Customer.organization_id == organization_id)
-        .where(Customer.deleted_at.is_(None))
+        .where(Customer.deleted_at.is_(None))  # type: ignore[union-attr]
     )
     return session.exec(statement).first()
 
@@ -707,7 +707,7 @@ def get_movements_by_organization(
     statement = (
         select(InventoryMovement)
         .where(InventoryMovement.organization_id == organization_id)
-        .order_by(InventoryMovement.created_at.desc())
+        .order_by(InventoryMovement.created_at.desc())  # type: ignore[attr-defined]
         .offset(skip)
         .limit(limit)
     )
@@ -741,7 +741,7 @@ def get_movements_by_product(
         select(InventoryMovement)
         .where(InventoryMovement.product_id == product_id)
         .where(InventoryMovement.organization_id == organization_id)
-        .order_by(InventoryMovement.created_at.desc())
+        .order_by(InventoryMovement.created_at.desc())  # type: ignore[attr-defined]
         .offset(skip)
         .limit(limit)
     )
@@ -969,7 +969,7 @@ def get_sales_today(
         .where(Sale.organization_id == organization_id)
         .where(Sale.status == "completed")
         .where(Sale.sale_date >= today_start)
-        .order_by(Sale.created_at.desc())
+        .order_by(Sale.created_at.desc())  # type: ignore[attr-defined]
         .offset(skip)
         .limit(limit)
     )
@@ -1103,7 +1103,7 @@ def get_sales_by_customer(
         select(Sale)
         .where(Sale.customer_id == customer_id)
         .where(Sale.organization_id == organization_id)
-        .order_by(Sale.created_at.desc())
+        .order_by(Sale.created_at.desc())  # type: ignore[attr-defined]
         .offset(skip)
         .limit(limit)
     )
@@ -1170,10 +1170,7 @@ def _get_top_products_for_current_month(
     quantity_sum = func.sum(SaleItem.quantity)
     revenue_sum = func.sum(SaleItem.subtotal)
 
-    if order_by == "quantity":
-        order_column = quantity_sum
-    else:
-        order_column = revenue_sum
+    order_column: Any = quantity_sum if order_by == "quantity" else revenue_sum
 
     statement = (
         select(
@@ -1182,12 +1179,12 @@ def _get_top_products_for_current_month(
             quantity_sum.label("quantity_sold"),
             revenue_sum.label("revenue"),
         )
-        .join(Sale, SaleItem.sale_id == Sale.id)
+        .join(Sale, SaleItem.sale_id == Sale.id)  # type: ignore[arg-type]
         .where(Sale.organization_id == organization_id)
         .where(Sale.status == "completed")
         .where(Sale.sale_date >= month_start)
         .where(Sale.sale_date < next_month_start)
-        .group_by(SaleItem.product_id, SaleItem.product_name)
+        .group_by(SaleItem.product_id, SaleItem.product_name)  # type: ignore[arg-type]
         .order_by(order_column.desc())
         .limit(limit)
     )
