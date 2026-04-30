@@ -10,16 +10,16 @@ Universidad Sergio Arboleda — Semillero de Software como Innovación
 
 OrbitEngine utiliza **Docker Compose** como orquestador de contenedores en todos los entornos. La arquitectura de despliegue se compone de los siguientes servicios:
 
-| Servicio | Imagen | Descripción |
-|----------|--------|-------------|
-| `db` | `postgres:18` | Base de datos relacional PostgreSQL |
-| `backend` | Custom (FastAPI) | API REST del sistema |
-| `frontend` | Custom (React/Nginx) | Interfaz de usuario compilada |
-| `prestart` | Custom (FastAPI) | Ejecuta migraciones y datos iniciales al iniciar |
-| `adminer` | `adminer` | Panel web de administración de BD |
-| `proxy` | `traefik:3.6` | Reverse proxy y gestor de rutas HTTP/HTTPS |
-| `minio` | `minio/minio` | Almacenamiento de objetos S3-compatible (dev) |
-| `mailcatcher` | `schickling/mailcatcher` | Servidor SMTP de prueba (solo dev) |
+| Servicio      | Imagen                   | Descripción                                      |
+| ------------- | ------------------------ | ------------------------------------------------ |
+| `db`          | `postgres:18`            | Base de datos relacional PostgreSQL              |
+| `backend`     | Custom (FastAPI)         | API REST del sistema                             |
+| `frontend`    | Custom (React/Nginx)     | Interfaz de usuario compilada                    |
+| `prestart`    | Custom (FastAPI)         | Ejecuta migraciones y datos iniciales al iniciar |
+| `adminer`     | `adminer`                | Panel web de administración de BD                |
+| `proxy`       | `traefik:3.6`            | Reverse proxy y gestor de rutas HTTP/HTTPS       |
+| `minio`       | `minio/minio`            | Almacenamiento de objetos S3-compatible (dev)    |
+| `mailcatcher` | `schickling/mailcatcher` | Servidor SMTP de prueba (solo dev)               |
 
 El enrutamiento externo se gestiona con **Traefik**, que expone los servicios bajo subdominios configurados y maneja la terminación TLS automática mediante Let's Encrypt en producción.
 
@@ -29,29 +29,29 @@ El enrutamiento externo se gestiona con **Traefik**, que expone los servicios ba
 
 ### B.2.1 Herramientas requeridas
 
-| Herramienta | Versión mínima | Propósito |
-|-------------|---------------|-----------|
-| Docker Engine | 24.x | Contenedores |
-| Docker Compose | v2.x | Orquestación de servicios |
-| Git | 2.x | Control de versiones |
-| `uv` | 0.4+ | Gestor de dependencias Python (para desarrollo local sin Docker) |
-| Bun | 1.x | Runtime JS / gestor de paquetes (para desarrollo local sin Docker) |
+| Herramienta    | Versión mínima | Propósito                                                          |
+| -------------- | -------------- | ------------------------------------------------------------------ |
+| Docker Engine  | 24.x           | Contenedores                                                       |
+| Docker Compose | v2.x           | Orquestación de servicios                                          |
+| Git            | 2.x            | Control de versiones                                               |
+| `uv`           | 0.4+           | Gestor de dependencias Python (para desarrollo local sin Docker)   |
+| Bun            | 1.x            | Runtime JS / gestor de paquetes (para desarrollo local sin Docker) |
 
 ### B.2.2 Puertos utilizados
 
-| Puerto | Servicio | Entorno |
-|--------|----------|---------|
-| 80 | Traefik HTTP | Dev y Producción |
-| 443 | Traefik HTTPS | Producción |
-| 8000 | Backend FastAPI | Dev (expuesto directamente) |
-| 5173 | Frontend (Vite) | Dev |
-| 5432 | PostgreSQL | Dev |
-| 8080 | Adminer | Dev |
-| 8090 | Traefik Dashboard | Dev |
-| 9000 | MinIO API | Dev |
-| 9001 | MinIO Console | Dev |
-| 1025 | Mailcatcher SMTP | Dev |
-| 1080 | Mailcatcher UI | Dev |
+| Puerto | Servicio          | Entorno                     |
+| ------ | ----------------- | --------------------------- |
+| 80     | Traefik HTTP      | Dev y Producción            |
+| 443    | Traefik HTTPS     | Producción                  |
+| 8000   | Backend FastAPI   | Dev (expuesto directamente) |
+| 5173   | Frontend (Vite)   | Dev                         |
+| 5432   | PostgreSQL        | Dev                         |
+| 8080   | Adminer           | Dev                         |
+| 8090   | Traefik Dashboard | Dev                         |
+| 9000   | MinIO API         | Dev                         |
+| 9001   | MinIO Console     | Dev                         |
+| 1025   | Mailcatcher SMTP  | Dev                         |
+| 1080   | Mailcatcher UI    | Dev                         |
 
 ---
 
@@ -93,24 +93,13 @@ SMTP_PORT=1025                         # En producción: 587
 SMTP_TLS=false                         # En producción: true
 EMAILS_FROM_EMAIL=noreply@tu-dominio.com
 
-# ─── Almacenamiento S3 / MinIO ────────────────────────────────────────────────
-S3_ENDPOINT_URL=http://minio:9000      # Omitir en producción con AWS S3 nativo
-S3_ACCESS_KEY_ID=minioadmin
-S3_SECRET_ACCESS_KEY=minioadmin
-S3_BUCKET_NAME=app-storage
-S3_REGION=us-east-1
-
-# ─── MinIO (solo desarrollo) ──────────────────────────────────────────────────
-MINIO_ROOT_USER=minioadmin
-MINIO_ROOT_PASSWORD=minioadmin
-
 # ─── Imágenes Docker ──────────────────────────────────────────────────────────
 DOCKER_IMAGE_BACKEND=backend
 DOCKER_IMAGE_FRONTEND=frontend
 ENVIRONMENT=local                      # local | staging | production
 ```
 
-> **Producción:** Cambiar todas las claves y contraseñas por valores aleatorios seguros. Se recomienda usar un gestor de secretos (HashiCorp Vault, AWS Secrets Manager, etc.).
+> **Producción:** Cambiar todas las claves y contraseñas por valores aleatorios seguros. Se recomienda gestionar las variables de entorno directamente en el panel de Railway (backend) y en el panel de Vercel (frontend), evitando archivos `.env` en producción.
 
 ---
 
@@ -126,6 +115,7 @@ docker compose watch
 ```
 
 Este comando:
+
 1. Construye las imágenes de backend y frontend si no existen.
 2. Levanta todos los servicios en orden de dependencias.
 3. Activa la recarga automática del backend al detectar cambios en `./backend`.
@@ -133,16 +123,16 @@ Este comando:
 
 ### B.4.2 URLs del entorno local
 
-| Servicio | URL |
-|----------|-----|
-| Frontend | http://localhost:5173 |
-| Backend API | http://localhost:8000 |
-| Documentación interactiva (Swagger) | http://localhost:8000/docs |
-| ReDoc | http://localhost:8000/redoc |
-| Adminer | http://localhost:8080 |
-| Traefik Dashboard | http://localhost:8090 |
-| MinIO Console | http://localhost:9001 |
-| Mailcatcher UI | http://localhost:1080 |
+| Servicio                            | URL                         |
+| ----------------------------------- | --------------------------- |
+| Frontend                            | http://localhost:5173       |
+| Backend API                         | http://localhost:8000       |
+| Documentación interactiva (Swagger) | http://localhost:8000/docs  |
+| ReDoc                               | http://localhost:8000/redoc |
+| Adminer                             | http://localhost:8080       |
+| Traefik Dashboard                   | http://localhost:8090       |
+| MinIO Console                       | http://localhost:9001       |
+| Mailcatcher UI                      | http://localhost:1080       |
 
 ### B.4.3 Detener el entorno
 
@@ -200,14 +190,14 @@ docker compose exec backend alembic downgrade -1
 
 Las migraciones actuales del esquema son:
 
-| Archivo | Descripción |
-|---------|-------------|
-| `001_initial_schema.py` | Tablas base: `organizations`, `roles`, `users` |
-| `002_categories.py` | Tabla `categories` con jerarquía padre-hijo |
-| `003_products.py` | Tabla `products` |
-| `004_customers.py` | Tabla `customers` |
-| `005_inventory_movements.py` | Tabla `inventory_movements` |
-| `006_sales.py` | Tablas `sales` y `sale_items` |
+| Archivo                      | Descripción                                    |
+| ---------------------------- | ---------------------------------------------- |
+| `001_initial_schema.py`      | Tablas base: `organizations`, `roles`, `users` |
+| `002_categories.py`          | Tabla `categories` con jerarquía padre-hijo    |
+| `003_products.py`            | Tabla `products`                               |
+| `004_customers.py`           | Tabla `customers`                              |
+| `005_inventory_movements.py` | Tabla `inventory_movements`                    |
+| `006_sales.py`               | Tablas `sales` y `sale_items`                  |
 
 ---
 
@@ -233,18 +223,7 @@ uv run pytest -k "test_create" -v
 uv run coverage run -m pytest && coverage report
 ```
 
-La cobertura de pruebas incluye:
-
-| Módulo | Pruebas API | Pruebas CRUD |
-|--------|-------------|--------------|
-| Usuarios | ✅ | ✅ |
-| Autenticación | ✅ | — |
-| Categorías | ✅ | ✅ |
-| Productos | ✅ | ✅ |
-| Clientes | ✅ | ✅ |
-| Ventas | ✅ | ✅ |
-| Movimientos de inventario | ✅ | ✅ |
-| Dashboard | ✅ | ✅ |
+La cobertura de pruebas abarca los principales módulos del sistema, tanto a nivel de API como de lógica CRUD. Se realizaron pruebas completas de API y CRUD para los módulos de usuarios, categorías, productos, clientes, ventas, movimientos de inventario y dashboard, lo que garantiza la validez funcional y la robustez de estos componentes. En el módulo de autenticación, la cobertura se concentra exclusivamente en pruebas de la API, debido a que la lógica principal reside en los flujos de autenticación y autorización más que en operaciones CRUD tradicionales. Esta cobertura integral asegura que los procesos críticos relacionados con la gestión de datos y la seguridad hayan sido evaluados mediante casos de prueba automatizados.
 
 ### B.6.2 Pruebas del frontend (Playwright E2E)
 
@@ -309,6 +288,7 @@ docker compose -f compose.traefik.yml up -d
 ```
 
 Esto levanta Traefik en modo producción con:
+
 - Redirección automática HTTP → HTTPS.
 - Certificados TLS gestionados por Let's Encrypt.
 - Panel de Traefik accesible solo internamente.
@@ -329,12 +309,6 @@ SMTP_HOST=smtp.tu-proveedor.com
 SMTP_PORT=587
 SMTP_TLS=true
 EMAILS_FROM_EMAIL=noreply@tu-dominio.com
-
-# S3 real (AWS) — omitir S3_ENDPOINT_URL para usar AWS S3 nativo
-S3_ACCESS_KEY_ID=<tu-access-key>
-S3_SECRET_ACCESS_KEY=<tu-secret-key>
-S3_BUCKET_NAME=<tu-bucket>
-S3_REGION=us-east-1
 ```
 
 ### B.8.5 Construir y desplegar
@@ -352,6 +326,7 @@ docker compose logs -f
 ```
 
 Los servicios se levantan en este orden:
+
 1. `db` — espera estar healthy (hasta 30s).
 2. `prestart` — ejecuta migraciones y datos iniciales.
 3. `backend` y `frontend` — arrancan tras `prestart`.
@@ -405,17 +380,17 @@ docker volume prune -f              # Elimina volúmenes sin usar (¡precaución
 
 ## B.10 Solución de Problemas
 
-| Problema | Causa probable | Solución |
-|----------|---------------|----------|
-| El backend no inicia | BD no está disponible | Verificar que `db` esté `healthy` con `docker compose ps`. Revisar `POSTGRES_*` en `.env`. |
-| Error de migraciones al iniciar | Migración incompatible | Ejecutar `docker compose exec backend alembic history` y `alembic current`. Corregir el script de migración. |
-| `502 Bad Gateway` en el frontend | Backend no responde | Verificar logs del backend: `docker compose logs backend`. Comprobar el healthcheck. |
-| Emails no se envían (producción) | SMTP mal configurado | Verificar `SMTP_HOST`, `SMTP_PORT` y credenciales. Probar con `telnet $SMTP_HOST $SMTP_PORT`. |
-| MinIO no accesible | Variables de entorno incorrectas | Verificar `S3_ENDPOINT_URL`, `S3_ACCESS_KEY_ID` y `S3_BUCKET_NAME` en `.env`. |
-| `Secret key too short` al iniciar | `SECRET_KEY` es demasiado corta | Generar una clave con `openssl rand -hex 32` y actualizar `.env`. |
-| Traefik no renueva el certificado TLS | Puerto 80 bloqueado o DNS incorrecto | Verificar que el dominio resuelva a la IP correcta y el puerto 80 esté abierto. |
-| Error `UNIQUE constraint` al insertar | Dato duplicado en BD | Verificar que el SKU, slug u otro campo único no esté repetido. |
+| Problema                              | Causa probable                       | Solución                                                                                                     |
+| ------------------------------------- | ------------------------------------ | ------------------------------------------------------------------------------------------------------------ |
+| El backend no inicia                  | BD no está disponible                | Verificar que `db` esté `healthy` con `docker compose ps`. Revisar `POSTGRES_*` en `.env`.                   |
+| Error de migraciones al iniciar       | Migración incompatible               | Ejecutar `docker compose exec backend alembic history` y `alembic current`. Corregir el script de migración. |
+| `502 Bad Gateway` en el frontend      | Backend no responde                  | Verificar logs del backend: `docker compose logs backend`. Comprobar el healthcheck.                         |
+| Emails no se envían (producción)      | SMTP mal configurado                 | Verificar `SMTP_HOST`, `SMTP_PORT` y credenciales. Probar con `telnet $SMTP_HOST $SMTP_PORT`.                |
+| MinIO no accesible                    | Variables de entorno incorrectas     | Verificar `S3_ENDPOINT_URL`, `S3_ACCESS_KEY_ID` y `S3_BUCKET_NAME` en `.env`.                                |
+| `Secret key too short` al iniciar     | `SECRET_KEY` es demasiado corta      | Generar una clave con `openssl rand -hex 32` y actualizar `.env`.                                            |
+| Traefik no renueva el certificado TLS | Puerto 80 bloqueado o DNS incorrecto | Verificar que el dominio resuelva a la IP correcta y el puerto 80 esté abierto.                              |
+| Error `UNIQUE constraint` al insertar | Dato duplicado en BD                 | Verificar que el SKU, slug u otro campo único no esté repetido.                                              |
 
 ---
 
-*Documento generado como parte del proyecto de grado — Universidad Sergio Arboleda, Semillero de Software como Innovación, Abril 2026.*
+_Documento generado como parte del proyecto de grado — Universidad Sergio Arboleda, Semillero de Software como Innovación, Abril 2026._

@@ -33,7 +33,7 @@ La relevancia del problema es, por tanto, tanto académica como práctica: una s
 El desarrollo de OrbitEngine se justifica por la convergencia de condiciones tecnológicas que hacen viable hoy lo que no era posible hace una década:
 
 1. **Democratización de la nube**: el modelo SaaS elimina la necesidad de servidores propios, reduciendo la barrera de entrada a un costo mensual por suscripción.
-2. **Madurez del ecosistema de desarrollo moderno**: frameworks como FastAPI y React, combinados con herramientas de contenerización (Docker) e infraestructura en la nube (AWS), permiten a equipos pequeños construir plataformas escalables con calidad de producción.
+2. **Madurez del ecosistema de desarrollo moderno**: frameworks como FastAPI y React, combinados con herramientas de contenerización (Docker) e infraestructura en la nube (Railway, Vercel), permiten a equipos pequeños construir plataformas escalables con calidad de producción.
 3. **Generación automática de API clients**: herramientas como OpenAPI permiten mantener sincronizados el contrato de la API y el frontend sin esfuerzo manual, reduciendo errores y acelerando el desarrollo.
 
 ### 1.2.3 Justificación Académica
@@ -56,7 +56,7 @@ Desarrollar e implementar una plataforma SaaS multi-tenant para la gestión inte
 
 3. **Construir** un sistema de reportes y analítica que proporcione indicadores clave de desempeño (KPIs) en tiempo real, con capacidad de exportación de datos en formatos estándar (PDF, Excel), facilitando la toma de decisiones basada en datos.
 
-4. **Desplegar** la plataforma en infraestructura de nube (AWS) con un pipeline de integración y entrega continua (CI/CD), garantizando una disponibilidad mínima del 95% y tiempos de respuesta inferiores a 2 segundos para operaciones transaccionales.
+4. **Desplegar** la plataforma en infraestructura de nube (Railway para el backend y la base de datos, Vercel para el frontend) con un pipeline de integración y entrega continua (CI/CD), garantizando una disponibilidad mínima del 95% y tiempos de respuesta inferiores a 2 segundos para operaciones transaccionales.
 
 5. **Validar** la solución mediante pruebas de usabilidad y rendimiento con al menos dos empresas piloto, midiendo el impacto en la eficiencia operativa a través de métricas cuantitativas (reducción de tiempo en tareas, tasa de error) y cualitativas (satisfacción de usuario).
 
@@ -80,7 +80,7 @@ OrbitEngine abarca el siguiente conjunto de funcionalidades dentro del producto 
 - API RESTful documentada con OpenAPI/Swagger.
 - Interfaz web responsive, compatible con navegadores modernos (Chrome, Firefox, Safari, Edge).
 
-***- Despliegue en AWS con Docker y GitHub Actions.***
+***- Despliegue en Railway (backend) y Vercel (frontend) con GitHub Actions.***
 - Suite de pruebas automatizadas con cobertura mínima del 60%.
 
 ### 1.4.2 Limitaciones y Exclusiones
@@ -99,7 +99,7 @@ Las siguientes características quedan fuera del alcance del MVP y podrán abord
 
 1. Los usuarios de la plataforma disponen de conexión a internet estable para el acceso a la aplicación web.
 2. Las empresas piloto están dispuestas a cargar sus datos de productos, clientes y stock inicial para comenzar a operar con el sistema.
-3. El equipo de desarrollo cuenta con acceso a créditos de AWS para educación o presupuesto operativo para la infraestructura de nube.
+3. El equipo de desarrollo cuenta con cuentas activas en Railway y Vercel con planes adecuados para el despliegue de la plataforma.
 
 ---
 

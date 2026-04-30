@@ -10,7 +10,7 @@ Esta sección presenta las conclusiones del proyecto OrbitEngine organizadas por
 
 **Objetivo 1**: *Diseñar la arquitectura técnica de una plataforma SaaS multi-tenant que garantice el aislamiento de datos entre organizaciones, la escalabilidad horizontal y la seguridad de la información.*
 
-Se diseñó e implementó una arquitectura de N capas con multi-tenancy por campo discriminador (`organization_id`), desplegada sobre infraestructura AWS con soporte de escalado horizontal en la capa de aplicación. La arquitectura adoptada demostró ser adecuada para el alcance del proyecto: el mecanismo de aislamiento de datos mediante el filtrado sistemático por `organization_id` en todas las operaciones de base de datos, combinado con la inclusión del contexto de organización en el token JWT, garantizó que no se produjeran filtraciones de datos entre tenants durante las pruebas de integración ni durante el período de uso en producción.
+Se diseñó e implementó una arquitectura de N capas con multi-tenancy por campo discriminador (`organization_id`), desplegada sobre infraestructura en la nube con soporte de escalado horizontal en la capa de aplicación (backend en Railway, base de datos PostgreSQL gestionada por Railway, y frontend estático en Vercel). La arquitectura adoptada demostró ser adecuada para el alcance del proyecto: el mecanismo de aislamiento de datos mediante el filtrado sistemático por `organization_id` en todas las operaciones de base de datos, combinado con la inclusión del contexto de organización en el token JWT, garantizó que no se produjeran filtraciones de datos entre tenants durante las pruebas de integración ni durante el período de uso en producción.
 
 Las decisiones arquitectónicas documentadas (monolito modular sobre microservicios, tabla compartida sobre BD por tenant, REST sobre GraphQL) resultaron apropiadas para un equipo de tres personas en un plazo de siete meses, permitiendo entregar un sistema funcional sin comprometer la escalabilidad futura.
 
@@ -34,7 +34,7 @@ Durante la validación, los usuarios reportaron que la generación del reporte d
 
 **Objetivo 4**: *Desplegar la plataforma en infraestructura de nube con CI/CD, garantizando disponibilidad ≥ 95% y tiempos de respuesta < 2 segundos.*
 
-El sistema fue desplegado en AWS con un pipeline de CI/CD completamente automatizado mediante GitHub Actions. Durante el período de producción, se alcanzó una disponibilidad del **[X]%** y los tiempos de respuesta en el percentil 95 se mantuvieron por debajo de los 500ms para todas las operaciones CRUD bajo carga normal. Ambos requisitos no funcionales (RNF-01, RNF-02) fueron satisfechos.
+El sistema fue desplegado en Railway (backend y base de datos PostgreSQL) y Vercel (frontend) con un pipeline de CI/CD completamente automatizado mediante GitHub Actions. Durante el período de producción, se alcanzó una disponibilidad del **[X]%** y los tiempos de respuesta en el percentil 95 se mantuvieron por debajo de los 500ms para todas las operaciones CRUD bajo carga normal. Ambos requisitos no funcionales (RNF-01, RNF-02) fueron satisfechos.
 
 La adopción de CI/CD desde las primeras etapas del proyecto fue una decisión de alto valor: el pipeline automatizado detectó múltiples regresiones antes de que llegaran a producción, en particular errores de tipado en los schemas de Pydantic que surgían al modificar los modelos de base de datos.
 

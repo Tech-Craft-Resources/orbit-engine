@@ -173,8 +173,8 @@ El sistema se organiza en cuatro componentes principales desplegados de forma in
             ┌───────────┴───────────┐
             ▼                       ▼
      ┌──────────┐             ┌──────────┐
-     │PostgreSQL│             │  AWS S3  │
-     │  (RDS)   │             │ (Files)  │
+     │PostgreSQL│             │  MinIO   │
+     │(Railway) │             │ (Files)  │
      └──────────┘             └──────────┘
 ```
 

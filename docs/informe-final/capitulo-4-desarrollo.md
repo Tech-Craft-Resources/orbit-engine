@@ -33,7 +33,7 @@ El equipo se organizó en roles complementarios con zonas de especialización cl
 
 - **Backend Lead**: arquitectura del sistema, endpoints de la API, modelos de base de datos, lógica de negocio y reportes.
 - **Frontend Lead**: componentes de UI, flujos de usuario, integración con la API, diseño responsivo.
-- **DevOps / Full Stack**: infraestructura AWS, pipelines CI/CD, monitoreo, soporte en backend y frontend.
+- **DevOps / Full Stack**: infraestructura en Railway y Vercel, pipelines CI/CD, monitoreo, soporte en backend y frontend.
 
 ### 4.1.4 Gestión de la Calidad del Código
 
@@ -73,9 +73,9 @@ Con el backlog definido, se realizó el diseño técnico del sistema:
 - Especificación de la API RESTful en formato OpenAPI.
 - Wireframes y mockups de alta fidelidad de las vistas principales.
 - Configuración del repositorio, estructura de carpetas y pipeline de CI/CD base.
-- Aprovisionamiento de la infraestructura AWS inicial (VPC, RDS, S3, ECS).
+- Aprovisionamiento de la infraestructura inicial en Railway (backend y base de datos PostgreSQL) y Vercel (frontend).
 
-**Entregables**: diseño de base de datos completo, mockups aprobados, infraestructura base en AWS.
+**Entregables**: diseño de base de datos completo, mockups aprobados, infraestructura base en Railway y Vercel.
 
 ### Fase 3 — Desarrollo Core (noviembre 2025 – enero 2026, sprints 1–6)
 
@@ -89,7 +89,7 @@ Esta es la fase de mayor volumen de desarrollo, donde se implementaron los módu
 #### Sprint 2: Inventario Core — CRUD de Productos (17–28 noviembre 2025 | 17 SP)
 - Backend: modelos `Product` y `Category`, CRUD completo con paginación y filtros, soft delete.
 - Frontend: tabla de productos con búsqueda en tiempo real, formulario de alta/edición con validación Zod, modal de confirmación de eliminación.
-- DevOps: primer despliegue en ambiente de staging en AWS.
+- DevOps: primer despliegue en ambiente de staging en Railway.
 - Resultado: gestión de catálogo de productos operativa.
 
 #### Sprint 3: Inventario Avanzado (1–12 diciembre 2025 | 16 SP)
@@ -124,7 +124,7 @@ Con todos los módulos funcionales, esta fase se enfocó en la calidad: correcci
 
 #### Sprint 8: Pruebas de Carga y Despliegue en Producción (16–27 febrero 2026 | 14 SP)
 - Pruebas de carga con Locust (50 usuarios concurrentes) y optimización de queries lentas identificadas.
-- Configuración de monitoreo en producción (CloudWatch Alarms, Sentry).
+- Configuración de monitoreo en producción (Railway Metrics, Sentry).
 - Despliegue a producción con dominio definitivo, certificado TLS y configuración de DNS.
 - Resultado: sistema en producción con monitoreo activo; SLA de disponibilidad validado internamente.
 
@@ -237,8 +237,8 @@ Trigger: push a cualquier rama / PR a main
     │       Frontend: bun run build
     │
     └─► Deploy (solo en merge a main)
-            Backend: push imagen a ECR → update ECS service
-            Frontend: sync a S3 → invalidar CloudFront
+            Backend: push a main → deploy automático en Railway
+            Frontend: push a main → deploy automático en Vercel
 ```
 
 Este pipeline garantiza que solo código probado y con tipos correctos llegue a producción.
@@ -273,22 +273,21 @@ Se realizó una prueba de carga básica con la herramienta Locust, simulando has
 
 ## 4.5 Infraestructura de Despliegue
 
-### 4.5.1 Arquitectura de Producción en AWS
+### 4.5.1 Arquitectura de Producción
 
-El sistema fue desplegado en AWS con la siguiente configuración:
+El sistema fue desplegado en Railway y Vercel con la siguiente configuración:
 
-| Servicio AWS | Componente | Configuración |
-|-------------|-----------|---------------|
-| ECS Fargate | Backend API | 2 tareas (512 CPU / 1GB RAM cada una) |
-| RDS PostgreSQL | Base de datos | db.t3.micro, Multi-AZ desactivado (costo MVP) |
-| S3 | Frontend + archivos | Bucket público con HTTPS |
-| CloudFront | CDN | Distribución global, caché de 24h |
-| ACM | Certificado TLS | Certificado wildcard *.orbitengine.com |
-| Route 53 | DNS | Registros A para API y frontend |
+| Plataforma | Componente | Configuración |
+|-----------|-----------|---------------|
+| Railway | Backend API | Servicio web desplegado desde imagen Docker; variables de entorno gestionadas en el panel de Railway |
+| Railway | Base de datos PostgreSQL | Instancia gestionada, backups automáticos, URL de conexión inyectada como variable de entorno |
+| Vercel | Frontend (React/Vite) | SPA compilada con Vite, CDN global integrado, HTTPS automático y previsualizaciones por pull request |
+| Railway / Vercel | Certificados TLS | Certificados gestionados y renovados automáticamente por cada plataforma |
+| Proveedor de dominio | DNS | Registros CNAME configurados para apuntar al backend en Railway y al frontend en Vercel |
 
 ### 4.5.2 Estrategia de Secretos y Configuración
 
-La configuración sensible (credenciales de base de datos, secreto JWT, claves AWS) se gestiona mediante AWS Secrets Manager y se inyecta como variables de entorno en los contenedores de ECS. Las variables de configuración no sensibles se definen en el archivo `docker-compose.yml` para desarrollo y en las definiciones de tarea de ECS para producción.
+La configuración sensible (credenciales de base de datos, secreto JWT) se gestiona mediante las variables de entorno del panel de Railway para el backend, y mediante el panel de Vercel para el frontend. Las variables de configuración no sensibles se definen en el archivo `docker-compose.yml` para el entorno de desarrollo local.
 
 Esta separación de configuración garantiza que nunca se cometan credenciales al repositorio de código.
 
@@ -296,7 +295,7 @@ Esta separación de configuración garantiza que nunca se cometan credenciales a
 
 Se configuraron los siguientes mecanismos de observabilidad:
 
-- **CloudWatch Logs**: todos los contenedores envían logs a grupos de CloudWatch, con retención de 30 días.
-- **CloudWatch Alarms**: alarmas para CPU > 80%, memoria > 85% y tasa de errores HTTP 5xx > 1%.
+- **Railway Logs**: los logs del backend se centralizan en el panel de Railway, con acceso en tiempo real y retención configurable desde la interfaz web.
+- **Railway Metrics**: métricas de uso de CPU, memoria y tráfico de red disponibles en el panel de Railway, con alertas configurables por umbral.
 - **Sentry** (integración en el backend): captura automática de excepciones no manejadas con contexto completo (stack trace, request, usuario).
-- **Healthcheck endpoint**: `GET /api/v1/utils/health-check` consultado por ECS cada 30 segundos para detectar contenedores no saludables.
+- **Healthcheck endpoint**: `GET /api/v1/utils/health-check` consultado periódicamente por Railway para detectar instancias no saludables y reiniciarlas automáticamente.
