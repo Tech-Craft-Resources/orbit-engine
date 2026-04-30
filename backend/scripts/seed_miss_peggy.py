@@ -660,15 +660,15 @@ CUSTOMERS_DATA: list[dict] = [
 
 SELLER_USERS: list[dict] = [
     {
-        "email": "vendedor1@misspeggy.co",
-        "first_name": "Peggy",
-        "last_name": "Administradora",
+        "email": "carolinaforero@misspeggy.co",
+        "first_name": "Carolina",
+        "last_name": "Forero",
         "phone": "+57 300 111 2222",
     },
     {
-        "email": "vendedor2@misspeggy.co",
-        "first_name": "Sandra",
-        "last_name": "Ruiz",
+        "email": "nicolasrodriguez@misspeggy.co",
+        "first_name": "Nicolas",
+        "last_name": "Rodriguez",
         "phone": "+57 300 333 4444",
     },
 ]
