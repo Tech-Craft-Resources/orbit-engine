@@ -39,7 +39,7 @@ El trabajo de grado titulado **"OrbitEngine: Desarrollo e Implementación de una
 
 \vspace{2cm}
 
-**Director del Semillero**
+**Co-director del Semillero**
 
 \_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_  
 Juan Pablo Ospina López  
