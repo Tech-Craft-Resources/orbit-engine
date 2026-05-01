@@ -27,7 +27,7 @@ Eso es todo. No requiere configuración adicional.
 
 ```bash
 cd backend
-uv run locust -f tests/performance/locustfile.py --host=https://orbitengine.lat
+uv run locust -f tests/performance/locustfile.py --host=https://api.orbitengine.lat
 ```
 
 **2. Abrir el panel de control** en el navegador:
@@ -42,7 +42,7 @@ http://localhost:8089
 |---|---|---|
 | Number of users | `8` | Cuántos usuarios simultáneos se simulan |
 | Spawn rate | `1` | Cuántos usuarios arrancan por segundo (gradual) |
-| Host | `https://orbitengine.lat` | Ya viene pre-llenado |
+| Host | `https://api.orbitengine.lat` | Ya viene pre-llenado |
 
 **4. Hacer clic en Start.** El panel muestra en tiempo real:
 
@@ -96,6 +96,37 @@ Cada cuenta pertenece a una organización diferente. Esto significa que cada usu
 
 ---
 
+## Modo de estrés máximo (romper el servidor)
+
+Para buscar el límite real del sistema, usa más usuarios con spawn rápido:
+
+```bash
+cd backend
+uv run locust -f tests/performance/locustfile.py \
+    --host=https://api.orbitengine.lat \
+    --headless \
+    --users 50 \
+    --spawn-rate 5 \
+    --run-time 120s \
+    --html reporte-estres.html
+```
+
+Con interfaz web puedes ir subiendo los usuarios en caliente (botón **Edit**) mientras la prueba corre para encontrar el punto de quiebre.
+
+---
+
+## Clases de usuario
+
+El archivo tiene tres perfiles distintos que Locust mezcla automáticamente según su peso:
+
+| Clase | Peso | `wait_time` | Qué hace |
+|---|---|---|---|
+| `OrbitEngineUser` | 3 | 0.5–1.5 s | Lector realista: paginación, búsquedas, filtros, ordenamiento |
+| `SellerUser` | 2 | 1–2 s | Crea ventas reales con productos del catálogo y ajusta stock |
+| `SpammerUser` | 1 | 0 s (sin pausa) | Martilla dashboard/stats y endpoints de agregación sin descanso |
+
+---
+
 ## Modo sin interfaz (solo terminal)
 
 Si quieres correrlo de forma automatizada sin abrir el navegador:
@@ -103,7 +134,7 @@ Si quieres correrlo de forma automatizada sin abrir el navegador:
 ```bash
 cd backend
 uv run locust -f tests/performance/locustfile.py \
-    --host=https://orbitengine.lat \
+    --host=https://api.orbitengine.lat \
     --headless \
     --users 8 \
     --spawn-rate 1 \
