@@ -57,7 +57,7 @@ A continuación se presentan las historias de usuario más representativas por m
 
 **Módulo de Reportes:**
 - HU-040: Como administrador, quiero ver un dashboard con los KPIs del negocio en tiempo real para tomar decisiones informadas.
-- HU-041: Como contador, quiero exportar el reporte de ventas del mes en Excel para procesarlo en mi software contable.
+- HU-041: Como contador o administrador, quiero exportar a Excel los listados de ventas, inventario o clientes (con los filtros aplicados) para procesarlos en herramientas externas.
 
 ---
 
@@ -98,9 +98,8 @@ Los requisitos funcionales se organizan por módulo. Cada requisito está identi
 | RF-SAL-03 | El sistema debe generar un número de factura único y secuencial por organización. | Alta |
 | RF-SAL-04 | El sistema debe permitir asociar una venta a un cliente registrado. | Media |
 | RF-SAL-05 | El sistema debe registrar el método de pago (efectivo, tarjeta, transferencia). | Media |
-| RF-SAL-06 | El sistema debe permitir exportar el detalle de una venta en formato PDF. | Media |
-| RF-SAL-07 | Solo el rol Administrador puede cancelar una venta registrada. La cancelación debe revertir el stock de los productos involucrados. | Alta |
-| RF-SAL-08 | El historial de ventas debe ser filtrable por rango de fechas, cliente, vendedor y método de pago. | Alta |
+| RF-SAL-06 | Solo el rol Administrador puede cancelar una venta registrada. La cancelación debe revertir el stock de los productos involucrados. | Alta |
+| RF-SAL-07 | El historial de ventas debe ser filtrable por rango de fechas, cliente, vendedor y método de pago. | Alta |
 
 #### RF-CUS — Módulo de Gestión de Clientes
 
@@ -117,7 +116,7 @@ Los requisitos funcionales se organizan por módulo. Cada requisito está identi
 | RF-REP-01 | El dashboard debe mostrar en tiempo real: ventas del día, ventas del mes, productos con stock bajo y top 5 productos más vendidos. | Alta |
 | RF-REP-02 | El dashboard debe incluir un gráfico de línea de ventas de los últimos 7 días. | Alta |
 | RF-REP-03 | El sistema debe generar reportes de ventas por período (diario, semanal, mensual). | Alta |
-| RF-REP-04 | El sistema debe permitir exportar los reportes en formato PDF y Excel. | Media |
+| RF-REP-04 | El sistema debe permitir exportar a Excel (.xlsx) los listados filtrados de inventario, ventas y clientes desde el módulo de reportes. | Media |
 | RF-REP-05 | El sistema debe generar un reporte de estado de inventario con productos agrupados por categoría. | Media |
 
 ### 3.2.2 Requisitos No Funcionales
@@ -346,7 +345,7 @@ La aplicación utiliza un layout de sidebar fijo con las siguientes secciones de
 - **Inventario**: gestión de productos y categorías, historial de movimientos.
 - **Ventas**: registro de nuevas ventas e historial.
 - **Clientes**: base de datos y perfiles de clientes.
-- **Reportes**: reportes por período y exportaciones.
+- **Reportes**: exportación a Excel de los listados de inventario, ventas y clientes con filtros aplicados.
 - **Configuración**: gestión de usuarios y perfil de la organización (solo Administrador).
 
 ### 3.5.3 Sistema de Diseño

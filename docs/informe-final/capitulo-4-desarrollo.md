@@ -108,9 +108,9 @@ Esta es la fase de mayor volumen de desarrollo, donde se implementaron los módu
 - Resultado: base de datos de clientes con análisis de comportamiento.
 
 #### Sprint 6: Reportes y Dashboard (19–30 enero 2026 | 18 SP)
-- Backend: endpoints de agregación para KPIs (ventas del día, ventas del mes, productos con stock bajo, top productos), generación de reportes con filtros de período, exportación a Excel mediante la biblioteca `openpyxl` y a PDF mediante `reportlab`.
+- Backend: endpoints de agregación para KPIs (ventas del día, ventas del mes, productos con stock bajo, top productos) y endpoint `POST /dashboard/export-excel` que genera archivos `.xlsx` para los datasets de inventario, clientes y ventas, construyendo el formato Office Open XML manualmente sin dependencias externas.
 - Frontend: dashboard con widgets de KPIs, gráfico de ventas de los últimos 7 días (Recharts), módulo de reportes con filtros de fecha.
-- Resultado: dashboard operativo con exportación de datos.
+- Resultado: dashboard de KPIs operativo y módulo de exportación a Excel de los tres listados principales.
 
 ### Fase 4 — Estabilización y Refinamiento (febrero – marzo 2026, sprints 7–9)
 

@@ -24,9 +24,9 @@ Un hallazgo del proceso de validación fue la importancia de las alertas de stoc
 
 ---
 
-**Objetivo 3**: *Construir un sistema de reportes y analítica que proporcione KPIs en tiempo real con capacidad de exportación.*
+**Objetivo 3**: *Construir un sistema de reportes y analítica que proporcione KPIs en tiempo real en el dashboard y exportación a Excel de los listados operativos.*
 
-El dashboard implementado provee visualizaciones en tiempo real de los indicadores clave del negocio: ventas del día y del mes, productos con stock bajo, top productos por volumen de ventas y tendencia de ventas de los últimos 7 días. Los módulos de exportación generan reportes en formato PDF y Excel correctamente.
+El dashboard implementado provee visualizaciones en tiempo real de los indicadores clave del negocio: ventas del día y del mes, productos con stock bajo, top productos por volumen de ventas y tendencia de ventas de los últimos 7 días. Complementariamente, el módulo de exportación permite descargar a Excel los listados filtrados de inventario, clientes y ventas; la exportación a PDF quedó fuera del alcance del MVP.
 
 Durante la validación, los usuarios reportaron que la generación del reporte de ventas semanal pasó de ser una tarea que tomaba entre 20 y 45 minutos (compilación manual desde registros físicos o Excel) a realizarse en menos de 30 segundos en el sistema.
 

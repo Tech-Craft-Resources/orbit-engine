@@ -54,7 +54,7 @@ Desarrollar e implementar una plataforma SaaS multi-tenant para la gestión inte
 
 2. **Desarrollar** los módulos de gestión operativa esenciales —autenticación y control de acceso basado en roles, gestión de inventario con alertas automáticas, registro de ventas con generación de documentos, y gestión de clientes con análisis de historial— conforme a los requisitos levantados con usuarios reales de pymes.
 
-3. **Construir** un sistema de reportes y analítica que proporcione indicadores clave de desempeño (KPIs) en tiempo real, con capacidad de exportación de datos en formatos estándar (PDF, Excel), facilitando la toma de decisiones basada en datos.
+3. **Construir** un sistema de reportes y analítica que proporcione indicadores clave de desempeño (KPIs) en tiempo real en el dashboard, junto con la capacidad de exportar a Excel los listados operativos (inventario, ventas y clientes), facilitando la toma de decisiones basada en datos.
 
 4. **Desplegar** la plataforma en infraestructura de nube (Railway para el backend y la base de datos, Vercel para el frontend) con un pipeline de integración y entrega continua (CI/CD), garantizando una disponibilidad mínima del 95% y tiempos de respuesta inferiores a 2 segundos para operaciones transaccionales.
 
@@ -71,9 +71,9 @@ OrbitEngine abarca el siguiente conjunto de funcionalidades dentro del producto 
 **Módulos implementados:**
 - Autenticación y gestión de usuarios con control de acceso basado en roles (RBAC): Administrador, Vendedor y Visualizador.
 - Gestión de inventario: CRUD de productos por categorías, control de stock en tiempo real, alertas automáticas de nivel mínimo e historial de movimientos.
-- Gestión de ventas: registro de transacciones multi-producto, historial de ventas con filtros, exportación de facturas en PDF.
+- Gestión de ventas: registro de transacciones multi-producto con generación de número de factura, historial de ventas con filtros y búsqueda.
 - Gestión de clientes: base de datos de clientes, historial de compras y métricas de comportamiento.
-- Dashboard y reportes: KPIs en tiempo real, reportes por período y exportación a PDF y Excel.
+- Dashboard y reportes: KPIs en tiempo real (ventas del día/mes, stock bajo, top de productos, tendencia de ventas) y exportación a Excel de los listados de inventario, ventas y clientes.
 - Infraestructura multi-tenant: soporte para múltiples organizaciones con aislamiento total de datos.
 
 **Características técnicas:**

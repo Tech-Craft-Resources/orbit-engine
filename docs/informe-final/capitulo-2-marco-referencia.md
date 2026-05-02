@@ -170,7 +170,7 @@ FastAPI es un framework web moderno para Python, basado en Starlette y Pydantic,
 - **Rendimiento**: comparable a Node.js y Go en benchmarks de concurrencia, gracias a su implementación asíncrona (ASGI).
 - **Tipado automático**: la integración con Pydantic valida automáticamente los datos de entrada y salida de cada endpoint, reduciendo el boilerplate de validación.
 - **Documentación automática**: genera una interfaz Swagger UI y ReDoc sin configuración adicional, facilitando la comunicación con el frontend y la evaluación académica.
-- **Ecosistema Python maduro**: la elección de Python como lenguaje de backend otorga acceso a un amplio ecosistema de bibliotecas para procesamiento de datos, generación de reportes (openpyxl, reportlab) y posibles extensiones futuras.
+- **Ecosistema Python maduro**: la elección de Python como lenguaje de backend otorga acceso a un amplio ecosistema de bibliotecas para procesamiento de datos, generación de reportes y exportación de datos tabulares, y posibles extensiones futuras.
 
 ### 2.3.2 React (Frontend)
 

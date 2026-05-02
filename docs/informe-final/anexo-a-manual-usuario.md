@@ -345,7 +345,7 @@ Actualmente cada usuario tiene un único rol. Los roles definen los permisos de 
 Los productos cuyo stock actual es igual o menor al **stock mínimo** configurado aparecen resaltados en la tabla de inventario y se contabilizan en el indicador "Productos con stock bajo" del dashboard.
 
 **¿Se puede exportar la información a Excel o PDF?**  
-La exportación de reportes es una funcionalidad planificada para versiones futuras. Actualmente los datos se visualizan dentro de la plataforma.
+Los listados de inventario, ventas y clientes pueden exportarse a Excel (.xlsx) desde el módulo correspondiente, conservando los filtros aplicados. La exportación a PDF no está disponible en esta versión.
 
 **¿Qué navegadores son compatibles?**  
 OrbitEngine es compatible con las versiones recientes de Chrome, Firefox, Edge y Safari. No se garantiza compatibilidad con Internet Explorer.
