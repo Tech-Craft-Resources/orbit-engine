@@ -590,11 +590,6 @@ La configuración se carga desde el archivo `.env` usando Pydantic-Settings. Tod
 | `EMAILS_FROM_EMAIL`              | `EmailStr\|None` | `None`                  | Email remitente                      |
 | `EMAIL_RESET_TOKEN_EXPIRE_HOURS` | `int`            | `48`                    | Expiración del token de reset        |
 | `SENTRY_DSN`                     | `HttpUrl\|None`  | `None`                  | DSN de Sentry para error tracking    |
-| `S3_ENDPOINT_URL`                | `str\|None`      | `None`                  | Endpoint S3 (MinIO en dev)           |
-| `S3_ACCESS_KEY_ID`               | `str\|None`      | `None`                  | Access key para S3/MinIO             |
-| `S3_SECRET_ACCESS_KEY`           | `str\|None`      | `None`                  | Secret key para S3/MinIO             |
-| `S3_BUCKET_NAME`                 | `str\|None`      | `None`                  | Nombre del bucket S3                 |
-| `S3_REGION`                      | `str`            | `"us-east-1"`           | Región S3                            |
 
 ### C.6.3 Propiedades calculadas (no en `.env`)
 
@@ -603,7 +598,6 @@ La configuración se carga desde el archivo `.env` usando Pydantic-Settings. Tod
 | `SQLALCHEMY_DATABASE_URI` | URI completa de conexión a PostgreSQL                          |
 | `all_cors_origins`        | `BACKEND_CORS_ORIGINS` + `FRONTEND_HOST`                       |
 | `emails_enabled`          | `True` si `SMTP_HOST` y `EMAILS_FROM_EMAIL` están configurados |
-| `s3_enabled`              | `True` si las tres variables S3 clave están configuradas       |
 
 ---
 

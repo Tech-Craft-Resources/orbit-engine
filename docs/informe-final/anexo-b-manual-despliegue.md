@@ -18,7 +18,6 @@ OrbitEngine utiliza **Docker Compose** como orquestador de contenedores en todos
 | `prestart`    | Custom (FastAPI)         | Ejecuta migraciones y datos iniciales al iniciar |
 | `adminer`     | `adminer`                | Panel web de administración de BD                |
 | `proxy`       | `traefik:3.6`            | Reverse proxy y gestor de rutas HTTP/HTTPS       |
-| `minio`       | `minio/minio`            | Almacenamiento de objetos S3-compatible (dev)    |
 | `mailcatcher` | `schickling/mailcatcher` | Servidor SMTP de prueba (solo dev)               |
 
 El enrutamiento externo se gestiona con **Traefik**, que expone los servicios bajo subdominios configurados y maneja la terminación TLS automática mediante Let's Encrypt en producción.
@@ -48,8 +47,6 @@ El enrutamiento externo se gestiona con **Traefik**, que expone los servicios ba
 | 5432   | PostgreSQL        | Dev                         |
 | 8080   | Adminer           | Dev                         |
 | 8090   | Traefik Dashboard | Dev                         |
-| 9000   | MinIO API         | Dev                         |
-| 9001   | MinIO Console     | Dev                         |
 | 1025   | Mailcatcher SMTP  | Dev                         |
 | 1080   | Mailcatcher UI    | Dev                         |
 
@@ -105,7 +102,7 @@ ENVIRONMENT=local                      # local | staging | production
 
 ## B.4 Entorno de Desarrollo Local
 
-El entorno de desarrollo combina `compose.yml` con `compose.override.yml`, que añade los servicios de desarrollo (Traefik local, Mailcatcher, MinIO) y sobrescribe las configuraciones para recarga en caliente.
+El entorno de desarrollo combina `compose.yml` con `compose.override.yml`, que añade los servicios de desarrollo (Traefik local, Mailcatcher) y sobrescribe las configuraciones para recarga en caliente.
 
 ### B.4.1 Iniciar el entorno
 
@@ -131,7 +128,6 @@ Este comando:
 | ReDoc                               | http://localhost:8000/redoc |
 | Adminer                             | http://localhost:8080       |
 | Traefik Dashboard                   | http://localhost:8090       |
-| MinIO Console                       | http://localhost:9001       |
 | Mailcatcher UI                      | http://localhost:1080       |
 
 ### B.4.3 Detener el entorno
@@ -386,7 +382,6 @@ docker volume prune -f              # Elimina volúmenes sin usar (¡precaución
 | Error de migraciones al iniciar       | Migración incompatible               | Ejecutar `docker compose exec backend alembic history` y `alembic current`. Corregir el script de migración. |
 | `502 Bad Gateway` en el frontend      | Backend no responde                  | Verificar logs del backend: `docker compose logs backend`. Comprobar el healthcheck.                         |
 | Emails no se envían (producción)      | SMTP mal configurado                 | Verificar `SMTP_HOST`, `SMTP_PORT` y credenciales. Probar con `telnet $SMTP_HOST $SMTP_PORT`.                |
-| MinIO no accesible                    | Variables de entorno incorrectas     | Verificar `S3_ENDPOINT_URL`, `S3_ACCESS_KEY_ID` y `S3_BUCKET_NAME` en `.env`.                                |
 | `Secret key too short` al iniciar     | `SECRET_KEY` es demasiado corta      | Generar una clave con `openssl rand -hex 32` y actualizar `.env`.                                            |
 | Traefik no renueva el certificado TLS | Puerto 80 bloqueado o DNS incorrecto | Verificar que el dominio resuelva a la IP correcta y el puerto 80 esté abierto.                              |
 | Error `UNIQUE constraint` al insertar | Dato duplicado en BD                 | Verificar que el SKU, slug u otro campo único no esté repetido.                                              |
