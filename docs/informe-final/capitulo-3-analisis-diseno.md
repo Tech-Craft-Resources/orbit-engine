@@ -212,21 +212,7 @@ El modelo de datos se organiza alrededor de las siguientes entidades:
 
 ### 3.4.2 Diagrama Entidad-Relación
 
-```
-organizations (1) ─────── (N) users
-organizations (1) ─────── (N) categories
-organizations (1) ─────── (N) products
-organizations (1) ─────── (N) customers
-organizations (1) ─────── (N) sales
-
-categories (1) ──────────── (N) products
-products (1) ────────────── (N) sale_items
-products (1) ────────────── (N) inventory_movements
-
-sales (1) ────────────────── (N) sale_items
-sales (N) ────────────────── (1) customers  [opcional]
-sales (N) ────────────────── (1) users  [vendedor]
-```
+![Diagrama Entidad-Relación](images/OrbitEngine_DER.drawio.png)
 
 ### 3.4.3 Tabla: `organizations`
 
