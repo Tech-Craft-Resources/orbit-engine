@@ -1,6 +1,6 @@
 <mxfile host="app.diagrams.net">
   <diagram id="Z-C3V4AzAfOw0_smcGXP" name="Página-1">
-    <mxGraphModel dx="2915" dy="1278" grid="0" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="0" pageScale="1" pageWidth="1654" pageHeight="2000" background="#ffffff" math="0" shadow="0">
+    <mxGraphModel dx="1986" dy="1059" grid="0" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="0" pageScale="1" pageWidth="1654" pageHeight="2000" background="#ffffff" math="0" shadow="0">
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
@@ -102,7 +102,7 @@
           </mxGeometry>
         </mxCell>
         <mxCell id="roles" parent="1" style="shape=table;startSize=30;container=1;collapsible=1;childLayout=tableLayout;fixedRows=1;rowLines=0;fontStyle=1;align=center;resizeLast=1;fillColor=#e1d5e7;strokeColor=#9673a6;fontColor=#4a235a;fontSize=13;" value="roles" vertex="1">
-          <mxGeometry height="180" width="410" x="1417" y="-130" as="geometry" />
+          <mxGeometry height="180" width="410" x="1223" y="-160" as="geometry" />
         </mxCell>
         <mxCell id="roles_r0" parent="roles" style="shape=tableRow;horizontal=0;startSize=0;swimlaneHead=0;swimlaneBody=0;fillColor=none;collapsible=0;dropTarget=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fontSize=11;top=0;left=0;right=0;bottom=1;" value="" vertex="1">
           <mxGeometry height="25" width="410" y="30" as="geometry" />
@@ -170,7 +170,7 @@
           </mxGeometry>
         </mxCell>
         <mxCell id="users" parent="1" style="shape=table;startSize=30;container=1;collapsible=1;childLayout=tableLayout;fixedRows=1;rowLines=0;fontStyle=1;align=center;resizeLast=1;fillColor=#d5e8d4;strokeColor=#82b366;fontColor=#1a4a1a;fontSize=13;" value="users" vertex="1">
-          <mxGeometry height="330" width="410" x="1566" y="353" as="geometry" />
+          <mxGeometry height="330" width="410" x="1286" y="193" as="geometry" />
         </mxCell>
         <mxCell id="users_r0" parent="users" style="shape=tableRow;horizontal=0;startSize=0;swimlaneHead=0;swimlaneBody=0;fillColor=none;collapsible=0;dropTarget=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fontSize=11;top=0;left=0;right=0;bottom=1;" value="" vertex="1">
           <mxGeometry height="25" width="410" y="30" as="geometry" />
@@ -316,7 +316,7 @@
           </mxGeometry>
         </mxCell>
         <mxCell id="cats" parent="1" style="shape=table;startSize=30;container=1;collapsible=1;childLayout=tableLayout;fixedRows=1;rowLines=0;fontStyle=1;align=center;resizeLast=1;fillColor=#fff2cc;strokeColor=#d6b656;fontColor=#7d4e00;fontSize=13;" value="categories" vertex="1">
-          <mxGeometry height="230" width="410" x="-376" y="319" as="geometry" />
+          <mxGeometry height="230" width="410" x="-42" y="215" as="geometry" />
         </mxCell>
         <mxCell id="cats_r0" parent="cats" style="shape=tableRow;horizontal=0;startSize=0;swimlaneHead=0;swimlaneBody=0;fillColor=none;collapsible=0;dropTarget=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fontSize=11;top=0;left=0;right=0;bottom=1;" value="" vertex="1">
           <mxGeometry height="25" width="410" y="30" as="geometry" />
@@ -539,7 +539,7 @@
           <mxGeometry height="25" width="340" x="70" as="geometry" />
         </mxCell>
         <mxCell id="custs" parent="1" style="shape=table;startSize=30;container=1;collapsible=1;childLayout=tableLayout;fixedRows=1;rowLines=0;fontStyle=1;align=center;resizeLast=1;fillColor=#f8cecc;strokeColor=#b85450;fontColor=#6d1f1f;fontSize=13;" value="customers" vertex="1">
-          <mxGeometry height="355" width="410" x="-386" y="797" as="geometry" />
+          <mxGeometry height="355" width="410" x="-252" y="655" as="geometry" />
         </mxCell>
         <mxCell id="custs_r0" parent="custs" style="shape=tableRow;horizontal=0;startSize=0;swimlaneHead=0;swimlaneBody=0;fillColor=none;collapsible=0;dropTarget=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fontSize=11;top=0;left=0;right=0;bottom=1;" value="" vertex="1">
           <mxGeometry height="25" width="410" y="30" as="geometry" />
@@ -929,7 +929,7 @@
           </mxGeometry>
         </mxCell>
         <mxCell id="invmov" parent="1" style="shape=table;startSize=30;container=1;collapsible=1;childLayout=tableLayout;fixedRows=1;rowLines=0;fontStyle=1;align=center;resizeLast=1;fillColor=#d5e8d4;strokeColor=#82b366;fontColor=#1a4a1a;fontSize=13;" value="inventory_movements" vertex="1">
-          <mxGeometry height="330" width="410" x="-366" y="1358" as="geometry" />
+          <mxGeometry height="330" width="410" x="-240" y="1138" as="geometry" />
         </mxCell>
         <mxCell id="invmov_r0" parent="invmov" style="shape=tableRow;horizontal=0;startSize=0;swimlaneHead=0;swimlaneBody=0;fillColor=none;collapsible=0;dropTarget=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fontSize=11;top=0;left=0;right=0;bottom=1;" value="" vertex="1">
           <mxGeometry height="25" width="410" y="30" as="geometry" />
@@ -1100,8 +1100,8 @@
         <mxCell id="e_org_cus" edge="1" parent="1" source="org" style="edgeStyle=orthogonalEdgeStyle;endArrow=ERmany;startArrow=ERone;strokeColor=#b85450;fontStyle=1;fontSize=10;" target="custs" value="1:N">
           <mxGeometry relative="1" as="geometry">
             <Array as="points">
-              <mxPoint x="-588" y="-81" />
-              <mxPoint x="-588" y="975" />
+              <mxPoint x="-383" y="-81" />
+              <mxPoint x="-383" y="975" />
             </Array>
             <mxPoint x="851" y="-89" as="sourcePoint" />
             <mxPoint x="-372" y="848" as="targetPoint" />
@@ -1120,8 +1120,7 @@
         <mxCell id="e_org_inv" edge="1" parent="1" source="org" style="edgeStyle=orthogonalEdgeStyle;endArrow=ERmany;startArrow=ERone;strokeColor=#82b366;fontStyle=1;fontSize=10;" target="invmov" value="1:N">
           <mxGeometry relative="1" as="geometry">
             <Array as="points">
-              <mxPoint x="-491" y="52" />
-              <mxPoint x="-491" y="1523" />
+              <mxPoint x="-311" y="52" />
             </Array>
             <mxPoint x="712" y="44" as="sourcePoint" />
             <mxPoint x="-491" y="1542" as="targetPoint" />
@@ -1146,7 +1145,7 @@
         <mxCell id="e_cus_sal" edge="1" parent="1" source="custs" style="edgeStyle=orthogonalEdgeStyle;endArrow=ERmany;startArrow=ERone;strokeColor=#b85450;fontStyle=1;fontSize=10;" target="sales" value="1:N">
           <mxGeometry relative="1" as="geometry">
             <Array as="points">
-              <mxPoint x="384" y="975" />
+              <mxPoint x="384" y="825" />
               <mxPoint x="384" y="1129" />
             </Array>
             <mxPoint x="61" y="995" as="sourcePoint" />
@@ -1156,7 +1155,7 @@
         <mxCell id="e_usr_sal" edge="1" parent="1" source="users" style="edgeStyle=orthogonalEdgeStyle;endArrow=ERmany;startArrow=ERone;strokeColor=#82b366;fontStyle=1;fontSize=10;" target="sales" value="1:N">
           <mxGeometry relative="1" as="geometry">
             <Array as="points">
-              <mxPoint x="1701" y="960" />
+              <mxPoint x="1613" y="960" />
             </Array>
             <mxPoint x="2190" y="671" as="sourcePoint" />
             <mxPoint x="884" y="1248" as="targetPoint" />
@@ -1187,9 +1186,9 @@
         <mxCell id="e_usr_inv" edge="1" parent="1" source="users" style="edgeStyle=orthogonalEdgeStyle;endArrow=ERmany;startArrow=ERone;strokeColor=#82b366;fontStyle=1;fontSize=10;" target="invmov" value="1:N">
           <mxGeometry relative="1" as="geometry">
             <Array as="points">
-              <mxPoint x="2491" y="426" />
-              <mxPoint x="2491" y="1870" />
-              <mxPoint x="-224" y="1870" />
+              <mxPoint x="1781" y="358" />
+              <mxPoint x="1781" y="1568" />
+              <mxPoint x="-35" y="1568" />
             </Array>
             <mxPoint x="2058" y="426" as="sourcePoint" />
             <mxPoint x="-214" y="1431" as="targetPoint" />
