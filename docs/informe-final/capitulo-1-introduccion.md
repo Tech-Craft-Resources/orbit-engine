@@ -24,21 +24,29 @@ Se identifica así un problema de investigación y desarrollo bien definido: **l
 
 ### 1.2.1 Justificación Económica y Social
 
-La digitalización de las pymes no es un objetivo exclusivamente tecnológico; es un imperativo económico. El BID estima que cerrar la brecha digital de las pymes en América Latina podría incrementar el PIB regional en hasta un 5% adicional para 2030. En términos individuales, los estudios de adopción de ERP en pymes reportan reducciones de costos operativos del 15% al 30% y mejoras en la eficiencia de la gestión de inventario de hasta el 40% en el primer año de implementación (Kumar & Hillegersberg, 2000; Duan et al., 2012).
+La digitalización de las pymes no es un objetivo exclusivamente tecnológico; es un imperativo económico. El BID estima que cerrar la brecha digital de las pymes en América Latina podría incrementar el PIB regional en hasta un 5% adicional para 2030. En términos individuales, los estudios de adopción de ERP en pymes reportan reducciones de costos operativos del 15% al 30% y mejoras en la eficiencia de la gestión de inventario de hasta el 40% en el primer año de implementación (Kumar & van Hillegersberg, 2000; Duan et al., 2012).
 
 La relevancia del problema es, por tanto, tanto académica como práctica: una solución bien diseñada tiene potencial de impacto directo en la competitividad de cientos de pequeñas empresas.
 
 ### 1.2.2 Justificación Tecnológica
 
-El desarrollo de OrbitEngine se justifica por la convergencia de condiciones tecnológicas que hacen viable hoy lo que no era posible hace una década:
+Las decisiones tecnológicas que sustentan OrbitEngine no se justifican por la mera disponibilidad de las herramientas seleccionadas, sino por su capacidad de reducir el riesgo técnico del proyecto y acelerar su tiempo de salida al mercado en un contexto de equipo reducido y plazos académicos acotados:
 
-1. **Democratización de la nube**: el modelo SaaS elimina la necesidad de servidores propios, reduciendo la barrera de entrada a un costo mensual por suscripción.
-2. **Madurez del ecosistema de desarrollo moderno**: frameworks como FastAPI y React, combinados con herramientas de contenerización (Docker) e infraestructura en la nube (AWS), permiten a equipos pequeños construir plataformas escalables con calidad de producción.
-3. **Generación automática de API clients**: herramientas como OpenAPI permiten mantener sincronizados el contrato de la API y el frontend sin esfuerzo manual, reduciendo errores y acelerando el desarrollo.
+1. **Idoneidad del stack para una plataforma transaccional multi-tenant**: la elección de un backend asíncrono basado en FastAPI con tipado estricto, junto con un frontend declarativo en React, responde a requisitos concretos del dominio —validación rigurosa de datos contables, concurrencia en operaciones de inventario y trazabilidad por organización—, y no a una preferencia genérica por tecnologías populares.
+2. **Contrato API como única fuente de verdad**: la adopción de un enfoque *contract-first* mediante OpenAPI permite generar automáticamente el cliente tipado del frontend a partir del esquema del backend, garantizando consistencia entre capas, detectando regresiones en tiempo de compilación y eliminando una clase entera de errores de integración propios de los desarrollos manuales.
+3. **Seguridad desde el diseño**: la arquitectura incorpora autenticación basada en JWT, control de acceso por roles a nivel de endpoint y aislamiento lógico de datos por organización como invariantes del modelo, no como capas añadidas a posteriori, lo cual es crítico al manejar información financiera de terceros.
+4. **Aprovechamiento de inteligencia artificial generativa en el ciclo de desarrollo**: la incorporación de asistentes de IA en tareas de codificación, documentación y revisión permitió al equipo sostener un ritmo de entrega comparable al de equipos de mayor tamaño, manteniendo estándares de calidad mediante revisión humana sistemática del código generado.
+5. **Viabilidad económica del despliegue en la nube para el segmento pyme**: las plataformas de despliegue gestionado seleccionadas ofrecen, en 2026, un costo marginal por organización lo suficientemente bajo como para que el modelo de suscripción resulte rentable incluso con un volumen reducido de clientes, condición que no se cumplía con la infraestructura disponible una década atrás.
 
 ### 1.2.3 Justificación Académica
 
-El presente proyecto representa una contribución en la intersección de dos áreas de investigación activa: la adopción de tecnologías de información en pymes y el diseño de plataformas SaaS multi-tenant para contextos de recursos limitados. El desarrollo de un sistema funcional, validado con usuarios reales, permite contrastar con evidencia empírica las hipótesis sobre el impacto de la digitalización en la eficiencia operativa de pequeñas empresas latinoamericanas.
+La pertinencia académica del presente proyecto se sustenta en tres ejes complementarios que articulan su contribución al conocimiento, su rigor metodológico y su correspondencia con la formación recibida en el programa.
+
+En primer lugar, el proyecto aporta evidencia empírica a un vacío específico de la literatura: si bien la adopción de sistemas de información en pequeñas y medianas empresas ha sido ampliamente documentada en contextos anglosajones y europeos (Kumar & van Hillegersberg, 2000; Duan et al., 2012), los estudios centrados en pymes latinoamericanas —y en particular sobre plataformas SaaS multi-tenant diseñadas para sus restricciones de costo, capacidad técnica y conectividad— son notablemente más escasos. OrbitEngine se propone como un caso de estudio que documenta tanto el diseño arquitectónico como los resultados de su adopción en este contexto regional.
+
+En segundo lugar, la validación del sistema sigue un diseño cuasi-experimental de tipo pre/post con empresas piloto, articulando métricas cuantitativas —reducción del tiempo en tareas administrativas, disminución de la tasa de error en operaciones de inventario y tiempos de respuesta en producción— con métricas cualitativas estandarizadas, en particular el instrumento *System Usability Scale* (SUS) y entrevistas semiestructuradas de cierre. Este enfoque mixto permite contrastar con evidencia las hipótesis sobre el impacto de la digitalización en la eficiencia operativa, más allá de la sola demostración funcional del software.
+
+En tercer lugar, el proyecto se inscribe en la línea de trabajo del semillero *Software como Innovación* y articula de manera integral las competencias formativas del pregrado en Ciencias de la Computación e Inteligencia Artificial: ingeniería de requisitos, arquitectura de software, desarrollo full-stack, despliegue en la nube, validación experimental y comunicación de resultados. Lo anterior justifica su carácter como proyecto de grado y no como un desarrollo de software meramente aplicado.
 
 ---
 
@@ -54,9 +62,9 @@ Desarrollar e implementar una plataforma SaaS multi-tenant para la gestión inte
 
 2. **Desarrollar** los módulos de gestión operativa esenciales —autenticación y control de acceso basado en roles, gestión de inventario con alertas automáticas, registro de ventas con generación de documentos, y gestión de clientes con análisis de historial— conforme a los requisitos levantados con usuarios reales de pymes.
 
-3. **Construir** un sistema de reportes y analítica que proporcione indicadores clave de desempeño (KPIs) en tiempo real, con capacidad de exportación de datos en formatos estándar (PDF, Excel), facilitando la toma de decisiones basada en datos.
+3. **Construir** un sistema de reportes y analítica que proporcione indicadores clave de desempeño (KPIs) en tiempo real en el dashboard, junto con la capacidad de exportar a Excel los listados operativos (inventario, ventas y clientes), facilitando la toma de decisiones basada en datos.
 
-4. **Desplegar** la plataforma en infraestructura de nube (AWS) con un pipeline de integración y entrega continua (CI/CD), garantizando una disponibilidad mínima del 95% y tiempos de respuesta inferiores a 2 segundos para operaciones transaccionales.
+4. **Desplegar** la plataforma en infraestructura de nube (Railway para el backend y la base de datos, Vercel para el frontend) con un pipeline de integración y entrega continua (CI/CD), garantizando una disponibilidad mínima del 95% y tiempos de respuesta inferiores a 2 segundos para operaciones transaccionales.
 
 5. **Validar** la solución mediante pruebas de usabilidad y rendimiento con al menos dos empresas piloto, midiendo el impacto en la eficiencia operativa a través de métricas cuantitativas (reducción de tiempo en tareas, tasa de error) y cualitativas (satisfacción de usuario).
 
@@ -71,16 +79,16 @@ OrbitEngine abarca el siguiente conjunto de funcionalidades dentro del producto 
 **Módulos implementados:**
 - Autenticación y gestión de usuarios con control de acceso basado en roles (RBAC): Administrador, Vendedor y Visualizador.
 - Gestión de inventario: CRUD de productos por categorías, control de stock en tiempo real, alertas automáticas de nivel mínimo e historial de movimientos.
-- Gestión de ventas: registro de transacciones multi-producto, historial de ventas con filtros, exportación de facturas en PDF.
+- Gestión de ventas: registro de transacciones multi-producto con generación de número de factura, historial de ventas con filtros y búsqueda.
 - Gestión de clientes: base de datos de clientes, historial de compras y métricas de comportamiento.
-- Dashboard y reportes: KPIs en tiempo real, reportes por período y exportación a PDF y Excel.
+- Dashboard y reportes: KPIs en tiempo real (ventas del día/mes, stock bajo, top de productos, tendencia de ventas) y exportación a Excel de los listados de inventario, ventas y clientes.
 - Infraestructura multi-tenant: soporte para múltiples organizaciones con aislamiento total de datos.
 
 **Características técnicas:**
 - API RESTful documentada con OpenAPI/Swagger.
 - Interfaz web responsive, compatible con navegadores modernos (Chrome, Firefox, Safari, Edge).
 
-***- Despliegue en AWS con Docker y GitHub Actions.***
+***- Despliegue en Railway (backend) y Vercel (frontend) con GitHub Actions.***
 - Suite de pruebas automatizadas con cobertura mínima del 60%.
 
 ### 1.4.2 Limitaciones y Exclusiones
@@ -99,7 +107,7 @@ Las siguientes características quedan fuera del alcance del MVP y podrán abord
 
 1. Los usuarios de la plataforma disponen de conexión a internet estable para el acceso a la aplicación web.
 2. Las empresas piloto están dispuestas a cargar sus datos de productos, clientes y stock inicial para comenzar a operar con el sistema.
-3. El equipo de desarrollo cuenta con acceso a créditos de AWS para educación o presupuesto operativo para la infraestructura de nube.
+3. El equipo de desarrollo cuenta con cuentas activas en Railway y Vercel con planes adecuados para el despliegue de la plataforma.
 
 ---
 

@@ -109,7 +109,7 @@ class OrganizationPublic(OrganizationBase):
 class RoleBase(SQLModel):
     name: str = Field(max_length=50, index=True)
     description: str | None = None
-    permissions: list[str] = Field(default_factory=list, sa_column=Column(JSONB))  # type: ignore
+    permissions: list[str] = Field(default_factory=list, sa_column=Column(JSONB))
 
 
 class Role(RoleBase, table=True):

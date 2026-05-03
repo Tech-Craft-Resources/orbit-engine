@@ -12,7 +12,7 @@ router = APIRouter(prefix="/utils", tags=["utils"])
     "/test-email/",
     status_code=201,
 )
-def test_email(email_to: EmailStr, current_user: CurrentAdminUser) -> Message:
+def test_email(email_to: EmailStr, _current_user: CurrentAdminUser) -> Message:
     """
     Test emails.
 

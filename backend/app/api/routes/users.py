@@ -187,8 +187,8 @@ def delete_user_me(session: SessionDep, current_user: CurrentUser) -> Any:
             .select_from(User)
             .where(User.organization_id == current_user.organization_id)
             .where(User.role_id == role.id)
-            .where(User.is_active == True)
-            .where(User.deleted_at.is_(None))
+            .where(User.is_active == True)  # noqa: E712
+            .where(User.deleted_at.is_(None))  # type: ignore[union-attr]
             .where(User.id != current_user.id)
         ).one()
 
@@ -332,8 +332,8 @@ def delete_user(
             .select_from(User)
             .where(User.organization_id == current_organization)
             .where(User.role_id == user_role.id)
-            .where(User.is_active == True)
-            .where(User.deleted_at.is_(None))
+            .where(User.is_active == True)  # noqa: E712
+            .where(User.deleted_at.is_(None))  # type: ignore[union-attr]
         ).one()
 
         if admin_count <= 1:

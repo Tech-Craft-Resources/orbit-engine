@@ -27,7 +27,7 @@ router = APIRouter()
 @router.get("/", response_model=ProductsPublic)
 def read_products(
     session: SessionDep,
-    current_user: CurrentUser,
+    _current_user: CurrentUser,
     current_organization: CurrentOrganization,
     skip: int = 0,
     limit: int = 100,
@@ -117,7 +117,7 @@ def create_product(
 @router.get("/low-stock", response_model=ProductsPublic)
 def read_low_stock_products(
     session: SessionDep,
-    current_user: CurrentUser,
+    _current_user: CurrentUser,
     current_organization: CurrentOrganization,
     skip: int = 0,
     limit: int = 100,
@@ -140,7 +140,7 @@ def read_low_stock_products(
 def read_product(
     product_id: uuid.UUID,
     session: SessionDep,
-    current_user: CurrentUser,
+    _current_user: CurrentUser,
     current_organization: CurrentOrganization,
 ) -> Any:
     """
@@ -307,7 +307,7 @@ def adjust_stock(
 def read_product_movements(
     product_id: uuid.UUID,
     session: SessionDep,
-    current_user: CurrentUser,
+    _current_user: CurrentUser,
     current_organization: CurrentOrganization,
     skip: int = 0,
     limit: int = 100,

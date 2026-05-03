@@ -170,7 +170,7 @@ FastAPI es un framework web moderno para Python, basado en Starlette y Pydantic,
 - **Rendimiento**: comparable a Node.js y Go en benchmarks de concurrencia, gracias a su implementación asíncrona (ASGI).
 - **Tipado automático**: la integración con Pydantic valida automáticamente los datos de entrada y salida de cada endpoint, reduciendo el boilerplate de validación.
 - **Documentación automática**: genera una interfaz Swagger UI y ReDoc sin configuración adicional, facilitando la comunicación con el frontend y la evaluación académica.
-- **Ecosistema Python maduro**: la elección de Python como lenguaje de backend otorga acceso a un amplio ecosistema de bibliotecas para procesamiento de datos, generación de reportes (openpyxl, reportlab) y posibles extensiones futuras.
+- **Ecosistema Python maduro**: la elección de Python como lenguaje de backend otorga acceso a un amplio ecosistema de bibliotecas para procesamiento de datos, generación de reportes y exportación de datos tabulares, y posibles extensiones futuras.
 
 ### 2.3.2 React (Frontend)
 
@@ -185,16 +185,15 @@ PostgreSQL es el sistema de gestión de bases de datos relacionales de código a
 - **Integridad referencial**: las relaciones entre entidades de negocio (ventas → productos, ventas → clientes) se benefician de las garantías ACID de un motor relacional.
 - **JSON nativo**: el soporte para columnas JSONB permite almacenar datos semi-estructurados (atributos variables de productos) sin sacrificar las ventajas relacionales.
 - **Row-Level Security**: característica nativa de PostgreSQL que permite definir políticas de acceso a nivel de fila, complementando la estrategia de multi-tenancy a nivel de aplicación.
-- **Ecosistema robusto**: integración nativa con SQLAlchemy/SQLModel (ORM Python) y soporte completo en AWS RDS.
+- **Ecosistema robusto**: integración nativa con SQLAlchemy/SQLModel (ORM Python) y soporte completo en plataformas gestionadas como Railway.
 
-### 2.3.4 Docker y AWS
+### 2.3.4 Docker, Railway y Vercel
 
-La contenerización mediante Docker garantiza la paridad entre los ambientes de desarrollo, pruebas y producción, eliminando la clase de errores "funciona en mi máquina". El despliegue en AWS se apoya en los servicios:
+La contenerización mediante Docker garantiza la paridad entre los ambientes de desarrollo, pruebas y producción, eliminando la clase de errores "funciona en mi máquina". El despliegue en producción se apoya en los siguientes servicios:
 
-- **ECS Fargate**: ejecución de los contenedores del backend de forma escalable y sin gestión de servidores.
-- **RDS**: instancia gestionada de PostgreSQL, con backups automáticos y failover.
-- **S3**: almacenamiento de archivos estáticos (frontend compilado) y archivos generados (PDFs de reportes).
-- **CloudFront**: CDN para distribución global del frontend con baja latencia.
+- **Railway** (backend): plataforma PaaS que gestiona el ciclo de vida de los contenedores del backend, desplegando automáticamente desde el repositorio Git ante cada merge a la rama principal.
+- **Railway** (base de datos): instancia gestionada de PostgreSQL con backups automáticos y variables de conexión inyectadas directamente en el entorno de ejecución.
+- **Vercel** (frontend): plataforma especializada en el despliegue de aplicaciones frontend, con CDN global integrado, HTTPS automático y previsualizaciones por pull request.
 
 ### 2.3.5 SQLModel
 

@@ -26,7 +26,7 @@ router = APIRouter()
 @router.get("/", response_model=SalesPublic)
 def read_sales(
     session: SessionDep,
-    current_user: CurrentUser,
+    _current_user: CurrentUser,
     current_organization: CurrentOrganization,
     skip: int = 0,
     limit: int = 100,
@@ -213,7 +213,7 @@ def create_sale(
 @router.get("/today", response_model=SalesPublic)
 def read_sales_today(
     session: SessionDep,
-    current_user: CurrentUser,
+    _current_user: CurrentUser,
     current_organization: CurrentOrganization,
     skip: int = 0,
     limit: int = 100,
@@ -235,7 +235,7 @@ def read_sales_today(
 @router.get("/stats", response_model=SaleStatsPublic)
 def read_sales_stats(
     session: SessionDep,
-    current_user: CurrentUser,
+    _current_user: CurrentUser,
     current_organization: CurrentOrganization,
 ) -> Any:
     """
@@ -251,7 +251,7 @@ def read_sales_stats(
 def read_sale(
     sale_id: uuid.UUID,
     session: SessionDep,
-    current_user: CurrentUser,
+    _current_user: CurrentUser,
     current_organization: CurrentOrganization,
 ) -> Any:
     """

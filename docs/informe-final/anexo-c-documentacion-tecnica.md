@@ -10,55 +10,54 @@ Universidad Sergio Arboleda — Semillero de Software como Innovación
 
 ### C.1.1 Backend
 
-| Componente | Tecnología | Versión | Propósito |
-|------------|-----------|---------|-----------|
-| Lenguaje | Python | 3.10+ | Lenguaje principal del backend |
-| Framework web | FastAPI | 0.115+ | API REST asíncrona con tipado estricto |
-| ORM + Schemas | SQLModel | 0.0.21+ | Modelos compartidos entre SQLAlchemy y Pydantic |
-| Motor de BD | SQLAlchemy | 2.x | Capa de abstracción de base de datos |
-| Driver PostgreSQL | Psycopg3 | 3.x | Conector PostgreSQL para Python |
-| Migraciones | Alembic | 1.x | Gestión de migraciones de esquema |
-| Autenticación | PyJWT | 2.x | Generación y verificación de tokens JWT |
-| Hash de contraseñas | Pwdlib | 0.2+ | Hashing seguro con bcrypt |
-| Validación | Pydantic | 2.x | Schemas de entrada/salida de datos |
-| Configuración | Pydantic-Settings | 2.x | Variables de entorno tipadas |
-| Linter/Formatter | Ruff | 0.6+ | Análisis estático y formato de código |
-| Verificación de tipos | Mypy | 1.x | Chequeo de tipos estático en modo estricto |
-| Testing | Pytest + Coverage | 8.x | Pruebas unitarias e integración |
-| Monitoring | Sentry (opcional) | — | Rastreo de errores en producción |
+| Componente            | Tecnología        | Versión | Propósito                                       |
+| --------------------- | ----------------- | ------- | ----------------------------------------------- |
+| Lenguaje              | Python            | 3.10+   | Lenguaje principal del backend                  |
+| Framework web         | FastAPI           | 0.115+  | API REST asíncrona con tipado estricto          |
+| ORM + Schemas         | SQLModel          | 0.0.21+ | Modelos compartidos entre SQLAlchemy y Pydantic |
+| Motor de BD           | SQLAlchemy        | 2.x     | Capa de abstracción de base de datos            |
+| Driver PostgreSQL     | Psycopg3          | 3.x     | Conector PostgreSQL para Python                 |
+| Migraciones           | Alembic           | 1.x     | Gestión de migraciones de esquema               |
+| Autenticación         | PyJWT             | 2.x     | Generación y verificación de tokens JWT         |
+| Hash de contraseñas   | Pwdlib            | 0.2+    | Hashing seguro con bcrypt                       |
+| Validación            | Pydantic          | 2.x     | Schemas de entrada/salida de datos              |
+| Configuración         | Pydantic-Settings | 2.x     | Variables de entorno tipadas                    |
+| Linter/Formatter      | Ruff              | 0.6+    | Análisis estático y formato de código           |
+| Verificación de tipos | Mypy              | 1.x     | Chequeo de tipos estático en modo estricto      |
+| Testing               | Pytest + Coverage | 8.x     | Pruebas unitarias e integración                 |
+| Monitoring            | Sentry (opcional) | —       | Rastreo de errores en producción                |
 
 ### C.1.2 Frontend
 
-| Componente | Tecnología | Versión | Propósito |
-|------------|-----------|---------|-----------|
-| Lenguaje | TypeScript | 5.x | Tipado estático sobre JavaScript |
-| Framework UI | React | 19.x | Librería de componentes reactivos |
-| Build tool | Vite | 6.x | Empaquetado y servidor de desarrollo |
-| Router | TanStack Router | 1.x | Enrutamiento con tipado por archivo |
-| Server state | TanStack Query | 5.x | Cache y sincronización de datos del servidor |
-| Tablas | TanStack Table | 8.x | Tablas con sorting/filtering/paginación |
-| Formularios | React Hook Form | 7.x | Manejo de formularios con rendimiento optimizado |
-| Validación | Zod | 3.x | Schemas de validación con inferencia de tipos |
-| UI Components | Shadcn/ui | — | Componentes base sobre Radix UI |
-| Estilos | Tailwind CSS | 4.x | Utilidades CSS de bajo nivel |
-| Gráficos | Recharts | 2.x | Gráficas para el dashboard |
-| HTTP Client | Axios (generado) | — | Cliente OpenAPI auto-generado |
-| Notificaciones | Sonner | 1.x | Toasts y notificaciones |
-| Íconos | Lucide React | 0.4+ | Librería de íconos SVG |
-| Linter/Formatter | Biome | 1.x | Análisis estático y formato |
-| E2E Testing | Playwright | 1.x | Pruebas end-to-end en navegador |
+| Componente       | Tecnología       | Versión | Propósito                                        |
+| ---------------- | ---------------- | ------- | ------------------------------------------------ |
+| Lenguaje         | TypeScript       | 5.x     | Tipado estático sobre JavaScript                 |
+| Framework UI     | React            | 19.x    | Librería de componentes reactivos                |
+| Build tool       | Vite             | 6.x     | Empaquetado y servidor de desarrollo             |
+| Router           | TanStack Router  | 1.x     | Enrutamiento con tipado por archivo              |
+| Server state     | TanStack Query   | 5.x     | Cache y sincronización de datos del servidor     |
+| Tablas           | TanStack Table   | 8.x     | Tablas con sorting/filtering/paginación          |
+| Formularios      | React Hook Form  | 7.x     | Manejo de formularios con rendimiento optimizado |
+| Validación       | Zod              | 3.x     | Schemas de validación con inferencia de tipos    |
+| UI Components    | Shadcn/ui        | —       | Componentes base sobre Radix UI                  |
+| Estilos          | Tailwind CSS     | 4.x     | Utilidades CSS de bajo nivel                     |
+| Gráficos         | Recharts         | 2.x     | Gráficas para el dashboard                       |
+| HTTP Client      | Axios (generado) | —       | Cliente OpenAPI auto-generado                    |
+| Notificaciones   | Sonner           | 1.x     | Toasts y notificaciones                          |
+| Íconos           | Lucide React     | 0.4+    | Librería de íconos SVG                           |
+| Linter/Formatter | Biome            | 1.x     | Análisis estático y formato                      |
+| E2E Testing      | Playwright       | 1.x     | Pruebas end-to-end en navegador                  |
 
 ### C.1.3 Infraestructura
 
-| Componente | Tecnología | Propósito |
-|------------|-----------|-----------|
-| Base de datos | PostgreSQL 18 | Almacenamiento relacional principal |
-| Contenedores | Docker Compose v2 | Orquestación de servicios |
-| Reverse proxy | Traefik 3.6 | Enrutamiento HTTP/HTTPS + TLS automático |
-| Almacenamiento | MinIO (dev) / AWS S3 (prod) | Almacenamiento de objetos S3-compatible |
-| CI/CD | GitHub Actions | Pipeline de integración y entrega continua |
-| Panel de BD | Adminer | Administración web de PostgreSQL |
-| Email (dev) | Mailcatcher | Interceptor SMTP para desarrollo |
+| Componente    | Tecnología        | Propósito                                  |
+| ------------- | ----------------- | ------------------------------------------ |
+| Base de datos | PostgreSQL 18     | Almacenamiento relacional principal        |
+| Contenedores  | Docker Compose v2 | Orquestación de servicios                  |
+| Reverse proxy | Traefik 3.6       | Enrutamiento HTTP/HTTPS + TLS automático   |
+| CI/CD         | GitHub Actions    | Pipeline de integración y entrega continua |
+| Panel de BD   | Adminer           | Administración web de PostgreSQL           |
+| Email (dev)   | Mailcatcher       | Interceptor SMTP para desarrollo           |
 
 ---
 
@@ -189,11 +188,11 @@ OrbitEngine usa **JWT Bearer Tokens** siguiendo el estándar OAuth2 Password Flo
 
 **Parámetros del token:**
 
-| Parámetro | Valor |
-|-----------|-------|
-| Algoritmo | HS256 |
-| Payload `sub` | UUID del usuario (`str`) |
-| Expiración | 8 días (11,520 minutos) |
+| Parámetro      | Valor                    |
+| -------------- | ------------------------ |
+| Algoritmo      | HS256                    |
+| Payload `sub`  | UUID del usuario (`str`) |
+| Expiración     | 8 días (11,520 minutos)  |
 | Clave de firma | `SECRET_KEY` del entorno |
 
 ### C.3.2 Control de acceso basado en roles (RBAC)
@@ -212,12 +211,12 @@ def create_sale(...) -> Any: ...
 
 **Dependencias de autenticación disponibles:**
 
-| Tipo anotado | Descripción |
-|-------------|-------------|
-| `CurrentUser` | Usuario autenticado; error 403 si token inválido |
-| `CurrentAdminUser` | Usuario autenticado con rol `admin`; error 403 si no |
-| `CurrentOrganization` | UUID de organización extraído del `CurrentUser` |
-| `SessionDep` | Sesión de base de datos SQLModel |
+| Tipo anotado          | Descripción                                          |
+| --------------------- | ---------------------------------------------------- |
+| `CurrentUser`         | Usuario autenticado; error 403 si token inválido     |
+| `CurrentAdminUser`    | Usuario autenticado con rol `admin`; error 403 si no |
+| `CurrentOrganization` | UUID de organización extraído del `CurrentUser`      |
+| `SessionDep`          | Sesión de base de datos SQLModel                     |
 
 ### C.3.3 Protección contra fuerza bruta
 
@@ -231,94 +230,94 @@ Todos los endpoints están prefijados con `/api/v1`. La documentación interacti
 
 ### C.4.1 Autenticación (`/login`)
 
-| Método | Ruta | Auth | Descripción |
-|--------|------|------|-------------|
-| POST | `/login/access-token` | No | Obtener token JWT (login) |
-| POST | `/login/test-token` | Sí | Verificar validez del token |
-| POST | `/password-recovery/{email}` | No | Solicitar enlace de recuperación |
-| POST | `/reset-password` | No | Restablecer contraseña con token |
+| Método | Ruta                         | Auth | Descripción                      |
+| ------ | ---------------------------- | ---- | -------------------------------- |
+| POST   | `/login/access-token`        | No   | Obtener token JWT (login)        |
+| POST   | `/login/test-token`          | Sí   | Verificar validez del token      |
+| POST   | `/password-recovery/{email}` | No   | Solicitar enlace de recuperación |
+| POST   | `/reset-password`            | No   | Restablecer contraseña con token |
 
 ### C.4.2 Usuarios (`/users`)
 
-| Método | Ruta | Auth | Rol mínimo | Descripción |
-|--------|------|------|-----------|-------------|
-| GET | `/users/` | Sí | admin | Listar usuarios de la organización |
-| POST | `/users/` | Sí | admin | Crear usuario en la organización |
-| GET | `/users/me` | Sí | Cualquiera | Obtener perfil propio |
-| PATCH | `/users/me` | Sí | Cualquiera | Actualizar nombre/apellido/teléfono |
-| DELETE | `/users/me` | Sí | Cualquiera | Eliminar cuenta propia (soft delete) |
-| PATCH | `/users/me/password` | Sí | Cualquiera | Cambiar contraseña |
-| GET | `/users/{user_id}` | Sí | admin | Obtener usuario por ID |
-| PATCH | `/users/{user_id}` | Sí | admin | Actualizar usuario |
-| DELETE | `/users/{user_id}` | Sí | admin | Eliminar usuario |
+| Método | Ruta                 | Auth | Rol mínimo | Descripción                          |
+| ------ | -------------------- | ---- | ---------- | ------------------------------------ |
+| GET    | `/users/`            | Sí   | admin      | Listar usuarios de la organización   |
+| POST   | `/users/`            | Sí   | admin      | Crear usuario en la organización     |
+| GET    | `/users/me`          | Sí   | Cualquiera | Obtener perfil propio                |
+| PATCH  | `/users/me`          | Sí   | Cualquiera | Actualizar nombre/apellido/teléfono  |
+| DELETE | `/users/me`          | Sí   | Cualquiera | Eliminar cuenta propia (soft delete) |
+| PATCH  | `/users/me/password` | Sí   | Cualquiera | Cambiar contraseña                   |
+| GET    | `/users/{user_id}`   | Sí   | admin      | Obtener usuario por ID               |
+| PATCH  | `/users/{user_id}`   | Sí   | admin      | Actualizar usuario                   |
+| DELETE | `/users/{user_id}`   | Sí   | admin      | Eliminar usuario                     |
 
 ### C.4.3 Organizaciones (`/organizations`)
 
-| Método | Ruta | Auth | Rol mínimo | Descripción |
-|--------|------|------|-----------|-------------|
-| GET | `/organizations/me` | Sí | Cualquiera | Ver datos de la organización actual |
-| PATCH | `/organizations/me` | Sí | admin | Actualizar nombre/slug/descripción |
-| POST | `/organizations/signup` | No | — | Registro de nueva organización + admin |
+| Método | Ruta                    | Auth | Rol mínimo | Descripción                            |
+| ------ | ----------------------- | ---- | ---------- | -------------------------------------- |
+| GET    | `/organizations/me`     | Sí   | Cualquiera | Ver datos de la organización actual    |
+| PATCH  | `/organizations/me`     | Sí   | admin      | Actualizar nombre/slug/descripción     |
+| POST   | `/organizations/signup` | No   | —          | Registro de nueva organización + admin |
 
 ### C.4.4 Roles (`/roles`)
 
-| Método | Ruta | Auth | Descripción |
-|--------|------|------|-------------|
-| GET | `/roles/` | Sí | Listar roles disponibles en la organización |
+| Método | Ruta      | Auth | Descripción                                 |
+| ------ | --------- | ---- | ------------------------------------------- |
+| GET    | `/roles/` | Sí   | Listar roles disponibles en la organización |
 
 ### C.4.5 Categorías (`/categories`)
 
-| Método | Ruta | Auth | Rol mínimo | Descripción |
-|--------|------|------|-----------|-------------|
-| GET | `/categories/` | Sí | Cualquiera | Listar categorías (soporta `search`, `is_active`) |
-| POST | `/categories/` | Sí | admin | Crear categoría |
-| GET | `/categories/{id}` | Sí | Cualquiera | Obtener categoría por ID |
-| PATCH | `/categories/{id}` | Sí | admin | Actualizar categoría |
-| DELETE | `/categories/{id}` | Sí | admin | Eliminar / desactivar categoría |
+| Método | Ruta               | Auth | Rol mínimo | Descripción                                       |
+| ------ | ------------------ | ---- | ---------- | ------------------------------------------------- |
+| GET    | `/categories/`     | Sí   | Cualquiera | Listar categorías (soporta `search`, `is_active`) |
+| POST   | `/categories/`     | Sí   | admin      | Crear categoría                                   |
+| GET    | `/categories/{id}` | Sí   | Cualquiera | Obtener categoría por ID                          |
+| PATCH  | `/categories/{id}` | Sí   | admin      | Actualizar categoría                              |
+| DELETE | `/categories/{id}` | Sí   | admin      | Eliminar / desactivar categoría                   |
 
 ### C.4.6 Productos (`/products`)
 
-| Método | Ruta | Auth | Rol mínimo | Descripción |
-|--------|------|------|-----------|-------------|
-| GET | `/products/` | Sí | Cualquiera | Listar productos (`search`, `is_active`, `category_id`, `sort_by`) |
-| POST | `/products/` | Sí | admin | Crear producto |
-| GET | `/products/{id}` | Sí | Cualquiera | Obtener producto por ID |
-| PATCH | `/products/{id}` | Sí | admin | Actualizar producto |
-| DELETE | `/products/{id}` | Sí | admin | Eliminar / desactivar producto |
-| POST | `/products/{id}/stock-adjustment` | Sí | admin | Ajuste manual de stock |
-| GET | `/products/{id}/movements` | Sí | Cualquiera | Historial de movimientos del producto |
+| Método | Ruta                              | Auth | Rol mínimo | Descripción                                                        |
+| ------ | --------------------------------- | ---- | ---------- | ------------------------------------------------------------------ |
+| GET    | `/products/`                      | Sí   | Cualquiera | Listar productos (`search`, `is_active`, `category_id`, `sort_by`) |
+| POST   | `/products/`                      | Sí   | admin      | Crear producto                                                     |
+| GET    | `/products/{id}`                  | Sí   | Cualquiera | Obtener producto por ID                                            |
+| PATCH  | `/products/{id}`                  | Sí   | admin      | Actualizar producto                                                |
+| DELETE | `/products/{id}`                  | Sí   | admin      | Eliminar / desactivar producto                                     |
+| POST   | `/products/{id}/stock-adjustment` | Sí   | admin      | Ajuste manual de stock                                             |
+| GET    | `/products/{id}/movements`        | Sí   | Cualquiera | Historial de movimientos del producto                              |
 
 ### C.4.7 Clientes (`/customers`)
 
-| Método | Ruta | Auth | Rol mínimo | Descripción |
-|--------|------|------|-----------|-------------|
-| GET | `/customers/` | Sí | Cualquiera | Listar clientes (`search`, `is_active`) |
-| POST | `/customers/` | Sí | Cualquiera | Registrar cliente |
-| GET | `/customers/{id}` | Sí | Cualquiera | Obtener cliente por ID |
-| PATCH | `/customers/{id}` | Sí | Cualquiera | Actualizar cliente |
-| DELETE | `/customers/{id}` | Sí | admin | Desactivar cliente |
-| GET | `/customers/{id}/sales` | Sí | Cualquiera | Historial de compras del cliente |
+| Método | Ruta                    | Auth | Rol mínimo | Descripción                             |
+| ------ | ----------------------- | ---- | ---------- | --------------------------------------- |
+| GET    | `/customers/`           | Sí   | Cualquiera | Listar clientes (`search`, `is_active`) |
+| POST   | `/customers/`           | Sí   | Cualquiera | Registrar cliente                       |
+| GET    | `/customers/{id}`       | Sí   | Cualquiera | Obtener cliente por ID                  |
+| PATCH  | `/customers/{id}`       | Sí   | Cualquiera | Actualizar cliente                      |
+| DELETE | `/customers/{id}`       | Sí   | admin      | Desactivar cliente                      |
+| GET    | `/customers/{id}/sales` | Sí   | Cualquiera | Historial de compras del cliente        |
 
 ### C.4.8 Ventas (`/sales`)
 
-| Método | Ruta | Auth | Rol mínimo | Descripción |
-|--------|------|------|-----------|-------------|
-| GET | `/sales/` | Sí | Cualquiera | Listar ventas (`search`, `status`, `payment_method`, `sort_by`) |
-| POST | `/sales/` | Sí | Cualquiera | Registrar venta (descuenta stock automáticamente) |
-| GET | `/sales/{id}` | Sí | Cualquiera | Obtener venta por ID |
-| POST | `/sales/{id}/cancel` | Sí | admin | Cancelar venta (revierte stock) |
+| Método | Ruta                 | Auth | Rol mínimo | Descripción                                                     |
+| ------ | -------------------- | ---- | ---------- | --------------------------------------------------------------- |
+| GET    | `/sales/`            | Sí   | Cualquiera | Listar ventas (`search`, `status`, `payment_method`, `sort_by`) |
+| POST   | `/sales/`            | Sí   | Cualquiera | Registrar venta (descuenta stock automáticamente)               |
+| GET    | `/sales/{id}`        | Sí   | Cualquiera | Obtener venta por ID                                            |
+| POST   | `/sales/{id}/cancel` | Sí   | admin      | Cancelar venta (revierte stock)                                 |
 
 ### C.4.9 Movimientos de inventario (`/inventory-movements`)
 
-| Método | Ruta | Auth | Descripción |
-|--------|------|------|-------------|
-| GET | `/inventory-movements/` | Sí | Listar movimientos (`product_id`, `movement_type`, `sort_by`) |
+| Método | Ruta                    | Auth | Descripción                                                   |
+| ------ | ----------------------- | ---- | ------------------------------------------------------------- |
+| GET    | `/inventory-movements/` | Sí   | Listar movimientos (`product_id`, `movement_type`, `sort_by`) |
 
 ### C.4.10 Dashboard (`/dashboard`)
 
-| Método | Ruta | Auth | Descripción |
-|--------|------|------|-------------|
-| GET | `/dashboard/stats` | Sí | Estadísticas consolidadas de la organización |
+| Método | Ruta               | Auth | Descripción                                  |
+| ------ | ------------------ | ---- | -------------------------------------------- |
+| GET    | `/dashboard/stats` | Sí   | Estadísticas consolidadas de la organización |
 
 **Respuesta de `/dashboard/stats`:**
 
@@ -329,19 +328,22 @@ Todos los endpoints están prefijados con `/api/v1`. La documentación interacti
   "low_stock_count": 3,
   "average_ticket": "44047.62",
   "top_products": [
-    { "product_id": "...", "product_name": "Producto A", "quantity_sold": 15, "revenue": "450000.00" }
+    {
+      "product_id": "...",
+      "product_name": "Producto A",
+      "quantity_sold": 15,
+      "revenue": "450000.00"
+    }
   ],
-  "sales_by_day": [
-    { "date": "2026-04-01", "count": 3, "total": "120000.00" }
-  ]
+  "sales_by_day": [{ "date": "2026-04-01", "count": 3, "total": "120000.00" }]
 }
 ```
 
 ### C.4.11 Utilidades
 
-| Método | Ruta | Auth | Descripción |
-|--------|------|------|-------------|
-| GET | `/utils/health-check/` | No | Health check del servicio backend |
+| Método | Ruta                   | Auth | Descripción                       |
+| ------ | ---------------------- | ---- | --------------------------------- |
+| GET    | `/utils/health-check/` | No   | Health check del servicio backend |
 
 ---
 
@@ -559,49 +561,43 @@ La configuración se carga desde el archivo `.env` usando Pydantic-Settings. Tod
 
 ### C.6.1 Variables requeridas
 
-| Variable | Tipo | Descripción |
-|----------|------|-------------|
-| `PROJECT_NAME` | `str` | Nombre del proyecto |
-| `SECRET_KEY` | `str` | Clave para firmar los JWT |
-| `POSTGRES_SERVER` | `str` | Host del servidor PostgreSQL |
-| `POSTGRES_USER` | `str` | Usuario de PostgreSQL |
-| `POSTGRES_DB` | `str` | Nombre de la base de datos |
-| `FIRST_SUPERUSER` | `EmailStr` | Email del superusuario inicial |
-| `FIRST_SUPERUSER_PASSWORD` | `str` | Contraseña del superusuario inicial |
+| Variable                   | Tipo       | Descripción                         |
+| -------------------------- | ---------- | ----------------------------------- |
+| `PROJECT_NAME`             | `str`      | Nombre del proyecto                 |
+| `SECRET_KEY`               | `str`      | Clave para firmar los JWT           |
+| `POSTGRES_SERVER`          | `str`      | Host del servidor PostgreSQL        |
+| `POSTGRES_USER`            | `str`      | Usuario de PostgreSQL               |
+| `POSTGRES_DB`              | `str`      | Nombre de la base de datos          |
+| `FIRST_SUPERUSER`          | `EmailStr` | Email del superusuario inicial      |
+| `FIRST_SUPERUSER_PASSWORD` | `str`      | Contraseña del superusuario inicial |
 
 ### C.6.2 Variables opcionales con valores por defecto
 
-| Variable | Tipo | Default | Descripción |
-|----------|------|---------|-------------|
-| `POSTGRES_PORT` | `int` | `5432` | Puerto de PostgreSQL |
-| `POSTGRES_PASSWORD` | `str` | `""` | Contraseña de PostgreSQL |
-| `ACCESS_TOKEN_EXPIRE_MINUTES` | `int` | `11520` | Expiración del JWT (8 días) |
-| `FRONTEND_HOST` | `str` | `http://localhost:5173` | URL del frontend para CORS |
-| `BACKEND_CORS_ORIGINS` | `list[str]` | `[]` | Orígenes adicionales CORS |
-| `ENVIRONMENT` | `Literal` | `"local"` | `local` \| `staging` \| `production` |
-| `SMTP_HOST` | `str\|None` | `None` | Host SMTP para envío de emails |
-| `SMTP_PORT` | `int` | `587` | Puerto SMTP |
-| `SMTP_TLS` | `bool` | `True` | Usar TLS en SMTP |
-| `SMTP_SSL` | `bool` | `False` | Usar SSL en SMTP |
-| `SMTP_USER` | `str\|None` | `None` | Usuario SMTP |
-| `SMTP_PASSWORD` | `str\|None` | `None` | Contraseña SMTP |
-| `EMAILS_FROM_EMAIL` | `EmailStr\|None` | `None` | Email remitente |
-| `EMAIL_RESET_TOKEN_EXPIRE_HOURS` | `int` | `48` | Expiración del token de reset |
-| `SENTRY_DSN` | `HttpUrl\|None` | `None` | DSN de Sentry para error tracking |
-| `S3_ENDPOINT_URL` | `str\|None` | `None` | Endpoint S3 (MinIO en dev) |
-| `S3_ACCESS_KEY_ID` | `str\|None` | `None` | Access key para S3/MinIO |
-| `S3_SECRET_ACCESS_KEY` | `str\|None` | `None` | Secret key para S3/MinIO |
-| `S3_BUCKET_NAME` | `str\|None` | `None` | Nombre del bucket S3 |
-| `S3_REGION` | `str` | `"us-east-1"` | Región S3 |
+| Variable                         | Tipo             | Default                 | Descripción                          |
+| -------------------------------- | ---------------- | ----------------------- | ------------------------------------ |
+| `POSTGRES_PORT`                  | `int`            | `5432`                  | Puerto de PostgreSQL                 |
+| `POSTGRES_PASSWORD`              | `str`            | `""`                    | Contraseña de PostgreSQL             |
+| `ACCESS_TOKEN_EXPIRE_MINUTES`    | `int`            | `11520`                 | Expiración del JWT (8 días)          |
+| `FRONTEND_HOST`                  | `str`            | `http://localhost:5173` | URL del frontend para CORS           |
+| `BACKEND_CORS_ORIGINS`           | `list[str]`      | `[]`                    | Orígenes adicionales CORS            |
+| `ENVIRONMENT`                    | `Literal`        | `"local"`               | `local` \| `staging` \| `production` |
+| `SMTP_HOST`                      | `str\|None`      | `None`                  | Host SMTP para envío de emails       |
+| `SMTP_PORT`                      | `int`            | `587`                   | Puerto SMTP                          |
+| `SMTP_TLS`                       | `bool`           | `True`                  | Usar TLS en SMTP                     |
+| `SMTP_SSL`                       | `bool`           | `False`                 | Usar SSL en SMTP                     |
+| `SMTP_USER`                      | `str\|None`      | `None`                  | Usuario SMTP                         |
+| `SMTP_PASSWORD`                  | `str\|None`      | `None`                  | Contraseña SMTP                      |
+| `EMAILS_FROM_EMAIL`              | `EmailStr\|None` | `None`                  | Email remitente                      |
+| `EMAIL_RESET_TOKEN_EXPIRE_HOURS` | `int`            | `48`                    | Expiración del token de reset        |
+| `SENTRY_DSN`                     | `HttpUrl\|None`  | `None`                  | DSN de Sentry para error tracking    |
 
 ### C.6.3 Propiedades calculadas (no en `.env`)
 
-| Propiedad | Descripción |
-|-----------|-------------|
-| `SQLALCHEMY_DATABASE_URI` | URI completa de conexión a PostgreSQL |
-| `all_cors_origins` | `BACKEND_CORS_ORIGINS` + `FRONTEND_HOST` |
-| `emails_enabled` | `True` si `SMTP_HOST` y `EMAILS_FROM_EMAIL` están configurados |
-| `s3_enabled` | `True` si las tres variables S3 clave están configuradas |
+| Propiedad                 | Descripción                                                    |
+| ------------------------- | -------------------------------------------------------------- |
+| `SQLALCHEMY_DATABASE_URI` | URI completa de conexión a PostgreSQL                          |
+| `all_cors_origins`        | `BACKEND_CORS_ORIGINS` + `FRONTEND_HOST`                       |
+| `emails_enabled`          | `True` si `SMTP_HOST` y `EMAILS_FROM_EMAIL` están configurados |
 
 ---
 
@@ -610,6 +606,7 @@ La configuración se carga desde el archivo `.env` usando Pydantic-Settings. Tod
 ### C.7.1 Backend (Python)
 
 **Orden de imports:**
+
 ```python
 # 1. Biblioteca estándar
 import uuid
@@ -626,6 +623,7 @@ from app.models import ProductCreate, ProductPublic
 ```
 
 **Nomenclatura:**
+
 - Funciones y variables: `snake_case`
 - Clases y modelos: `PascalCase`
 - Modelos de BD: singular (`Product`, `Sale`)
@@ -635,6 +633,7 @@ from app.models import ProductCreate, ProductPublic
 **Anotaciones de tipo:** obligatorias en todas las funciones. Usar `str | None` (no `Optional[str]`).
 
 **Patrón de rutas:**
+
 ```python
 @router.post("/", response_model=ProductPublic)
 def create_product(
@@ -652,6 +651,7 @@ def create_product(
 ```
 
 **Códigos HTTP usados:**
+
 - `400` — Solicitud inválida (datos incorrectos)
 - `403` — Sin permisos / credenciales inválidas
 - `404` — Recurso no encontrado
@@ -662,21 +662,23 @@ def create_product(
 ### C.7.2 Frontend (TypeScript/React)
 
 **Orden de imports:**
+
 ```typescript
 // 1. Externos
-import { useState } from "react"
-import { useMutation, useQueryClient } from "@tanstack/react-query"
-import { z } from "zod"
+import { useState } from "react";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { z } from "zod";
 
 // 2. Internos (alias @/)
-import { ProductsService } from "@/client"
-import { DataTable } from "@/components/Common/DataTable"
-import { useCustomToast } from "@/hooks/useCustomToast"
+import { ProductsService } from "@/client";
+import { DataTable } from "@/components/Common/DataTable";
+import { useCustomToast } from "@/hooks/useCustomToast";
 ```
 
 **Componentes:** solo funcionales, un componente por archivo, nombre de archivo en `PascalCase`.
 
 **Patrón de mutación:**
+
 ```typescript
 const mutation = useMutation({
   mutationFn: (data: ProductCreate) =>
@@ -684,12 +686,13 @@ const mutation = useMutation({
   onSuccess: () => showSuccessToast("Producto creado"),
   onError: (err) => handleError(err),
   onSettled: () => queryClient.invalidateQueries({ queryKey: ["products"] }),
-})
+});
 ```
 
 **Validación de formularios:** React Hook Form + Zod schemas con `zodResolver`.
 
 **No editar:**
+
 - `src/client/**` — auto-generado desde OpenAPI
 - `src/components/ui/**` — componentes Shadcn/ui
 - `src/routeTree.gen.ts` — auto-generado por TanStack Router
@@ -708,6 +711,7 @@ El repositorio incluye workflows de GitHub Actions:
 ### C.8.2 Workflow de despliegue
 
 Al hacer merge a `main`:
+
 1. Construye las imágenes Docker de backend y frontend.
 2. Las etiqueta con el hash del commit y con `latest`.
 3. Las publica en el registro de imágenes.
@@ -744,14 +748,15 @@ backend/tests/
 
 **Fixtures disponibles en conftest.py:**
 
-| Fixture | Descripción |
-|---------|-------------|
-| `db` | Sesión de BD para pruebas (con rollback automático) |
-| `client` | `TestClient` de FastAPI |
-| `superuser_token_headers` | Headers con token del superusuario |
-| `normal_user_token_headers` | Headers con token de usuario normal |
+| Fixture                     | Descripción                                         |
+| --------------------------- | --------------------------------------------------- |
+| `db`                        | Sesión de BD para pruebas (con rollback automático) |
+| `client`                    | `TestClient` de FastAPI                             |
+| `superuser_token_headers`   | Headers con token del superusuario                  |
+| `normal_user_token_headers` | Headers con token de usuario normal                 |
 
 **Ejecutar pruebas:**
+
 ```bash
 cd backend
 uv run bash scripts/test.sh           # Todos los tests con cobertura
@@ -807,4 +812,4 @@ Esta estrategia garantiza aislamiento completo de datos entre tenants sin necesi
 
 ---
 
-*Documento generado como parte del proyecto de grado — Universidad Sergio Arboleda, Semillero de Software como Innovación, Abril 2026.*
+_Documento generado como parte del proyecto de grado — Universidad Sergio Arboleda, Semillero de Software como Innovación, Abril 2026._

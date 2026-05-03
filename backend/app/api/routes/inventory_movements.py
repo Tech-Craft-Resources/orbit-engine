@@ -22,7 +22,7 @@ router = APIRouter()
 @router.get("/", response_model=InventoryMovementsPublic)
 def read_movements(
     session: SessionDep,
-    current_user: CurrentUser,
+    _current_user: CurrentUser,
     current_organization: CurrentOrganization,
     skip: int = 0,
     limit: int = 100,
@@ -108,7 +108,7 @@ def create_movement(
 def read_movement(
     movement_id: uuid.UUID,
     session: SessionDep,
-    current_user: CurrentUser,
+    _current_user: CurrentUser,
     current_organization: CurrentOrganization,
 ) -> Any:
     """
