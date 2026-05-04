@@ -139,13 +139,13 @@ Con el alcance funcional cerrado al final de la Fase 3, esta fase se enfocó en 
 - Preparación del material de onboarding para las empresas piloto: guías de inicio rápido, plantillas de carga de datos y tutoriales.
 - Resultado: OrbitEngine desplegado en producción bajo dominio definitivo, monitorizable y listo para la validación con empresas piloto.
 
-### Fase 5 — Validación con Empresas Piloto (última semana de abril – primera semana de mayo 2026)
+### Fase 5 — Validación con Empresas Piloto (27 de abril – 4 de mayo de 2026)
 
-Durante dos semanas (aproximadamente del 27 de abril al 8 de mayo de 2026), el sistema en producción se puso a disposición de las empresas piloto seleccionadas para su uso real, con sesiones de capacitación, acompañamiento y recolección de retroalimentación. Esta fase se detalla en el Capítulo 5.
+Del 27 de abril al 4 de mayo de 2026, el sistema en producción se puso a disposición de las empresas piloto seleccionadas para su uso real, con sesiones de capacitación, acompañamiento y recolección de retroalimentación. Esta fase se detalla en el Capítulo 6.
 
-### Fase 6 — Documentación Final y Entrega (segunda semana de mayo 2026)
+### Fase 6 — Documentación Final y Entrega (5 de mayo – 15 de mayo de 2026)
 
-Consolidación del informe de grado, preparación de la presentación y defensa del proyecto durante la segunda semana de mayo de 2026 (aproximadamente del 11 al 15 de mayo).
+Consolidación del informe de grado, preparación de la presentación y defensa del proyecto del 5 al 15 de mayo de 2026.
 
 ---
 
