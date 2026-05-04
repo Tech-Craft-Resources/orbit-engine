@@ -24,7 +24,7 @@ El presente estudio adoptó un **diseño de estudio de caso múltiple** (Yin, 20
 
 El enfoque es **mixto** (Creswell & Plano Clark, 2018): combina datos cuantitativos (tiempos pre/post, tasas de error, scores SUS/NPS/CSAT, telemetría) con datos cualitativos (entrevistas semiestructuradas con codificación temática), siendo los cualitativos confirmatorios y explicativos de los cuantitativos.
 
-**Nota sobre el cambio de N respecto al Capítulo 5.** Las pruebas técnicas del Capítulo 5 se ejecutaron cuando la plataforma contaba con **dos empresas reales** en producción (Frozt Bitez y Miss Peggy). En el intervalo transcurrido entre el cierre de esas pruebas y el inicio de la Fase 5 de validación con usuarios (27 de abril de 2026), se incorporó una **tercera empresa real** —denominada Empresa Placeholder en este borrador, pendiente de confirmación del nombre definitivo— que también participó en el estudio de caso. El piloto de usuarios reales comprende, por tanto, **N = 3 empresas**.
+**Nota sobre el cambio de N respecto al Capítulo 5.** Las pruebas técnicas del Capítulo 5 se ejecutaron cuando la plataforma contaba con **dos empresas reales** en producción (Frozt Bitez y Miss Peggy). En el intervalo transcurrido entre el cierre de esas pruebas y el inicio de la Fase 5 de validación con usuarios (27 de abril de 2026), se incorporó una **tercera empresa real** —Luana Handmade— que también participó en el estudio de caso. El piloto de usuarios reales comprende, por tanto, **N = 3 empresas**.
 
 ### 6.1.3 Participantes
 
@@ -38,7 +38,7 @@ El enfoque es **mixto** (Creswell & Plano Clark, 2018): combina datos cuantitati
 - Empresas sin acceso a internet estable (requisito técnico de la plataforma).
 - Empresas en proceso de cierre o reestructuración durante el período de validación.
 
-**Muestra resultante:** tres empresas (N = 3), con un total de [pendiente: número total de usuarios participantes] usuarios individuales distribuidos entre las tres organizaciones.
+**Muestra resultante:** tres empresas (N = 3), con un total de 7 usuarios individuales distribuidos entre las tres organizaciones: 3 de Frozt Bitez (1 Administrador + 2 Vendedores), 3 de Miss Peggy (1 Administradora + 2 Vendedores) y 1 de Luana Handmade (1 Administradora).
 
 ### 6.1.4 Instrumentos
 
@@ -101,18 +101,16 @@ La siguiente tabla sintetiza los atributos más relevantes de las tres empresas 
 
 **Tabla 6.2.1.** Caracterización de las empresas piloto del estudio de caso.
 
-| Atributo | Frozt Bitez | Miss Peggy | Empresa Placeholder |
+| Atributo | Frozt Bitez | Miss Peggy | Luana Handmade |
 |---|---|---|---|
-| **Sector** | [pendiente: sector de Frozt Bitez] | [pendiente: sector de Miss Peggy] | [pendiente: sector de Empresa Placeholder] |
+| **Sector** | Alimentos / Comercio electrónico (uvas congeladas acidulces) | Comercio minorista — naturismo y belleza | Artesanías / Confección artesanal (tejidos en trapillo y macramé) |
 | **Antigüedad de la empresa** | [pendiente] | [pendiente] | [pendiente] |
-| **Número de empleados** | [pendiente] | [pendiente] | [pendiente] |
-| **Número de usuarios participantes en el estudio** | [pendiente] | [pendiente] | [pendiente] |
-| **Roles representados** | [pendiente: Administrador / Vendedor / Visualizador] | [pendiente] | [pendiente] |
-| **Rol del informante principal** | [pendiente: dueño / gerente / encargado] | [pendiente] | [pendiente] |
-| **Herramientas de gestión previas** | [pendiente: Excel / cuaderno / ninguna / software previo] | [pendiente] | [pendiente] |
+| **Número de empleados** | 3 (fundador + 2 colaboradores de ventas) | 3 (administradora + 2 colaboradores de ventas) | 1 (fundadora y única trabajadora) |
+| **Número de usuarios participantes en el estudio** | 3 | 3 | 1 |
+| **Roles representados** | Administrador y Vendedor | Administrador y Vendedor | Administrador |
+| **Rol del informante principal** | Fundador / Dueño | Dueña / Administradora | Fundadora / Propietaria |
+| **Herramientas de gestión previas** | [pendiente] | Excel (hoja de inventario propia) | [pendiente] |
 | **Incorporación al piloto** | Fase 5 (27 abr 2026) — también presente en piloto técnico del Cap. 5 | Fase 5 (27 abr 2026) — también presente en piloto técnico del Cap. 5 | Fase 5 (27 abr 2026) — incorporada entre el cierre del Cap. 5 y el inicio de la validación con usuarios |
-
-> **Nota sobre Empresa Placeholder.** Esta empresa se incorporó a la plataforma OrbitEngine en el período comprendido entre el cierre de las pruebas técnicas del Capítulo 5 y el inicio de la Fase 5 de validación con usuarios. Su nombre definitivo se registrará en la versión final de este capítulo una vez confirmado por el representante de la organización.
 
 ---
 
@@ -128,16 +126,16 @@ Los tiempos pre-implementación se recogieron mediante entrevista estructurada r
 |---|---|---|---|---|
 | Registro de una venta | Frozt Bitez | [pendiente] | [pendiente] | [pendiente] |
 | Registro de una venta | Miss Peggy | [pendiente] | [pendiente] | [pendiente] |
-| Registro de una venta | Empresa Placeholder | [pendiente] | [pendiente] | [pendiente] |
+| Registro de una venta | Luana Handmade | [pendiente] | [pendiente] | [pendiente] |
 | Actualización de stock (un producto) | Frozt Bitez | [pendiente] | [pendiente] | [pendiente] |
 | Actualización de stock (un producto) | Miss Peggy | [pendiente] | [pendiente] | [pendiente] |
-| Actualización de stock (un producto) | Empresa Placeholder | [pendiente] | [pendiente] | [pendiente] |
+| Actualización de stock (un producto) | Luana Handmade | [pendiente] | [pendiente] | [pendiente] |
 | Generación de reporte de ventas semanal | Frozt Bitez | [pendiente] | [pendiente] | [pendiente] |
 | Generación de reporte de ventas semanal | Miss Peggy | [pendiente] | [pendiente] | [pendiente] |
-| Generación de reporte de ventas semanal | Empresa Placeholder | [pendiente] | [pendiente] | [pendiente] |
+| Generación de reporte de ventas semanal | Luana Handmade | [pendiente] | [pendiente] | [pendiente] |
 | Consulta de historial de un cliente | Frozt Bitez | [pendiente] | [pendiente] | [pendiente] |
 | Consulta de historial de un cliente | Miss Peggy | [pendiente] | [pendiente] | [pendiente] |
-| Consulta de historial de un cliente | Empresa Placeholder | [pendiente] | [pendiente] | [pendiente] |
+| Consulta de historial de un cliente | Luana Handmade | [pendiente] | [pendiente] | [pendiente] |
 | **Promedio global** | **Todas** | **[pendiente]** | **[pendiente]** | **[pendiente]** |
 
 ### 6.3.2 Tasa de Error en Operaciones de Inventario
@@ -150,7 +148,7 @@ La tasa de error se definió como la proporción de ítems auditados que present
 |---|---|---|---|---|---|---|---|
 | Frozt Bitez | [pendiente] | [pendiente] | [pendiente] | [pendiente] | [pendiente] | [pendiente] | [pendiente] |
 | Miss Peggy | [pendiente] | [pendiente] | [pendiente] | [pendiente] | [pendiente] | [pendiente] | [pendiente] |
-| Empresa Placeholder | [pendiente] | [pendiente] | [pendiente] | [pendiente] | [pendiente] | [pendiente] | [pendiente] |
+| Luana Handmade | [pendiente] | [pendiente] | [pendiente] | [pendiente] | [pendiente] | [pendiente] | [pendiente] |
 | **Promedio** | | | **[pendiente]** | | | **[pendiente]** | **[pendiente]** |
 
 > **Nota metodológica.** Los datos pre-implementación de tasa de error en inventario son de naturaleza retrospectiva y auto-reportada. Las limitaciones de este tipo de medición se discuten en la sección 6.10.
@@ -196,12 +194,13 @@ El instrumento SUS (*System Usability Scale*, Brooke, 1996) consiste en diez afi
 |---|---|---|---|---|---|---|---|---|---|---|---|---|
 | Frozt Bitez | U1 | [p] | [p] | [p] | [p] | [p] | [p] | [p] | [p] | [p] | [p] | [pendiente] |
 | Frozt Bitez | U2 | [p] | [p] | [p] | [p] | [p] | [p] | [p] | [p] | [p] | [p] | [pendiente] |
-| Miss Peggy | U3 | [p] | [p] | [p] | [p] | [p] | [p] | [p] | [p] | [p] | [p] | [pendiente] |
+| Frozt Bitez | U3 | [p] | [p] | [p] | [p] | [p] | [p] | [p] | [p] | [p] | [p] | [pendiente] |
 | Miss Peggy | U4 | [p] | [p] | [p] | [p] | [p] | [p] | [p] | [p] | [p] | [p] | [pendiente] |
-| Empresa Placeholder | U5 | [p] | [p] | [p] | [p] | [p] | [p] | [p] | [p] | [p] | [p] | [pendiente] |
-| Empresa Placeholder | U6 | [p] | [p] | [p] | [p] | [p] | [p] | [p] | [p] | [p] | [p] | [pendiente] |
+| Miss Peggy | U5 | [p] | [p] | [p] | [p] | [p] | [p] | [p] | [p] | [p] | [p] | [pendiente] |
+| Miss Peggy | U6 | [p] | [p] | [p] | [p] | [p] | [p] | [p] | [p] | [p] | [p] | [pendiente] |
+| Luana Handmade | U7 | [p] | [p] | [p] | [p] | [p] | [p] | [p] | [p] | [p] | [p] | [pendiente] |
 
-> *[p] = pendiente de datos reales. Los números de usuarios por empresa (U1–U6) son indicativos; ajustar según la cantidad real de participantes.*
+> *[p] = pendiente de datos reales. U1–U3 corresponden a los tres usuarios de Frozt Bitez; U4–U6 a los tres de Miss Peggy; U7 a Claudia González (única usuaria de Luana Handmade).*
 
 **Tabla 6.5.1.b.** Score SUS agregado por empresa.
 
@@ -209,7 +208,7 @@ El instrumento SUS (*System Usability Scale*, Brooke, 1996) consiste en diez afi
 |---|---|---|---|
 | Frozt Bitez | [pendiente] | [pendiente] | [pendiente: Excelente ≥ 85.5 / Bueno 72.5–85.4 / Aceptable 52–72.4 / Marginal < 52] |
 | Miss Peggy | [pendiente] | [pendiente] | [pendiente] |
-| Empresa Placeholder | [pendiente] | [pendiente] | [pendiente] |
+| Luana Handmade | [pendiente] | [pendiente] | [pendiente] |
 
 ### 6.5.2 Score Global del Piloto vs. Benchmark 68
 
@@ -260,7 +259,7 @@ El NPS se calculó a partir de la pregunta: *"En una escala de 0 a 10, ¿qué ta
 |---|---|---|---|---|---|
 | Frozt Bitez | [pendiente] | [pendiente] | [pendiente] | [pendiente] | [pendiente] |
 | Miss Peggy | [pendiente] | [pendiente] | [pendiente] | [pendiente] | [pendiente] |
-| Empresa Placeholder | [pendiente] | [pendiente] | [pendiente] | [pendiente] | [pendiente] |
+| Luana Handmade | [pendiente] | [pendiente] | [pendiente] | [pendiente] | [pendiente] |
 | **Global** | **[pendiente]** | **[pendiente]** | **[pendiente]** | **[pendiente]** | **[pendiente]** |
 
 > Referencia: un NPS positivo (> 0) se considera satisfactorio; un NPS ≥ 50 se considera excelente (Reichheld, 2003).
@@ -271,7 +270,7 @@ El CSAT se midió con la pregunta: *"¿Qué tan satisfecho estás con este módu
 
 **Tabla 6.6.2.** Scores CSAT medios por módulo y por empresa (escala 1–5).
 
-| Módulo | Frozt Bitez | Miss Peggy | Empresa Placeholder | Media global |
+| Módulo | Frozt Bitez | Miss Peggy | Luana Handmade | Media global |
 |---|---|---|---|---|
 | Inventario (productos y stock) | [pendiente] | [pendiente] | [pendiente] | [pendiente] |
 | Ventas | [pendiente] | [pendiente] | [pendiente] | [pendiente] |
@@ -293,7 +292,7 @@ Los datos de telemetría se extrajeron directamente de la base de datos PostgreS
 
 **Tabla 6.7.1.** Actividad registrada en producción durante la Fase 5 (por empresa).
 
-| Métrica | Frozt Bitez | Miss Peggy | Empresa Placeholder |
+| Métrica | Frozt Bitez | Miss Peggy | Luana Handmade |
 |---|---|---|---|
 | Días activos (de 11 posibles) | [pendiente] | [pendiente] | [pendiente] |
 | Sesiones totales iniciadas | [pendiente] | [pendiente] | [pendiente] |
@@ -329,7 +328,7 @@ Las entrevistas semiestructuradas de cierre se realizaron con el informante prin
 
 [pendiente: incluir 1–2 citas textuales representativas de cada tema emergente, atribuidas a la empresa (no al individuo) a menos que el participante haya consentido la atribución nominal.]
 
-> [pendiente: cita del tema T1] — *Frozt Bitez / Miss Peggy / Empresa Placeholder*
+> [pendiente: cita del tema T1] — *Frozt Bitez / Miss Peggy / Luana Handmade*
 
 > [pendiente: cita del tema T2] — *[empresa]*
 
@@ -345,9 +344,9 @@ Las entrevistas semiestructuradas de cierre se realizaron con el informante prin
 
 [pendiente: redactar un estudio de caso narrativo de 150–250 palabras para Miss Peggy, con la misma estructura que 6.8.3.1. Destacar las diferencias de contexto y adopción respecto a Frozt Bitez.]
 
-#### 6.8.3.3 Empresa Placeholder
+#### 6.8.3.3 Luana Handmade
 
-[pendiente: redactar un estudio de caso narrativo de 150–250 palabras para Empresa Placeholder (usar nombre definitivo cuando esté disponible), con la misma estructura que los anteriores. Destacar que esta empresa se incorporó más recientemente a la plataforma y su proceso de onboarding fue parte integral de la Fase 5.]
+[pendiente: redactar un estudio de caso narrativo de 150–250 palabras para Luana Handmade, con la misma estructura que los anteriores. Contexto: emprendimiento artesanal unipersonal fundado por Claudia González, quien confecciona bolsos, alfombras, accesorios y piezas decorativas con diseños 100% autóctonos de Boyacá y materiales 100% sostenibles (trapillo reciclado y macramé). Opera en Régimen Simple (sin IVA), ventas principalmente por transferencia Nequi/Bancolombia, y una sola usuaria del sistema. Destacar que esta empresa se incorporó más recientemente a la plataforma y su proceso de onboarding fue parte integral de la Fase 5.]
 
 ---
 
