@@ -33,7 +33,7 @@ La relevancia del problema es, por tanto, tanto académica como práctica: una s
 Las decisiones tecnológicas que sustentan OrbitEngine no se justifican por la mera disponibilidad de las herramientas seleccionadas, sino por su capacidad de reducir el riesgo técnico del proyecto y acelerar su tiempo de salida al mercado en un contexto de equipo reducido y plazos académicos acotados:
 
 1. **Idoneidad del stack para una plataforma transaccional multi-tenant**: la elección de un backend asíncrono basado en FastAPI con tipado estricto, junto con un frontend declarativo en React, responde a requisitos concretos del dominio —validación rigurosa de datos contables, concurrencia en operaciones de inventario y trazabilidad por organización—, y no a una preferencia genérica por tecnologías populares.
-2. **Contrato API como única fuente de verdad**: la adopción de un enfoque *contract-first* mediante OpenAPI permite generar automáticamente el cliente tipado del frontend a partir del esquema del backend, garantizando consistencia entre capas, detectando regresiones en tiempo de compilación y eliminando una clase entera de errores de integración propios de los desarrollos manuales.
+2. **Contrato API como única fuente de verdad**: la adopción de un enfoque _contract-first_ mediante OpenAPI permite generar automáticamente el cliente tipado del frontend a partir del esquema del backend, garantizando consistencia entre capas, detectando regresiones en tiempo de compilación y eliminando una clase entera de errores de integración propios de los desarrollos manuales.
 3. **Seguridad desde el diseño**: la arquitectura incorpora autenticación basada en JWT, control de acceso por roles a nivel de endpoint y aislamiento lógico de datos por organización como invariantes del modelo, no como capas añadidas a posteriori, lo cual es crítico al manejar información financiera de terceros.
 4. **Aprovechamiento de inteligencia artificial generativa en el ciclo de desarrollo**: la incorporación de asistentes de IA en tareas de codificación, documentación y revisión permitió al equipo sostener un ritmo de entrega comparable al de equipos de mayor tamaño, manteniendo estándares de calidad mediante revisión humana sistemática del código generado.
 5. **Viabilidad económica del despliegue en la nube para el segmento pyme**: las plataformas de despliegue gestionado seleccionadas ofrecen, en 2026, un costo marginal por organización lo suficientemente bajo como para que el modelo de suscripción resulte rentable incluso con un volumen reducido de clientes, condición que no se cumplía con la infraestructura disponible una década atrás.
@@ -44,9 +44,9 @@ La pertinencia académica del presente proyecto se sustenta en tres ejes complem
 
 En primer lugar, el proyecto aporta evidencia empírica a un vacío específico de la literatura: si bien la adopción de sistemas de información en pequeñas y medianas empresas ha sido ampliamente documentada en contextos anglosajones y europeos (Kumar & van Hillegersberg, 2000; Duan et al., 2012), los estudios centrados en pymes latinoamericanas —y en particular sobre plataformas SaaS multi-tenant diseñadas para sus restricciones de costo, capacidad técnica y conectividad— son notablemente más escasos. OrbitEngine se propone como un caso de estudio que documenta tanto el diseño arquitectónico como los resultados de su adopción en este contexto regional.
 
-En segundo lugar, la validación del sistema sigue un diseño cuasi-experimental de tipo pre/post con empresas piloto, articulando métricas cuantitativas —reducción del tiempo en tareas administrativas, disminución de la tasa de error en operaciones de inventario y tiempos de respuesta en producción— con métricas cualitativas estandarizadas, en particular el instrumento *System Usability Scale* (SUS) y entrevistas semiestructuradas de cierre. Este enfoque mixto permite contrastar con evidencia las hipótesis sobre el impacto de la digitalización en la eficiencia operativa, más allá de la sola demostración funcional del software.
+En segundo lugar, la validación del sistema sigue un diseño cuasi-experimental de tipo pre/post con empresas piloto, articulando métricas cuantitativas —reducción del tiempo en tareas administrativas, disminución de la tasa de error en operaciones de inventario y tiempos de respuesta en producción— con métricas cualitativas estandarizadas, en particular el instrumento _System Usability Scale_ (SUS) y entrevistas semiestructuradas de cierre. Este enfoque mixto permite contrastar con evidencia las hipótesis sobre el impacto de la digitalización en la eficiencia operativa, más allá de la sola demostración funcional del software.
 
-En tercer lugar, el proyecto se inscribe en la línea de trabajo del semillero *Software como Innovación* y articula de manera integral las competencias formativas del pregrado en Ciencias de la Computación e Inteligencia Artificial: ingeniería de requisitos, arquitectura de software, desarrollo full-stack, despliegue en la nube, validación experimental y comunicación de resultados. Lo anterior justifica su carácter como proyecto de grado y no como un desarrollo de software meramente aplicado.
+En tercer lugar, el proyecto se inscribe en la línea de trabajo del semillero _Software como Innovación_ y articula de manera integral las competencias formativas del pregrado en Ciencias de la Computación e Inteligencia Artificial: ingeniería de requisitos, arquitectura de software, desarrollo full-stack, despliegue en la nube, validación experimental y comunicación de resultados. Lo anterior justifica su carácter como proyecto de grado y no como un desarrollo de software meramente aplicado.
 
 ---
 
@@ -77,6 +77,7 @@ Desarrollar e implementar una plataforma SaaS multi-tenant para la gestión inte
 OrbitEngine abarca el siguiente conjunto de funcionalidades dentro del producto mínimo viable (MVP):
 
 **Módulos implementados:**
+
 - Autenticación y gestión de usuarios con control de acceso basado en roles (RBAC): Administrador, Vendedor y Visualizador.
 - Gestión de inventario: CRUD de productos por categorías, control de stock en tiempo real, alertas automáticas de nivel mínimo e historial de movimientos.
 - Gestión de ventas: registro de transacciones multi-producto con generación de número de factura, historial de ventas con filtros y búsqueda.
@@ -85,10 +86,12 @@ OrbitEngine abarca el siguiente conjunto de funcionalidades dentro del producto 
 - Infraestructura multi-tenant: soporte para múltiples organizaciones con aislamiento total de datos.
 
 **Características técnicas:**
+
 - API RESTful documentada con OpenAPI/Swagger.
 - Interfaz web responsive, compatible con navegadores modernos (Chrome, Firefox, Safari, Edge).
 
-***- Despliegue en Railway (backend) y Vercel (frontend) con GitHub Actions.***
+**_- Despliegue en Railway (backend) y Vercel (frontend) con GitHub Actions._**
+
 - Suite de pruebas automatizadas con cobertura mínima del 60%.
 
 ### 1.4.2 Limitaciones y Exclusiones

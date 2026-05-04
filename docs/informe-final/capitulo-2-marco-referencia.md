@@ -11,7 +11,7 @@ Esta sección define los conceptos fundamentales sobre los que se sustenta el pr
 La definición de pyme varía según el país y el organismo de referencia. En América Latina, los criterios más comunes consideran el número de empleados y el volumen de ventas anuales. La CEPAL (2022) y el Banco Mundial utilizan como referencia general la siguiente clasificación:
 
 | Categoría | Empleados | Ventas anuales (USD) |
-|-----------|-----------|----------------------|
+|---|---|---|
 | Microempresa | 1–9 | < 100.000 |
 | Pequeña empresa | 10–49 | 100.000 – 1.000.000 |
 | Mediana empresa | 50–249 | 1.000.000 – 10.000.000 |
@@ -31,6 +31,7 @@ OrbitEngine no se clasifica como un ERP en el sentido amplio del término —no 
 Software as a Service (SaaS) es un modelo de distribución de software en el que el proveedor aloja la aplicación en infraestructura propia (nube) y la pone a disposición de los usuarios finales a través de internet, típicamente mediante una suscripción periódica (Benlian & Hess, 2011).
 
 El modelo SaaS elimina para el cliente la necesidad de:
+
 - Adquirir y mantener infraestructura de servidores.
 - Gestionar instalaciones, actualizaciones y parches del software.
 - Invertir en licencias únicas de alto costo.
@@ -46,7 +47,7 @@ El concepto de multi-tenancy (multi-arrendamiento) describe una arquitectura de 
 Existen tres enfoques principales de implementación:
 
 | Enfoque | Descripción | Aislamiento | Costo |
-|---------|-------------|-------------|-------|
+|---|---|---|---|
 | Base de datos por tenant | Cada cliente tiene su propia BD | Alto | Alto |
 | Esquema por tenant | Una BD, esquemas separados | Medio | Medio |
 | Tabla compartida + discriminador | Una BD, filas diferenciadas por `tenant_id` | Bajo-Medio | Bajo |
@@ -64,6 +65,7 @@ OpenAPI (anteriormente Swagger) es una especificación estándar para describir 
 Role-Based Access Control (RBAC) es un modelo de seguridad en el que los permisos de acceso a recursos del sistema se asignan a roles, y los usuarios adquieren permisos a través de su asignación a uno o más roles (Ferraiolo et al., 2001). Este modelo simplifica la administración de permisos en organizaciones donde múltiples usuarios realizan funciones diferenciadas.
 
 En OrbitEngine se definen tres roles:
+
 - **Administrador**: acceso total a todos los módulos y configuración de la organización.
 - **Vendedor**: acceso a ventas, consulta de inventario y clientes. Sin acceso a reportes avanzados ni configuración.
 - **Visualizador**: acceso de solo lectura a reportes y dashboards.
@@ -127,7 +129,7 @@ Siigo (Colombia) y Defontana (Chile) son soluciones SaaS con foco contable-tribu
 La siguiente tabla sintetiza la comparación entre las soluciones analizadas y OrbitEngine en las dimensiones relevantes para el segmento objetivo:
 
 | Criterio | Odoo | Zoho | QuickBooks | Alegra | OrbitEngine |
-|----------|------|------|------------|--------|-------------|
+|---|---|---|---|---|---|
 | Modelo de entrega | On-premise / SaaS | SaaS | SaaS | SaaS | SaaS |
 | Precio accesible para pymes pequeñas | Medio | No | No | Sí | Sí (objetivo) |
 | Gestión de inventario avanzada | Sí | Parcial | No | Básica | Sí |
@@ -197,5 +199,4 @@ La contenerización mediante Docker garantiza la paridad entre los ambientes de 
 
 ### 2.3.5 SQLModel
 
-SQLModel es una biblioteca Python que combina SQLAlchemy (ORM) y Pydantic en un único modelo de clase, permitiendo que el mismo tipo Python sirva tanto como modelo de base de datos como schema de validación de la API (Ramírez, 2021). Esta unificación reduce la duplicación de código y asegura la consistencia entre la capa de datos y la capa de API.
-
+SQLModel es una biblioteca Python que combina SQLAlchemy (ORM) y Pydantic en un único modelo de clase, permitiendo que el mismo tipo Python sirva tanto como modelo de base de datos como schema de validación de la API (Ramírez, 2021). Esta unificación reduce la duplicación de datos y asegura la consistencia entre la capa de datos y la capa de API.

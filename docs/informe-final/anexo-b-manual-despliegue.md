@@ -10,15 +10,15 @@ Universidad Sergio Arboleda — Semillero de Software como Innovación
 
 OrbitEngine utiliza **Docker Compose** como orquestador de contenedores en todos los entornos. La arquitectura de despliegue se compone de los siguientes servicios:
 
-| Servicio      | Imagen                   | Descripción                                      |
-| ------------- | ------------------------ | ------------------------------------------------ |
-| `db`          | `postgres:18`            | Base de datos relacional PostgreSQL              |
-| `backend`     | Custom (FastAPI)         | API REST del sistema                             |
-| `frontend`    | Custom (React/Nginx)     | Interfaz de usuario compilada                    |
-| `prestart`    | Custom (FastAPI)         | Ejecuta migraciones y datos iniciales al iniciar |
-| `adminer`     | `adminer`                | Panel web de administración de BD                |
-| `proxy`       | `traefik:3.6`            | Reverse proxy y gestor de rutas HTTP/HTTPS       |
-| `mailcatcher` | `schickling/mailcatcher` | Servidor SMTP de prueba (solo dev)               |
+| Servicio | Imagen | Descripción |
+|---|---|---|
+| `db` | `postgres:18` | Base de datos relacional PostgreSQL |
+| `backend` | Custom (FastAPI) | API REST del sistema |
+| `frontend` | Custom (React/Nginx) | Interfaz de usuario compilada |
+| `prestart` | Custom (FastAPI) | Ejecuta migraciones y datos iniciales al iniciar |
+| `adminer` | `adminer` | Panel web de administración de BD |
+| `proxy` | `traefik:3.6` | Reverse proxy y gestor de rutas HTTP/HTTPS |
+| `mailcatcher` | `schickling/mailcatcher` | Servidor SMTP de prueba (solo dev) |
 
 El enrutamiento externo se gestiona con **Traefik**, que expone los servicios bajo subdominios configurados y maneja la terminación TLS automática mediante Let's Encrypt en producción.
 
@@ -28,27 +28,27 @@ El enrutamiento externo se gestiona con **Traefik**, que expone los servicios ba
 
 ### B.2.1 Herramientas requeridas
 
-| Herramienta    | Versión mínima | Propósito                                                          |
-| -------------- | -------------- | ------------------------------------------------------------------ |
-| Docker Engine  | 24.x           | Contenedores                                                       |
-| Docker Compose | v2.x           | Orquestación de servicios                                          |
-| Git            | 2.x            | Control de versiones                                               |
-| `uv`           | 0.4+           | Gestor de dependencias Python (para desarrollo local sin Docker)   |
-| Bun            | 1.x            | Runtime JS / gestor de paquetes (para desarrollo local sin Docker) |
+| Herramienta | Versión mínima | Propósito |
+|---|---|---|
+| Docker Engine | 24.x | Contenedores |
+| Docker Compose | v2.x | Orquestación de servicios |
+| Git | 2.x | Control de versiones |
+| `uv` | 0.4+ | Gestor de dependencias Python (para desarrollo local sin Docker) |
+| Bun | 1.x | Runtime JS / gestor de paquetes (para desarrollo local sin Docker) |
 
 ### B.2.2 Puertos utilizados
 
-| Puerto | Servicio          | Entorno                     |
-| ------ | ----------------- | --------------------------- |
-| 80     | Traefik HTTP      | Dev y Producción            |
-| 443    | Traefik HTTPS     | Producción                  |
-| 8000   | Backend FastAPI   | Dev (expuesto directamente) |
-| 5173   | Frontend (Vite)   | Dev                         |
-| 5432   | PostgreSQL        | Dev                         |
-| 8080   | Adminer           | Dev                         |
-| 8090   | Traefik Dashboard | Dev                         |
-| 1025   | Mailcatcher SMTP  | Dev                         |
-| 1080   | Mailcatcher UI    | Dev                         |
+| Puerto | Servicio | Entorno |
+|---|---|---|
+| 80 | Traefik HTTP | Dev y Producción |
+| 443 | Traefik HTTPS | Producción |
+| 8000 | Backend FastAPI | Dev (expuesto directamente) |
+| 5173 | Frontend (Vite) | Dev |
+| 5432 | PostgreSQL | Dev |
+| 8080 | Adminer | Dev |
+| 8090 | Traefik Dashboard | Dev |
+| 1025 | Mailcatcher SMTP | Dev |
+| 1080 | Mailcatcher UI | Dev |
 
 ---
 
@@ -120,15 +120,15 @@ Este comando:
 
 ### B.4.2 URLs del entorno local
 
-| Servicio                            | URL                         |
-| ----------------------------------- | --------------------------- |
-| Frontend                            | http://localhost:5173       |
-| Backend API                         | http://localhost:8000       |
-| Documentación interactiva (Swagger) | http://localhost:8000/docs  |
-| ReDoc                               | http://localhost:8000/redoc |
-| Adminer                             | http://localhost:8080       |
-| Traefik Dashboard                   | http://localhost:8090       |
-| Mailcatcher UI                      | http://localhost:1080       |
+| Servicio | URL |
+|---|---|
+| Frontend | http://localhost:5173 |
+| Backend API | http://localhost:8000 |
+| Documentación interactiva (Swagger) | http://localhost:8000/docs |
+| ReDoc | http://localhost:8000/redoc |
+| Adminer | http://localhost:8080 |
+| Traefik Dashboard | http://localhost:8090 |
+| Mailcatcher UI | http://localhost:1080 |
 
 ### B.4.3 Detener el entorno
 
@@ -186,14 +186,14 @@ docker compose exec backend alembic downgrade -1
 
 Las migraciones actuales del esquema son:
 
-| Archivo                      | Descripción                                    |
-| ---------------------------- | ---------------------------------------------- |
-| `001_initial_schema.py`      | Tablas base: `organizations`, `roles`, `users` |
-| `002_categories.py`          | Tabla `categories` con jerarquía padre-hijo    |
-| `003_products.py`            | Tabla `products`                               |
-| `004_customers.py`           | Tabla `customers`                              |
-| `005_inventory_movements.py` | Tabla `inventory_movements`                    |
-| `006_sales.py`               | Tablas `sales` y `sale_items`                  |
+| Archivo | Descripción |
+|---|---|
+| `001_initial_schema.py` | Tablas base: `organizations`, `roles`, `users` |
+| `002_categories.py` | Tabla `categories` con jerarquía padre-hijo |
+| `003_products.py` | Tabla `products` |
+| `004_customers.py` | Tabla `customers` |
+| `005_inventory_movements.py` | Tabla `inventory_movements` |
+| `006_sales.py` | Tablas `sales` y `sale_items` |
 
 ---
 
@@ -376,15 +376,15 @@ docker volume prune -f              # Elimina volúmenes sin usar (¡precaución
 
 ## B.10 Solución de Problemas
 
-| Problema                              | Causa probable                       | Solución                                                                                                     |
-| ------------------------------------- | ------------------------------------ | ------------------------------------------------------------------------------------------------------------ |
-| El backend no inicia                  | BD no está disponible                | Verificar que `db` esté `healthy` con `docker compose ps`. Revisar `POSTGRES_*` en `.env`.                   |
-| Error de migraciones al iniciar       | Migración incompatible               | Ejecutar `docker compose exec backend alembic history` y `alembic current`. Corregir el script de migración. |
-| `502 Bad Gateway` en el frontend      | Backend no responde                  | Verificar logs del backend: `docker compose logs backend`. Comprobar el healthcheck.                         |
-| Emails no se envían (producción)      | SMTP mal configurado                 | Verificar `SMTP_HOST`, `SMTP_PORT` y credenciales. Probar con `telnet $SMTP_HOST $SMTP_PORT`.                |
-| `Secret key too short` al iniciar     | `SECRET_KEY` es demasiado corta      | Generar una clave con `openssl rand -hex 32` y actualizar `.env`.                                            |
-| Traefik no renueva el certificado TLS | Puerto 80 bloqueado o DNS incorrecto | Verificar que el dominio resuelva a la IP correcta y el puerto 80 esté abierto.                              |
-| Error `UNIQUE constraint` al insertar | Dato duplicado en BD                 | Verificar que el SKU, slug u otro campo único no esté repetido.                                              |
+| Problema | Causa probable | Solución |
+|---|---|---|
+| El backend no inicia | BD no está disponible | Verificar que `db` esté `healthy` con `docker compose ps`. Revisar `POSTGRES_*` en `.env`. |
+| Error de migraciones al iniciar | Migración incompatible | Ejecutar `docker compose exec backend alembic history` y `alembic current`. Corregir el script de migración. |
+| `502 Bad Gateway` en el frontend | Backend no responde | Verificar logs del backend: `docker compose logs backend`. Comprobar el healthcheck. |
+| Emails no se envían (producción) | SMTP mal configurado | Verificar `SMTP_HOST`, `SMTP_PORT` y credenciales. Probar con `telnet $SMTP_HOST $SMTP_PORT`. |
+| `Secret key too short` al iniciar | `SECRET_KEY` es demasiado corta | Generar una clave con `openssl rand -hex 32` y actualizar `.env`. |
+| Traefik no renueva el certificado TLS | Puerto 80 bloqueado o DNS incorrecto | Verificar que el dominio resuelva a la IP correcta y el puerto 80 esté abierto. |
+| Error `UNIQUE constraint` al insertar | Dato duplicado en BD | Verificar que el SKU, slug u otro campo único no esté repetido. |
 
 ---
 

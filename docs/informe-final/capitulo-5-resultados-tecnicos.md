@@ -52,16 +52,16 @@ Las pruebas de este capítulo se ejecutaron sobre un piloto compuesto por **ocho
 
 **Tabla 5.1.5.** Organizaciones del piloto técnico.
 
-| #   | Nombre del _tenant_ | Naturaleza                                                            | Sector / propósito                                                                                       |
-| --- | ------------------- | --------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------- |
-| 1   | **Frozt Bitez**     | **Empresa real**                                                      | Pyme que adoptó OrbitEngine para sus operaciones reales                                                  |
-| 2   | **Miss Peggy**      | **Empresa real**                                                      | Pyme de un sector distinto al de Frozt Bitez, que también adoptó la plataforma para sus operaciones      |
-| 3   | Lehgo               | Empresa ficticia de prueba (datos sintéticos)                         | Generación de volumen de productos, ventas y movimientos para forzar consultas                           |
-| 4   | Ferrallas del Norte | Empresa ficticia de prueba (datos sintéticos)                         | Generación de volumen de productos, ventas y movimientos para forzar consultas                           |
-| 5   | Sabor Caribe        | Empresa ficticia de prueba (datos sintéticos)                         | Generación de volumen de productos, ventas y movimientos para forzar consultas                           |
-| 6   | Moda Andes          | Empresa ficticia de prueba (datos sintéticos)                         | Generación de volumen de productos, ventas y movimientos para forzar consultas                           |
-| 7   | FarmaVida           | Empresa ficticia de prueba (datos sintéticos)                         | Generación de volumen de productos, ventas y movimientos para forzar consultas                           |
-| 8   | Default             | Datos de prueba — primera organización creada como _seed_ del entorno | Tenant base de pruebas internas; conserva información residual de las primeras iteraciones de desarrollo |
+| N°  | Nombre del _tenant_ | Naturaleza                                                | Sector / propósito                                                                                       |
+| --- | ------------------- | --------------------------------------------------------- | -------------------------------------------------------------------------------------------------------- |
+| 1   | **Frozt Bitez**     | **Empresa real**                                          | Pyme que adoptó OrbitEngine para sus operaciones reales                                                  |
+| 2   | **Miss Peggy**      | **Empresa real**                                          | Pyme de un sector distinto al de Frozt Bitez, que también adoptó la plataforma para sus operaciones      |
+| 3   | Lehgo               | Empresa ficticia de prueba (datos sintéticos)             | Generación de volumen de productos, ventas y movimientos para forzar consultas                           |
+| 4   | Ferrallas del Norte | Empresa ficticia de prueba (datos sintéticos)             | Generación de volumen de productos, ventas y movimientos para forzar consultas                           |
+| 5   | Sabor Caribe        | Empresa ficticia de prueba (datos sintéticos)             | Generación de volumen de productos, ventas y movimientos para forzar consultas                           |
+| 6   | Moda Andes          | Empresa ficticia de prueba (datos sintéticos)             | Generación de volumen de productos, ventas y movimientos para forzar consultas                           |
+| 7   | FarmaVida           | Empresa ficticia de prueba (datos sintéticos)             | Generación de volumen de productos, ventas y movimientos para forzar consultas                           |
+| 8   | Default del entorno | Datos de prueba — primera organización creada como _seed_ | Tenant base de pruebas internas; conserva información residual de las primeras iteraciones de desarrollo |
 
 **Resumen cuantitativo.**
 
@@ -93,11 +93,11 @@ Las pruebas se construyeron con **Locust** y están versionadas en el repositori
 
 El `locustfile.py` define tres clases de `HttpUser` que se mezclan según pesos relativos:
 
-| Perfil            | Peso | Comportamiento                                                                                                                                                                                            | Tiempo de espera    |
-| ----------------- | ---- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------- |
-| `OrbitEngineUser` | 3    | Lee dashboard, productos, ventas, clientes y categorías. Ejercita paginación extrema (`?limit=100&skip=0/100`), búsqueda (`?search=`_), ordenamiento (`?sort_by=_&sort_order=_`) y filtros (`?status=_`). | Entre 0,5 s y 1,5 s |
-| `SellerUser`      | 2    | Crea ventas reales contra el catálogo (`POST /sales/`), ajusta stock (`POST /products/{id}/adjust-stock`) y consulta movimientos.                                                                         | Entre 1 s y 2 s     |
-| `SpammerUser`     | 1    | Martillea sin pausa los endpoints de agregación (`/dashboard/stats`, `/sales/stats`, `/products/low-stock`) y peticiones a UUIDs inexistentes para ejercitar el camino de error 404.                      | `constant(0)`       |
+| Perfil            | Peso | Comportamiento                                                                                                                                                                                        | Tiempo de espera    |
+| ----------------- | ---- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------- |
+| `OrbitEngineUser` | 3    | Lee dashboard, productos, ventas, clientes y categorías. Ejercita paginación extrema (`?limit=100&skip=0/100`), búsqueda (`?search=`), ordenamiento (`?sort_by=&sort_order=`) y filtros (`?status=`). | Entre 0,5 s y 1,5 s |
+| `SellerUser`      | 2    | Crea ventas reales contra el catálogo (`POST /sales/`), ajusta stock (`POST /products/{id}/adjust-stock`) y consulta movimientos.                                                                     | Entre 1 s y 2 s     |
+| `SpammerUser`     | 1    | Martillea sin pausa los endpoints de agregación (`/dashboard/stats`, `/sales/stats`, `/products/low-stock`) y peticiones a UUIDs inexistentes para ejercitar el camino de error 404.                  | `constant(0)`       |
 
 La rotación de cuentas se hace de forma cíclica y _thread-safe_ sobre la lista `ACCOUNTS`, que contiene credenciales válidas de las ocho organizaciones del piloto técnico descritas en la sección 5.1.5: las **dos empresas reales** (**Frozt Bitez** y **Miss Peggy**) y las **seis empresas ficticias de prueba** (**Lehgo**, **Ferrallas del Norte**, **Sabor Caribe**, **Moda Andes**, **FarmaVida** y **Default**). Esta rotación cumple dos funciones en paralelo: (i) cada usuario virtual ejercita el aislamiento por `organization_id` desde un _tenant_ distinto, validando la integridad multi-tenant bajo carga; (ii) las peticiones consultan tanto los volúmenes reales y acotados de Frozt Bitez y Miss Peggy como los volúmenes grandes generados por las seis empresas ficticias de prueba, lo que aporta un perfil de coste por consulta más representativo que el que obtendría un único _tenant_.
 
@@ -126,17 +126,17 @@ Se ejecutaron seis escenarios consecutivos contra `https://api.orbitengine.lat`.
 
 Es el escenario de referencia y representa el régimen al que se diseñó el sistema. Con aproximadamente ocho usuarios virtuales se completaron **235 peticiones sin fallos**.
 
-| Endpoint                | Método | Reqs. | Mediana      | Promedio     | P95          | P99          |
-| ----------------------- | ------ | ----- | ------------ | ------------ | ------------ | ------------ |
-| `/login/access-token`   | POST   | 8     | 910 ms       | 1 196 ms     | 2 100 ms     | 2 100 ms     |
-| `/categories/`          | GET    | 20    | 430 ms       | 454 ms       | 850 ms       | 850 ms       |
-| `/customers/`           | GET    | 41    | 430 ms       | 453 ms       | 480 ms       | 850 ms       |
-| `/dashboard/stats`      | GET    | 57    | 710 ms       | 721 ms       | 780 ms       | 1 100 ms     |
-| `/inventory-movements/` | GET    | 20    | 520 ms       | 542 ms       | 640 ms       | 640 ms       |
-| `/products/`            | GET    | 45    | 500 ms       | 515 ms       | 710 ms       | 920 ms       |
-| `/products/low-stock`   | GET    | 21    | 430 ms       | 472 ms       | 840 ms       | 850 ms       |
-| `/sales/`               | GET    | 23    | **7 500 ms** | **7 501 ms** | **7 600 ms** | **7 600 ms** |
-| **Agregado**            | —      | 235   | 520 ms       | 1 254 ms     | 7 500 ms     | 7 600 ms     |
+| Endpoint              | Método | Reqs. | Mediana      | Promedio     | P95          | P99          |
+| --------------------- | ------ | ----- | ------------ | ------------ | ------------ | ------------ |
+| /login/access-token   | POST   | 8     | 910 ms       | 1 196 ms     | 2 100 ms     | 2 100 ms     |
+| /categories/          | GET    | 20    | 430 ms       | 454 ms       | 850 ms       | 850 ms       |
+| /customers/           | GET    | 41    | 430 ms       | 453 ms       | 480 ms       | 850 ms       |
+| /dashboard/stats      | GET    | 57    | 710 ms       | 721 ms       | 780 ms       | 1 100 ms     |
+| /inventory-movements/ | GET    | 20    | 520 ms       | 542 ms       | 640 ms       | 640 ms       |
+| /products/            | GET    | 45    | 500 ms       | 515 ms       | 710 ms       | 920 ms       |
+| /products/low-stock   | GET    | 21    | 430 ms       | 472 ms       | 840 ms       | 850 ms       |
+| /sales/               | GET    | 23    | **7 500 ms** | **7 501 ms** | **7 600 ms** | **7 600 ms** |
+| **Agregado**          | —      | 235   | 520 ms       | 1 254 ms     | 7 500 ms     | 7 600 ms     |
 
 Observación clave: la mediana global (520 ms) y la mediana de los endpoints CRUD se sitúan en el orden de cientos de milisegundos, pero el endpoint `GET /sales/` consume sistemáticamente **alrededor de 7,5 segundos por petición** incluso sin concurrencia significativa. Este endpoint domina el percentil 95 global y es responsable de que el agregado se aleje de los 500 ms exigidos por el RNF-01.
 
@@ -151,7 +151,7 @@ El sistema sostiene **16,3 RPS** con la mediana global en 1 000 ms y el percenti
 
 #### 5.2.4.3 Tests 03 a 05 — Régimen de Saturación
 
-Los escenarios 03, 04 y 05 reflejan la transición desde el estrés moderado hacia la saturación. Las tasas de fallos crecen del 6,4 % al 22,1 % y los percentiles superiores se desplazan al rango de las decenas de segundos. Los 500 dejan de concentrarse en `POST /sales/` y aparecen también en `GET /dashboard/stats`, `GET /products/?search=`_, `GET /customers/?search=_`y`GET /products/{id}/movements`. La duración total de cada test se acortó deliberadamente para no comprometer la disponibilidad del sistema durante períodos prolongados.
+Los escenarios 03, 04 y 05 reflejan la transición desde el estrés moderado hacia la saturación. Las tasas de fallos crecen del 6,4 % al 22,1 % y los percentiles superiores se desplazan al rango de las decenas de segundos. Los 500 dejan de concentrarse en `POST /sales/` y aparecen también en `GET /dashboard/stats`, `GET /products/?search=`, `GET /customers/?search=` y `GET /products/{id}/movements`. La duración total de cada test se acortó deliberadamente para no comprometer la disponibilidad del sistema durante períodos prolongados.
 
 #### 5.2.4.4 Test 06 — Pico Sostenido (~200 usuarios)
 
@@ -174,14 +174,21 @@ La tasa de fallos crece de manera monótona hasta el Test 05 (régimen de pico n
 
 Los CSV permiten aislar el comportamiento de los endpoints más representativos a lo largo de los seis escenarios:
 
-| Endpoint                   | Test 01 mediana | Test 02 mediana | Test 06 mediana            | Observación                                                                                                                                    |
-| -------------------------- | --------------- | --------------- | -------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------- |
-| `POST /login/access-token` | 910 ms          | 1 200 ms        | 2 200 ms                   | Coste fijo dominado por el hashing bcrypt de la contraseña; el cuello no es de base de datos.                                                  |
-| `GET /products/`           | 500 ms          | 730 ms          | 690 ms                     | Endpoint CRUD con paginación; el coste se mantiene acotado incluso bajo pico.                                                                  |
-| `GET /customers/`          | 430 ms          | 540 ms          | 620 ms                     | Comportamiento similar al de productos.                                                                                                        |
-| `GET /dashboard/stats`     | 710 ms          | 850 ms          | 1 100 ms (con 19 % de 500) | Agregaciones costosas que se vuelven inestables bajo pico sostenido.                                                                           |
-| `GET /sales/`              | **7 500 ms**    | **7 700 ms**    | **8 600 ms**               | Latencia dominante en todos los regímenes; resultado de joins con `SaleItem` y agregaciones por venta sin paginación servidor-lado optimizada. |
-| `POST /sales/`             | —               | 2 500 ms        | —                          | Operación transaccional con escritura de `Sale`, `SaleItem` e `InventoryMovement` en la misma sesión SQLAlchemy.                               |
++--------------------------+-------------------+-------------------+-----------------------------+---------------------------------------------------------------------------------------------------------------------------------------------+
+| Endpoint | Test 01 mediana | Test 02 mediana | Test 06 mediana | Observación |
++==========================+===================+===================+=============================+=============================================================================================================================================+
+| POST /login/access-token | 910 ms | 1 200 ms | 2 200 ms | Coste fijo dominado por el hashing bcrypt de la contraseña; el cuello no es de base de datos. |
++--------------------------+-------------------+-------------------+-----------------------------+---------------------------------------------------------------------------------------------------------------------------------------------+
+| GET /products/ | 500 ms | 730 ms | 690 ms | Endpoint CRUD con paginación; el coste se mantiene acotado incluso bajo pico. |
++--------------------------+-------------------+-------------------+-----------------------------+---------------------------------------------------------------------------------------------------------------------------------------------+
+| GET /customers/ | 430 ms | 540 ms | 620 ms | Comportamiento similar al de productos. |
++--------------------------+-------------------+-------------------+-----------------------------+---------------------------------------------------------------------------------------------------------------------------------------------+
+| GET /dashboard/stats | 710 ms | 850 ms | 1 100 ms (con 19 % de 500) | Agregaciones costosas que se vuelven inestables bajo pico sostenido. |
++--------------------------+-------------------+-------------------+-----------------------------+---------------------------------------------------------------------------------------------------------------------------------------------+
+| GET /sales/ | **7 500 ms** | **7 700 ms** | **8 600 ms** | Latencia dominante en todos los regímenes; resultado de joins con SaleItem y agregaciones por venta sin paginación servidor-lado optimizada. |
++--------------------------+-------------------+-------------------+-----------------------------+---------------------------------------------------------------------------------------------------------------------------------------------+
+| POST /sales/ | — | 2 500 ms | — | Operación transaccional con escritura de Sale, SaleItem e InventoryMovement en la misma sesión SQLAlchemy. |
++--------------------------+-------------------+-------------------+-----------------------------+---------------------------------------------------------------------------------------------------------------------------------------------+
 
 ### 5.2.7 Cumplimiento del RNF-01
 
@@ -205,18 +212,29 @@ Se ejecutó Lighthouse desde Chrome DevTools sobre la página pública (_landing
 
 **Tabla 5.3.1.** Puntajes y Web Vitals de Lighthouse por vista y organización. La columna _Tipo_ indica si el _tenant_ corresponde a una empresa real del piloto o a un _tenant_ sintético de prueba.
 
-| Vista                               | Organización   | Tipo               | Performance | Accesibilidad | Best Practices | SEO | FCP   | LCP   | TBT  | CLS   |
-| ----------------------------------- | -------------- | ------------------ | ----------- | ------------- | -------------- | --- | ----- | ----- | ---- | ----- |
-| Landing (`/`)                       | —              | Página pública     | 92          | 96            | 96             | 92  | 1,1 s | 1,6 s | 0 ms | 0     |
-| Dashboard                           | Lehgo          | Ficticia de prueba | 90          | 96            | 100            | 83  | 1,2 s | 1,6 s | 0 ms | 0,017 |
-| Dashboard                           | **Miss Peggy** | **Real**           | 91          | 96            | 100            | 83  | 1,1 s | 1,6 s | 0 ms | 0,021 |
-| Dashboard                           | Moda Andes     | Ficticia de prueba | 91          | 96            | 100            | 83  | 1,1 s | 1,6 s | 0 ms | 0,017 |
-| Inventario (`/dashboard/inventory`) | Lehgo          | Ficticia de prueba | 92          | 89            | 100            | 83  | 1,0 s | 1,5 s | 0 ms | 0     |
-| Inventario                          | **Miss Peggy** | **Real**           | 92          | 89            | 100            | 83  | 1,1 s | 1,5 s | 0 ms | 0     |
-| Inventario                          | Moda Andes     | Ficticia de prueba | 92          | 89            | 100            | 83  | 1,1 s | 1,5 s | 0 ms | 0     |
-| Ventas (`/dashboard/sales`)         | Lehgo          | Ficticia de prueba | 92          | 88            | 100            | 83  | 1,1 s | 1,5 s | 0 ms | 0     |
-| Ventas                              | **Miss Peggy** | **Real**           | 93          | 88            | 100            | 83  | 1,0 s | 1,5 s | 0 ms | 0     |
-| Ventas                              | Moda Andes     | Ficticia de prueba | 93          | 88            | 100            | 83  | 1,0 s | 1,5 s | 0 ms | 0     |
++---------------------------------------+-------------------+------------------------+-------------+-----------------+------------------+-----+--------+--------+-------+--------+
+| Vista | Organización | Tipo | Performance | Accesibilidad | Best Practices | SEO | FCP | LCP | TBT | CLS |
++=======================================+===================+========================+=============+=================+==================+=====+========+========+=======+========+
+| Landing (`/`) | — | Página pública | 92 | 96 | 96 | 92 | 1,1 s | 1,6 s | 0 ms | 0 |
++---------------------------------------+-------------------+------------------------+-------------+-----------------+------------------+-----+--------+--------+-------+--------+
+| Dashboard | Lehgo | Ficticia de prueba | 90 | 96 | 100 | 83 | 1,2 s | 1,6 s | 0 ms | 0,017 |
++---------------------------------------+-------------------+------------------------+-------------+-----------------+------------------+-----+--------+--------+-------+--------+
+| Dashboard | **Miss Peggy** | **Real** | 91 | 96 | 100 | 83 | 1,1 s | 1,6 s | 0 ms | 0,021 |
++---------------------------------------+-------------------+------------------------+-------------+-----------------+------------------+-----+--------+--------+-------+--------+
+| Dashboard | Moda Andes | Ficticia de prueba | 91 | 96 | 100 | 83 | 1,1 s | 1,6 s | 0 ms | 0,017 |
++---------------------------------------+-------------------+------------------------+-------------+-----------------+------------------+-----+--------+--------+-------+--------+
+| Inventario (`/dashboard/inventory`) | Lehgo | Ficticia de prueba | 92 | 89 | 100 | 83 | 1,0 s | 1,5 s | 0 ms | 0 |
++---------------------------------------+-------------------+------------------------+-------------+-----------------+------------------+-----+--------+--------+-------+--------+
+| Inventario | **Miss Peggy** | **Real** | 92 | 89 | 100 | 83 | 1,1 s | 1,5 s | 0 ms | 0 |
++---------------------------------------+-------------------+------------------------+-------------+-----------------+------------------+-----+--------+--------+-------+--------+
+| Inventario | Moda Andes | Ficticia de prueba | 92 | 89 | 100 | 83 | 1,1 s | 1,5 s | 0 ms | 0 |
++---------------------------------------+-------------------+------------------------+-------------+-----------------+------------------+-----+--------+--------+-------+--------+
+| Ventas (`/dashboard/sales`) | Lehgo | Ficticia de prueba | 92 | 88 | 100 | 83 | 1,1 s | 1,5 s | 0 ms | 0 |
++---------------------------------------+-------------------+------------------------+-------------+-----------------+------------------+-----+--------+--------+-------+--------+
+| Ventas | **Miss Peggy** | **Real** | 93 | 88 | 100 | 83 | 1,0 s | 1,5 s | 0 ms | 0 |
++---------------------------------------+-------------------+------------------------+-------------+-----------------+------------------+-----+--------+--------+-------+--------+
+| Ventas | Moda Andes | Ficticia de prueba | 93 | 88 | 100 | 83 | 1,0 s | 1,5 s | 0 ms | 0 |
++---------------------------------------+-------------------+------------------------+-------------+-----------------+------------------+-----+--------+--------+-------+--------+
 
 Las puntuaciones de Performance se mantienen entre **90 y 93** en todas las vistas y organizaciones, y las diferencias entre los tres _tenants_ medidos son menores a 1 punto. Esto es particularmente relevante porque la muestra confronta de manera explícita una empresa real (**Miss Peggy**) con dos empresas ficticias de prueba que cargan al sistema con volúmenes sintéticos mucho mayores (**Lehgo** y **Moda Andes**): el rendimiento percibido del frontend resulta **insensible al volumen y a los datos específicos** de cada organización dentro del rango medido, lo que valida que el coste del cliente no se ve afectado por los grandes volúmenes generados por las empresas ficticias de prueba. Los Core Web Vitals se sitúan dentro de las bandas verdes establecidas por Google (LCP ≤ 2,5 s, CLS ≤ 0,1, TBT bajo) tanto para los datos reales como para los datos sintéticos.
 

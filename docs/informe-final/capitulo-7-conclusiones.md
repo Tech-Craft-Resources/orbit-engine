@@ -8,7 +8,7 @@ Esta sección presenta las conclusiones del proyecto OrbitEngine organizadas por
 
 ---
 
-**Objetivo 1**: *Diseñar la arquitectura técnica de una plataforma SaaS multi-tenant que garantice el aislamiento de datos entre organizaciones, la escalabilidad horizontal y la seguridad de la información.*
+**Objetivo 1**: _Diseñar la arquitectura técnica de una plataforma SaaS multi-tenant que garantice el aislamiento de datos entre organizaciones, la escalabilidad horizontal y la seguridad de la información._
 
 Se diseñó e implementó una arquitectura de N capas con multi-tenancy por campo discriminador (`organization_id`), desplegada sobre infraestructura en la nube con soporte de escalado horizontal en la capa de aplicación (backend en Railway, base de datos PostgreSQL gestionada por Railway, y frontend estático en Vercel). La arquitectura adoptada demostró ser adecuada para el alcance del proyecto: el mecanismo de aislamiento de datos mediante el filtrado sistemático por `organization_id` en todas las operaciones de base de datos, combinado con la inclusión del contexto de organización en el token JWT, garantizó que no se produjeran filtraciones de datos entre tenants durante las pruebas de integración ni durante el período de uso en producción.
 
@@ -16,7 +16,7 @@ Las decisiones arquitectónicas documentadas —monolito modular sobre microserv
 
 ---
 
-**Objetivo 2**: *Desarrollar los módulos de gestión operativa esenciales conforme a los requisitos levantados con usuarios reales de pymes.*
+**Objetivo 2**: _Desarrollar los módulos de gestión operativa esenciales conforme a los requisitos levantados con usuarios reales de pymes._
 
 Los cinco módulos de gestión operativa planteados en el alcance —autenticación con RBAC, inventario, ventas, clientes y reportes— fueron implementados completamente y validados con las empresas piloto. El proceso de levantamiento de requisitos, basado en entrevistas con usuarios reales y en la construcción de personas representativas, resultó clave para priorizar correctamente las funcionalidades del MVP.
 
@@ -24,7 +24,7 @@ Un hallazgo del proceso de validación fue la importancia de las alertas de stoc
 
 ---
 
-**Objetivo 3**: *Construir un sistema de reportes y analítica que proporcione KPIs en tiempo real en el dashboard y exportación a Excel de los listados operativos.*
+**Objetivo 3**: _Construir un sistema de reportes y analítica que proporcione KPIs en tiempo real en el dashboard y exportación a Excel de los listados operativos._
 
 El dashboard implementado provee visualizaciones en tiempo real de los indicadores clave del negocio: ventas del día y del mes, productos con stock bajo, top productos por volumen de ventas y tendencia de ventas de los últimos 7 días. Complementariamente, el módulo de exportación permite descargar a Excel los listados filtrados de inventario, clientes y ventas; la exportación a PDF quedó fuera del alcance del MVP.
 
@@ -32,7 +32,7 @@ Durante la validación con usuarios, la generación del reporte de ventas semana
 
 ---
 
-**Objetivo 4**: *Desplegar la plataforma en infraestructura de nube con CI/CD, garantizando disponibilidad ≥ 95% y tiempos de respuesta < 2 segundos.*
+**Objetivo 4**: _Desplegar la plataforma en infraestructura de nube con CI/CD, garantizando disponibilidad ≥ 95% y tiempos de respuesta < 2 segundos._
 
 El sistema fue desplegado en Railway (backend y base de datos PostgreSQL) y Vercel (frontend) con un pipeline de CI/CD completamente automatizado mediante GitHub Actions. Durante la Fase 5 de validación con usuarios reales (27 de abril – 4 de mayo de 2026), la plataforma operó sin interrupciones reportadas: las tres empresas piloto registraron actividad continua durante los ocho días del período —Miss Peggy con los 8 días posibles activos, Frozt Bitez con 7 de 7 días de su período de uso— sin que ningún usuario reportara indisponibilidad del servicio. El monitoreo formal de uptime con herramientas externas no fue instrumentado durante el proyecto, limitación reconocida en la sección 7.4.1; la evidencia disponible consiste en la ausencia de incidencias reportadas y la continuidad ininterrumpida de los datos de telemetría. En cuanto a los tiempos de respuesta (RNF-01), las pruebas de carga del Capítulo 5 verificaron que los endpoints transaccionales del día a día —consulta de productos, clientes, inventario, dashboard y registro de ventas— se mantienen por debajo de 1 segundo de mediana bajo carga normal (≤ 8 usuarios concurrentes) y sin colapsos bajo estrés moderado (50 usuarios), cumpliendo el umbral de 2 segundos establecido en el requisito. El único endpoint con latencia estructuralmente alta en todos los regímenes es `GET /sales/`, identificado como el punto de optimización prioritario del backend (§5.2.4.1 y §7.5.1).
 
@@ -40,7 +40,7 @@ La adopción de CI/CD desde las primeras etapas del proyecto fue una decisión d
 
 ---
 
-**Objetivo 5**: *Validar la solución mediante pruebas con al menos dos empresas piloto, midiendo el impacto en la eficiencia operativa a través de métricas cuantitativas y cualitativas.*
+**Objetivo 5**: _Validar la solución mediante pruebas con al menos dos empresas piloto, midiendo el impacto en la eficiencia operativa a través de métricas cuantitativas y cualitativas._
 
 La validación se llevó a cabo con **tres empresas piloto** durante un período de ocho días de uso productivo real (Fase 5, 27 de abril – 4 de mayo de 2026), superando el umbral mínimo de dos empresas establecido en el objetivo. Los resultados detallados se presentan en el Capítulo 6; a modo de síntesis:
 
@@ -112,7 +112,7 @@ Las recomendaciones de esta sección se derivan directamente de los hallazgos de
 
 ### 7.5.2 Frontend
 
-1. **Optimización del LCP en dispositivos móviles.** Las pruebas de WebPageTest del Capítulo 5 detectaron un *Largest Contentful Paint* (LCP) superior al umbral de 2.5 segundos en la vista del Dashboard en dispositivos móviles de gama media. Se recomienda: (a) diferir la carga de los componentes de gráficas (Chart.js / Recharts) hasta que sean visibles en el viewport; (b) pre-cargar las fuentes web críticas con `<link rel="preload">`; y (c) revisar el tamaño de los iconos SVG incrustados en el bundle principal.
+1. **Optimización del LCP en dispositivos móviles.** Las pruebas de WebPageTest del Capítulo 5 detectaron un _Largest Contentful Paint_ (LCP) superior al umbral de 2.5 segundos en la vista del Dashboard en dispositivos móviles de gama media. Se recomienda: (a) diferir la carga de los componentes de gráficas (Chart.js / Recharts) hasta que sean visibles en el viewport; (b) pre-cargar las fuentes web críticas con `<link rel="preload">`; y (c) revisar el tamaño de los iconos SVG incrustados en el bundle principal.
 
 2. **Optimización del tamaño de activos.** Se recomienda revisar el bundle de producción con `vite-bundle-visualizer` para identificar dependencias de gran tamaño que puedan ser importadas dinámicamente (`import()` lazy) o reemplazadas por alternativas más ligeras.
 

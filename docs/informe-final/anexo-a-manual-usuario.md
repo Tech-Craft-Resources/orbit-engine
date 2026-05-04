@@ -28,7 +28,7 @@ Para crear una nueva empresa en la plataforma:
 2. En la pantalla `/signup-org`, completar el formulario con:
    - **Nombre de la organización** — nombre visible de la empresa.
    - **Slug** — identificador único en minúsculas (ej. `mi-empresa`). Solo letras, números y guiones; entre 3 y 50 caracteres.
-   - **Descripción** *(opcional)* — breve descripción del negocio.
+   - **Descripción** _(opcional)_ — breve descripción del negocio.
    - **Nombre**, **apellido** y **correo electrónico** del administrador.
    - **Contraseña** de al menos 8 caracteres.
 3. Hacer clic en **"Crear organización"**.
@@ -72,7 +72,7 @@ Una vez dentro del sistema, la interfaz se divide en:
 Los módulos disponibles son:
 
 | Módulo | Ruta | Acceso |
-|--------|------|--------|
+|---|---|---|
 | Dashboard | `/dashboard` | Todos los usuarios |
 | Inventario | `/dashboard/inventory` | Todos los usuarios |
 | Ventas | `/dashboard/sales` | Todos los usuarios |
@@ -108,37 +108,43 @@ El módulo de inventario permite gestionar los productos y categorías de la emp
 Las categorías permiten organizar el inventario en grupos lógicos. Admiten **jerarquía** (una categoría puede tener subcategorías).
 
 **Crear una categoría:**
+
 1. En el módulo Inventario, ir a la pestaña **Categorías**.
 2. Hacer clic en **"Agregar categoría"**.
-3. Completar el **nombre** *(requerido)* y opcionalmente una **descripción** y una **categoría padre**.
+3. Completar el **nombre** _(requerido)_ y opcionalmente una **descripción** y una **categoría padre**.
 4. Guardar.
 
 **Editar o desactivar una categoría:**
+
 - Hacer clic en el menú de acciones (⋮) de la fila y seleccionar **"Editar"** o **"Desactivar"**.
 
 ### A.5.2 Productos
 
 **Crear un producto:**
+
 1. En el módulo Inventario, ir a la pestaña **Productos**.
 2. Hacer clic en **"Agregar producto"**.
 3. Completar el formulario:
-   - **Nombre** *(requerido)*
-   - **SKU** — código único del producto *(requerido)*
-   - **Categoría** *(opcional)*
+   - **Nombre** _(requerido)_
+   - **SKU** — código único del producto _(requerido)_
+   - **Categoría** _(opcional)_
    - **Precio de costo** y **precio de venta**
-   - **Stock actual**, **stock mínimo** y **stock máximo** *(opcional)*
+   - **Stock actual**, **stock mínimo** y **stock máximo** _(opcional)_
    - **Unidad de medida** (ej. `unit`, `kg`, `lt`)
-   - **Código de barras** *(opcional)*
-   - **Descripción** e **imagen** *(opcionales)*
+   - **Código de barras** _(opcional)_
+   - **Descripción** e **imagen** _(opcionales)_
 4. Guardar.
 
 **Editar un producto:**
+
 - Hacer clic en el menú de acciones (⋮) → **"Editar"**. Todos los campos son modificables excepto el SKU si ya tiene movimientos.
 
 **Desactivar un producto:**
+
 - Hacer clic en el menú de acciones (⋮) → **"Desactivar"**. El producto deja de aparecer en los formularios de venta pero su historial se conserva.
 
 **Alerta de stock bajo:**
+
 - Los productos con `stock_quantity ≤ stock_min` aparecen resaltados en la tabla y se contabilizan en el indicador del dashboard.
 
 ### A.5.3 Ajuste de stock manual
@@ -147,7 +153,7 @@ Para corregir el inventario por diferencias de conteo, mermas u otros motivos:
 
 1. En la tabla de productos, seleccionar el producto y hacer clic en **"Ajustar stock"**.
 2. Ingresar la **cantidad** (positiva para agregar, negativa para restar).
-3. Ingresar un **motivo** del ajuste *(requerido)*.
+3. Ingresar un **motivo** del ajuste _(requerido)_.
 4. Confirmar.
 
 El ajuste queda registrado en el historial de movimientos con el tipo `adjustment`.
@@ -157,13 +163,14 @@ El ajuste queda registrado en el historial de movimientos con el tipo `adjustmen
 El historial registra todos los cambios de stock de cada producto:
 
 | Tipo de movimiento | Descripción |
-|--------------------|-------------|
+|---|---|
 | `sale` | Salida generada por una venta |
 | `adjustment` | Entrada o salida manual |
 | `return` | Entrada por devolución o cancelación de venta |
 | `purchase` | Entrada por compra |
 
 Para ver el historial de un producto:
+
 1. En la tabla de productos, hacer clic en el menú de acciones (⋮) → **"Ver historial de movimientos"**.
 2. Se muestra la tabla con fecha, tipo, cantidad, stock anterior y stock resultante, y el usuario que realizó el movimiento.
 
@@ -177,10 +184,10 @@ El módulo de ventas permite registrar transacciones comerciales, visualizar el 
 
 1. En el módulo Ventas, hacer clic en **"Nueva venta"**.
 2. Completar el formulario:
-   - **Cliente** *(opcional)* — buscar por nombre o documento.
+   - **Cliente** _(opcional)_ — buscar por nombre o documento.
    - **Método de pago**: Efectivo, Tarjeta, Transferencia u Otro.
-   - **Descuento** y **IVA/impuesto** *(opcional, en valores monetarios)*.
-   - **Notas** *(opcional)*.
+   - **Descuento** y **IVA/impuesto** _(opcional, en valores monetarios)_.
+   - **Notas** _(opcional)_.
 3. En la sección de **ítems**, agregar los productos de la venta:
    - Buscar el producto por nombre o SKU.
    - Ingresar la **cantidad**.
@@ -189,6 +196,7 @@ El módulo de ventas permite registrar transacciones comerciales, visualizar el 
 5. Hacer clic en **"Registrar venta"**.
 
 Al guardar, el sistema:
+
 - Genera un **número de factura** único.
 - Descuenta las cantidades del stock de cada producto registrado.
 - Registra los movimientos de inventario correspondientes (`sale`).
@@ -203,10 +211,11 @@ En la tabla de ventas, hacer clic en el menú de acciones (⋮) → **"Ver detal
 Una venta puede cancelarse mientras tenga estado `completed`:
 
 1. En la tabla de ventas, hacer clic en el menú de acciones (⋮) → **"Cancelar venta"**.
-2. Ingresar el **motivo de cancelación** *(requerido)*.
+2. Ingresar el **motivo de cancelación** _(requerido)_.
 3. Confirmar.
 
 Al cancelar, el sistema:
+
 - Cambia el estado de la venta a `cancelled`.
 - **Revierte el stock** de cada producto afectado (movimiento tipo `return`).
 - Registra la fecha y usuario de cancelación.
@@ -214,6 +223,7 @@ Al cancelar, el sistema:
 ### A.6.4 Filtros y búsqueda
 
 La tabla de ventas permite:
+
 - Buscar por **número de factura**.
 - Filtrar por **estado** (`completed`, `cancelled`) y **método de pago**.
 - Ordenar por cualquier columna.
@@ -228,11 +238,11 @@ El módulo permite gestionar el directorio de clientes de la organización y con
 
 1. En el módulo Clientes, hacer clic en **"Agregar cliente"**.
 2. Completar el formulario:
-   - **Tipo de documento**: CC, NIT, Pasaporte, Otro *(requerido)*.
-   - **Número de documento** *(requerido, único por organización)*.
-   - **Nombre** y **apellido** *(requeridos)*.
-   - **Correo electrónico**, **teléfono**, **dirección**, **ciudad** y **país** *(opcionales)*.
-   - **Notas internas** *(opcionales)*.
+   - **Tipo de documento**: CC, NIT, Pasaporte, Otro _(requerido)_.
+   - **Número de documento** _(requerido, único por organización)_.
+   - **Nombre** y **apellido** _(requeridos)_.
+   - **Correo electrónico**, **teléfono**, **dirección**, **ciudad** y **país** _(opcionales)_.
+   - **Notas internas** _(opcionales)_.
 3. Guardar.
 
 ### A.7.2 Editar un cliente
@@ -293,12 +303,14 @@ El módulo de configuración permite al usuario gestionar su cuenta personal y, 
 ### A.9.1 Información personal
 
 En la pestaña **"Perfil"**:
+
 - Ver y editar **nombre** y **apellido**.
 - Ver el **correo electrónico** asociado (no editable desde aquí).
 
 ### A.9.2 Cambio de contraseña
 
 En la pestaña **"Seguridad"**:
+
 1. Ingresar la **contraseña actual**.
 2. Ingresar la **nueva contraseña** y confirmarla.
 3. Hacer clic en **"Actualizar contraseña"**.
@@ -308,18 +320,21 @@ En la pestaña **"Seguridad"**:
 > Disponible solo para usuarios con rol **Administrador**.
 
 En la pestaña **"Organización"**:
+
 - Editar el **nombre** de la organización.
-- Editar el **slug** *(identificador único)*.
+- Editar el **slug** _(identificador único)_.
 - Editar la **descripción** y la **URL del logo**.
 
 ### A.9.4 Apariencia
 
 En la pestaña **"Apariencia"**:
+
 - Cambiar entre **modo claro** y **modo oscuro**.
 
 ### A.9.5 Eliminación de cuenta
 
 En la pestaña **"Cuenta"**:
+
 - El usuario puede solicitar la **eliminación de su propia cuenta**.
 - Se requiere confirmación escribiendo el correo electrónico.
 
@@ -352,4 +367,4 @@ OrbitEngine es compatible con las versiones recientes de Chrome, Firefox, Edge y
 
 ---
 
-*Documento generado como parte del proyecto de grado — Universidad Sergio Arboleda, Semillero de Software como Innovación, Abril 2026.*
+_Documento generado como parte del proyecto de grado — Universidad Sergio Arboleda, Semillero de Software como Innovación, Abril 2026._

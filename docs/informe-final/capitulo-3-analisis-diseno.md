@@ -18,50 +18,55 @@ OrbitEngine contempla tres perfiles de usuario, formalizados como roles dentro d
 
 **Perfil 1 — Administrador**
 
-- *Rol dentro del negocio*: responsable estratégico y operativo de la organización; típicamente corresponde al propietario o gerente de la pyme. Es quien rinde cuentas sobre los resultados del negocio y toma decisiones de abastecimiento, precios y gestión del personal.
-- *Responsabilidades funcionales*: configurar la organización y sus parámetros, administrar el catálogo de productos y categorías, gestionar la base de clientes, supervisar el inventario, registrar y revisar ventas, y dar de alta o de baja a otros usuarios asignándoles roles.
-- *Permisos y alcance en el sistema*: acceso completo (lectura, creación, modificación y eliminación) sobre todos los recursos pertenecientes a su organización, incluyendo la gestión de usuarios y la asignación de roles. No tiene acceso a recursos de otras organizaciones, en virtud del aislamiento multi-tenant.
-- *Necesidades de información*: indicadores agregados en tiempo real (ventas del día y del mes, productos con stock bajo, top de productos y tendencia de ventas) y reportes exportables que sirvan como insumo para análisis externo o para la rendición de cuentas contable.
+- _Rol dentro del negocio_: responsable estratégico y operativo de la organización; típicamente corresponde al propietario o gerente de la pyme. Es quien rinde cuentas sobre los resultados del negocio y toma decisiones de abastecimiento, precios y gestión del personal.
+- _Responsabilidades funcionales_: configurar la organización y sus parámetros, administrar el catálogo de productos y categorías, gestionar la base de clientes, supervisar el inventario, registrar y revisar ventas, y dar de alta o de baja a otros usuarios asignándoles roles.
+- _Permisos y alcance en el sistema_: acceso completo (lectura, creación, modificación y eliminación) sobre todos los recursos pertenecientes a su organización, incluyendo la gestión de usuarios y la asignación de roles. No tiene acceso a recursos de otras organizaciones, en virtud del aislamiento multi-tenant.
+- _Necesidades de información_: indicadores agregados en tiempo real (ventas del día y del mes, productos con stock bajo, top de productos y tendencia de ventas) y reportes exportables que sirvan como insumo para análisis externo o para la rendición de cuentas contable.
 
 **Perfil 2 — Vendedor**
 
-- *Rol dentro del negocio*: operador de punto de venta y de atención al cliente; ejecuta la operación cotidiana del negocio en términos de transacciones e interacción con compradores.
-- *Responsabilidades funcionales*: registrar ventas multi-producto, consultar la disponibilidad de stock al momento de atender al cliente, asociar la venta a un cliente registrado y consultar el historial de compras del mismo para ofrecer un servicio personalizado.
-- *Permisos y alcance en el sistema*: lectura sobre productos, categorías y clientes; creación de ventas y de los movimientos de inventario derivados de éstas; lectura de su propio historial de ventas. No puede modificar el catálogo, eliminar registros ni administrar usuarios.
-- *Necesidades de información*: respuesta inmediata en consultas de catálogo y stock, flujo de registro de ventas optimizado para el menor número posible de pasos, y acceso rápido al historial reciente de un cliente durante la atención.
+- _Rol dentro del negocio_: operador de punto de venta y de atención al cliente; ejecuta la operación cotidiana del negocio en términos de transacciones e interacción con compradores.
+- _Responsabilidades funcionales_: registrar ventas multi-producto, consultar la disponibilidad de stock al momento de atender al cliente, asociar la venta a un cliente registrado y consultar el historial de compras del mismo para ofrecer un servicio personalizado.
+- _Permisos y alcance en el sistema_: lectura sobre productos, categorías y clientes; creación de ventas y de los movimientos de inventario derivados de éstas; lectura de su propio historial de ventas. No puede modificar el catálogo, eliminar registros ni administrar usuarios.
+- _Necesidades de información_: respuesta inmediata en consultas de catálogo y stock, flujo de registro de ventas optimizado para el menor número posible de pasos, y acceso rápido al historial reciente de un cliente durante la atención.
 
 **Perfil 3 — Visualizador**
 
-- *Rol dentro del negocio*: analista o asesor —frecuentemente externo, como un contador o consultor— que requiere visibilidad sobre la operación sin intervenir directamente en ella. Su valor agregado reside en la interpretación de los datos del negocio.
-- *Responsabilidades funcionales*: revisar indicadores de desempeño, auditar registros de ventas y movimientos de inventario, y exportar listados operativos para su análisis posterior en herramientas externas.
-- *Permisos y alcance en el sistema*: acceso de solo lectura sobre todos los recursos de la organización, incluida la capacidad de exportar a Excel los listados de inventario, ventas y clientes. No puede crear, modificar ni eliminar información, lo cual preserva la integridad de los datos cuando el perfil es ejercido por un tercero externo a la empresa.
-- *Necesidades de información*: datos consolidados, consistentes y exportables, así como acceso a series históricas que permitan el análisis de tendencias y la elaboración de reportes contables o gerenciales.
+- _Rol dentro del negocio_: analista o asesor —frecuentemente externo, como un contador o consultor— que requiere visibilidad sobre la operación sin intervenir directamente en ella. Su valor agregado reside en la interpretación de los datos del negocio.
+- _Responsabilidades funcionales_: revisar indicadores de desempeño, auditar registros de ventas y movimientos de inventario, y exportar listados operativos para su análisis posterior en herramientas externas.
+- _Permisos y alcance en el sistema_: acceso de solo lectura sobre todos los recursos de la organización, incluida la capacidad de exportar a Excel los listados de inventario, ventas y clientes. No puede crear, modificar ni eliminar información, lo cual preserva la integridad de los datos cuando el perfil es ejercido por un tercero externo a la empresa.
+- _Necesidades de información_: datos consolidados, consistentes y exportables, así como acceso a series históricas que permitan el análisis de tendencias y la elaboración de reportes contables o gerenciales.
 
 ### 3.1.3 Historias de Usuario Principales
 
 A continuación se presentan las historias de usuario más representativas por módulo. El conjunto completo se encuentra en el documento de requisitos adjunto como anexo.
 
 **Módulo de Autenticación:**
+
 - HU-001: Como administrador, quiero registrar mi empresa en la plataforma para comenzar a gestionar mis operaciones.
 - HU-002: Como usuario, quiero iniciar sesión con mi correo y contraseña para acceder a mis datos de manera segura.
 - HU-003: Como administrador, quiero crear usuarios con diferentes roles para controlar qué puede hacer cada empleado.
 
 **Módulo de Inventario:**
+
 - HU-010: Como administrador, quiero agregar productos con precio, stock y categoría para tener un catálogo organizado.
 - HU-011: Como administrador, quiero recibir alertas cuando el stock de un producto sea inferior al mínimo configurado.
 - HU-012: Como vendedor, quiero consultar el stock disponible de un producto antes de registrar una venta.
 - HU-013: Como administrador, quiero ver el historial de movimientos de un producto para entender cómo ha variado su stock.
 
 **Módulo de Ventas:**
+
 - HU-020: Como vendedor, quiero registrar una venta seleccionando múltiples productos para generar la factura automáticamente.
 - HU-021: Como vendedor, quiero buscar un cliente por nombre o cédula para asociarlo a la venta.
 - HU-022: Como administrador, quiero ver el historial de ventas filtrado por fecha y vendedor para hacer seguimiento a la gestión.
 
 **Módulo de Clientes:**
+
 - HU-030: Como administrador, quiero registrar un cliente con su información de contacto para crear una base de datos de compradores.
 - HU-031: Como administrador, quiero ver el historial de compras de un cliente para entender su comportamiento.
 
 **Módulo de Reportes:**
+
 - HU-040: Como administrador, quiero ver un dashboard con los KPIs del negocio en tiempo real para tomar decisiones informadas.
 - HU-041: Como contador o administrador, quiero exportar a Excel los listados de ventas, inventario o clientes (con los filtros aplicados) para procesarlos en herramientas externas.
 
@@ -76,7 +81,7 @@ Los requisitos funcionales se organizan por módulo. Cada requisito está identi
 #### RF-AUTH — Módulo de Autenticación y Usuarios
 
 | ID | Requisito | Prioridad |
-|----|-----------|-----------|
+|---|---|---|
 | RF-AUTH-01 | El sistema debe permitir el registro de una nueva organización con nombre, email del administrador y contraseña. | Alta |
 | RF-AUTH-02 | El sistema debe autenticar usuarios mediante email y contraseña, generando un token JWT con tiempo de expiración configurable. | Alta |
 | RF-AUTH-03 | El token JWT debe incluir el `user_id`, `organization_id` y `role` para que el backend pueda filtrar datos y verificar permisos sin consultas adicionales. | Alta |
@@ -87,7 +92,7 @@ Los requisitos funcionales se organizan por módulo. Cada requisito está identi
 #### RF-INV — Módulo de Gestión de Inventario
 
 | ID | Requisito | Prioridad |
-|----|-----------|-----------|
+|---|---|---|
 | RF-INV-01 | El sistema debe permitir crear, editar, desactivar y consultar productos con los campos: nombre, SKU, categoría, precio de costo, precio de venta, stock actual, stock mínimo, stock máximo e imagen. | Alta |
 | RF-INV-02 | El sistema debe descontar automáticamente el stock de los productos al registrar una venta. | Alta |
 | RF-INV-03 | El sistema debe generar una alerta visible en el dashboard cuando el stock de un producto sea igual o inferior al stock mínimo configurado. | Alta |
@@ -98,7 +103,7 @@ Los requisitos funcionales se organizan por módulo. Cada requisito está identi
 #### RF-SAL — Módulo de Gestión de Ventas
 
 | ID | Requisito | Prioridad |
-|----|-----------|-----------|
+|---|---|---|
 | RF-SAL-01 | El sistema debe permitir registrar una venta seleccionando uno o más productos, con cantidad y precio unitario editable. | Alta |
 | RF-SAL-02 | El sistema debe calcular automáticamente el total de la venta, incluyendo descuentos si aplica. | Alta |
 | RF-SAL-03 | El sistema debe generar un número de factura único y secuencial por organización. | Alta |
@@ -110,7 +115,7 @@ Los requisitos funcionales se organizan por módulo. Cada requisito está identi
 #### RF-CUS — Módulo de Gestión de Clientes
 
 | ID | Requisito | Prioridad |
-|----|-----------|-----------|
+|---|---|---|
 | RF-CUS-01 | El sistema debe permitir registrar clientes con: nombre, email, teléfono y documento de identidad. | Alta |
 | RF-CUS-02 | El sistema debe mostrar el historial de compras de cada cliente con totales y fechas. | Alta |
 | RF-CUS-03 | El sistema debe calcular y mostrar métricas por cliente: total comprado, número de compras, frecuencia de compra. | Media |
@@ -118,7 +123,7 @@ Los requisitos funcionales se organizan por módulo. Cada requisito está identi
 #### RF-REP — Módulo de Reportes y Dashboard
 
 | ID | Requisito | Prioridad |
-|----|-----------|-----------|
+|---|---|---|
 | RF-REP-01 | El dashboard debe mostrar en tiempo real: ventas del día, ventas del mes, productos con stock bajo y top 5 productos más vendidos. | Alta |
 | RF-REP-02 | El dashboard debe incluir un gráfico de línea de ventas de los últimos 7 días. | Alta |
 | RF-REP-03 | El sistema debe generar reportes de ventas por período (diario, semanal, mensual). | Alta |
@@ -128,7 +133,7 @@ Los requisitos funcionales se organizan por módulo. Cada requisito está identi
 ### 3.2.2 Requisitos No Funcionales
 
 | ID | Categoría | Requisito |
-|----|-----------|-----------|
+|---|---|---|
 | RNF-01 | Rendimiento | El 95% de las respuestas de la API deben completarse en menos de 500ms bajo carga normal (hasta 50 usuarios concurrentes). |
 | RNF-02 | Disponibilidad | El sistema debe garantizar una disponibilidad mínima del 95% mensual. |
 | RNF-03 | Seguridad | Las contraseñas deben almacenarse con hash bcrypt (factor de coste ≥ 12). |
@@ -148,7 +153,7 @@ Los requisitos funcionales se organizan por módulo. Cada requisito está identi
 Las principales decisiones de diseño arquitectónico del sistema se tomaron considerando las restricciones del proyecto (equipo de 3 personas, plazo de 7 meses, presupuesto acotado) y los requisitos no funcionales de escalabilidad, seguridad y mantenibilidad.
 
 | Decisión | Alternativa considerada | Justificación |
-|----------|------------------------|---------------|
+|---|---|---|
 | SPA (React) | Server-side rendering (Next.js) | Mayor interactividad sin recargas; la naturaleza de la aplicación (dashboard, tablas, formularios) se beneficia de la reactividad de un SPA. |
 | REST API | GraphQL | Menor curva de aprendizaje, amplio soporte de herramientas, adecuado para el número de entidades del sistema. |
 | Multi-tenancy por campo discriminador | BD por tenant / esquema por tenant | Menor complejidad operativa y menor costo de infraestructura; adecuado para el número de tenants esperado en el MVP. |
@@ -161,7 +166,6 @@ Las principales decisiones de diseño arquitectónico del sistema se tomaron con
 El sistema se organiza en tres componentes principales desplegados de forma independiente:
 
 ![Vista de Componentes de Alto Nivel](images/Vista%20de%20Componentes%20de%20Alto%20Nivel.png)
-
 
 ### 3.3.3 Arquitectura del Backend en Capas
 
@@ -188,7 +192,7 @@ Este enfoque garantiza que, incluso si un token JWT es comprometido, el atacante
 
 A continuación se describen, en términos funcionales, los dos flujos transversales más representativos del sistema. Estos flujos articulan las responsabilidades del cliente, del backend y de la base de datos, y permiten ilustrar la interacción entre los componentes presentados en las secciones anteriores.
 
-**Flujo de autenticación.** El proceso se inicia cuando el usuario suministra sus credenciales —correo electrónico y contraseña— en la interfaz del cliente. El cliente envía estas credenciales al endpoint de autenticación del backend mediante una solicitud cifrada por TLS. El backend localiza al usuario en la base de datos, verifica la contraseña contra el hash almacenado y, en caso de éxito, emite un JSON Web Token firmado que incorpora como claims el identificador del usuario, el identificador de la organización a la que pertenece, su rol asignado y la marca de expiración. El cliente recibe el token, lo conserva en una capa de estado en memoria del navegador y lo incluye en la cabecera *Authorization* de todas las solicitudes posteriores, lo cual permite al backend autorizar cada operación sin necesidad de mantener sesiones en servidor.
+**Flujo de autenticación.** El proceso se inicia cuando el usuario suministra sus credenciales —correo electrónico y contraseña— en la interfaz del cliente. El cliente envía estas credenciales al endpoint de autenticación del backend mediante una solicitud cifrada por TLS. El backend localiza al usuario en la base de datos, verifica la contraseña contra el hash almacenado y, en caso de éxito, emite un JSON Web Token firmado que incorpora como claims el identificador del usuario, el identificador de la organización a la que pertenece, su rol asignado y la marca de expiración. El cliente recibe el token, lo conserva en una capa de estado en memoria del navegador y lo incluye en la cabecera _Authorization_ de todas las solicitudes posteriores, lo cual permite al backend autorizar cada operación sin necesidad de mantener sesiones en servidor.
 
 **Flujo de registro de una venta.** El usuario con rol de vendedor selecciona los productos a facturar, sus cantidades y, opcionalmente, el cliente asociado a la transacción. Al confirmar la operación, el cliente envía la información al backend, que ejecuta la lógica de negocio dentro de una transacción atómica para garantizar la consistencia: en primer lugar, verifica que exista stock suficiente para cada uno de los productos solicitados; a continuación, calcula los totales aplicando los descuentos y demás reglas comerciales pertinentes; luego, genera un número de factura secuencial dentro del ámbito de la organización. Acto seguido, persiste el registro de la venta junto con sus ítems detallados, descuenta el stock de cada producto y registra los movimientos de inventario correspondientes para conservar la trazabilidad. Finalmente, evalúa si algún producto ha quedado por debajo de su nivel mínimo configurado y, de ser así, dispara la alerta correspondiente. La operación concluye con la confirmación al cliente, que muestra al usuario el número de factura asignado y la información resumida de la transacción.
 
@@ -217,7 +221,7 @@ El modelo de datos se organiza alrededor de las siguientes entidades:
 ### 3.4.3 Tabla: `organizations`
 
 | Columna | Tipo | Descripción |
-|---------|------|-------------|
+|---|---|---|
 | id | UUID PK | Identificador único |
 | name | VARCHAR(255) NOT NULL | Nombre de la organización |
 | slug | VARCHAR(100) UNIQUE | Identificador en URL |
@@ -227,7 +231,7 @@ El modelo de datos se organiza alrededor de las siguientes entidades:
 ### 3.4.4 Tabla: `users`
 
 | Columna | Tipo | Descripción |
-|---------|------|-------------|
+|---|---|---|
 | id | UUID PK | Identificador único |
 | organization_id | UUID FK | Organización a la que pertenece |
 | role | ENUM | admin / seller / viewer |
@@ -240,7 +244,7 @@ El modelo de datos se organiza alrededor de las siguientes entidades:
 ### 3.4.5 Tabla: `products`
 
 | Columna | Tipo | Descripción |
-|---------|------|-------------|
+|---|---|---|
 | id | UUID PK | Identificador único |
 | organization_id | UUID FK | Multi-tenancy |
 | category_id | UUID FK | Categoría del producto |
@@ -256,7 +260,7 @@ El modelo de datos se organiza alrededor de las siguientes entidades:
 ### 3.4.6 Tabla: `sales`
 
 | Columna | Tipo | Descripción |
-|---------|------|-------------|
+|---|---|---|
 | id | UUID PK | Identificador único |
 | organization_id | UUID FK | Multi-tenancy |
 | invoice_number | VARCHAR(50) | Número único de factura |
