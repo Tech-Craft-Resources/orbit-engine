@@ -54,7 +54,7 @@ Se establecieron las siguientes prácticas de calidad desde el inicio del proyec
 
 ## 4.2 Fases y Sprints de Desarrollo
 
-El proyecto se estructuró en seis fases que cubrieron el período comprendido entre octubre de 2025 y la primera semana de mayo de 2026.
+El proyecto se estructuró en seis fases que cubrieron el período comprendido entre octubre de 2025 y mediados de mayo de 2026.
 
 ### Fase 1 — Documentación e Investigación (octubre 2025, semanas 1–3)
 
@@ -76,62 +76,62 @@ Con el backlog definido, se realizó el diseño técnico del sistema:
 
 **Entregables**: diseño de base de datos completo, mockups aprobados, repositorio inicializado con CI básico y entorno local reproducible vía Docker Compose.
 
-### Fase 3 — Desarrollo Core (noviembre 2025 – primera semana de marzo 2026, sprints 1–8)
+### Fase 3 — Desarrollo Core (noviembre 2025 – segunda semana de abril 2026, sprints 1–8)
 
-Esta es la fase de mayor volumen de desarrollo, donde se implementaron y consolidaron todos los módulos funcionales del sistema. Se extendió hasta principios de marzo de 2026 para permitir cerrar el alcance funcional completo antes de pasar a la fase de estabilización.
+Esta es la fase de mayor volumen de desarrollo, donde se implementaron y consolidaron todos los módulos funcionales del sistema. Se extendió desde la primera semana de noviembre de 2025 hasta la segunda semana de abril de 2026 para permitir cerrar el alcance funcional completo antes de pasar a la fase de estabilización. Los ocho sprints se distribuyeron en duraciones de **dos o tres semanas** según el tamaño de cada bloque de funcionalidad y, entre los Sprints 3 y 4, se respetó un receso académico de dos semanas (22 de diciembre de 2025 – 4 de enero de 2026) en el que el equipo no ejecutó iteraciones formales.
 
 #### Sprint 1: Autenticación y Setup Base (3–14 noviembre 2025 | 18 SP)
 - Backend: modelos `Organization` y `User`, endpoints `POST /organizations/signup` (alta de organización con su usuario administrador) y `POST /login/access-token`, generación y validación de JWT con `sub`, `organization_id`, `role` y `exp`, dependencia `get_current_user` y `require_role` para control de acceso por rol.
 - Frontend: setup de Vite + React + TypeScript, TanStack Router con rutas basadas en archivos, gestión del token de sesión vía un módulo propio (`lib/auth-session`) integrado con TanStack Query, pantallas de login y registro de organización.
 - Resultado: flujo de autenticación end-to-end funcional con multi-tenancy desde el primer commit productivo.
 
-#### Sprint 2: Inventario Core — CRUD de Productos (17–28 noviembre 2025 | 17 SP)
+#### Sprint 2: Inventario Core — CRUD de Productos (17 noviembre – 5 diciembre 2025 | 17 SP)
 - Backend: modelos `Product` y `Category`, CRUD completo con paginación, búsqueda y filtros, soft delete (`deleted_at`).
 - Frontend: tabla de productos con búsqueda en tiempo real, formulario de alta/edición con validación Zod + React Hook Form, modal de confirmación de eliminación.
 - Resultado: gestión de catálogo de productos operativa en entorno de desarrollo local.
 
-#### Sprint 3: Inventario Avanzado (1–12 diciembre 2025 | 16 SP)
+#### Sprint 3: Inventario Avanzado (8–19 diciembre 2025 | 16 SP)
 - Backend: modelo `InventoryMovement` con tipos `sale`, `purchase`, `adjustment` y `return`; endpoint `GET /products/low-stock` para listar productos por debajo del mínimo; endpoint `POST /inventory-movements/` para movimientos manuales (ajuste, compra, devolución).
 - Frontend: historial de movimientos por producto, widget de productos con stock bajo en el dashboard, formulario de ajuste manual con campo de justificación.
 - Resultado: trazabilidad completa de movimientos de stock.
 
-#### Sprint 4: Módulo de Ventas (15–26 diciembre 2025 | 20 SP)
+#### Sprint 4: Módulo de Ventas (5–23 enero 2026 | 20 SP)
 - Backend: modelos `Sale` y `SaleItem`, lógica de descuento automático de stock al registrar venta, generación de número de factura secuencial por organización, endpoint `POST /sales/{sale_id}/cancel` para anular ventas con reversión de stock vía movimientos de tipo `return`.
 - Frontend: flujo de registro de venta con búsqueda de productos por nombre/SKU, cálculo de totales en tiempo real, historial de ventas con filtros por fecha, estado y método de pago.
 - Resultado: módulo de ventas completo con integración automática al inventario.
 
-#### Sprint 5: Módulo de Clientes (5–16 enero 2026 | 15 SP)
+#### Sprint 5: Módulo de Clientes (26 enero – 13 febrero 2026 | 15 SP)
 - Backend: modelo `Customer`, CRUD de clientes, asociación opcional de ventas a clientes y actualización automática de métricas (total comprado, número de compras, ticket promedio) al registrar o cancelar una venta.
 - Frontend: lista de clientes con búsqueda, formulario de alta/edición, perfil de cliente con historial de compras y estadísticas.
 - Resultado: base de datos de clientes con análisis de comportamiento.
 
-#### Sprint 6: Reportes y Dashboard (19–30 enero 2026 | 18 SP)
+#### Sprint 6: Reportes y Dashboard (16 febrero – 6 marzo 2026 | 18 SP)
 - Backend: endpoint `GET /dashboard/stats` con KPIs agregados (ventas del día, ventas del mes, conteo de productos con stock bajo, ticket promedio, top productos, ventas por día) y endpoint `POST /dashboard/export-excel` que genera archivos `.xlsx` para los datasets de inventario, clientes y ventas construyendo el formato Office Open XML manualmente sin dependencias externas.
 - Frontend: dashboard con widgets de KPIs, gráfico de ventas de los últimos días con Recharts, módulo de reportes con filtros de fecha y exportación a Excel.
 - Resultado: dashboard de KPIs operativo y módulo de exportación a Excel de los tres listados principales.
 
-#### Sprint 7: Roles, Permisos y Refinamiento Funcional (2–13 febrero 2026 | 16 SP)
+#### Sprint 7: Roles, Permisos y Refinamiento Funcional (9–27 marzo 2026 | 16 SP)
 - Backend: endpoints `GET /roles/` y consolidación del rol `contador` además de `admin`, `seller` y `viewer`; ajustes de permisos en endpoints sensibles (exportación, gestión de usuarios, cancelación de ventas) usando la dependencia `require_role`.
 - Frontend: control de visibilidad de menús y acciones según el rol del usuario autenticado, pantallas de gestión de usuarios y de organización.
 - Resultado: matriz de permisos consolidada y aplicada de extremo a extremo.
 
-#### Sprint 8: Cierre Funcional y Pulido (16 febrero – 6 marzo 2026 | 17 SP)
+#### Sprint 8: Cierre Funcional y Pulido (30 marzo – 10 abril 2026 | 17 SP)
 - Backend: cierre de los últimos endpoints pendientes del backlog, ajustes de filtros y validaciones, mejoras en mensajes de error.
 - Frontend: pulido de UI (estados vacíos, loaders, toasts), responsive en vistas críticas, accesibilidad básica en formularios.
 - Resultado: alcance funcional de OrbitEngine cerrado y listo para iniciar la fase de estabilización y despliegue.
 
-### Fase 4 — Estabilización, Despliegue y Refinamiento (mediados de marzo – principios de abril 2026, sprints 9–10)
+### Fase 4 — Estabilización, Despliegue y Refinamiento (mediados de abril – última semana de abril 2026, sprints 9–10)
 
-Con el alcance funcional cerrado al final de la Fase 3, esta fase se enfocó en llevar el sistema a producción y dejarlo listo para usuarios externos. Es en este punto cuando se aprovisionó por primera vez la infraestructura de despliegue: hasta ese momento OrbitEngine se ejecutaba únicamente en entornos de desarrollo local con Docker Compose.
+Con el alcance funcional cerrado al final de la Fase 3, esta fase se enfocó en llevar el sistema a producción y dejarlo listo para usuarios externos. Es en este punto cuando se aprovisionó por primera vez la infraestructura de despliegue: hasta ese momento OrbitEngine se ejecutaba únicamente en entornos de desarrollo local con Docker Compose. Por la duración total de la fase, los Sprints 9 y 10 se planificaron como iteraciones cortas de una semana cada una.
 
-#### Sprint 9: Pruebas de Carga, Rendimiento y Refinamiento Interno (9–20 marzo 2026 | 16 SP)
+#### Sprint 9: Pruebas de Carga, Rendimiento y Refinamiento Interno (13–17 abril 2026 | 16 SP)
 - Diseño y ejecución de pruebas de carga con Locust contra una instancia de pre-producción, alternando entre escenarios de 8 y 200 usuarios concurrentes con distintos perfiles de interacción.
 - Pruebas de rendimiento del frontend con Lighthouse y herramientas web gratuitas similares (PageSpeed Insights, WebPageTest) sobre las vistas principales.
 - Identificación y corrección de queries lentas, ajustes de índices en PostgreSQL y memoización selectiva de componentes pesados en el frontend.
 - Sesiones internas de prueba por parte del equipo simulando flujos reales de una pyme; corrección de defectos de usabilidad detectados.
 - Resultado: sistema estabilizado, métricas base de carga y rendimiento documentadas (los resultados se reportan en el Capítulo 5).
 
-#### Sprint 10: Despliegue en Producción y Validación Interna (23 marzo – 3 abril 2026 | 18 SP)
+#### Sprint 10: Despliegue en Producción y Validación Interna (20–24 abril 2026 | 18 SP)
 - Aprovisionamiento de la infraestructura productiva: backend y base de datos PostgreSQL en Railway, frontend en Vercel.
 - Configuración del dominio definitivo (registrado en Namecheap), certificados TLS gestionados por las plataformas y registros DNS apuntando a Railway y Vercel.
 - Configuración del pipeline de despliegue continuo (push a `main` → despliegue automático en Railway y Vercel) y de las variables de entorno de producción.
@@ -139,13 +139,13 @@ Con el alcance funcional cerrado al final de la Fase 3, esta fase se enfocó en 
 - Preparación del material de onboarding para las empresas piloto: guías de inicio rápido, plantillas de carga de datos y tutoriales.
 - Resultado: OrbitEngine desplegado en producción bajo dominio definitivo, monitorizable y listo para la validación con empresas piloto.
 
-### Fase 5 — Validación con Empresas Piloto (abril 2026, semanas 2–3)
+### Fase 5 — Validación con Empresas Piloto (última semana de abril – primera semana de mayo 2026)
 
-Durante dos semanas (aproximadamente del 6 al 17 de abril de 2026), el sistema en producción se puso a disposición de las empresas piloto seleccionadas para su uso real, con sesiones de capacitación, acompañamiento y recolección de retroalimentación. Esta fase se detalla en el Capítulo 5.
+Durante dos semanas (aproximadamente del 27 de abril al 8 de mayo de 2026), el sistema en producción se puso a disposición de las empresas piloto seleccionadas para su uso real, con sesiones de capacitación, acompañamiento y recolección de retroalimentación. Esta fase se detalla en el Capítulo 5.
 
-### Fase 6 — Documentación Final y Entrega (última semana de abril – primera semana de mayo 2026)
+### Fase 6 — Documentación Final y Entrega (segunda semana de mayo 2026)
 
-Consolidación del informe de grado, preparación de la presentación y defensa del proyecto, cubriendo desde la última semana de abril hasta la primera semana de mayo de 2026.
+Consolidación del informe de grado, preparación de la presentación y defensa del proyecto durante la segunda semana de mayo de 2026 (aproximadamente del 11 al 15 de mayo).
 
 ---
 

@@ -29,7 +29,7 @@
 | [Capítulo 2 – Marco de Referencia](./informe-final/capitulo-2-marco-referencia.md) | Estado del arte, marco teórico, tecnologías |
 | [Capítulo 3 – Análisis y Diseño](./informe-final/capitulo-3-analisis-diseno.md) | Requisitos, arquitectura, diseño de BD y UI |
 | [Capítulo 4 – Desarrollo](./informe-final/capitulo-4-desarrollo.md) | Implementación por módulos, decisiones técnicas |
-| [Capítulo 5 – Resultados](./informe-final/capitulo-5-resultados.md) | Pruebas, métricas, validación con usuarios |
+| [Capítulo 5 – Resultados Técnicos](./informe-final/capitulo-5-resultados-tecnicos.md) | Pruebas de carga (Locust) y de rendimiento web (Lighthouse, PageSpeed Insights, WebPageTest) |
 | [Capítulo 6 – Conclusiones](./informe-final/capitulo-6-conclusiones.md) | Conclusiones, trabajo futuro |
 | [Anexo A – Manual de Usuario](./informe-final/anexo-a-manual-usuario.md) | Guía de uso de la plataforma |
 | [Anexo B – Manual de Despliegue](./informe-final/anexo-b-manual-despliegue.md) | Instrucciones de instalación y configuración |

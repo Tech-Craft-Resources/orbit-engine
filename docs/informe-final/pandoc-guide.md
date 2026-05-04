@@ -133,7 +133,7 @@ pandoc \
   capitulo-2-marco-referencia.md \
   capitulo-3-analisis-diseno.md \
   capitulo-4-desarrollo.md \
-  capitulo-5-resultados.md \
+  capitulo-5-resultados-tecnicos.md \
   capitulo-6-conclusiones.md \
   referencias.md \
   anexo-a-manual-usuario.md \
@@ -182,7 +182,7 @@ pandoc `
   "$inputDir\capitulo-2-marco-referencia.md" `
   "$inputDir\capitulo-3-analisis-diseno.md" `
   "$inputDir\capitulo-4-desarrollo.md" `
-  "$inputDir\capitulo-5-resultados.md" `
+  "$inputDir\capitulo-5-resultados-tecnicos.md" `
   "$inputDir\capitulo-6-conclusiones.md" `
   "$inputDir\referencias.md" `
   "$inputDir\anexo-a-manual-usuario.md" `
