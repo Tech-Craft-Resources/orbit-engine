@@ -134,7 +134,8 @@ pandoc \
   capitulo-3-analisis-diseno.md \
   capitulo-4-desarrollo.md \
   capitulo-5-resultados-tecnicos.md \
-  capitulo-6-conclusiones.md \
+  capitulo-6-resultados-usuarios.md \
+  capitulo-7-conclusiones.md \
   referencias.md \
   anexo-a-manual-usuario.md \
   anexo-b-manual-despliegue.md \
@@ -183,7 +184,8 @@ pandoc `
   "$inputDir\capitulo-3-analisis-diseno.md" `
   "$inputDir\capitulo-4-desarrollo.md" `
   "$inputDir\capitulo-5-resultados-tecnicos.md" `
-  "$inputDir\capitulo-6-conclusiones.md" `
+  "$inputDir\capitulo-6-resultados-usuarios.md" `
+  "$inputDir\capitulo-7-conclusiones.md" `
   "$inputDir\referencias.md" `
   "$inputDir\anexo-a-manual-usuario.md" `
   "$inputDir\anexo-b-manual-despliegue.md" `

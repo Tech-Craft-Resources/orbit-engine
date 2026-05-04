@@ -16,20 +16,21 @@
 Este directorio contiene el informe de grado completo de OrbitEngine, organizado en archivos Markdown por capítulo para facilitar la edición colaborativa. Para la versión final de entrega, los archivos deben consolidarse en un único documento Word/PDF siguiendo la plantilla de la universidad.
 
 
-| Archivo                                                              | Contenido                                                                                                             | Estado                                                      |
-| -------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------- |
-| [00-preliminares.md](00-preliminares.md)                             | Portada, página de aprobación, resumen (ES) y abstract (EN)                                                           | ✅ Borrador completo                                         |
-| [capitulo-1-introduccion.md](capitulo-1-introduccion.md)             | Planteamiento del problema, justificación, objetivos, alcance, metodología                                            | ✅ Borrador completo                                         |
-| [capitulo-2-marco-referencia.md](capitulo-2-marco-referencia.md)     | Marco conceptual, estado del arte, marco tecnológico                                                                  | ✅ Borrador completo                                         |
-| [capitulo-3-analisis-diseno.md](capitulo-3-analisis-diseno.md)       | Requisitos, arquitectura, modelo de datos, diseño de UI                                                               | ✅ Borrador completo                                         |
-| [capitulo-4-desarrollo.md](capitulo-4-desarrollo.md)                 | Metodología ágil, sprints, implementación, pruebas, CI/CD                                                             | ✅ Borrador completo                                         |
-| [capitulo-5-resultados-tecnicos.md](capitulo-5-resultados-tecnicos.md) | **Resultados Técnicos**: pruebas de carga (Locust) y de rendimiento web (Lighthouse, PageSpeed Insights, WebPageTest) | ✅ Borrador completo                                         |
-| *(pendiente)* Capítulo 6 — Resultados de Usuarios                    | Eficiencia operativa, completitud de tareas, encuesta SUS, validación de hipótesis con empresas piloto                | 🟡 Por redactar (capítulo nuevo)                            |
-| [capitulo-6-conclusiones.md](capitulo-6-conclusiones.md)             | Conclusiones por objetivo, limitaciones, trabajo futuro                                                               | ⚠️ Requiere datos del nuevo Cap. 6 (Resultados de Usuarios) |
-| [referencias.md](referencias.md)                                     | Referencias bibliográficas en formato APA 7.ª edición                                                                 | ✅ Borrador completo                                         |
-| [anexo-a-manual-usuario.md](anexo-a-manual-usuario.md)               | Manual de uso para usuarios finales (no técnico)                                                                      | ✅ Borrador completo                                         |
-| [anexo-b-manual-despliegue.md](anexo-b-manual-despliegue.md)         | Guía técnica de instalación y despliegue                                                                              | ✅ Borrador completo                                         |
-| [anexo-c-documentacion-tecnica.md](anexo-c-documentacion-tecnica.md) | Documentación técnica profesional: API, modelos, variables de entorno, convenciones                                   | ✅ Borrador completo                                         |
+| Archivo                                                                          | Contenido                                                                                                             | Estado                                                      |
+| -------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------- |
+| [00-preliminares.md](00-preliminares.md)                                         | Portada, página de aprobación, resumen (ES) y abstract (EN)                                                           | ✅ Borrador completo                                         |
+| [capitulo-1-introduccion.md](capitulo-1-introduccion.md)                         | Planteamiento del problema, justificación, objetivos, alcance, metodología                                            | ✅ Borrador completo                                         |
+| [capitulo-2-marco-referencia.md](capitulo-2-marco-referencia.md)                 | Marco conceptual, estado del arte, marco tecnológico                                                                  | ✅ Borrador completo                                         |
+| [capitulo-3-analisis-diseno.md](capitulo-3-analisis-diseno.md)                   | Requisitos, arquitectura, modelo de datos, diseño de UI                                                               | ✅ Borrador completo                                         |
+| [capitulo-4-desarrollo.md](capitulo-4-desarrollo.md)                             | Metodología ágil, sprints, implementación, pruebas, CI/CD                                                             | ✅ Borrador completo                                         |
+| [capitulo-5-resultados-tecnicos.md](capitulo-5-resultados-tecnicos.md)           | **Resultados Técnicos**: pruebas de carga (Locust) y de rendimiento web (Lighthouse, PageSpeed Insights, WebPageTest) | ✅ Borrador completo                                         |
+| [capitulo-6-resultados-usuarios.md](capitulo-6-resultados-usuarios.md)           | **Resultados de Usuarios**: eficiencia operativa pre/post, SUS, NPS, CSAT, telemetría, entrevistas, validación de hipótesis (N = 3 empresas reales) | ✅ Borrador completo (placeholders pendientes de datos reales) |
+| [capitulo-7-conclusiones.md](capitulo-7-conclusiones.md)                         | Conclusiones por objetivo, conclusión general, validación de hipótesis, limitaciones, recomendaciones de optimización, trabajo futuro | ✅ Borrador completo (sección 7.5.4 y 7.1 obj. 5 pendientes de datos del Cap. 6) |
+| [referencias.md](referencias.md)                                                 | Referencias bibliográficas en formato APA 7.ª edición                                                                 | ✅ Borrador completo                                         |
+| [anexo-a-manual-usuario.md](anexo-a-manual-usuario.md)                           | Manual de uso para usuarios finales (no técnico)                                                                      | ✅ Borrador completo                                         |
+| [anexo-b-manual-despliegue.md](anexo-b-manual-despliegue.md)                     | Guía técnica de instalación y despliegue                                                                              | ✅ Borrador completo                                         |
+| [anexo-c-documentacion-tecnica.md](anexo-c-documentacion-tecnica.md)             | Documentación técnica profesional: API, modelos, variables de entorno, convenciones                                   | ✅ Borrador completo                                         |
+| [recomendaciones.md](recomendaciones.md)                                         | **Guía interna**: cómo aplicar SUS, NPS, CSAT, pruebas de tareas, entrevistas y extraer telemetría para completar el Cap. 6 | 📋 Documento de apoyo (no es capítulo del informe)          |
 
 
 ---
@@ -80,15 +81,26 @@ Capítulo 5 — Resultados Técnicos
   5.4 Síntesis de Cumplimiento de Requisitos No Funcionales
   5.5 Interpretación y Limitaciones
 
-Capítulo 6 — Resultados de Usuarios  [pendiente — se redactará más adelante]
-  Eficiencia operativa, completitud de tareas, encuesta SUS y
-  validación de hipótesis con empresas piloto.
+Capítulo 6 — Resultados de Usuarios
+  6.1  Marco Metodológico de la Validación con Usuarios
+  6.2  Caracterización de las Empresas Piloto
+  6.3  Eficiencia Operativa (pre/post)
+  6.4  Pruebas de Tareas Guiadas
+  6.5  Encuesta de Usabilidad — SUS
+  6.6  Satisfacción Específica (NPS y CSAT por módulo)
+  6.7  Telemetría de Uso en Producción
+  6.8  Hallazgos Cualitativos de las Entrevistas
+  6.9  Validación de Hipótesis
+  6.10 Limitaciones de la Validación con Usuarios
 
-Capítulo (final) — Conclusiones y Trabajo Futuro
-  Conclusiones por Objetivo
-  Conclusión General
-  Limitaciones del Proyecto
-  Trabajo Futuro
+Capítulo 7 — Conclusiones y Trabajo Futuro
+  7.1 Conclusiones por Objetivo
+  7.2 Conclusión General
+  7.3 Cumplimiento de Hipótesis
+  7.4 Limitaciones del Proyecto
+  7.5 Recomendaciones de Optimización
+  7.6 Trabajo Futuro
+  7.7 Reflexión Final
 
 Referencias Bibliográficas
 
@@ -110,21 +122,24 @@ Los siguientes elementos requieren información real que no puede generarse auto
 - Síntesis de cumplimiento de RNF-01, RNF-02, RNF-07 y RNF-09
 - **Pendiente menor**: registrar los datos formales de uptime mensual (RNF-02) desde el panel de Railway / Vercel cuando se cierre el período de medición
 
-### Capítulo 6 (Resultados de Usuarios) — Por redactar
+### Capítulo 6 (Resultados de Usuarios) — Borrador completo, datos pendientes
 
-Capítulo nuevo, separado del Cap. 5 técnico. Requiere los siguientes insumos:
+El borrador estructural está redactado con placeholders. Para completarlo se requieren los siguientes datos reales (ver `recomendaciones.md` para el protocolo de recolección):
 
-- Datos de las empresas piloto (nombre, sector, número de empleados)
-- Tiempos medidos de tareas administrativas antes/después de la implementación
-- Puntajes de la encuesta SUS (System Usability Scale) por usuario
-- Feedback cualitativo de las entrevistas de cierre
-- Validación de las hipótesis del proyecto con base en los datos anteriores
+- Caracterización de las tres empresas piloto: Frost Bitez, Miss Peggy y Empresa Placeholder (sector, empleados, herramientas previas)
+- Tiempos pre/post para las cuatro tareas administrativas (por empresa y usuario)
+- Auditoría de inventario pre/post (por empresa)
+- Resultados de las pruebas de tareas guiadas (por usuario y tarea)
+- Respuestas SUS crudas (10 ítems Likert 1–5 por usuario)
+- Respuestas NPS (0–10) y CSAT por módulo (1–5) por usuario
+- Datos de telemetría extraídos de la BD de producción (rango: 27 abr – 8 may 2026)
+- Resúmenes o transcripciones de las entrevistas semiestructuradas de cierre
+- Nombre definitivo de Empresa Placeholder
 
-### Capítulo de Conclusiones — Requiere Cap. 6 (Resultados de Usuarios) completo
+### Capítulo 7 (Conclusiones y Trabajo Futuro) — Borrador completo, dos puntos pendientes
 
-- Completar las conclusiones por objetivo con los resultados de usuarios
-- Trasladar a este capítulo las recomendaciones de optimización derivadas del Cap. 5 (paginación de `/sales/`, caché de `/dashboard/stats`, optimización de activos del frontend, plan de escalado horizontal)
-- Ajustar la conclusión general en función de los resultados obtenidos
+- Sección 7.1 Objetivo 5: completar con los valores reales del Cap. 6 (reducción de tiempos, tasa de error, score SUS)
+- Sección 7.5.4: completar con las sugerencias funcionales identificadas en las entrevistas del Cap. 6
 
 ### Portada y páginas iniciales
 
