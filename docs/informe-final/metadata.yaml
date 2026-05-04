@@ -1,0 +1,115 @@
+---
+# ─── METADATOS DEL DOCUMENTO ────────────────────────────────────────────────
+title: >-
+  OrbitEngine: Desarrollo e Implementación de una Plataforma SaaS Multi-Tenant
+  para la Gestión Integral de Procesos Internos en Pequeñas y Medianas Empresas
+subtitle: "Proyecto de Grado"
+author:
+  - "Nicolás Rodríguez Forero"
+  - "Daniel Velasco González"
+  - "Fabián Rincón Suárez"
+date: "Abril de 2026"
+lang: es-CO
+
+# ─── TIPOGRAFÍA Y DISEÑO ────────────────────────────────────────────────────
+documentclass: report
+fontsize: 12pt
+linestretch: 1.5
+
+geometry:
+  - top=3cm
+  - bottom=2.5cm
+  - left=3cm
+  - right=2.5cm
+  - bindingoffset=0.5cm
+
+mainfont: "Times New Roman"
+sansfont: "Arial"
+monofont: "Consolas"
+
+# ─── TABLA DE CONTENIDOS ────────────────────────────────────────────────────
+toc: true
+toc-depth: 3
+lof: false
+lot: false
+numbersections: false
+
+# ─── ENLACES ────────────────────────────────────────────────────────────────
+colorlinks: true
+linkcolor: "black"
+urlcolor: "blue"
+citecolor: "black"
+
+# ─── CONFIGURACIÓN LATEX ────────────────────────────────────────────────────
+header-includes:
+  # Portada académica personalizada (reemplaza \maketitle automático)
+  - \renewcommand{\maketitle}{}
+  - |
+    \AtBeginDocument{
+      \begin{titlepage}
+        \centering
+        \vspace*{1.5cm}
+        {\large\bfseries Universidad Sergio Arboleda\par}
+        \vspace{0.3cm}
+        {\normalsize Escuela de Ciencias Exactas e Ingeniería\par}
+        {\normalsize Pregrado en Ciencias de la Computación e Inteligencia Artificial\par}
+        \vspace{2.5cm}
+        {\Huge\bfseries OrbitEngine\par}
+        \vspace{0.8cm}
+        {\large Desarrollo e Implementación de una Plataforma SaaS Multi-Tenant\par
+        para la Gestión Integral de Procesos Internos\par
+        en Pequeñas y Medianas Empresas\par}
+        \vspace{2cm}
+        {\normalsize\bfseries Autores\par}
+        \vspace{0.4cm}
+        {\normalsize
+          Nicolás Rodríguez Forero\par
+          Daniel Velasco González\par
+          Fabián Rincón Suárez\par
+        }
+        \vspace{1.5cm}
+        {\normalsize\bfseries Semillero de Software como Innovación\par}
+        \vspace{0.4cm}
+        {\normalsize
+          Directores:\par
+          Juan Pablo Ospina López\par
+          Camilo Enrique Rodríguez Torres\par
+        }
+        \vfill
+        {\normalsize Bogotá, Colombia --- Abril de 2026\par}
+      \end{titlepage}
+      \setcounter{page}{1}
+    }
+
+  # Encabezados y pie de página
+  - \usepackage{fancyhdr}
+  - \pagestyle{fancy}
+  - \fancyhf{}
+  - \fancyhead[R]{\small OrbitEngine}
+  - \fancyfoot[C]{\thepage}
+  - \renewcommand{\headrulewidth}{0.4pt}
+
+  # Cadenas en español
+  - \renewcommand{\contentsname}{Tabla de Contenidos}
+  - \renewcommand{\listfigurename}{Lista de Figuras}
+  - \renewcommand{\listtablename}{Lista de Tablas}
+  - \renewcommand{\figurename}{Figura}
+  - \renewcommand{\tablename}{Tabla}
+
+  # Bloques de código con salto de línea automático
+  - \usepackage{fvextra}
+  - \DefineVerbatimEnvironment{Highlighting}{Verbatim}{breaklines,breakanywhere,commandchars=\\\{\}}
+
+  # Soporte para tablas largas y formateadas
+  - \usepackage{longtable}
+  - \usepackage{booktabs}
+
+  # Tablas anchas: fuente más pequeña, menos padding y menos espacio entre filas
+  - \usepackage{etoolbox}
+  - \AtBeginEnvironment{longtable}{\footnotesize\setlength{\tabcolsep}{3pt}\renewcommand{\arraystretch}{0.95}}
+
+  # Carácter ⋮ (U+22EE, elipsis vertical) → \vdots en modo math
+  # Times New Roman no tiene este glifo; lo mapeamos a LaTeX para evitar el warning
+  - \usepackage{newunicodechar}
+  - \newunicodechar{⋮}{\ensuremath{\vdots}}
+---
