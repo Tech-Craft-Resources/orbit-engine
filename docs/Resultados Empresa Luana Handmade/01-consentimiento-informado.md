@@ -9,7 +9,7 @@
 
 **Proyecto:** OrbitEngine — Plataforma de gestión administrativa para pequeñas y medianas empresas  
 **Contexto:** Proyecto de grado, uso no comercial  
-**Institución:** [Nombre de la universidad]  
+**Institución:** Universidad Sergio Arboleda  
 **Equipo investigador:** Equipo OrbitEngine
 
 ---
@@ -70,7 +70,7 @@ La participación en este estudio es completamente voluntaria. La empresa y/o la
 
 ### 7. Contacto
 
-Para preguntas o inquietudes relacionadas con este estudio, puede contactar al equipo de OrbitEngine en: [correo del equipo de trabajo]
+Para preguntas o inquietudes relacionadas con este estudio, puede contactar al equipo de OrbitEngine en: orbitengine3@gmail.com
 
 ---
 
@@ -87,12 +87,7 @@ Al firmar este documento, la representante de la empresa **Luana Handmade** decl
 
 **Nombre completo:** Claudia González  
 **Cargo / Rol:** Fundadora y Administradora — Luana Handmade  
-**Documento de identidad:** CC [número]  
 **Fecha:** 30-abr-2026  
-
-&nbsp;
-
-**Firma:** ___________________________________
 
 &nbsp;
 

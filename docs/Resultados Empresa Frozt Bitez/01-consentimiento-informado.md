@@ -9,7 +9,7 @@
 
 **Proyecto:** OrbitEngine — Plataforma de gestión administrativa para pequeñas y medianas empresas  
 **Contexto:** Proyecto de grado, uso no comercial  
-**Institución:** [Nombre de la universidad]  
+**Institución:** Universidad Sergio Arboleda  
 **Equipo investigador:** Equipo OrbitEngine
 
 ---
@@ -38,7 +38,7 @@ La empresa Frozt Bitez participará en las siguientes actividades durante la Fas
 - Respuestas a encuestas de usabilidad (SUS, NPS, CSAT).
 - Observaciones de las sesiones de tareas guiadas (errores cometidos, tiempo por tarea).
 - Datos de actividad en la plataforma OrbitEngine (ventas, movimientos de inventario, módulos utilizados) — telemetría anonimizada.
-- Grabación de audio de la entrevista de cierre (con autorización explícita del representante).
+- Notas del facilitador de la entrevista de cierre (no se graba audio; ver sección 5).
 
 ---
 
@@ -55,10 +55,10 @@ Todos los datos recolectados serán:
 
 ### 5. Grabación de la entrevista de cierre
 
-La entrevista semiestructurada de cierre se realizará por videollamada.
+La entrevista semiestructurada de cierre se realizará de forma presencial en las instalaciones de Frozt Bitez.
 
-**☑ Autorizo la grabación de audio de la entrevista de cierre.**  
-**☐ No autorizo la grabación. El facilitador tomará notas extensas durante la sesión.**
+**☐ Autorizo la grabación de audio de la entrevista de cierre.**  
+**☑ No autorizo la grabación. El facilitador tomará notas extensas durante la sesión.**
 
 ---
 
@@ -70,7 +70,7 @@ La participación en este estudio es completamente voluntaria. La empresa y/o lo
 
 ### 7. Contacto
 
-Para preguntas o inquietudes relacionadas con este estudio, puede contactar al equipo de OrbitEngine en: [correo del equipo de trabajo]
+Para preguntas o inquietudes relacionadas con este estudio, puede contactar al equipo de OrbitEngine en: orbitengine3@gmail.com
 
 ---
 
@@ -87,15 +87,10 @@ Al firmar este documento, el representante de la empresa **Frozt Bitez** declara
 
 **Nombre completo:** Cesar Julian Espinoza Suarez  
 **Cargo / Rol:** Fundador y Administrador — Frozt Bitez  
-**Documento de identidad:** CC [número]  
 **Fecha:** 28-abr-2026  
-
-&nbsp;
-
-**Firma:** ___________________________________
 
 &nbsp;
 
 ---
 
-*Documento diligenciado el 28 de abril de 2026 mediante videollamada. El representante firmó el formulario en formato PDF digital y lo remitió al equipo de OrbitEngine por correo electrónico el mismo día.*
+*Documento diligenciado el 28 de abril de 2026 de forma presencial en las instalaciones de Frozt Bitez. El representante firmó el formulario en presencia del facilitador del equipo OrbitEngine.*

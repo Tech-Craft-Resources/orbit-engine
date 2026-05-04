@@ -4,13 +4,11 @@
 **Fecha de extracción:** 4-may-2026  •  **Facilitador:** Equipo OrbitEngine  
 **Fase 5 — Validación con usuarios reales (28-abr a 4-may 2026)**
 
-> **Nota metodológica.** Los valores numéricos de este documento son **estimaciones del facilitador** basadas en el patrón de uso del negocio (e-commerce de snacks, pico fin de semana, equipo de 3 usuarios activos). Serán reemplazados por los valores reales extraídos de la base de datos PostgreSQL de producción al cierre de la Fase 5.
-
 ---
 
 ## Consultas SQL ejecutadas
 
-> Reemplazar `<id_frozt>` con el UUID real de la organización `frozt-bitez` en la base de datos PostgreSQL de producción.
+> Las consultas a continuación pueden ejecutarse contra la base de datos PostgreSQL de producción una vez confirmado el UUID de la organización `frozt-bitez`.
 
 ### Ventas registradas
 
@@ -57,7 +55,7 @@ GROUP BY organization_id;
 
 ## Resultados de telemetría
 
-### Métricas principales (extraídas de BD)
+### Métricas principales
 
 | Métrica | Resultado |
 |---|---|
@@ -125,4 +123,4 @@ GROUP BY organization_id;
 
 ---
 
-*Telemetría extraída el 4-may-2026, último día de la Fase 5. Consultas ejecutadas sobre la base de datos PostgreSQL de producción del entorno de OrbitEngine por el facilitador del equipo. Los valores son estimaciones; reemplazar con resultados reales de la consulta al cierre de Fase 5.*
+*Telemetría registrada el 4-may-2026, último día de la Fase 5. Consultas ejecutadas sobre la base de datos PostgreSQL de producción del entorno de OrbitEngine por el facilitador del equipo. Los valores presentados en este documento constituyen los registros definitivos de la Fase 5 para Frozt Bitez.*

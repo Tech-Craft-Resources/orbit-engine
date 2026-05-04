@@ -87,7 +87,9 @@ GROUP BY organization_id;
 | Movimientos de apertura (onboarding 30-abr) | 18 |
 | Movimientos por venta (salidas) | ~20 ítems en 14 ventas × ~1.4 ítems/venta avg |
 | Movimientos manuales / reposición | 4 |
-| **Nota:** El total consultado desde BD es 24; los movimientos de apertura del seed (fecha anterior al 27-abr) no se incluyen en este conteo. | |
+| **Total registrado en BD** | **24** |
+
+> Los movimientos de apertura del seed generados con fecha anterior al inicio de la Fase 5 (27-abr) no se incluyen en este conteo.
 
 ### Métricas adicionales (registradas manualmente)
 
