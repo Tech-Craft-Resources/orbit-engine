@@ -67,10 +67,12 @@ export function AppSidebar() {
 
   const items = navItems.filter((item) => !item.roles || hasRole(item.roles))
 
-  const logoSrc =
+  const defaultLogo =
     resolvedTheme === "dark"
       ? "/assets/images/orbit-engine-logo-dark.png"
       : "/assets/images/orbit-engine-logo.png"
+
+  const logoSrc = organization?.logo_url ?? defaultLogo
 
   return (
     <Sidebar collapsible="icon">
