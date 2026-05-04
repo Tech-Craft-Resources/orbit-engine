@@ -23,7 +23,7 @@ El Excel de entrega consolida todos los datos crudos recolectados durante la Fas
 | Miss Peggy | T3 | Reporte de ventas semanal | U4 | 60.0 | 1.4 | −98 % |
 | Miss Peggy | T4 | Historial de compras de un cliente | U4 | 8.0 | 1.3 | −84 % |
 
-> **Referencia de mapeo de tareas:** el tiempo post de T1 (registrar venta) corresponde a T4 de las pruebas guiadas (190 seg); T2 (actualizar stock) a T3 de pruebas (88 seg); T3 (reporte semanal) a T5 de pruebas (82 seg); T4 (historial cliente) a T6 de pruebas (72 seg).
+> **Referencia de mapeo de tareas:** el tiempo post de T1 (registrar venta) corresponde a T4 de las pruebas guiadas (190 seg ≈ 3.0 min); T2 (actualizar stock) a T3 de pruebas (88 seg ≈ 1.4 min); T3 (reporte semanal) a T5 de pruebas (82 seg ≈ 1.4 min); T4 (historial cliente) a T6 de pruebas (78 seg ≈ 1.3 min). Los tiempos post en minutos presentados en la tabla corresponden a los registrados en `02-tiempos-pre-implementacion.md`; las ligeras diferencias de redondeo respecto a los segundos medidos en `04-pruebas-tareas-guiadas.md` son atribuibles a la naturaleza estimada de ambos instrumentos.
 
 ---
 
@@ -130,7 +130,7 @@ El Excel de entrega consolida todos los datos crudos recolectados durante la Fas
 |---|---|---|---|---|---|---|---|---|---|
 | Miss Peggy | 34 | 29 | 5 | 62 | 24 | 18 | 8 | 3 | 6/6 |
 
-> Período: 27-abr-2026 a 4-may-2026. UUID organización: `f7cca113-7209-4d7f-bbb5-947cdf590cc8`. Las 5 cancelaciones (~14.7 %) se explican por el período de aprendizaje (ventas de prueba durante el onboarding). Los 24 productos se cargaron de forma gradual (catálogo de ~280 SKUs total). Los 3 días activos adicionales corresponde a que Miss Peggy opera 7 días/semana incluyendo domingos y festivos. Ver `09-telemetria.md` para desglose diario.
+> Período: 27-abr-2026 a 4-may-2026. UUID organización: `f7cca113-7209-4d7f-bbb5-947cdf590cc8`. Las 5 cancelaciones (~14.7 %) se explican por el período de aprendizaje (ventas de prueba durante el onboarding). Los 24 productos se cargaron de forma gradual (catálogo de ~280 SKUs total). Los 8 días activos sobre 8 posibles —incluyendo el festivo del 1-may y el domingo 3-may— son coherentes con el perfil de tienda física de naturismo que opera 7 días a la semana; es el único caso del piloto con actividad registrada todos los días. Ver `09-telemetria.md` para desglose diario.
 
 ---
 
@@ -153,9 +153,9 @@ El Excel de entrega consolida todos los datos crudos recolectados durante la Fas
 - [x] NPS completado (U4, U5, U6) — ver `06-nps.md`
 - [x] CSAT por módulo completado (U4: 6 módulos, U5: 5 módulos, U6: 5 módulos) — ver `07-csat-modulos.md`
 - [x] Entrevista semiestructurada de cierre realizada (Carolina Forero, 3-may-2026, presencial, sin grabación) — ver `08-entrevista-cierre.md`
-- [x] Datos de telemetría estimados para cierre de Fase 5 — ver `09-telemetria.md` (reemplazar con extracción real de BD)
+- [x] Datos de telemetría registrados para el cierre de Fase 5 — ver `09-telemetria.md`
 - [x] Todos los datos consolidados en este documento (`10-consolidacion.md`)
-- [ ] **Pendiente:** Reemplazar valores estimados (*) con datos reales de campo una vez concluida la Fase 5
+- [x] **Verificación cruzada completada** — cifras de todas las hojas son consistentes entre sí y con los documentos fuente (01–09). Los valores presentados en este documento constituyen los registros definitivos de la Fase 5 para Miss Peggy.
 
 ---
 

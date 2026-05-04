@@ -292,17 +292,15 @@ El CSAT se midió con la pregunta: _"¿Qué tan satisfecho estás con este módu
 
 **Tabla 6.6.2.** Scores CSAT medios por módulo y por empresa (escala 1–5).
 
-| Módulo                         | Frozt Bitez | Miss Peggy | Luana Handmade | Media provisional ⁶ |
-| ------------------------------ | ----------- | ---------- | -------------- | ------------------- |
-| Inventario (productos y stock) | **4.0**     | **4.3**    | **4**          | **4.1**             |
-| Ventas                         | **4.7**     | **4.7**    | **4**          | **4.5**             |
-| Clientes                       | **4.7**     | **4.7**    | **5**          | **4.8**             |
-| Dashboard y KPIs               | **4.0**     | **4.0**    | **4**          | **4.0**             |
-| Reportes y exportación         | **4.3**     | **3.7**    | **3**          | **3.7**             |
-| Gestión de usuarios y roles    | **4.0**     | **4.0**    | **4**          | **4.0**             |
-| **CSAT global**                | **4.3**     | **4.2**    | **4.0**        | **4.2**             |
-
-> ⁶ Media provisional calculada con 2 de 3 empresas disponibles (Frozt Bitez y Luana Handmade). Actualizar cuando estén disponibles los datos de Miss Peggy.
+| Módulo                         | Frozt Bitez | Miss Peggy | Luana Handmade | Media global (3 empresas) |
+| ------------------------------ | ----------- | ---------- | -------------- | ------------------------- |
+| Inventario (productos y stock) | **4.0**     | **4.3**    | **4.0**        | **4.1**                   |
+| Ventas                         | **4.7**     | **4.7**    | **4.0**        | **4.5**                   |
+| Clientes                       | **4.7**     | **4.7**    | **5.0**        | **4.8**                   |
+| Dashboard y KPIs               | **4.0**     | **4.0**    | **4.0**        | **4.0**                   |
+| Reportes y exportación         | **4.3**     | **3.7**    | **3.0**        | **3.7**                   |
+| Gestión de usuarios y roles    | **4.0**     | **4.0**    | **4.0**        | **4.0**                   |
+| **CSAT global**                | **4.3**     | **4.2**    | **4.0**        | **4.2**                   |
 
 ### 6.6.3 Ranking de Módulos
 

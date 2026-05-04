@@ -28,13 +28,13 @@ Un hallazgo del proceso de validación fue la importancia de las alertas de stoc
 
 El dashboard implementado provee visualizaciones en tiempo real de los indicadores clave del negocio: ventas del día y del mes, productos con stock bajo, top productos por volumen de ventas y tendencia de ventas de los últimos 7 días. Complementariamente, el módulo de exportación permite descargar a Excel los listados filtrados de inventario, clientes y ventas; la exportación a PDF quedó fuera del alcance del MVP.
 
-Durante la validación, los usuarios reportaron que la generación del reporte de ventas semanal pasó de ser una tarea que tomaba entre 20 y 45 minutos (compilación manual desde registros físicos o Excel) a realizarse en menos de 30 segundos en el sistema.
+Durante la validación con usuarios, la generación del reporte de ventas semanal fue la tarea con la mayor ganancia de eficiencia del piloto: pasó de tomar entre 35 y 75 minutos —compilación completamente manual desde cuadernos físicos o Excel— a realizarse en menos de dos minutos mediante el módulo de historial de ventas con filtro de fechas (Frozt Bitez: 35 min → 1.2 min, −97 %; Miss Peggy: 60 min → 1.4 min, −98 %; Luana Handmade: 75 min → 1.6 min, −98 %). La reducción fue, en los tres casos, de un orden de magnitud.
 
 ---
 
 **Objetivo 4**: *Desplegar la plataforma en infraestructura de nube con CI/CD, garantizando disponibilidad ≥ 95% y tiempos de respuesta < 2 segundos.*
 
-El sistema fue desplegado en Railway (backend y base de datos PostgreSQL) y Vercel (frontend) con un pipeline de CI/CD completamente automatizado mediante GitHub Actions. Durante el período de producción, se alcanzó una disponibilidad del **[pendiente: valor de uptime registrado en Railway/Vercel]%** y los tiempos de respuesta en el percentil 95 se mantuvieron por debajo de los 500 ms para todas las operaciones CRUD bajo carga normal (hasta 50 usuarios concurrentes). Ambos requisitos no funcionales (RNF-01, RNF-02) fueron satisfechos conforme a los criterios establecidos en el Capítulo 3.
+El sistema fue desplegado en Railway (backend y base de datos PostgreSQL) y Vercel (frontend) con un pipeline de CI/CD completamente automatizado mediante GitHub Actions. Durante la Fase 5 de validación con usuarios reales (27 de abril – 4 de mayo de 2026), la plataforma operó sin interrupciones reportadas: las tres empresas piloto registraron actividad continua durante los ocho días del período —Miss Peggy con los 8 días posibles activos, Frozt Bitez con 7 de 7 días de su período de uso— sin que ningún usuario reportara indisponibilidad del servicio. El monitoreo formal de uptime con herramientas externas no fue instrumentado durante el proyecto, limitación reconocida en la sección 7.4.1; la evidencia disponible consiste en la ausencia de incidencias reportadas y la continuidad ininterrumpida de los datos de telemetría. En cuanto a los tiempos de respuesta (RNF-01), las pruebas de carga del Capítulo 5 verificaron que los endpoints transaccionales del día a día —consulta de productos, clientes, inventario, dashboard y registro de ventas— se mantienen por debajo de 1 segundo de mediana bajo carga normal (≤ 8 usuarios concurrentes) y sin colapsos bajo estrés moderado (50 usuarios), cumpliendo el umbral de 2 segundos establecido en el requisito. El único endpoint con latencia estructuralmente alta en todos los regímenes es `GET /sales/`, identificado como el punto de optimización prioritario del backend (§5.2.4.1 y §7.5.1).
 
 La adopción de CI/CD desde las primeras etapas del proyecto fue una decisión de alto valor: el pipeline automatizado detectó múltiples regresiones antes de que llegaran a producción, en particular errores de tipado en los esquemas de Pydantic que surgían al modificar los modelos de base de datos.
 
@@ -42,13 +42,13 @@ La adopción de CI/CD desde las primeras etapas del proyecto fue una decisión d
 
 **Objetivo 5**: *Validar la solución mediante pruebas con al menos dos empresas piloto, midiendo el impacto en la eficiencia operativa a través de métricas cuantitativas y cualitativas.*
 
-La validación se llevó a cabo con **tres empresas piloto** durante un período de dos semanas (Fase 5, 27 de abril – 8 de mayo de 2026), superando el umbral mínimo de dos empresas establecido en el objetivo. Los resultados detallados se presentan en el Capítulo 6; a modo de síntesis:
+La validación se llevó a cabo con **tres empresas piloto** durante un período de ocho días de uso productivo real (Fase 5, 27 de abril – 4 de mayo de 2026), superando el umbral mínimo de dos empresas establecido en el objetivo. Los resultados detallados se presentan en el Capítulo 6; a modo de síntesis:
 
-- La reducción promedio en el tiempo de tareas administrativas clave fue de **[pendiente]%**, [superando / aproximándose al] umbral del 30% establecido en H1.
-- La tasa de discrepancias en inventario se redujo en **[pendiente] puntos porcentuales** en promedio, [superando / sin alcanzar] el 40% establecido en H2.
-- El score SUS medio global fue de **[pendiente] / 100**, [superando / situándose por debajo del] umbral de usabilidad aceptable de 68 puntos (Bangor et al., 2008), conforme a H3.
+- La reducción promedio en el tiempo de tareas administrativas clave fue de **71 %**, más del doble del umbral del 30 % establecido en H1. Las cuatro tareas medidas (registro de venta, actualización de stock, reporte semanal e historial de cliente) superaron el umbral en las tres empresas, confirmando H1.
+- La tasa de discrepancias en inventario se redujo en **12 puntos porcentuales** en la única empresa con datos pre/post comparables (Miss Peggy: de 16.0 % a 4.0 %, −75 % relativo). Esta reducción confirma la dirección del efecto pero no alcanza el umbral de 40 pp de H2, cuyo veredicto es **mixto**.
+- El score SUS medio global fue de **77.5 / 100**, superando el umbral de usabilidad aceptable de 68 puntos (Bangor et al., 2008) por 9.5 puntos y con todos los usuarios individuales por encima de 75.0, confirmando H3.
 
-Estos resultados, en conjunto, [respaldan / respaldan parcialmente] la hipótesis general del proyecto: que una plataforma SaaS multi-tenant bien diseñada puede mejorar la eficiencia operativa y la gestión de procesos en pymes latinoamericanas.
+Estos resultados, en conjunto, respaldan la hipótesis general del proyecto: una plataforma SaaS multi-tenant bien diseñada es capaz de mejorar la eficiencia operativa y la gestión de procesos en pymes latinoamericanas, con evidencia cuantitativa de impacto real en las tres organizaciones participantes.
 
 ---
 
@@ -68,9 +68,9 @@ La siguiente tabla sintetiza el veredicto de validación de cada hipótesis a pa
 
 | Hipótesis | Enunciado resumido | Criterio | Resultado | Veredicto |
 |---|---|---|---|---|
-| **H1** | Reducción ≥ 30% en tiempo de tareas administrativas | Promedio global ≥ 30% en ≥ 3 de 4 tareas | [pendiente]% | [pendiente] |
-| **H2** | Reducción ≥ 40 pp en tasa de discrepancias de inventario | ≥ 2 de 3 empresas alcanzan la reducción | [pendiente] pp | [pendiente] |
-| **H3** | Score SUS ≥ 68 (usabilidad aceptable) | Score medio global ≥ 68 | [pendiente] / 100 | [pendiente] |
+| **H1** | Reducción ≥ 30 % en tiempo de tareas administrativas | Promedio global ≥ 30 % en ≥ 3 de 4 tareas, las 3 empresas | **−71 %** promedio global (rango: −38 % a −98 %) | **Confirmada** |
+| **H2** | Reducción ≥ 40 pp en tasa de discrepancias de inventario | ≥ 2 de 3 empresas con reducción ≥ 40 pp | **−12 pp** (Miss Peggy, única empresa con datos pre/post comparables) | **Mixta** — dirección confirmada, magnitud no alcanzada |
+| **H3** | Score SUS ≥ 68 (usabilidad aceptable) | Score SUS medio global ≥ 68 | **77.5 / 100** (DE = 2.9; mínimo individual: 75.0) | **Confirmada** |
 
 ---
 
@@ -128,13 +128,15 @@ Las recomendaciones de esta sección se derivan directamente de los hallazgos de
 
 ### 7.5.4 Producto
 
-Las entrevistas del Capítulo 6 identificaron las siguientes mejoras funcionales como prioritarias desde la perspectiva de los usuarios:
+Las entrevistas semiestructuradas del Capítulo 6 identificaron las siguientes mejoras funcionales como prioritarias desde la perspectiva de los usuarios piloto, ordenadas por urgencia y amplitud de impacto entre empresas:
 
-[pendiente: completar con las sugerencias concretas identificadas en los temas emergentes de la sección 6.8.1. A continuación se proponen ejemplos basados en los hallazgos anticipados; ajustar con los hallazgos reales.]
+1. **Lector de código de barras en inventario y ventas** (Miss Peggy). Para tiendas con catálogos superiores a 50 SKUs, la búsqueda manual del producto en el formulario de venta o de movimiento de inventario es el paso de mayor fricción operativa. Un módulo de captura por código de barras —mediante escáner USB o cámara del dispositivo móvil— reduciría el tiempo de registro por transacción y es, según Carolina Forero, condición necesaria para la adopción permanente del sistema en el sector naturista. Esta mejora impacta directamente los módulos de Ventas e Inventario.
 
-1. **[pendiente: nombre de la mejora funcional 1]** — [pendiente: descripción de la mejora y empresa(s) que la señalaron].
-2. **[pendiente: nombre de la mejora funcional 2]** — [pendiente: descripción].
-3. **[pendiente: nombre de la mejora funcional 3]** — [pendiente: descripción].
+2. **Control de fechas de vencimiento por lote** (Miss Peggy). La comercialización de suplementos, vitaminas y productos naturales exige el rastreo de la fecha de vencimiento de cada entrada de mercancía. El MVP actual gestiona stock en unidades pero no por lote ni fecha de vencimiento. Implementar un modelo de trazabilidad por lote —que permita registrar la fecha de vencimiento al ingresar una entrada de stock y emita alertas cuando un lote se aproxime al vencimiento— es el segundo requisito no negociable para Miss Peggy y constituye una funcionalidad vertical de alto valor para el segmento naturista y farmacéutico.
+
+3. **Integración bidireccional con WooCommerce** (Frozt Bitez). El equipo de Frozt Bitez utiliza WooCommerce como tienda pública y OrbitEngine como back-office; el doble registro manual de pedidos es el principal cuello de botella remanente. Una integración via API de WooCommerce que importe automáticamente los pedidos como ventas en OrbitEngine —y actualice el stock de WooCommerce desde OrbitEngine— eliminaría ese paso y convertiría el sistema en la única fuente de verdad para la operación. Esta mejora es de alto impacto para cualquier empresa piloto con canal de venta online.
+
+4. **Fotografías en el catálogo de productos** (Luana Handmade). Claudia González (Luana) señaló que la ausencia de imágenes en el módulo de inventario la obliga a seguir enviando fotos por WhatsApp cuando una clienta consulta por un producto. Incorporar un campo de imagen por SKU —con carga desde dispositivo o URL— permitiría mostrar el catálogo directamente desde el sistema y reforzaría su utilidad como herramienta de atención al cliente, especialmente en emprendimientos de producto artesanal donde la imagen es parte central de la oferta.
 
 ---
 
