@@ -18,19 +18,19 @@ Este directorio contiene el informe de grado completo de OrbitEngine, organizado
 
 | Archivo                                                                          | Contenido                                                                                                             | Estado                                                      |
 | -------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------- |
-| [00-preliminares.md](00-preliminares.md) | Portada, página de aprobación, resumen (ES) y abstract (EN) | ✅ Borrador completo (pendiente: nombres de jurados y número de páginas) |
-| [capitulo-1-introduccion.md](capitulo-1-introduccion.md) | Planteamiento del problema, justificación, objetivos, alcance, metodología | ✅ Borrador completo (placeholders pendientes) |
-| [capitulo-2-marco-referencia.md](capitulo-2-marco-referencia.md) | Marco conceptual, estado del arte, marco tecnológico | ✅ Borrador completo (placeholders pendientes) |
-| [capitulo-3-analisis-diseno.md](capitulo-3-analisis-diseno.md) | Requisitos, arquitectura, modelo de datos, diseño de UI | ✅ Borrador completo (placeholders pendientes) |
-| [capitulo-4-desarrollo.md](capitulo-4-desarrollo.md) | Metodología ágil, sprints, implementación, pruebas, CI/CD | ✅ Borrador completo (placeholders pendientes) |
-| [capitulo-5-resultados-tecnicos.md](capitulo-5-resultados-tecnicos.md) | Resultados Técnicos: pruebas de carga (Locust) y de rendimiento web (Lighthouse, PageSpeed Insights, WebPageTest) | ✅ Borrador completo (pendiente menor: registrar datos formales de uptime mensual RNF-02) |
+| [00-preliminares.md](00-preliminares.md) | Portada, página de aprobación, resumen (ES) y abstract (EN) | ✅ Borrador completo |
+| [capitulo-1-introduccion.md](capitulo-1-introduccion.md) | Planteamiento del problema, justificación, objetivos, alcance, metodología | ✅ Borrador completo |
+| [capitulo-2-marco-referencia.md](capitulo-2-marco-referencia.md) | Marco conceptual, estado del arte, marco tecnológico | ✅ Borrador completo |
+| [capitulo-3-analisis-diseno.md](capitulo-3-analisis-diseno.md) | Requisitos, arquitectura, modelo de datos, diseño de UI | ✅ Borrador completo |
+| [capitulo-4-desarrollo.md](capitulo-4-desarrollo.md) | Metodología ágil, sprints, implementación, pruebas, CI/CD | ✅ Borrador completo |
+| [capitulo-5-resultados-tecnicos.md](capitulo-5-resultados-tecnicos.md) | Resultados Técnicos: pruebas de carga (Locust) y de rendimiento web (Lighthouse, PageSpeed Insights, WebPageTest) | ✅ Borrador completo |
 | [capitulo-6-resultados-usuarios.md](capitulo-6-resultados-usuarios.md) | Resultados de Usuarios: eficiencia operativa pre/post, SUS, NPS, CSAT, telemetría, entrevistas, validación de hipótesis (N = 3 empresas reales) | ✅ Borrador completo (datos reales de las tres empresas piloto incluidos) |
-| [capitulo-7-conclusiones.md](capitulo-7-conclusiones.md) | Conclusiones por objetivo, conclusión general, validación de hipótesis, limitaciones, recomendaciones de optimización, trabajo futuro | ✅ Borrador completo (sección 7.5.4 y 7.1 obj. 5 pendientes de datos del Cap. 6) |
+| [capitulo-7-conclusiones.md](capitulo-7-conclusiones.md) | Conclusiones por objetivo, conclusión general, validación de hipótesis, limitaciones, recomendaciones de optimización, trabajo futuro | ✅ Borrador completo |
 | [referencias.md](referencias.md) | Referencias bibliográficas en formato APA 7.ª edición | ✅ Borrador completo |
-| [anexo-a-manual-usuario.md](anexo-a-manual-usuario.md) | Manual de uso para usuarios finales (no técnico) | ✅ Borrador completo (pendiente: capturas de pantalla de la aplicación) |
-| [anexo-b-manual-despliegue.md](anexo-b-manual-despliegue.md) | Guía técnica de instalación y despliegue | ✅ Borrador completo (placeholders pendientes) |
-| [anexo-c-documentacion-tecnica.md](anexo-c-documentacion-tecnica.md) | Documentación técnica profesional: API, modelos, variables de entorno, convenciones | ✅ Borrador completo (placeholders pendientes) |
-| [recomendaciones.md](recomendaciones.md) | Guía interna: cómo aplicar SUS, NPS, CSAT, pruebas de tareas, entrevistas y extraer telemetría para completar el Cap. 6 | ✅ Borrador completo |
+| [anexo-a-manual-usuario.md](anexo-a-manual-usuario.md) | Manual de uso para usuarios finales (no técnico) | ✅ Borrador completo |
+| [anexo-b-manual-despliegue.md](anexo-b-manual-despliegue.md) | Guía técnica de instalación y despliegue | ✅ Borrador completo |
+| [anexo-c-documentacion-tecnica.md](anexo-c-documentacion-tecnica.md) | Documentación técnica profesional: API, modelos, variables de entorno, convenciones | ✅ Borrador completo |
+| [recomendaciones.md](recomendaciones.md) | Guía interna: cómo aplicar SUS, NPS, CSAT, pruebas de tareas, entrevistas y extraer telemetría para completar el Cap. 6 | ✅ Borrador completo (guía interna) |
 
 
 ---
