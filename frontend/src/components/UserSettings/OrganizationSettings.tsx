@@ -156,36 +156,11 @@ const OrganizationSettings = () => {
             }
           />
 
+          {/* logo_url field intentionally hidden from UI */}
           <FormField
             control={form.control}
             name="logo_url"
-            render={({ field }) =>
-              editMode ? (
-                <FormItem>
-                  <FormLabel>URL del logo</FormLabel>
-                  <FormControl>
-                    <Input
-                      type="url"
-                      placeholder="https://example.com/logo.png"
-                      {...field}
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              ) : (
-                <FormItem>
-                  <FormLabel>URL del logo</FormLabel>
-                  <p
-                    className={cn(
-                      "py-2 truncate max-w-sm",
-                      !field.value && "text-muted-foreground",
-                    )}
-                  >
-                    {field.value || "No disponible"}
-                  </p>
-                </FormItem>
-              )
-            }
+            render={({ field }) => <input type="hidden" {...field} />}
           />
 
           <div className="flex gap-3">
