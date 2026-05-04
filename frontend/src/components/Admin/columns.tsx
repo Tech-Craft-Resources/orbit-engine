@@ -2,6 +2,7 @@ import type { ColumnDef } from "@tanstack/react-table"
 
 import type { UserPublic } from "@/client"
 import { Badge } from "@/components/ui/badge"
+import { ROLE_DISPLAY_NAMES, ROLE_IDS } from "@/hooks/useAuth"
 import { cn } from "@/lib/utils"
 import { UserActionsMenu } from "./UserActionsMenu"
 
@@ -42,16 +43,16 @@ export const columns: ColumnDef<UserTableData>[] = [
     accessorKey: "role_id",
     header: "Rol",
     cell: ({ row }) => {
-      const roleNames = {
-        1: "Administrador",
-        2: "Vendedor",
-        3: "Consulta",
-      } as const
-      const roleId = row.original.role_id as 1 | 2 | 3
-      const roleName = roleNames[roleId] || "Desconocido"
+      const roleId = row.original.role_id
+      const internalName = Object.entries(ROLE_IDS).find(
+        ([, id]) => id === roleId,
+      )?.[0] as keyof typeof ROLE_DISPLAY_NAMES | undefined
+      const displayName = internalName
+        ? ROLE_DISPLAY_NAMES[internalName]
+        : "Desconocido"
       return (
-        <Badge variant={roleId === 1 ? "default" : "secondary"}>
-          {roleName}
+        <Badge variant={roleId === ROLE_IDS.admin ? "default" : "secondary"}>
+          {displayName}
         </Badge>
       )
     },

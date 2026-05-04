@@ -36,6 +36,14 @@ const ROLE_NAMES: Record<number, RoleName> = {
   [ROLE_IDS.contador]: "contador",
 }
 
+/** Human-readable Spanish display labels for each role */
+export const ROLE_DISPLAY_NAMES: Record<RoleName, string> = {
+  admin: "Administrador",
+  seller: "Vendedor",
+  contador: "Contador",
+  viewer: "Solo lectura",
+}
+
 const isLoggedIn = () => {
   return hasAccessToken()
 }

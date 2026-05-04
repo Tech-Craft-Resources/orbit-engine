@@ -6,6 +6,7 @@ import { useForm } from "react-hook-form"
 import { z } from "zod"
 
 import { RolesService, type UserPublic, UsersService } from "@/client"
+import { ROLE_DISPLAY_NAMES } from "@/hooks/useAuth"
 import { Button } from "@/components/ui/button"
 import { Checkbox } from "@/components/ui/checkbox"
 import {
@@ -213,8 +214,9 @@ const EditUser = ({ user, onSuccess }: EditUserProps) => {
                       <SelectContent>
                         {rolesData?.data.map((role) => (
                           <SelectItem key={role.id} value={role.id.toString()}>
-                            {role.name.charAt(0).toUpperCase() +
-                              role.name.slice(1)}
+                            {ROLE_DISPLAY_NAMES[
+                              role.name as keyof typeof ROLE_DISPLAY_NAMES
+                            ] ?? role.name}
                           </SelectItem>
                         ))}
                       </SelectContent>
