@@ -1,539 +1,336 @@
-# OrbitEngine 🚀
+# OrbitEngine
 
-> Plataforma SaaS para la gestión integral de procesos internos en pequeñas y medianas empresas utilizando Inteligencia Artificial
+> Plataforma SaaS para la gestión integral de procesos internos en pequeñas y medianas empresas
 
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-[![Python](https://img.shields.io/badge/python-3.11+-blue.svg)](https://www.python.org/downloads/)
-[![React](https://img.shields.io/badge/react-18.3+-61DAFB.svg)](https://reactjs.org/)
-[![FastAPI](https://img.shields.io/badge/FastAPI-0.110+-009688.svg)](https://fastapi.tiangolo.com/)
+[![Python](https://img.shields.io/badge/python-3.10+-blue.svg)](https://www.python.org/downloads/)
+[![React](https://img.shields.io/badge/react-19+-61DAFB.svg)](https://reactjs.org/)
+[![FastAPI](https://img.shields.io/badge/FastAPI-0.114+-009688.svg)](https://fastapi.tiangolo.com/)
 [![PostgreSQL](https://img.shields.io/badge/postgresql-15+-336791.svg)](https://www.postgresql.org/)
 
 ---
 
-## 📋 Descripción
+## Descripción
 
-OrbitEngine es una plataforma SaaS diseñada para digitalizar y optimizar los procesos internos de pequeñas y medianas empresas (pymes). Proporciona herramientas para gestionar inventario, ventas, clientes y reportes, incorporando Inteligencia Artificial para predicción de demanda y análisis predictivo.
+OrbitEngine es una plataforma SaaS full-stack diseñada para digitalizar y centralizar los procesos internos de pequeñas y medianas empresas. Permite gestionar inventario, ventas, clientes y usuarios desde un único panel, con soporte multi-tenancy mediante organizaciones y control de acceso basado en roles.
 
-**Estado del Proyecto:** 🚧 En desarrollo (Proyecto de Grado)  
-**Período:** Noviembre 2025 - Abril 2026
-
----
-
-## ✨ Características Principales
-
-- 🔐 **Autenticación y Roles:** Sistema seguro con JWT y control de acceso basado en roles
-- 📦 **Gestión de Inventario:** CRUD de productos, categorías, alertas de stock bajo
-- 💰 **Gestión de Ventas:** Registro de ventas, facturación, historial de transacciones
-- 👥 **Gestión de Clientes:** Base de datos de clientes, historial de compras
-- 📊 **Dashboard y Reportes:** KPIs en tiempo real, exportación a PDF/Excel
-- 🤖 **IA - Predicción de Demanda:** Forecasting con Prophet para optimizar inventario
-- 🏢 **Multi-tenancy:** Soporte para múltiples empresas con aislamiento de datos
+**Estado del Proyecto:** En desarrollo activo (Proyecto de Grado)
+**Período:** Noviembre 2025 – Mayo 2026
 
 ---
 
-## 🛠️ Tech Stack
+## Funcionalidades Implementadas
+
+- **Autenticación y Roles:** JWT con control de acceso por roles (admin, seller, viewer). Registro, login, recuperación de contraseña.
+- **Multi-tenancy:** Soporte para múltiples organizaciones con aislamiento completo de datos.
+- **Gestión de Inventario:** CRUD de productos y categorías, ajustes de stock, historial de movimientos.
+- **Gestión de Ventas:** Registro de ventas con líneas de detalle, vista de detalle, cancelación.
+- **Gestión de Clientes:** CRUD de clientes, historial de compras por cliente.
+- **Administración de Usuarios:** Creación, edición y eliminación de usuarios por parte de admins.
+- **Dashboard:** KPIs en tiempo real con gráficos (Recharts).
+- **Configuración:** Perfil de usuario, cambio de contraseña, configuración de organización, eliminación de cuenta.
+- **Landing Page:** Página pública con hero, características, beneficios y estadísticas.
+- **Modo oscuro/claro:** Tema persistente por usuario.
+
+---
+
+## Tech Stack
 
 ### Frontend
-- **Framework:** React 18.3+ con TypeScript 5+
-- **Build Tool:** Vite 5+
-- **Styling:** Tailwind CSS 3+
-- **Components:** shadcn/ui
-- **State Management:** Zustand + TanStack Query (React Query)
-- **Forms:** React Hook Form + Zod
-- **Charts:** Recharts
+- **Framework:** React 19 con TypeScript 5
+- **Build Tool:** Vite 7
+- **Routing:** TanStack Router v1 (file-based)
+- **Server State:** TanStack Query v5
+- **Tablas:** TanStack Table v8
+- **Formularios:** React Hook Form 7 + Zod 4
+- **Styling:** Tailwind CSS 4
+- **Componentes:** shadcn/ui (Radix UI)
+- **Gráficos:** Recharts
+- **Linting:** Biome
+- **Testing E2E:** Playwright
 
 ### Backend
-- **Framework:** FastAPI 0.110+ (Python 3.11+)
-- **ORM:** SQLAlchemy 2.0+
-- **Migrations:** Alembic
-- **Validation:** Pydantic 2.0+
-- **Auth:** JWT (python-jose + passlib)
-- **Tasks:** Celery + Redis
-- **Testing:** pytest
+- **Framework:** FastAPI 0.114+ (Python 3.10+)
+- **ORM:** SQLModel (SQLAlchemy 2 + Pydantic 2)
+- **Migraciones:** Alembic
+- **Auth:** PyJWT + pwdlib (argon2/bcrypt)
+- **Email:** Resend + Jinja2 (templates)
+- **Monitoreo:** Sentry
+- **Linting:** ruff + mypy (strict)
+- **Testing:** pytest + coverage
 
-### Database & Storage
-- **Primary:** PostgreSQL 15+
-- **Cache:** Redis 7+ (to be implemented)
-- **Storage:** MinIO (development) / AWS S3 (production)
+### Base de Datos y Almacenamiento
+- **Base de datos:** PostgreSQL 15+
+- **Almacenamiento de archivos:** MinIO (desarrollo) / AWS S3 (producción)
 
-### Machine Learning
-- **Libraries:** scikit-learn, Prophet, pandas, numpy
-- **Use Case:** Demand forecasting, trend analysis
-
-### Infrastructure
-- **Cloud:** AWS (EC2/ECS, RDS, S3, CloudFront, ALB)
-- **Containerization:** Docker + Docker Compose
-- **CI/CD:** GitHub Actions
-- **Monitoring:** CloudWatch, Sentry
+### Infraestructura
+- **Contenedores:** Docker + Docker Compose
+- **Email (desarrollo):** Mailcatcher
+- **Proxy:** Traefik
 
 ---
 
-## 📁 Estructura del Proyecto
+## Estructura del Proyecto
 
 ```
-orbitengine/
-├── backend/                 # FastAPI Backend
-│   ├── alembic/            # Database migrations
+orbit-engine/
+├── backend/                    # FastAPI backend
 │   ├── app/
-│   │   ├── api/            # API endpoints
-│   │   ├── core/           # Configuration
-│   │   ├── models/         # SQLAlchemy models
-│   │   ├── schemas/        # Pydantic schemas
-│   │   ├── services/       # Business logic
-│   │   ├── ml/             # Machine Learning
-│   │   ├── tasks/          # Celery tasks
-│   │   └── main.py         # App entry point
-│   ├── tests/              # Tests
-│   ├── Dockerfile
-│   └── requirements.txt
+│   │   ├── api/
+│   │   │   ├── routes/         # Un archivo por dominio
+│   │   │   │   ├── login.py
+│   │   │   │   ├── users.py
+│   │   │   │   ├── organizations.py
+│   │   │   │   ├── roles.py
+│   │   │   │   ├── products.py
+│   │   │   │   ├── categories.py
+│   │   │   │   ├── customers.py
+│   │   │   │   ├── sales.py
+│   │   │   │   ├── inventory_movements.py
+│   │   │   │   ├── dashboard.py
+│   │   │   │   └── utils.py
+│   │   │   └── deps.py         # Dependencias inyectadas (CurrentUser, SessionDep…)
+│   │   ├── core/               # Config, seguridad, base de datos
+│   │   ├── alembic/            # Migraciones
+│   │   ├── models.py           # Modelos SQLModel + schemas Pydantic
+│   │   └── crud.py             # Operaciones CRUD
+│   ├── tests/                  # Pruebas pytest
+│   └── scripts/                # test.sh, lint.sh, format.sh
 │
-├── frontend/               # React Frontend
+├── frontend/                   # React frontend
 │   ├── src/
-│   │   ├── api/           # API client
-│   │   ├── components/    # Reusable components
-│   │   ├── features/      # Feature modules
-│   │   ├── hooks/         # Custom hooks
-│   │   ├── pages/         # Page components
-│   │   ├── stores/        # Zustand stores
-│   │   └── types/         # TypeScript types
-│   ├── public/
-│   ├── Dockerfile
-│   └── package.json
+│   │   ├── client/             # Cliente API auto-generado (NO EDITAR)
+│   │   ├── components/
+│   │   │   ├── Admin/          # Gestión de usuarios (admin)
+│   │   │   ├── Common/         # Componentes compartidos
+│   │   │   ├── Customers/      # Módulo clientes
+│   │   │   ├── Dashboard/      # KPIs y exportaciones
+│   │   │   ├── Inventory/      # Módulo inventario
+│   │   │   ├── Landing/        # Página pública
+│   │   │   ├── Sales/          # Módulo ventas
+│   │   │   ├── Sidebar/        # Navegación lateral
+│   │   │   ├── UserSettings/   # Ajustes de cuenta y organización
+│   │   │   └── ui/             # shadcn/ui (NO EDITAR)
+│   │   ├── hooks/              # useAuth, useCustomToast, useCopyToClipboard, useMobile
+│   │   ├── routes/             # Rutas file-based (TanStack Router)
+│   │   └── routeTree.gen.ts    # Auto-generado (NO EDITAR)
+│   └── tests/                  # Pruebas Playwright E2E
 │
-├── docs/                   # 📚 Academic documentation
-│   ├── propuesta.md
-│   ├── 01-alcance-mvp.md
-│   ├── 02-requisitos.md
-│   ├── 03-cronograma.md
-│   ├── 04-stack-tecnologico.md
-│   ├── 05-base-de-datos.md
-│   ├── 06-arquitectura-tecnica.md
-│   └── README.md
-│
-├── docker-compose.yml      # Local development setup
-├── .github/                # GitHub Actions workflows
-└── README.md              # This file
+├── docs/                       # Documentación académica
+├── docker-compose.yml
+├── docker-compose.override.yml
+└── .env.example
 ```
 
 ---
 
-## 🚀 Getting Started
+## Inicio Rápido
 
-### Prerequisitos
+### Prerrequisitos
 
-- **Docker** y **Docker Compose** instalados
-- **Git** para clonar el repositorio
-- **Bun** instalado (para desarrollo de frontend)
-- (Opcional) **Python 3.11+** y **uv** para desarrollo de backend sin Docker
+- Docker y Docker Compose
+- Git
+- Bun (para desarrollo de frontend)
+- (Opcional) Python 3.10+ y uv para desarrollo de backend sin Docker
 
 ### Instalación
 
-1. **Clonar el repositorio**
+1. Clonar el repositorio
 
 ```bash
-git clone https://github.com/tu-usuario/orbitengine.git
-cd orbitengine
+git clone https://github.com/Tech-Craft-Resources/orbit-engine.git
+cd orbit-engine
 ```
 
-2. **Configurar variables de entorno**
+2. Configurar variables de entorno
 
 ```bash
 cp .env.example .env
 # Editar .env con tus configuraciones
 ```
 
-3. **Iniciar con Docker Compose**
+3. Iniciar con Docker Compose
 
 ```bash
-# Primera vez o después de cambiar Dockerfiles
-docker compose build
-
-# Iniciar los servicios
-docker compose up -d
+docker compose watch
 ```
 
-Esto iniciará:
+Esto levanta:
 - PostgreSQL en `localhost:5432`
-- Adminer (DB admin) en `http://adminer.localhost`
 - Backend (FastAPI) en `http://api.localhost`
 - Frontend (React) en `http://localhost`
-- MinIO (S3-compatible storage) en:
-  - API: `http://minio.localhost`
-  - Console: `http://minio-console.localhost`
-- Mailcatcher (email testing) en `http://localhost:1080`
+- Adminer en `http://adminer.localhost`
+- MinIO API en `http://minio.localhost` / Consola en `http://minio-console.localhost`
+- Mailcatcher en `http://localhost:1080`
 - Traefik dashboard en `http://localhost:8090`
 
-**Nota:** El backend usa volúmenes configurados en `compose.override.yml` para hot-reload automático. Los cambios en el código Python se reflejan inmediatamente sin reiniciar. Solo necesitas reiniciar el contenedor si instalas/actualizas/eliminas dependencias.
+4. Acceder
 
-4. **Acceder a la aplicación**
-
-- Frontend: http://localhost
-- Backend API Docs: http://api.localhost/docs
-- Backend ReDoc: http://api.localhost/redoc
-- Adminer (DB): http://adminer.localhost
-- MinIO Console: http://minio-console.localhost (user: `minioadmin`, pass: `minioadmin`)
-- Mailcatcher: http://localhost:1080
-
-**Nota sobre MinIO:** MinIO es un servidor de almacenamiento de objetos compatible con S3 para desarrollo local. Para usar AWS S3 en producción, simplemente cambia las variables de entorno (ver [`docs/varios/s3-storage.md`](./docs/varios/s3-storage.md)).
+| Servicio | URL |
+|---|---|
+| Frontend | http://localhost |
+| API Docs (Swagger) | http://api.localhost/docs |
+| API Docs (ReDoc) | http://api.localhost/redoc |
+| Adminer | http://adminer.localhost |
+| MinIO Console | http://minio-console.localhost |
+| Mailcatcher | http://localhost:1080 |
 
 ---
 
-## 💻 Desarrollo Local
+## Desarrollo Local
 
 ### Backend
 
-El backend corre dentro de Docker con **hot-reload automático** gracias a:
-- Volúmenes configurados en `compose.override.yml` que sincronizan el código
-- Comando `fastapi run --reload` que detecta cambios automáticamente
+El backend tiene **hot-reload automático** dentro de Docker mediante `compose.override.yml`. No hace falta reiniciar el contenedor al cambiar código Python; solo al instalar/actualizar dependencias:
 
-**¿Cuándo reiniciar el contenedor backend?**
-- ✅ **NO reiniciar** cuando cambies código Python (hot-reload automático)
-- ⚠️ **SÍ reiniciar** cuando instales/actualices/elimines dependencias con `uv`:
-  ```bash
-  docker compose restart backend
-  ```
-
-**Ver logs en tiempo real:**
 ```bash
+docker compose restart backend
+```
+
+```bash
+# Logs en tiempo real
 docker compose logs -f backend
-```
 
-**Ejecutar migraciones:**
-```bash
-docker compose exec backend alembic revision --autogenerate -m "description"
-docker compose exec backend alembic upgrade head
-```
-
-**Acceder al contenedor:**
-```bash
+# Acceder al contenedor
 docker compose exec backend bash
+
+# Servidor local sin Docker (requiere DB corriendo)
+cd backend
+uv run fastapi dev app/main.py
 ```
 
 ### Frontend
 
-Para desarrollo de frontend, es recomendable **detener el contenedor de Docker** y ejecutar Bun localmente para mejor experiencia de desarrollo:
+Para mejor experiencia de desarrollo, corre Bun localmente y detén el contenedor de frontend:
 
 ```bash
-# Detener el contenedor de frontend
 docker compose stop frontend
-
-# Ir al directorio frontend
 cd frontend
-
-# Instalar dependencias (primera vez)
-bun install
-
-# Iniciar servidor de desarrollo
-bun run dev
+bun install       # solo la primera vez
+bun run dev       # http://localhost:5173
 ```
 
-Esto te dará:
-- ⚡ Hot-reload instantáneo
-- 🔥 Mejor rendimiento
-- 🐛 Mejor debugging
-
-El frontend seguirá usando el backend que corre en Docker (`http://localhost:8000`).
-
-### Ejecutar Tests
+### Migraciones
 
 ```bash
-# Backend (desde la raíz del proyecto)
-docker compose exec backend bash scripts/test.sh
+docker compose exec backend alembic revision --autogenerate -m "descripcion"
+docker compose exec backend alembic upgrade head
+docker compose exec backend alembic downgrade -1
+```
 
-# O con uv localmente
-cd backend
-uv run bash scripts/test.sh
+### Regenerar cliente API
 
-# Frontend (con Playwright)
-cd frontend
-bun run test
+Después de cambiar endpoints o schemas del backend:
 
-# Frontend con UI
+```bash
+# Con el backend corriendo
+cd frontend && bun run generate-client
+```
+
+---
+
+## Tests
+
+```bash
+# Backend – todos los tests con coverage
+cd backend && uv run bash scripts/test.sh
+
+# Backend – test específico
+uv run pytest tests/api/routes/test_users.py -v
+
+# Backend – patrón
+uv run pytest -k "test_create" -v
+
+# Frontend – E2E con Playwright
+cd frontend && bun run test
+
+# Frontend – modo UI interactivo
 bun run test:ui
 ```
 
 ---
 
-## 🗄️ Base de Datos
+## Variables de Entorno
 
-### Crear nueva migración
-
-```bash
-docker compose exec backend alembic revision --autogenerate -m "Descripción del cambio"
-```
-
-### Aplicar migraciones
-
-```bash
-docker compose exec backend alembic upgrade head
-```
-
-### Rollback
-
-```bash
-docker compose exec backend alembic downgrade -1
-```
-
----
-
-## 📝 Variables de Entorno
-
-### Backend (`.env`)
+Copia `.env.example` a `.env`. Variables clave:
 
 ```env
-# Project
-PROJECT_NAME=OrbitEngine
-STACK_NAME=orbitengine-stack
 DOMAIN=localhost
+SECRET_KEY=cambia-esto-en-produccion
 
-# Backend
-BACKEND_CORS_ORIGINS=["http://localhost:5173","http://localhost"]
-SECRET_KEY=your-secret-key-here-change-in-production
-
-# Frontend
-FRONTEND_HOST=http://localhost:5173
-
-# Database
 POSTGRES_SERVER=db
-POSTGRES_PORT=5432
 POSTGRES_USER=postgres
 POSTGRES_PASSWORD=changethis
 POSTGRES_DB=app
 
-# First Superuser
 FIRST_SUPERUSER=admin@example.com
 FIRST_SUPERUSER_PASSWORD=changethis
 
-# Email (using mailcatcher in development)
+# Email – Resend (producción) o Mailcatcher (desarrollo)
 SMTP_HOST=mailcatcher
 SMTP_PORT=1025
-SMTP_TLS=false
-EMAILS_FROM_EMAIL=noreply@example.com
+RESEND_API_KEY=
 
-# Redis (to be implemented)
-# REDIS_URL=redis://redis:6379/0
-
-# Celery (to be implemented)
-# CELERY_BROKER_URL=redis://redis:6379/1
-# CELERY_RESULT_BACKEND=redis://redis:6379/2
-
-# S3 / Object Storage (S3-compatible)
-# For development with MinIO (default configuration)
+# Almacenamiento S3 / MinIO
 S3_ENDPOINT_URL=http://minio:9000
 S3_ACCESS_KEY_ID=minioadmin
 S3_SECRET_ACCESS_KEY=minioadmin
 S3_BUCKET_NAME=app-storage
-S3_REGION=us-east-1
-
-# MinIO (only for local development)
-MINIO_ROOT_USER=minioadmin
-MINIO_ROOT_PASSWORD=minioadmin
-
-# Docker Images
-DOCKER_IMAGE_BACKEND=backend
-DOCKER_IMAGE_FRONTEND=frontend
-
-# Environment
-ENVIRONMENT=development
 ```
 
 ---
 
-## 🤖 IA/ML - Predicción de Demanda
+## Documentación Académica
 
-El sistema utilizará **Prophet** (Meta) para forecasting de demanda. Esta funcionalidad será implementada en fases posteriores del proyecto.
+La documentación completa del proyecto está en [`docs/`](./docs/):
 
-### Características planeadas:
-
-- Predicción de demanda basada en histórico de ventas
-- Alertas automáticas de reabastecimiento
-- Análisis de tendencias y estacionalidad
-- Optimización de inventario
-
-Las predicciones se generarán automáticamente usando **Celery Beat** (scheduler) ejecutándose en background.
-
-Para más detalles sobre los algoritmos de IA planeados, ver [`docs/planteamiento/IA.md`](./docs/planteamiento/IA.md)
+- [Propuesta](./docs/planteamiento/propuesta.md)
+- [Alcance y MVP](./docs/planteamiento/01-alcance-mvp.md)
+- [Requisitos (SRS)](./docs/planteamiento/SRS.md)
+- [Stack Tecnológico](./docs/planteamiento/04-stack-tecnologico.md)
+- [Base de Datos](./docs/planteamiento/05-base-de-datos.md)
+- [Arquitectura Técnica](./docs/planteamiento/06-arquitectura-tecnica.md)
 
 ---
 
-## 🧪 Testing
+## Roadmap
 
-### Estrategia de Testing
+### Completado
+- [x] Setup de infraestructura y repositorio
+- [x] Autenticación JWT + registro + recuperación de contraseña
+- [x] Multi-tenancy con organizaciones
+- [x] Control de acceso basado en roles (admin, seller, viewer)
+- [x] Gestión de inventario (productos, categorías, movimientos, ajustes de stock)
+- [x] Gestión de ventas (registro, detalle, cancelación)
+- [x] Gestión de clientes (CRUD, historial de compras)
+- [x] Dashboard con KPIs y gráficos
+- [x] Administración de usuarios
+- [x] Configuración de cuenta y organización
+- [x] Landing page pública
+- [x] Modo oscuro/claro
+- [x] Tests E2E con Playwright
+- [x] Tests backend con pytest
 
-- **Backend:** Tests unitarios y de integración con pytest
-- **Frontend:** Tests E2E con Playwright
+### Pendiente
+- [ ] Predicción de demanda con IA (Prophet)
+- [ ] Exportación a PDF/Excel desde el dashboard
+- [ ] Deployment en producción (AWS / VPS)
+- [ ] CI/CD con GitHub Actions
 
-### Ejecutar tests
+---
+
+## Contribución
+
+Proyecto académico — contribuciones limitadas al equipo de desarrollo.
 
 ```bash
-# Backend - todos los tests con coverage
-cd backend
-uv run bash scripts/test.sh
-
-# Backend - test específico
-uv run pytest tests/api/routes/test_users.py -v
-
-# Backend - dentro de Docker
-docker compose exec backend bash scripts/test.sh
-
-# Frontend - E2E con Playwright
-cd frontend
-bun run test
-
-# Frontend - con UI interactiva
-bun run test:ui
-```
-
----
-
-## 🚢 Deployment
-
-El deployment a producción será configurado en fases posteriores usando AWS:
-
-### Infraestructura planeada:
-
-**Backend:**
-- ECS/EC2 para servicios FastAPI
-- Celery Workers para tareas asíncronas
-- Celery Beat para tareas programadas
-
-**Frontend:**
-- S3 para hosting estático
-- CloudFront como CDN global
-
-**Database & Cache:**
-- RDS PostgreSQL (instancia gestionada)
-- ElastiCache Redis para cache y Celery
-
-**CI/CD:**
-- GitHub Actions para deployment automático
-- Environments: staging y production
-
-Ver documentación completa en [`docs/planteamiento/06-arquitectura-tecnica.md`](./docs/planteamiento/06-arquitectura-tecnica.md)
-
----
-
-## 📚 Documentación
-
-La documentación académica completa del proyecto se encuentra en la carpeta [`docs/planteamiento/`](./docs/planteamiento/):
-
-- **[Alcance y MVP](./docs/planteamiento/01-alcance-mvp.md)** - Definición del alcance y métricas de éxito
-- **[Requisitos (SRS)](./docs/planteamiento/SRS.md)** - Requisitos funcionales y no funcionales
-- **[Cronograma](./docs/planteamiento/03-cronograma.md)** - Planificación temporal (6 meses)
-- **[Stack Tecnológico](./docs/planteamiento/04-stack-tecnologico.md)** - Decisiones técnicas justificadas
-- **[Base de Datos](./docs/planteamiento/05-base-de-datos.md)** - Modelo de datos completo
-- **[Arquitectura Técnica](./docs/planteamiento/06-arquitectura-tecnica.md)** - Diseño arquitectónico del sistema
-- **[IA/ML](./docs/planteamiento/IA.md)** - Algoritmos de predicción de demanda
-
----
-
-## 🗺️ Roadmap
-
-### ✅ Fase 1: Investigación y Planificación (Noviembre 2025)
-- [x] Definición de requisitos
-- [x] Diseño de arquitectura
-- [x] Selección de stack tecnológico
-- [x] Documentación inicial
-
-### 🚧 Fase 2: Diseño y Setup (Noviembre-Diciembre 2025)
-- [ ] Setup de repositorios
-- [ ] Configuración de infraestructura AWS
-- [ ] Diseño de UI/UX (Figma)
-- [ ] Setup de CI/CD
-
-### 📅 Fase 3: Desarrollo Core (Diciembre 2025 - Febrero 2026)
-- [ ] Sprint 1: Autenticación y usuarios
-- [ ] Sprint 2-3: Gestión de inventario
-- [ ] Sprint 4: Gestión de ventas
-- [ ] Sprint 5: Gestión de clientes
-
-### 📅 Fase 4: Desarrollo Avanzado (Febrero - Marzo 2026)
-- [ ] Sprint 6: Dashboard y reportes
-- [ ] Sprint 7: Integración de IA/ML
-
-### 📅 Fase 5: Testing y Validación (Marzo - Abril 2026)
-- [ ] Pruebas con usuarios reales
-- [ ] Recolección de métricas
-- [ ] Ajustes y mejoras
-
-### 📅 Fase 6: Documentación y Defensa (Abril 2026)
-- [ ] Documentación final
-- [ ] Presentación del proyecto
-- [ ] Defensa de proyecto de grado
-
----
-
-## 👥 Equipo
-
-- **Backend Lead:** [Nombre] - Arquitectura, APIs, ML/IA
-- **Frontend Lead:** [Nombre] - UI/UX, React, Integración
-- **DevOps & Full Stack:** [Nombre] - Infraestructura, CI/CD, Soporte
-
-**Asesor Académico:** [Nombre del asesor]  
-**Universidad:** [Nombre de la universidad]
-
----
-
-## 🤝 Contribución
-
-Este es un proyecto de grado académico. Las contribuciones están limitadas al equipo de desarrollo.
-
-### Workflow de Git
-
-```bash
-# Crear rama para feature
 git checkout -b feature/nombre-feature
-
-# Commits siguiendo Conventional Commits
 git commit -m "feat: descripción del cambio"
-git commit -m "fix: descripción del fix"
-
-# Push y crear PR
 git push origin feature/nombre-feature
 ```
 
-### Conventional Commits
-
-- `feat:` Nueva funcionalidad
-- `fix:` Corrección de bug
-- `docs:` Cambios en documentación
-- `style:` Cambios de formato (no afectan lógica)
-- `refactor:` Refactorización de código
-- `test:` Añadir o modificar tests
-- `chore:` Tareas de mantenimiento
+Convenciones de commits: `feat`, `fix`, `docs`, `style`, `refactor`, `test`, `chore`.
 
 ---
 
-## 📄 Licencia
-
-Este proyecto es académico y forma parte de un Proyecto de Grado.
-
----
-
-## 🙏 Agradecimientos
-
-- A nuestro asesor académico por su guía
-- A las pymes que participarán en las pruebas piloto
-- A la comunidad open source por las herramientas utilizadas
-
----
-
-## 📞 Contacto
-
-Para consultas sobre el proyecto:
-
-- **Email:** [email del equipo]
-- **GitHub:** [link al repo]
-- **Documentación:** [link a docs]
-
----
-
-**Última actualización:** Noviembre 2025  
-**Versión:** 0.1.0-alpha
-
----
-
-<p align="center">
-  <strong>Hecho con ❤️ por el equipo OrbitEngine</strong>
-</p>
-
+**Última actualización:** Mayo 2026
+**Versión:** 0.4.0

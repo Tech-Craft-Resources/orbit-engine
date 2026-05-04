@@ -1,525 +1,255 @@
-# FastAPI Project - Frontend
+# OrbitEngine – Frontend
 
-Frontend built with [Vite](https://vitejs.dev/), [React](https://reactjs.org/), [TypeScript](https://www.typescriptlang.org/), [TanStack Query](https://tanstack.com/query), [TanStack Router](https://tanstack.com/router), and [Tailwind CSS](https://tailwindcss.com/).
+Aplicación web construida con **React 19**, **TypeScript 5** y **Vite 7**. Usa TanStack Router para routing file-based, TanStack Query para estado del servidor, React Hook Form + Zod para formularios y shadcn/ui como sistema de componentes.
 
-## Requirements
+---
 
-- [Bun](https://bun.sh/) (recommended) or [Node.js](https://nodejs.org/)
-- Backend running (either in Docker or locally)
+## Requisitos
 
-## Development Workflow (Recommended)
+- [Bun](https://bun.sh/)
+- Backend corriendo (Docker o local)
 
-For the best frontend development experience, **stop the Docker frontend container** and run Bun locally:
+---
+
+## Desarrollo Local (recomendado)
+
+Para mejor experiencia (hot-reload instantáneo), detén el contenedor de frontend y corre Bun directamente:
 
 ```bash
-# 1. Stop the frontend container (from project root)
+# Detener el contenedor de frontend
 docker compose stop frontend
 
-# 2. Go to frontend directory
 cd frontend
 
-# 3. Install dependencies (first time only)
+# Instalar dependencias (solo la primera vez)
 bun install
 
-# 4. Start development server
+# Servidor de desarrollo
 bun run dev
 ```
 
-The frontend will be available at http://localhost:5173/
+El frontend estará en http://localhost:5173 y se conectará automáticamente al backend en Docker.
 
-**Benefits of local development:**
-- ⚡ Instant hot-reload
-- 🔥 Better performance
-- 🐛 Better debugging experience
-- 🎯 Direct access to source maps
+---
 
-The frontend will automatically connect to the backend running in Docker at `http://localhost:8000`.
-
-## Running in Docker
-
-If you prefer to run everything in Docker:
+## Scripts Disponibles
 
 ```bash
-# From project root
-docker compose up frontend -d
+bun run dev             # Servidor de desarrollo con hot-reload
+bun run build           # Build de producción (tsc + vite build)
+bun run lint            # Lint y auto-fix con Biome
+bun run preview         # Preview del build de producción
+bun run generate-client # Regenerar cliente API desde OpenAPI
+bun run test            # Tests E2E con Playwright
+bun run test:ui         # Tests E2E en modo interactivo
 ```
 
-Frontend will be available at http://localhost:5173/
+---
 
-**Note:** The Docker setup builds for production, so hot-reload is not as fast as local development.
-
-## Available Scripts
-
-```bash
-# Development server with hot-reload
-bun run dev
-
-# Type checking
-bun run type-check
-
-# Linting and auto-fix
-bun run lint
-
-# Build for production
-bun run build
-
-# Preview production build
-bun run preview
-
-# Generate API client from OpenAPI schema
-bun run generate-client
-
-# Run E2E tests with Playwright
-bun run test
-
-# Run tests with UI
-bun run test:ui
-```
-
-## Generate API Client
-
-The frontend uses an auto-generated TypeScript client based on the backend's OpenAPI schema. **Never edit files in `src/client/` manually** - they are auto-generated.
-
-### Automatic generation (recommended):
-
-```bash
-# From project root, with backend running
-bash ./scripts/generate-client.sh
-```
-
-### Manual generation:
-
-```bash
-# 1. Make sure backend is running in Docker
-docker compose up backend -d
-
-# 2. Go to frontend directory
-cd frontend
-
-# 3. Generate client
-bun run generate-client
-```
-
-**When to regenerate:**
-- After adding/modifying backend API endpoints
-- After changing request/response schemas
-- After updating Pydantic models
-
-Always commit the generated client files to git.
-
-## How the API Client Works
-
-The frontend uses a **type-safe auto-generated API client** created from the backend's OpenAPI specification. This ensures that frontend and backend are always in sync.
-
-### Architecture:
-
-```
-Backend (FastAPI)
-    ↓ exposes
-OpenAPI Schema (JSON)
-    ↓ generates
-TypeScript Client (src/client/)
-    ↓ used by
-React Components + TanStack Query
-```
-
-### Generated Files Structure:
-
-```
-src/client/
-├── index.ts           # Main exports
-├── types.gen.ts       # TypeScript types from Pydantic schemas
-├── schemas.gen.ts     # Zod schemas for validation
-├── sdk.gen.ts         # API service methods
-└── core/              # HTTP client internals
-    ├── OpenAPI.ts
-    ├── request.ts
-    └── ...
-```
-
-### Using the API Client:
-
-#### 1. Import Services
-
-Each API router in the backend generates a corresponding service:
-
-```typescript
-import { UsersService, ItemsService, LoginService } from "@/client"
-```
-
-#### 2. Available Services:
-
-Based on your backend structure:
-- `LoginService` - Authentication endpoints
-- `UsersService` - User management (CRUD)
-- `UtilsService` - Utility endpoints (health check, etc.)
-
-#### 3. Making API Calls with TanStack Query:
-
-**Fetch data (Query):**
-
-```typescript
-import { useQuery } from "@tanstack/react-query"
-import { UsersService } from "@/client"
-
-function UsersList() {
-  const { data, isLoading, error } = useQuery({
-    queryKey: ["users"], // Cache key
-    queryFn: () => UsersService.readUsers(), // API call
-  })
-
-  if (isLoading) return <div>Loading...</div>
-  if (error) return <div>Error: {error.message}</div>
-
-  return (
-    <ul>
-      {data?.data.map((user) => (
-        <li key={user.id}>{user.email}</li>
-      ))}
-    </ul>
-  )
-}
-```
-
-**Create/Update data (Mutation):**
-
-```typescript
-import { useMutation, useQueryClient } from "@tanstack/react-query"
-import { UsersService, type UserCreate } from "@/client"
-
-function CreateUserForm() {
-  const queryClient = useQueryClient()
-
-  const mutation = useMutation({
-    // API call to create user
-    mutationFn: (data: UserCreate) => 
-      UsersService.createUser({ requestBody: data }),
-    
-    // On success: invalidate cache and refetch
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["users"] })
-      showToast("User created successfully")
-    },
-    
-    // On error: show error message
-    onError: (error) => {
-      showToast(`Error: ${error.message}`)
-    },
-  })
-
-  const handleSubmit = (formData: UserCreate) => {
-    mutation.mutate(formData)
-  }
-
-  return (
-    <form onSubmit={handleSubmit}>
-      {/* form fields */}
-      <button type="submit" disabled={mutation.isPending}>
-        {mutation.isPending ? "Creating..." : "Create User"}
-      </button>
-    </form>
-  )
-}
-```
-
-**Update with optimistic UI:**
-
-```typescript
-const updateMutation = useMutation({
-  mutationFn: (data: { id: string; body: UserUpdate }) =>
-    UsersService.updateUser({ 
-      userId: data.id, 
-      requestBody: data.body 
-    }),
-  
-  onSuccess: () => {
-    queryClient.invalidateQueries({ queryKey: ["users"] })
-  },
-})
-```
-
-**Delete:**
-
-```typescript
-const deleteMutation = useMutation({
-  mutationFn: (userId: string) => 
-    UsersService.deleteUser({ userId }),
-  
-  onSuccess: () => {
-    queryClient.invalidateQueries({ queryKey: ["users"] })
-  },
-})
-```
-
-#### 4. TypeScript Types:
-
-All Pydantic models from the backend are available as TypeScript types:
-
-```typescript
-import type { 
-  UserPublic,      // Response type
-  UserCreate,      // Create request
-  UserUpdate,      // Update request
-  UsersPublic,     // Paginated list response
-} from "@/client"
-
-// Use in component props
-interface UserCardProps {
-  user: UserPublic
-}
-
-// Use in forms
-const [formData, setFormData] = useState<UserCreate>({
-  email: "",
-  password: "",
-  full_name: "",
-})
-```
-
-#### 5. Error Handling:
-
-```typescript
-import { ApiError } from "@/client"
-
-try {
-  const result = await UsersService.createUser({ requestBody: data })
-} catch (error) {
-  if (error instanceof ApiError) {
-    console.error("API Error:", error.status, error.body)
-    // error.status: HTTP status code (400, 404, 500, etc.)
-    // error.body: Error response from backend
-  }
-}
-```
-
-Or with TanStack Query:
-
-```typescript
-const { error } = useQuery({
-  queryKey: ["users"],
-  queryFn: () => UsersService.readUsers(),
-  onError: (error) => {
-    if (error instanceof ApiError) {
-      // Handle specific status codes
-      if (error.status === 401) {
-        // Redirect to login
-      }
-    }
-  },
-})
-```
-
-#### 6. Authentication:
-
-The client automatically includes authentication tokens from cookies/localStorage:
-
-```typescript
-// Login sets the token
-const { data } = await LoginService.loginAccessToken({
-  formData: { username, password }
-})
-
-// Subsequent requests automatically include the token
-const users = await UsersService.readUsers() // Token included automatically
-```
-
-The token is stored and managed by the `useAuth` hook in `src/hooks/useAuth.ts`.
-
-#### 7. Query Keys Convention:
-
-Use consistent query keys for cache management:
-
-```typescript
-// List queries
-["users"]
-["items"]
-["items", { skip: 0, limit: 50 }] // with params
-
-// Detail queries
-["users", userId]
-["items", itemId]
-
-// Nested/related queries
-["users", userId, "items"]
-```
-
-#### 8. Common Patterns:
-
-**Paginated Lists:**
-
-```typescript
-const { data } = useQuery({
-  queryKey: ["items", { skip, limit }],
-  queryFn: () => ItemsService.readItems({ skip, limit }),
-})
-
-// data.data: array of items
-// data.count: total count
-```
-
-**Dependent Queries:**
-
-```typescript
-// Only fetch user's items after user is loaded
-const { data: user } = useQuery({
-  queryKey: ["users", userId],
-  queryFn: () => UsersService.readUser({ userId }),
-})
-
-const { data: items } = useQuery({
-  queryKey: ["users", userId, "items"],
-  queryFn: () => ItemsService.readItems({ ownerId: userId }),
-  enabled: !!user, // Only run if user exists
-})
-```
-
-### Best Practices:
-
-1. ✅ **Always use TanStack Query** for API calls (not raw fetch/axios)
-2. ✅ **Invalidate queries** after mutations to refresh data
-3. ✅ **Use TypeScript types** from the client for type safety
-4. ✅ **Regenerate client** after backend changes
-5. ✅ **Commit generated client** files to git
-6. ❌ **Never edit** files in `src/client/` manually
-7. ❌ **Never use** different HTTP clients (fetch, axios) alongside the generated client
-
-### Troubleshooting:
-
-**Type errors after backend changes:**
-```bash
-# Regenerate the client
-bun run generate-client
-```
-
-**404 errors on API calls:**
-- Check backend is running: http://localhost:8000/docs
-- Verify `VITE_API_URL` in `.env`
-- Check backend logs: `docker compose logs -f backend`
-
-**CORS errors:**
-- Ensure `BACKEND_CORS_ORIGINS` in `.env` includes `http://localhost:5173`
-- Restart backend after changing CORS settings
-
-## Code Structure
+## Estructura de Código
 
 ```
 frontend/src/
-├── client/          # 🚫 Auto-generated API client (DO NOT EDIT)
+├── client/                     # Cliente API auto-generado (NO EDITAR)
+│   ├── types.gen.ts            # Tipos TypeScript desde schemas Pydantic
+│   ├── sdk.gen.ts              # Métodos de servicio por dominio
+│   └── core/                  # Internals del cliente HTTP
+│
 ├── components/
-│   ├── Admin/       # Admin-specific components
-│   ├── Common/      # Shared components
-│   ├── Pending/     # Pending users management
-│   ├── Sidebar/     # Sidebar navigation
-│   ├── ui/          # 🚫 shadcn/ui components (DO NOT EDIT)
-│   └── UserSettings/ # User settings components
-├── hooks/           # Custom React hooks
-│   ├── useAuth.ts
-│   ├── useCopyToClipboard.ts
-│   ├── useCustomToast.ts
-│   └── useMobile.ts
-├── routes/          # TanStack Router pages (file-based routing)
-│   ├── _layout/     # Layout routes
-│   ├── __root.tsx   # Root layout
-│   ├── login.tsx
-│   └── ...
+│   ├── Admin/                  # Gestión de usuarios (AddUser, EditUser, DeleteUser…)
+│   ├── Common/                 # Compartidos: DataTable, AuthLayout, RoleGuard, Footer…
+│   ├── Customers/              # Módulo clientes (CRUD, historial de compras)
+│   ├── Dashboard/              # Exportaciones e indicadores
+│   ├── Inventory/              # Módulo inventario (productos, categorías, movimientos)
+│   ├── Landing/                # Página pública (Hero, Features, Benefits, Stats, CTA)
+│   ├── Pending/                # Usuarios pendientes de aprobación
+│   ├── Sales/                  # Módulo ventas (registro, detalle, cancelación)
+│   ├── Sidebar/                # Navegación lateral (AppSidebar, Main, User)
+│   ├── UserSettings/           # Ajustes (perfil, contraseña, organización, cuenta)
+│   └── ui/                     # shadcn/ui (NO EDITAR)
+│
+├── hooks/
+│   ├── useAuth.ts              # Autenticación, usuario actual, organización, roles
+│   ├── useCustomToast.ts       # Toasts de éxito/error con Sonner
+│   ├── useCopyToClipboard.ts   # Copiar al portapapeles
+│   └── useMobile.ts            # Detección de viewport mobile
+│
+├── routes/                     # Páginas (TanStack Router file-based)
+│   ├── __root.tsx              # Layout raíz
+│   ├── index.tsx               # Landing page (/)
+│   ├── login.tsx               # /login
+│   ├── signup.tsx              # /signup
+│   ├── signup-org.tsx          # /signup-org (registro de organización)
+│   ├── recover-password.tsx    # /recover-password
+│   ├── reset-password.tsx      # /reset-password
+│   ├── terminos.tsx            # /terminos
+│   ├── privacidad.tsx          # /privacidad
+│   ├── dashboard.tsx           # Layout del dashboard
+│   └── dashboard/
+│       ├── index.tsx           # /dashboard (panel principal)
+│       ├── inventory.tsx       # /dashboard/inventory
+│       ├── sales.tsx           # /dashboard/sales
+│       ├── sales.index.tsx     # /dashboard/sales (index)
+│       ├── sales.$saleId.tsx   # /dashboard/sales/:saleId (detalle)
+│       ├── customers.tsx       # /dashboard/customers
+│       ├── admin.tsx           # /dashboard/admin (solo admin)
+│       └── settings.tsx        # /dashboard/settings (solo admin)
+│
 ├── lib/
-│   └── utils.ts     # Utility functions
-├── index.css        # Global styles
-├── main.tsx         # App entry point
-└── routeTree.gen.ts # 🚫 Auto-generated routes (DO NOT EDIT)
+│   └── utils.ts                # cn(), getInitials() y utilidades
+├── routeTree.gen.ts            # Auto-generado por TanStack Router (NO EDITAR)
+├── main.tsx                    # Entry point
+└── index.css                   # Estilos globales y variables CSS
 ```
 
-## End-to-End Testing with Playwright
+---
 
-The project includes E2E tests using Playwright.
+## Cliente API Auto-generado
 
-### Setup:
+El directorio `src/client/` es generado automáticamente desde el schema OpenAPI del backend. **Nunca edites estos archivos manualmente.**
+
+### Regenerar el cliente
 
 ```bash
-# Install Playwright browsers (first time only)
+# El backend debe estar corriendo
+cd frontend
+bun run generate-client
+```
+
+Regenera cuando:
+- Agregues o modifiques endpoints del backend
+- Cambies schemas de request/response
+- Actualices modelos Pydantic
+
+Siempre commitea los archivos generados.
+
+### Uso del cliente con TanStack Query
+
+**Query (lectura):**
+
+```typescript
+import { useQuery } from "@tanstack/react-query"
+import { ProductsService } from "@/client"
+
+const { data, isLoading } = useQuery({
+  queryKey: ["products"],
+  queryFn: () => ProductsService.readProducts(),
+})
+```
+
+**Mutation (escritura):**
+
+```typescript
+import { useMutation, useQueryClient } from "@tanstack/react-query"
+import { ProductsService, type ProductCreate } from "@/client"
+
+const queryClient = useQueryClient()
+
+const mutation = useMutation({
+  mutationFn: (data: ProductCreate) =>
+    ProductsService.createProduct({ requestBody: data }),
+  onSuccess: () => showSuccessToast("Producto creado"),
+  onError: handleError.bind(showErrorToast),
+  onSettled: () => queryClient.invalidateQueries({ queryKey: ["products"] }),
+})
+```
+
+---
+
+## Routing
+
+Rutas gestionadas con **TanStack Router** en modo file-based. El árbol de rutas se regenera automáticamente en `src/routeTree.gen.ts` al guardar archivos en `src/routes/`.
+
+La protección de rutas se hace mediante el `RoleGuard` y el hook `useAuth`:
+
+```typescript
+const { user, organization, hasRole } = useAuth()
+if (!hasRole(["admin"])) return <Navigate to="/dashboard" />
+```
+
+---
+
+## Formularios
+
+Todos los formularios usan **React Hook Form + Zod**:
+
+```typescript
+const formSchema = z.object({
+  name: z.string().min(1, "El nombre es obligatorio"),
+  price: z.number().positive("El precio debe ser positivo"),
+})
+
+const form = useForm<z.infer<typeof formSchema>>({
+  resolver: zodResolver(formSchema),
+})
+```
+
+---
+
+## Componentes UI
+
+El proyecto usa [shadcn/ui](https://ui.shadcn.com/) en `src/components/ui/`. No edites estos archivos directamente. Para personalizar, crea un wrapper en `src/components/Common/`.
+
+Para añadir nuevos componentes de shadcn:
+
+```bash
+bunx shadcn@latest add [nombre-del-componente]
+```
+
+---
+
+## Modo Oscuro/Claro
+
+El tema se gestiona con `next-themes` a través de `ThemeProvider` en `src/components/theme-provider.tsx`. El usuario puede cambiarlo desde el sidebar con `SidebarAppearance`.
+
+---
+
+## Tests E2E con Playwright
+
+```bash
+# Instalar browsers (solo la primera vez)
 bunx playwright install
-```
 
-### Run tests:
-
-```bash
-# Make sure backend is running
+# El backend debe estar corriendo
 docker compose up -d --wait backend
 
-# Run all tests
+# Ejecutar todos los tests
 bun run test
 
-# Run tests with UI (interactive mode)
+# Modo interactivo con UI
 bun run test:ui
 
-# Run specific test file
+# Archivo específico
 bunx playwright test tests/login.spec.ts
 
-# Run tests matching a pattern
-bunx playwright test --grep "create item"
+# Tests que coincidan con un patrón
+bunx playwright test --grep "login"
 ```
 
-### Clean up after tests:
+---
 
-```bash
-# Stop containers and remove test data
-docker compose down -v
-```
-
-### Test files:
-
-- `tests/*.spec.ts` - Test specifications
-- `tests/utils/` - Test utilities and helpers
-- `tests/config.ts` - Test configuration
-- `playwright.config.ts` - Playwright configuration
-
-For more information, see the [Playwright documentation](https://playwright.dev/docs/intro).
-
-## Using a Remote API
-
-To use a remote backend instead of localhost, set the `VITE_API_URL` environment variable:
+## Variables de Entorno
 
 ```env
-# frontend/.env
-VITE_API_URL=https://api.example.com
-```
-
-Or set it when running:
-
-```bash
-VITE_API_URL=https://api.example.com bun run dev
-```
-
-## shadcn/ui Components
-
-The project uses [shadcn/ui](https://ui.shadcn.com/) components in `src/components/ui/`.
-
-**Important:** These components are managed by shadcn and should not be edited directly. If you need to customize them:
-
-1. Create a wrapper component in `src/components/Common/`
-2. Import and extend the ui component there
-3. Use your wrapper throughout the app
-
-To add new shadcn components:
-
-```bash
-bunx shadcn@latest add [component-name]
-```
-
-## Environment Variables
-
-```env
-# .env or .env.local
+# frontend/.env o frontend/.env.local
 VITE_API_URL=http://localhost:8000
 ```
 
-Environment variables must be prefixed with `VITE_` to be exposed to the app.
+Las variables deben tener prefijo `VITE_` para ser expuestas a la aplicación.
 
-## Styling
+---
 
-The project uses:
-- **Tailwind CSS** for utility-first styling
-- **CSS variables** for theming (light/dark mode)
-- **shadcn/ui** design system
+## Troubleshooting
 
-Theme configuration is in `src/components/theme-provider.tsx`.
+**Errores de tipos después de cambiar el backend:**
+```bash
+bun run generate-client
+```
+
+**El frontend no conecta al backend:**
+- Verifica que el backend corra: http://localhost:8000/docs
+- Revisa `VITE_API_URL` en `frontend/.env`
+- Comprueba CORS: `BACKEND_CORS_ORIGINS` en `.env` debe incluir `http://localhost:5173`
+
+**Rutas no encontradas:**
+- TanStack Router regenera el árbol automáticamente; si no funciona, reinicia `bun run dev`

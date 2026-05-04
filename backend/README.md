@@ -1,267 +1,229 @@
-# FastAPI Project - Backend
+# OrbitEngine – Backend
 
-## Requirements
+API REST construida con **FastAPI** y **Python 3.10+**. Usa SQLModel como ORM, Alembic para migraciones, PyJWT para autenticación y Resend para envío de correos.
 
-* [Docker](https://www.docker.com/)
-* [uv](https://docs.astral.sh/uv/) for Python package and environment management
+---
 
-## Development with Docker Compose (Recommended)
+## Requisitos
 
-Start the full stack with Docker Compose from the project root:
+- [Docker](https://www.docker.com/) y Docker Compose (recomendado)
+- [uv](https://docs.astral.sh/uv/) para gestión de entorno Python (desarrollo local)
+
+---
+
+## Desarrollo con Docker Compose (recomendado)
+
+Desde la raíz del proyecto:
 
 ```bash
-# First time or after changing Dockerfiles
-docker compose build
-
-# Start services
-docker compose up -d
+docker compose watch
 ```
 
-The backend runs with **automatic hot-reload** thanks to:
-- Volume mounting configured in `compose.override.yml` (syncs `./backend` to container)
-- Command override: `fastapi run --reload app/main.py`
-
-Changes to Python files are detected automatically and the server reloads instantly.
-
-### When to restart the backend container:
-
-- ✅ **NO need to restart** when changing Python code (auto-reload enabled)
-- ⚠️ **YES, restart required** when installing/updating/removing dependencies:
-  ```bash
-  docker compose restart backend
-  ```
-
-### View logs in real-time:
+El backend corre con **hot-reload automático**: los cambios en código Python se reflejan al instante sin reiniciar el contenedor. Solo reinicia cuando instales, actualices o elimines dependencias:
 
 ```bash
+docker compose restart backend
+```
+
+```bash
+# Logs en tiempo real
 docker compose logs -f backend
-```
 
-### Accessing the backend container:
-
-```bash
+# Acceder al contenedor
 docker compose exec backend bash
 ```
 
-### Available endpoints:
+**Endpoints disponibles:**
+- Swagger UI: http://api.localhost/docs
+- ReDoc: http://api.localhost/redoc
+- Health check: http://api.localhost/api/v1/utils/health-check/
 
-- API Docs (Swagger): http://api.localhost/docs
-- API Docs (ReDoc): http://api.localhost/redoc
-- Health Check: http://api.localhost/api/v1/utils/health-check/
+---
 
-## Local Development (without Docker)
+## Desarrollo Local (sin Docker)
 
-If you prefer to run the backend locally without Docker:
+Requiere PostgreSQL corriendo (puede ser solo el contenedor de la BD):
 
 ```bash
+# Arrancar solo la base de datos
+docker compose up db -d
+
 cd backend
 
-# Install uv if not already installed
-# macOS/Linux: curl -LsSf https://astral.sh/uv/install.sh | sh
-# Windows: powershell -c "irm https://astral.sh/uv/install.ps1 | iex"
-
-# Install dependencies
+# Instalar dependencias
 uv sync
 
-# Activate virtual environment
-source .venv/bin/activate  # On Windows: .venv\Scripts\activate
+# Activar entorno virtual
+source .venv/bin/activate   # Windows: .venv\Scripts\activate
 
-# Run migrations (requires database running)
+# Aplicar migraciones
 alembic upgrade head
 
-# Start development server with hot-reload
+# Servidor de desarrollo con hot-reload
 uv run fastapi dev app/main.py
 ```
 
-**Note:** You'll still need the database running. You can start only the database with:
-```bash
-docker compose up db -d
+---
+
+## Estructura de Código
+
+```
+backend/app/
+├── api/
+│   ├── routes/             # Un archivo por dominio
+│   │   ├── login.py        # Autenticación, tokens, recuperación de contraseña
+│   │   ├── users.py        # Gestión de usuarios
+│   │   ├── organizations.py # Configuración de organización
+│   │   ├── roles.py        # Asignación de roles
+│   │   ├── products.py     # Inventario – productos
+│   │   ├── categories.py   # Inventario – categorías
+│   │   ├── inventory_movements.py  # Movimientos de stock
+│   │   ├── customers.py    # Clientes
+│   │   ├── sales.py        # Ventas
+│   │   ├── dashboard.py    # KPIs y métricas
+│   │   └── utils.py        # Health check
+│   └── deps.py             # CurrentUser, SessionDep, RoleChecker…
+├── core/
+│   ├── config.py           # Settings (pydantic-settings)
+│   ├── security.py         # JWT, hashing de contraseñas
+│   └── db.py               # Engine y sesión SQLModel
+├── alembic/
+│   └── versions/           # Migraciones
+├── email-templates/
+│   ├── src/                # Plantillas MJML (editables)
+│   └── build/              # HTML compilado (usado por la app)
+├── models.py               # Todos los modelos SQLModel y schemas Pydantic
+├── crud.py                 # Operaciones CRUD reutilizables
+└── main.py                 # Entry point, routers, CORS, Sentry
 ```
 
-## Code Structure
+### Convenciones de modelos
 
-- `app/api/` - API endpoints organized by domain
-- `app/api/deps.py` - Dependency injection (database session, current user, etc.)
-- `app/core/` - Core configuration (settings, security, database)
-- `app/models.py` - SQLModel models (database tables + Pydantic schemas)
-- `app/crud.py` - Database CRUD operations
-- `app/alembic/` - Database migrations
-- `tests/` - Pytest tests
+Todos los modelos y schemas están en `models.py`. Nomenclatura:
 
-## Backend Tests
+| Clase | Propósito |
+|---|---|
+| `{Model}` | Tabla de base de datos (`table=True`) |
+| `{Model}Create` | Schema de creación (input) |
+| `{Model}Update` | Schema de actualización parcial (input) |
+| `{Model}Public` | Schema de respuesta (output) |
+| `{Model}sPublic` | Lista paginada de respuesta |
 
-### Run all tests with coverage:
+---
 
-```bash
-# From backend directory
-uv run bash scripts/test.sh
-```
+## Migraciones
 
-### Run specific tests:
+Siempre ejecutar dentro del contenedor Docker para tener acceso a la base de datos:
 
 ```bash
-# Single test file
-uv run pytest tests/api/routes/test_users.py -v
+# Crear migración automática a partir de cambios en models.py
+docker compose exec backend alembic revision --autogenerate -m "descripcion del cambio"
 
-# Single test function
-uv run pytest tests/api/routes/test_users.py::test_get_users_superuser_me -v
-
-# Tests matching a pattern
-uv run pytest -k "test_create" -v
-```
-
-### Run tests inside Docker:
-
-```bash
-# From project root
-docker compose exec backend bash scripts/test.sh
-
-# Or with specific pytest options
-docker compose exec backend bash scripts/tests-start.sh -x  # stop on first error
-```
-
-### Test Coverage
-
-After running tests, open `htmlcov/index.html` in your browser to see detailed coverage reports.
-
-## Migrations
-
-Database migrations are managed with Alembic. Always run migrations inside the Docker container to ensure proper database connectivity.
-
-### Create a new migration:
-
-```bash
-docker compose exec backend alembic revision --autogenerate -m "Add column last_name to User model"
-```
-
-### Apply migrations:
-
-```bash
+# Aplicar migraciones pendientes
 docker compose exec backend alembic upgrade head
-```
 
-### Rollback last migration:
-
-```bash
+# Revertir última migración
 docker compose exec backend alembic downgrade -1
 ```
 
-### Migration workflow:
+### Flujo de trabajo recomendado
 
-1. Modify models in `app/models.py`
-2. Create migration: `docker compose exec backend alembic revision --autogenerate -m "description"`
-3. Review generated migration file in `app/alembic/versions/`
-4. Apply migration: `docker compose exec backend alembic upgrade head`
-5. Commit both `models.py` and migration files to git
+1. Modificar modelos en `app/models.py`
+2. Crear migración: `docker compose exec backend alembic revision --autogenerate -m "..."`
+3. Revisar el archivo generado en `app/alembic/versions/`
+4. Aplicar: `docker compose exec backend alembic upgrade head`
+5. Commitear `models.py` y el archivo de migración juntos
 
-**Important:** Alembic is configured to import models from `app/models.py`. Make sure all your SQLModel models are defined there.
+---
 
-## Code Quality
-
-### Linting:
+## Tests
 
 ```bash
-uv run bash scripts/lint.sh
+# Todos los tests con reporte de cobertura
+uv run bash scripts/test.sh
+
+# Archivo específico
+uv run pytest tests/api/routes/test_users.py -v
+
+# Función específica
+uv run pytest tests/api/routes/test_users.py::test_get_users_superuser_me -v
+
+# Tests que coincidan con un patrón
+uv run pytest -k "test_create" -v
+
+# Dentro de Docker
+docker compose exec backend bash scripts/test.sh
 ```
 
-This runs:
-- `ruff check` - Fast Python linter
-- `mypy` - Static type checker
+Los reportes de cobertura en HTML se generan en `htmlcov/index.html`.
 
-### Formatting:
+---
+
+## Calidad de Código
 
 ```bash
+# Lint (ruff + mypy strict)
+uv run bash scripts/lint.sh
+
+# Formateo automático
 uv run bash scripts/format.sh
 ```
 
-This runs `ruff format` to auto-format code.
+---
 
-## VS Code Setup
+## Email
 
-The project includes VS Code configurations for:
-- Running backend through the debugger with breakpoints
-- Running tests through the Python tests tab
-- Python interpreter set to `backend/.venv/bin/python`
+- **Desarrollo:** Mailcatcher (captura todos los correos en http://localhost:1080)
+- **Producción:** [Resend](https://resend.com) — configurar `RESEND_API_KEY` en `.env`
 
-Make sure your editor is using the correct Python virtual environment.
+Las plantillas están en `app/email-templates/src/` (formato MJML). Para compilarlas a HTML usa la extensión [MJML para VS Code](https://github.com/mjmlio/vscode-mjml) y guarda el resultado en `build/`.
 
-## Email Templates
+---
 
-Email templates are in `app/email-templates/`:
-- `src/` - Source MJML files (editable)
-- `build/` - Compiled HTML files (used by the app)
+## Almacenamiento de Archivos (S3 / MinIO)
 
-To edit email templates:
-1. Install [MJML extension](https://github.com/mjmlio/vscode-mjml) for VS Code
-2. Edit `.mjml` files in `src/`
-3. Use `Ctrl+Shift+P` → "MJML: Export to HTML"
-4. Save compiled `.html` file to `build/`
-
-## Environment Variables
-
-Key environment variables (set in root `.env` file):
+- **Desarrollo:** MinIO (arranca automáticamente con Docker Compose). Consola en http://minio-console.localhost con `minioadmin/minioadmin`.
+- **Producción:** AWS S3 — basta con cambiar las variables de entorno.
 
 ```env
-# Database
+# Desarrollo (MinIO)
+S3_ENDPOINT_URL=http://minio:9000
+S3_ACCESS_KEY_ID=minioadmin
+S3_SECRET_ACCESS_KEY=minioadmin
+S3_BUCKET_NAME=app-storage
+
+# Producción (AWS S3) – dejar S3_ENDPOINT_URL vacío
+S3_ENDPOINT_URL=
+S3_ACCESS_KEY_ID=tu-aws-key
+S3_SECRET_ACCESS_KEY=tu-aws-secret
+S3_BUCKET_NAME=tu-bucket
+S3_REGION=us-east-1
+```
+
+---
+
+## Variables de Entorno Clave
+
+Se definen en el archivo `.env` de la raíz del proyecto:
+
+```env
 POSTGRES_SERVER=db
 POSTGRES_PORT=5432
 POSTGRES_USER=postgres
 POSTGRES_PASSWORD=changethis
 POSTGRES_DB=app
 
-# Security
-SECRET_KEY=your-secret-key-change-in-production
-
-# CORS
+SECRET_KEY=cambia-esto-en-produccion
 BACKEND_CORS_ORIGINS=["http://localhost:5173","http://localhost"]
 
-# Email (development with mailcatcher)
 SMTP_HOST=mailcatcher
 SMTP_PORT=1025
 SMTP_TLS=false
 EMAILS_FROM_EMAIL=noreply@example.com
+RESEND_API_KEY=
 
-# S3 / Object Storage (MinIO for development, S3 for production)
-S3_ENDPOINT_URL=http://minio:9000  # Use MinIO locally
-S3_ACCESS_KEY_ID=minioadmin
-S3_SECRET_ACCESS_KEY=minioadmin
-S3_BUCKET_NAME=app-storage
-S3_REGION=us-east-1
+FIRST_SUPERUSER=admin@example.com
+FIRST_SUPERUSER_PASSWORD=changethis
 ```
 
-See `.env.example` in project root for complete list.
-
-## Object Storage (S3 / MinIO)
-
-The project uses S3-compatible object storage for file uploads:
-
-- **Development:** MinIO (S3-compatible server running in Docker)
-- **Production:** AWS S3 (or any S3-compatible service)
-
-### Using MinIO (Development)
-
-MinIO is automatically started with `docker compose up`. Access the console at http://minio-console.localhost with credentials `minioadmin/minioadmin`.
-
-**Important:** You must manually create the bucket before uploading files:
-
-```bash
-# Option 1: Via MinIO Console (web UI)
-# Go to http://minio-console.localhost → Buckets → Create Bucket → "app-storage"
-
-# Option 2: Via CLI
-docker compose exec minio mc mb local/app-storage
-```
-
-### Using AWS S3 (Production)
-
-To switch to AWS S3, simply update the environment variables in `.env`:
-
-```env
-S3_ENDPOINT_URL=              # Leave empty for AWS S3
-S3_ACCESS_KEY_ID=your-aws-key
-S3_SECRET_ACCESS_KEY=your-aws-secret
-S3_BUCKET_NAME=your-bucket
-S3_REGION=us-east-1
-```
-
-The same code works for both MinIO and AWS S3. See [`docs/varios/s3-storage.md`](../docs/varios/s3-storage.md) for detailed instructions.
+Consulta `.env.example` en la raíz para la lista completa.

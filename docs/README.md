@@ -1,211 +1,125 @@
 # Documentación del Proyecto OrbitEngine
 ## Plataforma SaaS para Gestión de Pymes
 
-**Proyecto de Grado**  
-**Equipo:** 3 Integrantes  
-**Período:** Noviembre 2025 - Abril 2026
+**Proyecto de Grado**
+**Período:** Noviembre 2025 – Mayo 2026
 
 ---
 
-## 📋 Índice de Documentos
+## Índice de Documentos
 
-### 1. [Propuesta de Proyecto](./propuesta.md)
-Documento inicial con el planteamiento del problema, objetivos e hipótesis del proyecto de grado.
+### Planteamiento del Proyecto
 
-### 2. [Alcance del Proyecto y MVP](./01-alcance-mvp.md)
-Define el alcance completo del proyecto, la definición del MVP (Minimum Viable Product), módulos incluidos y excluidos, y métricas de éxito.
+| Documento | Descripción |
+|---|---|
+| [Alcance y MVP](./planteamiento/01-alcance-mvp.md) | Alcance del proyecto, definición del MVP, módulos y métricas de éxito |
+| [Historias de Usuario y Requisitos](./planteamiento/02-requisitos.md) | Personas, 27 historias de usuario, requisitos funcionales y no funcionales |
+| [Cronograma](./planteamiento/03-cronograma.md) | Planificación por sprints, hitos y distribución de tareas |
+| [Arquitectura Técnica](./planteamiento/04-arquitectura-tecnica.md) | Arquitectura de alto nivel, backend, frontend, seguridad y deployment |
+| [Base de Datos](./planteamiento/05-base-de-datos.md) | Diagrama ER, tablas, relaciones, estrategia de multi-tenancy |
+| [SRS – Especificación de Requisitos](./planteamiento/SRS.md) | Documento formal de especificación de requisitos del sistema |
+| [IA / Predicción de Demanda](./planteamiento/IA.md) | Diseño del módulo de forecasting con Prophet |
 
-**Contenido destacado:**
-- ✅ Definición clara del MVP
-- ✅ Priorización de funcionalidades (Prioridad 1, 2, 3)
-- ✅ Módulos adicionales post-MVP
-- ✅ Métricas técnicas y de producto
-- ✅ Riesgos y mitigación
+### Informe Final
 
-### 3. [Historias de Usuario y Requisitos](./02-requisitos.md)
-Especificación detallada de historias de usuario, requisitos funcionales y no funcionales del sistema.
-
-**Contenido destacado:**
-- 👥 Personas (usuarios tipo)
-- 📖 27 Historias de Usuario detalladas con criterios de aceptación
-- ⚙️ Requisitos funcionales por módulo
-- 🔒 Requisitos no funcionales (rendimiento, seguridad, usabilidad)
-- ✅ Reglas de negocio y validaciones
-
-### 4. [Cronograma de Desarrollo](./03-cronograma.md)
-Planificación temporal completa desde noviembre 2024 hasta abril 2025.
-
-**Contenido destacado:**
-- 📅 6 fases de desarrollo
-- 🏃 12 sprints de 2 semanas cada uno
-- 📊 Distribución de historias de usuario por sprint
-- 🎯 Hitos principales (milestones)
-- 👥 Roles y responsabilidades del equipo
-- ⚠️ Gestión de riesgos y buffers
-
-### 5. [Stack Tecnológico](./04-stack-tecnologico.md)
-Propuesta completa del stack tecnológico con justificaciones.
-
-**Contenido destacado:**
-- 💻 **Frontend:** React 18 + TypeScript, Vite, Tailwind CSS, shadcn/ui
-- ⚙️ **Backend:** Python 3.11 + FastAPI, SQLAlchemy, Pydantic
-- 🗄️ **Base de Datos:** PostgreSQL + Redis
-- 🤖 **IA/ML:** scikit-learn, Prophet, pandas
-- ☁️ **Cloud:** AWS (EC2/ECS, RDS, S3, CloudFront)
-- 🔄 **DevOps:** Docker, GitHub Actions, Celery
-- 📊 Comparativas y justificaciones de decisiones
-- 💰 Estimación de costos AWS (~$40/mes)
-
-### 6. [Diseño de Base de Datos](./05-base-de-datos.md)
-Modelo de datos completo con todas las tablas, relaciones e índices.
-
-**Contenido destacado:**
-- 📐 Diagrama Entidad-Relación
-- 📊 11 tablas principales detalladas
-- 🔐 Estrategia de multi-tenancy
-- ⚡ Índices y optimizaciones
-- 🔄 Triggers importantes
-- 💾 Estrategia de backups
-- 📈 Consideraciones de escalabilidad
-- 📝 Queries comunes optimizadas
-
-### 7. [Arquitectura Técnica](./06-arquitectura-tecnica.md)
-Diseño arquitectónico completo del sistema con diagramas y patrones.
-
-**Contenido destacado:**
-- 🏗️ Arquitectura de alto nivel (diagrama de componentes)
-- 🔧 Arquitectura del backend (capas, estructura de directorios)
-- 🎨 Arquitectura del frontend (estructura, gestión de estado)
-- 🔐 Seguridad y autenticación (flujo JWT, RBAC)
-- 🤖 Sistema de IA/ML (pipelines de entrenamiento y predicción)
-- 🚀 Estrategia de despliegue (Docker, CI/CD)
-- 🔄 Flujos principales del sistema
-- 📐 Patrones arquitectónicos (Repository, Service Layer, DI)
-- 📈 Consideraciones de escalabilidad
+| Documento | Descripción |
+|---|---|
+| [Preliminares](./informe-final/00-preliminares.md) | Portada, resumen, agradecimientos |
+| [Capítulo 1 – Introducción](./informe-final/capitulo-1-introduccion.md) | Contexto, problema, objetivos, justificación |
+| [Capítulo 2 – Marco de Referencia](./informe-final/capitulo-2-marco-referencia.md) | Estado del arte, marco teórico, tecnologías |
+| [Capítulo 3 – Análisis y Diseño](./informe-final/capitulo-3-analisis-diseno.md) | Requisitos, arquitectura, diseño de BD y UI |
+| [Capítulo 4 – Desarrollo](./informe-final/capitulo-4-desarrollo.md) | Implementación por módulos, decisiones técnicas |
+| [Capítulo 5 – Resultados](./informe-final/capitulo-5-resultados.md) | Pruebas, métricas, validación con usuarios |
+| [Capítulo 6 – Conclusiones](./informe-final/capitulo-6-conclusiones.md) | Conclusiones, trabajo futuro |
+| [Anexo A – Manual de Usuario](./informe-final/anexo-a-manual-usuario.md) | Guía de uso de la plataforma |
+| [Anexo B – Manual de Despliegue](./informe-final/anexo-b-manual-despliegue.md) | Instrucciones de instalación y configuración |
+| [Anexo C – Documentación Técnica](./informe-final/anexo-c-documentacion-tecnica.md) | API, modelos, estructura de código |
+| [Referencias](./informe-final/referencias.md) | Bibliografía y fuentes |
 
 ---
 
-## 🎯 Resumen Ejecutivo del Proyecto
+## Resumen del Proyecto
 
 ### ¿Qué es OrbitEngine?
 
-Una plataforma SaaS accesible y modular que permite a las pequeñas y medianas empresas (pymes) gestionar de manera centralizada sus procesos internos de **inventario, ventas, clientes y reportes**, incorporando **Inteligencia Artificial** para predicción de demanda y análisis predictivo.
+Plataforma SaaS full-stack que permite a las pymes gestionar de forma centralizada sus procesos internos: **inventario, ventas, clientes y usuarios**, con soporte multi-tenancy y control de acceso por roles.
 
 ### Problema que Resuelve
 
-Las pymes enfrentan una brecha tecnológica considerable, gestionando sus procesos mediante métodos manuales (hojas de cálculo, mensajería), lo que produce:
-- ❌ Duplicidad y pérdida de información
-- ❌ Errores frecuentes en inventarios
-- ❌ Escasa trazabilidad
-- ❌ Sobrecarga administrativa
-
-### Solución Propuesta
-
-✅ Plataforma web intuitiva y responsive  
-✅ Gestión centralizada de inventario, ventas y clientes  
-✅ Dashboard con métricas en tiempo real  
-✅ Predicción de demanda con IA  
-✅ Recomendaciones inteligentes de reabastecimiento  
-✅ Reportes exportables y análisis  
-
-### MVP (Alcance Inicial)
-
-**Módulos Críticos:**
-1. ✅ Autenticación y gestión de usuarios con roles
-2. ✅ Gestión de inventario (CRUD productos, alertas de stock)
-3. ✅ Gestión de ventas (registro, historial, facturación)
-4. ✅ Gestión de clientes (CRUD, historial de compras)
-5. ✅ Dashboard y reportes básicos
-6. ✅ Predicción de demanda con IA (simplificado)
+Las pymes gestionan sus procesos con métodos manuales (hojas de cálculo, mensajería), lo que genera:
+- Duplicidad y pérdida de información
+- Errores frecuentes en inventarios
+- Falta de trazabilidad y métricas
+- Sobrecarga administrativa
 
 ### Stack Tecnológico
 
 ```
-Frontend:  React + TypeScript + Tailwind CSS
-Backend:   Python + FastAPI + PostgreSQL
-Cloud:     AWS (EC2, RDS, S3, CloudFront)
-IA/ML:     Prophet + scikit-learn
+Frontend:   React 19 + TypeScript + TanStack Router/Query + Tailwind CSS + shadcn/ui
+Backend:    Python 3.10 + FastAPI + SQLModel + PostgreSQL + Alembic
+Auth:       JWT (PyJWT + pwdlib)
+Email:      Resend + Mailcatcher (dev)
+Storage:    MinIO (dev) / AWS S3 (prod)
+Infra:      Docker + Docker Compose + Traefik
+Testing:    pytest (backend) + Playwright (frontend)
 ```
 
-### Timeline
+---
 
-- **Inicio:** Noviembre 2025
-- **Desarrollo:** 16 semanas (8 sprints)
-- **Validación:** 4 semanas con pymes reales
-- **Entrega:** Abril 2026
+## Estado del Proyecto (Mayo 2026)
 
-### Equipo
+### Módulos Completados
 
-- **3 integrantes:** Backend Lead, Frontend Lead, DevOps & Full Stack
-- **15-20 horas/semana** por integrante
-- **Metodología:** Scrum adaptado (sprints de 2 semanas)
+| Módulo | Estado |
+|---|---|
+| Autenticación (login, registro, recuperación de contraseña) | Completo |
+| Multi-tenancy con organizaciones | Completo |
+| Control de acceso basado en roles (admin, seller, viewer) | Completo |
+| Gestión de inventario (productos, categorías, movimientos, ajuste de stock) | Completo |
+| Gestión de ventas (registro, detalle, cancelación) | Completo |
+| Gestión de clientes (CRUD, historial de compras) | Completo |
+| Dashboard con KPIs y gráficos | Completo |
+| Administración de usuarios | Completo |
+| Configuración de cuenta y organización | Completo |
+| Landing page pública | Completo |
+| Tests backend (pytest) | Completo |
+| Tests frontend E2E (Playwright) | Completo |
+
+### Módulos Pendientes
+
+| Módulo | Estado |
+|---|---|
+| Predicción de demanda con IA (Prophet) | Pendiente |
+| Exportación a PDF/Excel | Pendiente |
+| Deployment en producción | Pendiente |
+| CI/CD con GitHub Actions | Pendiente |
 
 ---
 
-## 📊 Métricas de Éxito
+## Métricas de Éxito
 
 ### Técnicas
-- ⚡ Tiempo de respuesta < 500ms
-- 🧪 Cobertura de tests > 60%
-- ⏰ Disponibilidad > 95%
+- Tiempo de respuesta API < 500ms
+- Cobertura de tests > 60%
 
 ### Producto
-- 👥 2+ pymes usando el sistema
-- 😊 Satisfacción de usuario > 4/5
-- 🎯 Precisión de IA > 70%
+- 2+ pymes usando el sistema en piloto
+- Satisfacción de usuario > 4/5
 
 ### Académicas
-- ✅ Validación empírica de hipótesis
-- 📉 Reducción de tiempo en tareas administrativas > 30%
-- 📊 Reducción de errores en inventario > 40%
+- Reducción de tiempo en tareas administrativas > 30%
+- Reducción de errores en inventario > 40%
 
 ---
 
-## 🚀 Próximos Pasos
-
-### Fase 1: Setup Inicial (Noviembre)
-1. Configurar repositorios GitHub
-2. Setup de infraestructura AWS
-3. Crear estructura de proyecto (backend + frontend)
-4. Configurar CI/CD básico
-5. Sprint Planning - Sprint 1
-
-### Sprint 1: Autenticación (Diciembre)
-1. Implementar modelos de Usuario y Roles
-2. Endpoints de login/register
-3. Generación y validación de JWT
-4. UI de login y registro
-5. Tests de autenticación
-
----
-
-## 📚 Cómo Usar Esta Documentación
-
-1. **Empezar por:** [Propuesta](./propuesta.md) para entender el contexto
-2. **Luego:** [Alcance y MVP](./01-alcance-mvp.md) para ver qué se va a construir
-3. **Después:** [Requisitos](./02-requisitos.md) para detalles funcionales
-4. **Para planificación:** [Cronograma](./03-cronograma.md)
-5. **Para implementación:** [Stack Tecnológico](./04-stack-tecnologico.md), [Base de Datos](./05-base-de-datos.md), [Arquitectura](./06-arquitectura-tecnica.md)
-
----
-
-## 🔄 Control de Versiones
+## Control de Versiones
 
 | Versión | Fecha | Descripción |
-|---------|-------|-------------|
-| 1.0 | Nov 2025 | Versión inicial completa de documentación |
+|---|---|---|
+| 1.0 | Nov 2025 | Documentación inicial de planteamiento |
+| 2.0 | Ene 2026 | Inicio del informe final |
+| 3.0 | May 2026 | Actualización al estado real del proyecto |
 
 ---
 
-## 👥 Contacto
-
-**Proyecto:** OrbitEngine  
-**Universidad:** [Tu Universidad]  
-**Asesor:** [Nombre del asesor]  
-**Equipo:** [Nombres de los integrantes]
-
----
-
-**Fecha de Elaboración:** Noviembre 2025  
-**Última Actualización:** Noviembre 2025
-
+**Última actualización:** Mayo 2026
