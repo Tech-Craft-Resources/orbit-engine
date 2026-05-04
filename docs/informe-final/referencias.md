@@ -11,6 +11,10 @@ Amid, A., Moalagh, M., & Ravasan, A. Z. (2012). Identification and classificatio
 Banco Interamericano de Desarrollo. (2021). *La transformación digital de las pymes latinoamericanas:
     Diagnóstico y hoja de ruta*. BID. https://publications.iadb.org/
 
+Bangor, A., Kortum, P. T., & Miller, J. T. (2008). An empirical evaluation of the System Usability
+    Scale. *International Journal of Human-Computer Interaction*, *24*(6), 574–594.
+    https://doi.org/10.1080/10447310802205776
+
 Benlian, A., & Hess, T. (2011). Opportunities and risks of software-as-a-service: Findings from a
     survey of IT executives. *Decision Support Systems*, *52*(1), 232–246.
     https://doi.org/10.1016/j.dss.2011.07.007
@@ -20,9 +24,15 @@ Bezemer, C. P., & Zaidman, A. (2010). Multi-tenant SaaS applications: Maintenanc
     International Workshop on Principles of Software Evolution (IWPSE)* (pp. 88–92). ACM.
     https://doi.org/10.1145/1862372.1862393
 
+Braun, V., & Clarke, V. (2006). Using thematic analysis in psychology. *Qualitative Research in
+    Psychology*, *3*(2), 77–101. https://doi.org/10.1191/1478088706qp063oa
+
 Brooke, J. (1996). SUS: A "quick and dirty" usability scale. En P. W. Jordan, B. Thomas,
     B. A. Weerdmeester & I. L. McClelland (Eds.), *Usability evaluation in industry* (pp. 189–194).
     Taylor & Francis.
+
+Campbell, D. T., & Stanley, J. C. (1963). *Experimental and quasi-experimental designs for
+    research*. Rand McNally.
 
 Cardona, M., Vera, C., & Tabares, J. (2022). Factores críticos en la implementación de sistemas ERP
     en pymes colombianas: Una revisión sistemática de la literatura. *Información Tecnológica*,
@@ -31,6 +41,9 @@ Cardona, M., Vera, C., & Tabares, J. (2022). Factores críticos en la implementa
 Comisión Económica para América Latina y el Caribe. (2022). *Perspectivas económicas de América
     Latina 2022: Hacia una transición verde y digital*. CEPAL.
     https://repositorio.cepal.org/
+
+Creswell, J. W., & Plano Clark, V. L. (2018). *Designing and conducting mixed methods research*
+    (3rd ed.). SAGE.
 
 Duan, J., Faker, K., Fesak, A., & Stuart, T. (2012). Benefits and drawbacks of cloud-based versus
     traditional ERP systems. En *Proceedings of Advanced Topics in Information Technology*
@@ -66,12 +79,17 @@ Ramírez, S. (2018). *FastAPI: High performance, easy to learn, fast to code, re
 Ramírez, S. (2021). *SQLModel: SQL databases in Python, designed for simplicity, compatibility, and
     robustness*. https://sqlmodel.tiangolo.com/
 
+Reichheld, F. F. (2003). The one number you need to grow. *Harvard Business Review*, *81*(12),
+    46–54.
+
 Rodríguez-Abitia, G., Bribiesca-Correa, G., García-Rodríguez, F. J., & Martínez-Alonso, M. (2020).
     Digital gap in universities and challenges for digital transformation in Mexico during COVID-19.
     *Future Internet*, *12*(12), Artículo 210. https://doi.org/10.3390/fi12120210
 
 Soh, C., Kien, S. S., & Tay-Yap, J. (2000). Cultural fits and misfits: Is ERP a universal solution?
     *Communications of the ACM*, *43*(4), 47–51. https://doi.org/10.1145/332051.332070
+
+Yin, R. K. (2018). *Case study research and applications: Design and methods* (6th ed.). SAGE.
 
 Zhang, Z., Li, X., & Wang, C. (2021). Usability evaluation of ERP systems for SME users:
     A multi-criteria approach. *Computers in Human Behavior*, *118*, Artículo 106698.

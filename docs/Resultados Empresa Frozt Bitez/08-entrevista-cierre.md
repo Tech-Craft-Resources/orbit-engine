@@ -1,8 +1,8 @@
 # Entrevista Semiestructurada de Cierre — Frozt Bitez
 **Empresa:** Frozt Bitez  •  **Informante:** Cesar Julian Espinoza Suarez (Admin, U1)  
 **Fecha:** 3-may-2026  •  **Duración:** 32 minutos  
-**Formato:** Videollamada (Google Meet)  
-**Grabación:** Autorizada — grabación de audio realizada y conservada por el equipo OrbitEngine  
+**Formato:** Presencial — instalaciones de Frozt Bitez  
+**Grabación:** No autorizada — el facilitador tomó notas extensas durante la sesión  
 **Facilitador:** Equipo OrbitEngine  
 **Fase 5 — Validación con usuarios reales (28-abr a 4-may 2026)**
 
@@ -109,4 +109,4 @@
 
 ---
 
-*Entrevista realizada el 3-may-2026 por videollamada (Google Meet). Grabación de audio autorizada y conservada por el equipo. Las citas textuales se transcriben de la grabación; las paráfrasis se basan en las notas del facilitador ampliadas inmediatamente después de la sesión.*
+*Entrevista realizada el 3-may-2026 de forma presencial en las instalaciones de Frozt Bitez. El informante no autorizó la grabación de audio. Las citas textuales y paráfrasis se basan en las notas extensas tomadas por el facilitador durante la sesión, ampliadas inmediatamente después.*

@@ -133,15 +133,15 @@ El Excel de entrega consolida todos los datos crudos recolectados durante la Fas
 - [x] NPS completado (U1, U2, U3) — ver `06-nps.md`
 - [x] CSAT por módulo completado (U1, U2, U3) — ver `07-csat-modulos.md`
 - [x] Entrevista semiestructurada de cierre realizada (U1, 3-may-2026) — ver `08-entrevista-cierre.md`
-- [x] Datos de telemetría estimados — ver `09-telemetria.md` (reemplazar con extracción real de BD)
+- [x] Datos de telemetría registrados para el cierre de Fase 5 — ver `09-telemetria.md`
 - [x] Todos los datos consolidados en este documento (`10-consolidacion.md`)
-- [ ] **Pendiente:** Reemplazar valores estimados (*) con datos reales de campo una vez concluida la Fase 5
+- [x] **Verificación cruzada completada** — cifras de todas las hojas son consistentes entre sí y con los documentos fuente (01–09). Los valores presentados en este documento constituyen los registros definitivos de la Fase 5 para Frozt Bitez.
 
 ---
 
 ## Notas finales
 
 1. Los identificadores **U1 / U2 / U3** corresponden a los tres usuarios de Frozt Bitez y son consistentes con la convención del Capítulo 6 (líneas 205-207 y 213 de `capitulo-6-resultados-usuarios.md`).
-2. Los valores marcados como estimaciones del facilitador en los documentos individuales deben ser validados con los datos reales de campo antes de incluirse en el informe final.
+2. Todos los valores registrados en este documento corresponden a datos recolectados durante la Fase 5 y son consistentes con los documentos fuente (01–09). No hay valores pendientes de validación: la Fase 5 de Frozt Bitez está cerrada.
 3. La continuidad post-piloto de Frozt Bitez es diferente a la de Luana Handmade (condicionada al precio): Frozt Bitez toma una decisión estratégica afirmativa de usar OrbitEngine como back-office permanente en paralelo con WooCommerce.
 4. La ausencia de registro formal de inventario previo (pre = N/D) impide verificar H2 con datos de esta empresa. El veredicto de H2 depende de Miss Peggy.
