@@ -1,13 +1,13 @@
-# compile.ps1 — Compila el informe de grado con Pandoc
-# Ejecutar desde la raiz del proyecto: .\docs\compile.ps1
-# O desde la carpeta docs:             .\compile.ps1
-
 $ErrorActionPreference = "Stop"
 
-$output  = "informe-final.pdf"
-$dir     = "$PSScriptRoot\informe-final"
+$dir = "$PSScriptRoot\informe-final"
 
-Write-Host "Compilando $output..." -ForegroundColor Cyan
+# =========================
+# 1. Documento principal
+# =========================
+$outputMain = "informe-final.pdf"
+
+Write-Host "Compilando documento principal..." -ForegroundColor Cyan
 
 pandoc `
   "$dir\metadata.yaml" `
@@ -19,19 +19,42 @@ pandoc `
   "$dir\capitulo-6-resultados-usuarios.md" `
   "$dir\capitulo-7-conclusiones.md" `
   "$dir\referencias.md" `
-  "$dir\anexo-a-manual-usuario.md" `
-  "$dir\anexo-b-manual-despliegue.md" `
-  "$dir\anexo-c-documentacion-tecnica.md" `
-  -o "$PSScriptRoot\$output" `
+  -o "$PSScriptRoot\$outputMain" `
   --pdf-engine=xelatex `
   --from="markdown+smart+pipe_tables" `
   --syntax-highlighting=tango `
   --resource-path="$dir" `
   --top-level-division=chapter
 
+# =========================
+# 2. Anexos
+# =========================
+$outputAnexos = "anexos.pdf"
+
+Write-Host "Compilando anexos..." -ForegroundColor Cyan
+
+pandoc `
+  "$dir\metadata.yaml" `
+  "$dir\anexo-a-manual-usuario.md" `
+  "$dir\anexo-b-manual-despliegue.md" `
+  "$dir\anexo-c-documentacion-tecnica.md" `
+  -o "$PSScriptRoot\$outputAnexos" `
+  --pdf-engine=xelatex `
+  --from="markdown+smart+pipe_tables" `
+  --syntax-highlighting=tango `
+  --resource-path="$dir" `
+  --top-level-division=chapter
+
+# =========================
+# Resultado
+# =========================
 if ($LASTEXITCODE -eq 0) {
-    Write-Host "PDF generado: docs\$output" -ForegroundColor Green
-    Start-Process "$PSScriptRoot\$output"
+    Write-Host "PDFs generados:" -ForegroundColor Green
+    Write-Host " - docs\$outputMain"
+    Write-Host " - docs\$outputAnexos"
+
+    Start-Process "$PSScriptRoot\$outputMain"
+    Start-Process "$PSScriptRoot\$outputAnexos"
 } else {
     Write-Host "Error al compilar. Revisa los mensajes de xelatex." -ForegroundColor Red
     exit 1
