@@ -22,6 +22,7 @@ pandoc `
   -o "$PSScriptRoot\$outputMain" `
   --pdf-engine=xelatex `
   --from="markdown+smart+pipe_tables" `
+  --lua-filter="$dir\fix_tables.lua" `
   --syntax-highlighting=tango `
   --resource-path="$dir" `
   --top-level-division=chapter
@@ -29,21 +30,21 @@ pandoc `
 # =========================
 # 2. Anexos
 # =========================
-$outputAnexos = "anexos.pdf"
+# $outputAnexos = "anexos.pdf"
 
-Write-Host "Compilando anexos..." -ForegroundColor Cyan
+# Write-Host "Compilando anexos..." -ForegroundColor Cyan
 
-pandoc `
-  "$dir\metadata.yaml" `
-  "$dir\anexo-a-manual-usuario.md" `
-  "$dir\anexo-b-manual-despliegue.md" `
-  "$dir\anexo-c-documentacion-tecnica.md" `
-  -o "$PSScriptRoot\$outputAnexos" `
-  --pdf-engine=xelatex `
-  --from="markdown+smart+pipe_tables" `
-  --syntax-highlighting=tango `
-  --resource-path="$dir" `
-  --top-level-division=chapter
+# pandoc `
+#   "$dir\metadata.yaml" `
+#   "$dir\anexo-a-manual-usuario.md" `
+#   "$dir\anexo-b-manual-despliegue.md" `
+#   "$dir\anexo-c-documentacion-tecnica.md" `
+#   -o "$PSScriptRoot\$outputAnexos" `
+#   --pdf-engine=xelatex `
+#   --from="markdown+smart+pipe_tables" `
+#   --syntax-highlighting=tango `
+#   --resource-path="$dir" `
+#   --top-level-division=chapter
 
 # =========================
 # Resultado
@@ -51,10 +52,10 @@ pandoc `
 if ($LASTEXITCODE -eq 0) {
     Write-Host "PDFs generados:" -ForegroundColor Green
     Write-Host " - docs\$outputMain"
-    Write-Host " - docs\$outputAnexos"
+    # Write-Host " - docs\$outputAnexos"
 
     Start-Process "$PSScriptRoot\$outputMain"
-    Start-Process "$PSScriptRoot\$outputAnexos"
+    # Start-Process "$PSScriptRoot\$outputAnexos"
 } else {
     Write-Host "Error al compilar. Revisa los mensajes de xelatex." -ForegroundColor Red
     exit 1

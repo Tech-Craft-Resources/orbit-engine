@@ -104,6 +104,9 @@ header-includes:
   - \usepackage{longtable}
   - \usepackage{booktabs}
 
+  # Tablas en orientación horizontal (landscape) cuando el ancho lo requiere
+  - \usepackage{pdflscape}
+
   # Tablas anchas: fuente más pequeña, menos padding y menos espacio entre filas
   - \usepackage{etoolbox}
   - \AtBeginEnvironment{longtable}{\footnotesize\setlength{\tabcolsep}{3pt}\renewcommand{\arraystretch}{0.95}}

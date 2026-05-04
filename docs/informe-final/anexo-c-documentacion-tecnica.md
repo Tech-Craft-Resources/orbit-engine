@@ -254,7 +254,7 @@ Todos los endpoints están prefijados con `/api/v1`. La documentación interacti
 ### C.4.3 Organizaciones (`/organizations`)
 
 | Método | Ruta | Auth | Rol mínimo | Descripción |
-|---|---|---|---|---|
+| ------ | ---- | ---- | ---------- | ----------- |
 | GET | `/organizations/me` | Sí | Cualquiera | Ver datos de la organización actual |
 | PATCH | `/organizations/me` | Sí | admin | Actualizar nombre/slug/descripción |
 | POST | `/organizations/signup` | No | — | Registro de nueva organización + admin |
@@ -278,7 +278,7 @@ Todos los endpoints están prefijados con `/api/v1`. La documentación interacti
 ### C.4.6 Productos (`/products`)
 
 | Método | Ruta | Auth | Rol mínimo | Descripción |
-|---|---|---|---|---|
+| ------ | ---- | ---- | ---------- | ----------- |
 | GET | `/products/` | Sí | Cualquiera | Listar productos (`search`, `is_active`, `category_id`, `sort_by`) |
 | POST | `/products/` | Sí | admin | Crear producto |
 | GET | `/products/{id}` | Sí | Cualquiera | Obtener producto por ID |
@@ -574,22 +574,22 @@ La configuración se carga desde el archivo `.env` usando Pydantic-Settings. Tod
 ### C.6.2 Variables opcionales con valores por defecto
 
 | Variable | Tipo | Default | Descripción |
-|---|---|---|---|
+| -------- | ---- | ------- | ----------- |
 | `POSTGRES_PORT` | `int` | `5432` | Puerto de PostgreSQL |
 | `POSTGRES_PASSWORD` | `str` | `""` | Contraseña de PostgreSQL |
 | `ACCESS_TOKEN_EXPIRE_MINUTES` | `int` | `11520` | Expiración del JWT (8 días) |
 | `FRONTEND_HOST` | `str` | `http://localhost:5173` | URL del frontend para CORS |
 | `BACKEND_CORS_ORIGINS` | `list[str]` | `[]` | Orígenes adicionales CORS |
-| `ENVIRONMENT` | `Literal` | `"local"` | `local` \ | `staging` \ | `production` |
-| `SMTP_HOST` | `str\ | None` | `None` | Host SMTP para envío de emails |
+| `ENVIRONMENT` | `Literal` | `"local"` | `local` \| `staging` \| `production` |
+| `SMTP_HOST` | `str \| None` | `None` | Host SMTP para envío de emails |
 | `SMTP_PORT` | `int` | `587` | Puerto SMTP |
 | `SMTP_TLS` | `bool` | `True` | Usar TLS en SMTP |
 | `SMTP_SSL` | `bool` | `False` | Usar SSL en SMTP |
-| `SMTP_USER` | `str\ | None` | `None` | Usuario SMTP |
-| `SMTP_PASSWORD` | `str\ | None` | `None` | Contraseña SMTP |
-| `EMAILS_FROM_EMAIL` | `EmailStr\ | None` | `None` | Email remitente |
+| `SMTP_USER` | `str \| None` | `None` | Usuario SMTP |
+| `SMTP_PASSWORD` | `str \| None` | `None` | Contraseña SMTP |
+| `EMAILS_FROM_EMAIL` | `EmailStr \| None` | `None` | Email remitente |
 | `EMAIL_RESET_TOKEN_EXPIRE_HOURS` | `int` | `48` | Expiración del token de reset |
-| `SENTRY_DSN` | `HttpUrl\ | None` | `None` | DSN de Sentry para error tracking |
+| `SENTRY_DSN` | `HttpUrl \| None` | `None` | DSN de Sentry para error tracking |
 
 ### C.6.3 Propiedades calculadas (no en `.env`)
 

@@ -16,26 +16,26 @@ La validación técnica se planteó tres objetivos verificables:
 
 ### 5.1.2 Ambiente de Pruebas
 
-Todas las mediciones se ejecutaron contra el **despliegue de producción** descrito en el Capítulo 4:
+Todas las mediciones técnicas se realizaron sobre el entorno de producción real del sistema, siguiendo la configuración detallada en el capítulo anterior. El backend, construido en FastAPI, estaba desplegado en la plataforma Railway, ejecutándose como un servicio web sin réplicas horizontales, es decir, con una única instancia principal. Para adecuarse al nivel de exigencia de cada escenario, se configuró el paralelismo interno del servidor ajustando la cantidad de workers: en los tests 01 a 05 se dispuso de dos workers de FastAPI, mientras que para el test 06—que correspondía a un escenario de carga pico sostenida—se aumentó a cuatro workers, permitiendo simular mayor concurrencia en la aplicación.
 
-| Componente                  | Plataforma                                                     | Configuración relevante para las pruebas                                                                                                                                                                                                                 |
-| --------------------------- | -------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Backend (FastAPI)           | Railway                                                        | Servicio web sin réplicas horizontales, imagen Docker, variables de entorno de producción. La concurrencia interna se ajustó por escenario: **2 workers de FastAPI para los Tests 01–05** y **4 workers para el Test 06** (escenario de pico sostenido). |
-| Base de datos               | PostgreSQL gestionada por Railway                              | Instancia compartida, sin réplicas de lectura                                                                                                                                                                                                            |
-| Frontend (React/Vite)       | Vercel                                                         | SPA con CDN global integrado, HTTPS automático                                                                                                                                                                                                           |
-| Dominio                     | `orbitengine.lat` (frontend) y `api.orbitengine.lat` (backend) | Certificados TLS gestionados por las plataformas                                                                                                                                                                                                         |
-| Cliente de pruebas de carga | Estación de trabajo única del equipo                           | Conexión doméstica en Bogotá, Colombia                                                                                                                                                                                                                   |
+La base de datos utilizada en todas las pruebas fue PostgreSQL, también gestionada desde Railway. Se trataba de una única instancia compartida, sin réplicas de lectura, lo que significa que todas las operaciones (tanto de lectura como de escritura) recaían sobre el mismo servidor de base de datos.
+
+En cuanto al frontend, este estaba desplegado en Vercel. Se trata de una aplicación de página única (SPA), construida con React y Vite, y servida a través de una red global de distribución de contenido (CDN), lo que permite un acceso rápido y seguro gracias a la integración de HTTPS automático.
+
+Respecto a los dominios accesibles en las pruebas, se utilizaron las rutas oficiales del entorno productivo: `orbitengine.lat` para el frontend y `api.orbitengine.lat` para los endpoints del backend. Ambos estaban protegidos con certificados TLS, gestionados y renovados automáticamente por las propias plataformas de despliegue.
+
+Por último, todas las pruebas de carga se ejecutaron desde una única estación de trabajo del equipo, conectada desde una red doméstica situada en Bogotá, Colombia, lo que replica condiciones realistas de acceso de usuarios finales desde una red residencial estándar.
 
 ### 5.1.3 Criterios de Aceptación
 
-Los criterios contra los cuales se evalúan los resultados provienen del Capítulo 3, Sección 3.2:
+Los resultados de la validación técnica se evaluaron en función de criterios previamente definidos y recogidos en la Sección 3.2 del Capítulo 3. Estos criterios son:
 
-| ID     | Tipo           | Criterio aplicable a este capítulo                                                                                                       |
-| ------ | -------------- | ---------------------------------------------------------------------------------------------------------------------------------------- |
-| RNF-01 | Rendimiento    | El 95 % de las respuestas de la API debe completarse en menos de 500 ms bajo carga normal (hasta 50 usuarios concurrentes).              |
-| RNF-02 | Disponibilidad | El sistema debe garantizar una disponibilidad mínima del 95 % mensual.                                                                   |
-| RNF-07 | Usabilidad     | La interfaz debe ser responsive y funcional en dispositivos de 375 px de ancho mínimo.                                                   |
-| RNF-09 | Escalabilidad  | La arquitectura debe soportar el incremento de tenants sin cambios estructurales, mediante escalado horizontal de la capa de aplicación. |
+- Para el rendimiento (RNF-01): Se exige que al menos el 95% de las respuestas de la API, bajo condiciones de carga normal (hasta 50 usuarios concurrentes), tengan un tiempo de resolución inferior a 500 milisegundos. Este umbral busca garantizar una experiencia ágil incluso cuando la plataforma es utilizada por decenas de usuarios al mismo tiempo.
+- En cuanto a la disponibilidad (RNF-02): El sistema debe permanecer disponible y operativo al menos el 95% del tiempo a lo largo de un mes, limitando al mínimo los periodos de caída o interrupción en el servicio.
+- Analizando la usabilidad (RNF-07): Se requiere que la interfaz principal del sistema sea completamente responsive y funcional en dispositivos cuyo ancho de pantalla sea igual o superior a 375 píxeles, que es una referencia común para pantallas de teléfonos móviles actuales.
+- Respecto a la escalabilidad (RNF-09): La arquitectura técnica del sistema debe poder soportar el crecimiento en la cantidad de organizaciones (tenants) que lo utilizan, sin necesidad de modificar estructuras internas del software, solamente añadiendo nuevas instancias (escalado horizontal) en la capa de aplicación.
+
+Estos criterios delimitan de forma concreta cómo juzgar el éxito o insuficiencia de los resultados obtenidos durante la validación técnica de OrbitEngine.
 
 ### 5.1.4 Herramientas Empleadas
 
@@ -93,11 +93,11 @@ Las pruebas se construyeron con **Locust** y están versionadas en el repositori
 
 El `locustfile.py` define tres clases de `HttpUser` que se mezclan según pesos relativos:
 
-| Perfil            | Peso | Comportamiento                                                                                                                                                                                        | Tiempo de espera    |
-| ----------------- | ---- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------- |
-| `OrbitEngineUser` | 3    | Lee dashboard, productos, ventas, clientes y categorías. Ejercita paginación extrema (`?limit=100&skip=0/100`), búsqueda (`?search=`), ordenamiento (`?sort_by=&sort_order=`) y filtros (`?status=`). | Entre 0,5 s y 1,5 s |
-| `SellerUser`      | 2    | Crea ventas reales contra el catálogo (`POST /sales/`), ajusta stock (`POST /products/{id}/adjust-stock`) y consulta movimientos.                                                                     | Entre 1 s y 2 s     |
-| `SpammerUser`     | 1    | Martillea sin pausa los endpoints de agregación (`/dashboard/stats`, `/sales/stats`, `/products/low-stock`) y peticiones a UUIDs inexistentes para ejercitar el camino de error 404.                  | `constant(0)`       |
+| Perfil | Peso | Comportamiento | Tiempo de espera |
+| ----------------- | ---- | -------------- | ---------------- |
+| `OrbitEngineUser` | 3 | Lee dashboard, productos, ventas, clientes y categorías. Ejercita paginación extrema (`?limit=100&skip=0/100`), búsqueda (`?search=`), ordenamiento (`?sort_by=&sort_order=`) y filtros (`?status=`). | Entre 0,5 s y 1,5 s |
+| `SellerUser` | 2 | Crea ventas reales contra el catálogo (`POST /sales/`), ajusta stock (`POST /products/{id}/adjust-stock`) y consulta movimientos. | Entre 1 s y 2 s |
+| `SpammerUser` | 1 | Martillea sin pausa los endpoints de agregación (`/dashboard/stats`, `/sales/stats`, `/products/low-stock`) y peticiones a UUIDs inexistentes para ejercitar el camino de error 404. | `constant(0)` |
 
 La rotación de cuentas se hace de forma cíclica y _thread-safe_ sobre la lista `ACCOUNTS`, que contiene credenciales válidas de las ocho organizaciones del piloto técnico descritas en la sección 5.1.5: las **dos empresas reales** (**Frozt Bitez** y **Miss Peggy**) y las **seis empresas ficticias de prueba** (**Lehgo**, **Ferrallas del Norte**, **Sabor Caribe**, **Moda Andes**, **FarmaVida** y **Default**). Esta rotación cumple dos funciones en paralelo: (i) cada usuario virtual ejercita el aislamiento por `organization_id` desde un _tenant_ distinto, validando la integridad multi-tenant bajo carga; (ii) las peticiones consultan tanto los volúmenes reales y acotados de Frozt Bitez y Miss Peggy como los volúmenes grandes generados por las seis empresas ficticias de prueba, lo que aporta un perfil de coste por consulta más representativo que el que obtendría un único _tenant_.
 
@@ -174,21 +174,14 @@ La tasa de fallos crece de manera monótona hasta el Test 05 (régimen de pico n
 
 Los CSV permiten aislar el comportamiento de los endpoints más representativos a lo largo de los seis escenarios:
 
-+--------------------------+-------------------+-------------------+-----------------------------+---------------------------------------------------------------------------------------------------------------------------------------------+
 | Endpoint | Test 01 mediana | Test 02 mediana | Test 06 mediana | Observación |
-+==========================+===================+===================+=============================+=============================================================================================================================================+
+| -------- | --------------- | --------------- | --------------- | ----------- |
 | POST /login/access-token | 910 ms | 1 200 ms | 2 200 ms | Coste fijo dominado por el hashing bcrypt de la contraseña; el cuello no es de base de datos. |
-+--------------------------+-------------------+-------------------+-----------------------------+---------------------------------------------------------------------------------------------------------------------------------------------+
 | GET /products/ | 500 ms | 730 ms | 690 ms | Endpoint CRUD con paginación; el coste se mantiene acotado incluso bajo pico. |
-+--------------------------+-------------------+-------------------+-----------------------------+---------------------------------------------------------------------------------------------------------------------------------------------+
 | GET /customers/ | 430 ms | 540 ms | 620 ms | Comportamiento similar al de productos. |
-+--------------------------+-------------------+-------------------+-----------------------------+---------------------------------------------------------------------------------------------------------------------------------------------+
 | GET /dashboard/stats | 710 ms | 850 ms | 1 100 ms (con 19 % de 500) | Agregaciones costosas que se vuelven inestables bajo pico sostenido. |
-+--------------------------+-------------------+-------------------+-----------------------------+---------------------------------------------------------------------------------------------------------------------------------------------+
 | GET /sales/ | **7 500 ms** | **7 700 ms** | **8 600 ms** | Latencia dominante en todos los regímenes; resultado de joins con SaleItem y agregaciones por venta sin paginación servidor-lado optimizada. |
-+--------------------------+-------------------+-------------------+-----------------------------+---------------------------------------------------------------------------------------------------------------------------------------------+
 | POST /sales/ | — | 2 500 ms | — | Operación transaccional con escritura de Sale, SaleItem e InventoryMovement en la misma sesión SQLAlchemy. |
-+--------------------------+-------------------+-------------------+-----------------------------+---------------------------------------------------------------------------------------------------------------------------------------------+
 
 ### 5.2.7 Cumplimiento del RNF-01
 
@@ -212,29 +205,24 @@ Se ejecutó Lighthouse desde Chrome DevTools sobre la página pública (_landing
 
 **Tabla 5.3.1.** Puntajes y Web Vitals de Lighthouse por vista y organización. La columna _Tipo_ indica si el _tenant_ corresponde a una empresa real del piloto o a un _tenant_ sintético de prueba.
 
-+---------------------------------------+-------------------+------------------------+-------------+-----------------+------------------+-----+--------+--------+-------+--------+
-| Vista | Organización | Tipo | Performance | Accesibilidad | Best Practices | SEO | FCP | LCP | TBT | CLS |
-+=======================================+===================+========================+=============+=================+==================+=====+========+========+=======+========+
-| Landing (`/`) | — | Página pública | 92 | 96 | 96 | 92 | 1,1 s | 1,6 s | 0 ms | 0 |
-+---------------------------------------+-------------------+------------------------+-------------+-----------------+------------------+-----+--------+--------+-------+--------+
-| Dashboard | Lehgo | Ficticia de prueba | 90 | 96 | 100 | 83 | 1,2 s | 1,6 s | 0 ms | 0,017 |
-+---------------------------------------+-------------------+------------------------+-------------+-----------------+------------------+-----+--------+--------+-------+--------+
+```{=latex}
+```
+
+| Vista | Organización | Tipo | Perf. | Accesib. | Best Pract. | SEO | FCP | LCP | TBT | CLS |
+| ----------- | -------------- | ------------------ | ----- | -------- | ----------- | --- | ----- | ----- | ---- | ----- |
+| Landing (/) | — | Página | 92 | 96 | 96 | 92 | 1,1 s | 1,6 s | 0 ms | 0 |
+| Dashboard | Lehgo | Ficticia | 90 | 96 | 100 | 83 | 1,2 s | 1,6 s | 0 ms | 0,017 |
 | Dashboard | **Miss Peggy** | **Real** | 91 | 96 | 100 | 83 | 1,1 s | 1,6 s | 0 ms | 0,021 |
-+---------------------------------------+-------------------+------------------------+-------------+-----------------+------------------+-----+--------+--------+-------+--------+
-| Dashboard | Moda Andes | Ficticia de prueba | 91 | 96 | 100 | 83 | 1,1 s | 1,6 s | 0 ms | 0,017 |
-+---------------------------------------+-------------------+------------------------+-------------+-----------------+------------------+-----+--------+--------+-------+--------+
-| Inventario (`/dashboard/inventory`) | Lehgo | Ficticia de prueba | 92 | 89 | 100 | 83 | 1,0 s | 1,5 s | 0 ms | 0 |
-+---------------------------------------+-------------------+------------------------+-------------+-----------------+------------------+-----+--------+--------+-------+--------+
+| Dashboard | Moda Andes | Ficticia | 91 | 96 | 100 | 83 | 1,1 s | 1,6 s | 0 ms | 0,017 |
+| Inventario | Lehgo | Ficticia | 92 | 89 | 100 | 83 | 1,0 s | 1,5 s | 0 ms | 0 |
 | Inventario | **Miss Peggy** | **Real** | 92 | 89 | 100 | 83 | 1,1 s | 1,5 s | 0 ms | 0 |
-+---------------------------------------+-------------------+------------------------+-------------+-----------------+------------------+-----+--------+--------+-------+--------+
-| Inventario | Moda Andes | Ficticia de prueba | 92 | 89 | 100 | 83 | 1,1 s | 1,5 s | 0 ms | 0 |
-+---------------------------------------+-------------------+------------------------+-------------+-----------------+------------------+-----+--------+--------+-------+--------+
-| Ventas (`/dashboard/sales`) | Lehgo | Ficticia de prueba | 92 | 88 | 100 | 83 | 1,1 s | 1,5 s | 0 ms | 0 |
-+---------------------------------------+-------------------+------------------------+-------------+-----------------+------------------+-----+--------+--------+-------+--------+
+| Inventario | Moda Andes | Ficticia | 92 | 89 | 100 | 83 | 1,1 s | 1,5 s | 0 ms | 0 |
+| Ventas | Lehgo | Ficticia | 92 | 88 | 100 | 83 | 1,1 s | 1,5 s | 0 ms | 0 |
 | Ventas | **Miss Peggy** | **Real** | 93 | 88 | 100 | 83 | 1,0 s | 1,5 s | 0 ms | 0 |
-+---------------------------------------+-------------------+------------------------+-------------+-----------------+------------------+-----+--------+--------+-------+--------+
-| Ventas | Moda Andes | Ficticia de prueba | 93 | 88 | 100 | 83 | 1,0 s | 1,5 s | 0 ms | 0 |
-+---------------------------------------+-------------------+------------------------+-------------+-----------------+------------------+-----+--------+--------+-------+--------+
+| Ventas | Moda Andes | Ficticia | 93 | 88 | 100 | 83 | 1,0 s | 1,5 s | 0 ms | 0 |
+
+```{=latex}
+```
 
 Las puntuaciones de Performance se mantienen entre **90 y 93** en todas las vistas y organizaciones, y las diferencias entre los tres _tenants_ medidos son menores a 1 punto. Esto es particularmente relevante porque la muestra confronta de manera explícita una empresa real (**Miss Peggy**) con dos empresas ficticias de prueba que cargan al sistema con volúmenes sintéticos mucho mayores (**Lehgo** y **Moda Andes**): el rendimiento percibido del frontend resulta **insensible al volumen y a los datos específicos** de cada organización dentro del rango medido, lo que valida que el coste del cliente no se ve afectado por los grandes volúmenes generados por las empresas ficticias de prueba. Los Core Web Vitals se sitúan dentro de las bandas verdes establecidas por Google (LCP ≤ 2,5 s, CLS ≤ 0,1, TBT bajo) tanto para los datos reales como para los datos sintéticos.
 
@@ -283,14 +271,23 @@ Consolidando las tres herramientas:
 
 ## 5.4 Síntesis de Cumplimiento de Requisitos No Funcionales
 
-**Tabla 5.4.** Cumplimiento consolidado de los RNF que aplican a la validación técnica.
+A continuación se presenta el cumplimiento consolidado de los Requisitos No Funcionales (RNF) que aplican a la validación técnica:
 
-| RNF    | Criterio                                              | Resultado                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             | Evidencia                            |
-| ------ | ----------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------ |
-| RNF-01 | P95 de la API < 500 ms con ≤ 50 usuarios concurrentes | **Cumplido** para el entorno de despliegue dimensionado para la aplicación: en carga normal los endpoints CRUD se mantienen dentro del rango esperado y el régimen de 50 usuarios se sostiene sin colapsos. La optimización para escenarios > 50 concurrentes queda planteada como evolución futura.                                                                                                                                                                                                                                                                                  | Sección 5.2.4 (Test 01 y 02) y 5.2.7 |
-| RNF-02 | Disponibilidad ≥ 95 % mensual                         | **Cumplido en aproximación.** Aunque no se ejecutó una medición formal de uptime mensual durante la validación, las estadísticas de carga obtenidas (0 % de fallos en carga normal, 1,7 % en estrés moderado y comportamiento estable del despliegue durante todas las pasadas de prueba) permiten proyectar razonablemente que la plataforma se mantendría por encima del 95 % de disponibilidad en una ventana mensual bajo el perfil de uso esperado. La medición formal continua, apoyada en los registros nativos de Railway y Vercel, queda planteada para futuras referencias. | Sección 5.1.2                        |
-| RNF-07 | Interfaz responsive y funcional desde 375 px          | **Cumplido.** Auditorías de Lighthouse y PageSpeed en _form factor_ móvil obtienen Accesibilidad ≥ 88 sin errores bloqueantes.                                                                                                                                                                                                                                                                                                                                                                                                                                                        | Tablas 5.3.1 y 5.3.2                 |
-| RNF-09 | Escalabilidad horizontal de la capa de aplicación     | **Cumplido a nivel arquitectónico.** El sistema soporta multi-tenancy bajo carga sin filtraciones (sección 5.2.1) y la degradación bajo pico es la esperada para una configuración de 2–4 workers sobre una sola instancia, según el escenario; esto confirma que la arquitectura admite escalado horizontal sin cambios estructurales.                                                                                                                                                                                                                                               | Sección 5.2.5                        |
+- RNF-01: P95 de la API menor a 500 ms con hasta 50 usuarios concurrentes.
+  Resultado: Cumplido para el entorno de despliegue dimensionado para la aplicación. Bajo carga normal, los endpoints CRUD se mantienen dentro del rango esperado y el régimen de 50 usuarios se sostiene sin colapsos. La optimización para escenarios con más de 50 usuarios concurrentes queda planteada como una evolución futura.
+  Evidencia: Ver Sección 5.2.4 (Test 01 y 02) y 5.2.7.
+
+- RNF-02: Disponibilidad mensual mayor o igual al 95 %.
+  Resultado: Cumplido en aproximación. Aunque no se realizó una medición formal de uptime mensual durante la validación, las estadísticas de carga obtenidas (0 % de fallos en carga normal, 1,7 % en estrés moderado y comportamiento estable del despliegue durante todas las pruebas) permiten proyectar razonablemente que la plataforma se mantendría por encima del 95 % de disponibilidad en una ventana mensual bajo el perfil de uso esperado. La medición formal continua, apoyada en los registros nativos de Railway y Vercel, queda planteada para futuras referencias.
+  Evidencia: Ver Sección 5.1.2.
+
+- RNF-07: Interfaz responsive y funcional desde 375 px.
+  Resultado: Cumplido. Auditorías de Lighthouse y PageSpeed en dispositivos móviles arrojan una accesibilidad igual o superior a 88 sin errores bloqueantes.
+  Evidencia: Ver Tablas 5.3.1 y 5.3.2.
+
+- RNF-09: Escalabilidad horizontal de la capa de aplicación.
+  Resultado: Cumplido a nivel arquitectónico. El sistema soporta multi-tenancy bajo carga sin filtraciones, como se verifica en la sección 5.2.1, y la degradación bajo picos de carga es la esperada para una configuración de 2 a 4 workers sobre una sola instancia, según el escenario. Esto confirma que la arquitectura admite escalado horizontal sin cambios estructurales.
+  Evidencia: Ver Sección 5.2.5.
 
 ---
 
