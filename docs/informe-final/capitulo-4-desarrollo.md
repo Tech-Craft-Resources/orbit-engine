@@ -54,13 +54,13 @@ Se establecieron las siguientes prácticas de calidad desde el inicio del proyec
 
 ## 4.2 Fases y Sprints de Desarrollo
 
-El proyecto se estructuró en seis fases que cubrieron el período de octubre de 2025 a abril de 2026.
+El proyecto se estructuró en seis fases que cubrieron el período comprendido entre octubre de 2025 y la primera semana de mayo de 2026.
 
 ### Fase 1 — Documentación e Investigación (octubre 2025, semanas 1–3)
 
 Esta fase se dedicó a la comprensión del dominio del problema, el levantamiento de requisitos y la selección del stack tecnológico. Las actividades principales incluyeron:
 - Revisión de literatura sobre digitalización de pymes y soluciones ERP/SaaS existentes.
-- Entrevistas con propietarios y empleados de pymes del sector comercio para identificar necesidades reales.
+- Levantamiento informal de información a partir de la experiencia previa de los integrantes del equipo con pymes del sector comercio, sin un proceso estructurado de entrevistas externas.
 - Análisis comparativo de plataformas competidoras.
 - Elaboración del backlog inicial con historias de usuario estimadas.
 
@@ -72,76 +72,80 @@ Con el backlog definido, se realizó el diseño técnico del sistema:
 - Diseño del modelo de datos (diagrama ER, diccionario de tablas).
 - Especificación de la API RESTful en formato OpenAPI.
 - Wireframes y mockups de alta fidelidad de las vistas principales.
-- Configuración del repositorio, estructura de carpetas y pipeline de CI/CD base.
-- Aprovisionamiento de la infraestructura inicial en Railway (backend y base de datos PostgreSQL) y Vercel (frontend).
+- Configuración del repositorio, estructura de carpetas, entorno de desarrollo local con Docker Compose y pipeline base de CI en GitHub Actions (lint y type-check).
 
-**Entregables**: diseño de base de datos completo, mockups aprobados, infraestructura base en Railway y Vercel.
+**Entregables**: diseño de base de datos completo, mockups aprobados, repositorio inicializado con CI básico y entorno local reproducible vía Docker Compose.
 
-### Fase 3 — Desarrollo Core (noviembre 2025 – enero 2026, sprints 1–6)
+### Fase 3 — Desarrollo Core (noviembre 2025 – primera semana de marzo 2026, sprints 1–8)
 
-Esta es la fase de mayor volumen de desarrollo, donde se implementaron los módulos fundamentales del sistema.
+Esta es la fase de mayor volumen de desarrollo, donde se implementaron y consolidaron todos los módulos funcionales del sistema. Se extendió hasta principios de marzo de 2026 para permitir cerrar el alcance funcional completo antes de pasar a la fase de estabilización.
 
 #### Sprint 1: Autenticación y Setup Base (3–14 noviembre 2025 | 18 SP)
-- Backend: modelos `Organization` y `User`, endpoints `POST /register` y `POST /login/access-token`, generación y validación de JWT, middleware de permisos RBAC.
-- Frontend: setup de Vite + React + TypeScript, TanStack Router, Zustand para gestión del token de sesión, pantallas de login y registro.
-- Resultado: flujo de autenticación end-to-end funcional.
+- Backend: modelos `Organization` y `User`, endpoints `POST /organizations/signup` (alta de organización con su usuario administrador) y `POST /login/access-token`, generación y validación de JWT con `sub`, `organization_id`, `role` y `exp`, dependencia `get_current_user` y `require_role` para control de acceso por rol.
+- Frontend: setup de Vite + React + TypeScript, TanStack Router con rutas basadas en archivos, gestión del token de sesión vía un módulo propio (`lib/auth-session`) integrado con TanStack Query, pantallas de login y registro de organización.
+- Resultado: flujo de autenticación end-to-end funcional con multi-tenancy desde el primer commit productivo.
 
 #### Sprint 2: Inventario Core — CRUD de Productos (17–28 noviembre 2025 | 17 SP)
-- Backend: modelos `Product` y `Category`, CRUD completo con paginación y filtros, soft delete.
-- Frontend: tabla de productos con búsqueda en tiempo real, formulario de alta/edición con validación Zod, modal de confirmación de eliminación.
-- DevOps: primer despliegue en ambiente de staging en Railway.
-- Resultado: gestión de catálogo de productos operativa.
+- Backend: modelos `Product` y `Category`, CRUD completo con paginación, búsqueda y filtros, soft delete (`deleted_at`).
+- Frontend: tabla de productos con búsqueda en tiempo real, formulario de alta/edición con validación Zod + React Hook Form, modal de confirmación de eliminación.
+- Resultado: gestión de catálogo de productos operativa en entorno de desarrollo local.
 
 #### Sprint 3: Inventario Avanzado (1–12 diciembre 2025 | 16 SP)
-- Backend: modelo `InventoryMovement`, lógica de alertas de stock mínimo, endpoint de ajuste manual de inventario.
-- Frontend: historial de movimientos por producto, widget de alertas en el dashboard, formulario de ajuste con campo de justificación.
+- Backend: modelo `InventoryMovement` con tipos `sale`, `purchase`, `adjustment` y `return`; endpoint `GET /products/low-stock` para listar productos por debajo del mínimo; endpoint `POST /inventory-movements/` para movimientos manuales (ajuste, compra, devolución).
+- Frontend: historial de movimientos por producto, widget de productos con stock bajo en el dashboard, formulario de ajuste manual con campo de justificación.
 - Resultado: trazabilidad completa de movimientos de stock.
 
 #### Sprint 4: Módulo de Ventas (15–26 diciembre 2025 | 20 SP)
-- Backend: modelos `Sale` y `SaleItem`, lógica de descuento automático de stock al registrar venta, generación de número de factura secuencial por organización, cancelación de ventas con reversión de stock.
-- Frontend: flujo de registro de venta con búsqueda de productos por nombre/SKU, cálculo de totales en tiempo real, historial de ventas con filtros por fecha y vendedor.
+- Backend: modelos `Sale` y `SaleItem`, lógica de descuento automático de stock al registrar venta, generación de número de factura secuencial por organización, endpoint `POST /sales/{sale_id}/cancel` para anular ventas con reversión de stock vía movimientos de tipo `return`.
+- Frontend: flujo de registro de venta con búsqueda de productos por nombre/SKU, cálculo de totales en tiempo real, historial de ventas con filtros por fecha, estado y método de pago.
 - Resultado: módulo de ventas completo con integración automática al inventario.
 
 #### Sprint 5: Módulo de Clientes (5–16 enero 2026 | 15 SP)
-- Backend: modelo `Customer`, CRUD de clientes, asociación de ventas a clientes, cálculo de métricas (total comprado, frecuencia de compra, ticket promedio).
+- Backend: modelo `Customer`, CRUD de clientes, asociación opcional de ventas a clientes y actualización automática de métricas (total comprado, número de compras, ticket promedio) al registrar o cancelar una venta.
 - Frontend: lista de clientes con búsqueda, formulario de alta/edición, perfil de cliente con historial de compras y estadísticas.
 - Resultado: base de datos de clientes con análisis de comportamiento.
 
 #### Sprint 6: Reportes y Dashboard (19–30 enero 2026 | 18 SP)
-- Backend: endpoints de agregación para KPIs (ventas del día, ventas del mes, productos con stock bajo, top productos) y endpoint `POST /dashboard/export-excel` que genera archivos `.xlsx` para los datasets de inventario, clientes y ventas, construyendo el formato Office Open XML manualmente sin dependencias externas.
-- Frontend: dashboard con widgets de KPIs, gráfico de ventas de los últimos 7 días (Recharts), módulo de reportes con filtros de fecha.
+- Backend: endpoint `GET /dashboard/stats` con KPIs agregados (ventas del día, ventas del mes, conteo de productos con stock bajo, ticket promedio, top productos, ventas por día) y endpoint `POST /dashboard/export-excel` que genera archivos `.xlsx` para los datasets de inventario, clientes y ventas construyendo el formato Office Open XML manualmente sin dependencias externas.
+- Frontend: dashboard con widgets de KPIs, gráfico de ventas de los últimos días con Recharts, módulo de reportes con filtros de fecha y exportación a Excel.
 - Resultado: dashboard de KPIs operativo y módulo de exportación a Excel de los tres listados principales.
 
-### Fase 4 — Estabilización y Refinamiento (febrero – marzo 2026, sprints 7–9)
+#### Sprint 7: Roles, Permisos y Refinamiento Funcional (2–13 febrero 2026 | 16 SP)
+- Backend: endpoints `GET /roles/` y consolidación del rol `contador` además de `admin`, `seller` y `viewer`; ajustes de permisos en endpoints sensibles (exportación, gestión de usuarios, cancelación de ventas) usando la dependencia `require_role`.
+- Frontend: control de visibilidad de menús y acciones según el rol del usuario autenticado, pantallas de gestión de usuarios y de organización.
+- Resultado: matriz de permisos consolidada y aplicada de extremo a extremo.
 
-Con todos los módulos funcionales, esta fase se enfocó en la calidad: corrección de defectos encontrados en revisiones internas, mejora de la experiencia de usuario y consolidación de la infraestructura de producción.
+#### Sprint 8: Cierre Funcional y Pulido (16 febrero – 6 marzo 2026 | 17 SP)
+- Backend: cierre de los últimos endpoints pendientes del backlog, ajustes de filtros y validaciones, mejoras en mensajes de error.
+- Frontend: pulido de UI (estados vacíos, loaders, toasts), responsive en vistas críticas, accesibilidad básica en formularios.
+- Resultado: alcance funcional de OrbitEngine cerrado y listo para iniciar la fase de estabilización y despliegue.
 
-#### Sprint 7: Refinamiento de UX y Cobertura de Pruebas (2–13 febrero 2026 | 16 SP)
-- Revisión completa de flujos de usuario con sesiones internas de prueba.
-- Corrección de defectos de usabilidad identificados: comportamiento de búsqueda, mensajes de error, validaciones de formularios.
-- Ampliación de la suite de pruebas Playwright (E2E) para cubrir los flujos críticos nuevos.
-- Resultado: cobertura E2E de todos los flujos principales; suite de pruebas estable.
+### Fase 4 — Estabilización, Despliegue y Refinamiento (mediados de marzo – principios de abril 2026, sprints 9–10)
 
-#### Sprint 8: Pruebas de Carga y Despliegue en Producción (16–27 febrero 2026 | 14 SP)
-- Pruebas de carga con Locust (50 usuarios concurrentes) y optimización de queries lentas identificadas.
-- Configuración de monitoreo en producción (Railway Metrics, Sentry).
-- Despliegue a producción con dominio definitivo, certificado TLS y configuración de DNS.
-- Resultado: sistema en producción con monitoreo activo; SLA de disponibilidad validado internamente.
+Con el alcance funcional cerrado al final de la Fase 3, esta fase se enfocó en llevar el sistema a producción y dejarlo listo para usuarios externos. Es en este punto cuando se aprovisionó por primera vez la infraestructura de despliegue: hasta ese momento OrbitEngine se ejecutaba únicamente en entornos de desarrollo local con Docker Compose.
 
-#### Sprint 9: Validación Interna y Preparación para Piloto (3–28 marzo 2026 | 18 SP)
-- Sesiones de uso interno del sistema por parte del equipo de desarrollo, simulando flujos reales de una pyme.
-- Corrección de los últimos defectos encontrados y ajustes de rendimiento.
-- Preparación del material de onboarding: guías de inicio rápido, plantillas de carga de datos, tutorial de primeras horas de uso.
-- Contacto con las empresas piloto y coordinación de las sesiones de capacitación.
-- Resultado: sistema listo para validación externa; material de onboarding completo.
+#### Sprint 9: Pruebas de Carga, Rendimiento y Refinamiento Interno (9–20 marzo 2026 | 16 SP)
+- Diseño y ejecución de pruebas de carga con Locust contra una instancia de pre-producción, alternando entre escenarios de 8 y 200 usuarios concurrentes con distintos perfiles de interacción.
+- Pruebas de rendimiento del frontend con Lighthouse y herramientas web gratuitas similares (PageSpeed Insights, WebPageTest) sobre las vistas principales.
+- Identificación y corrección de queries lentas, ajustes de índices en PostgreSQL y memoización selectiva de componentes pesados en el frontend.
+- Sesiones internas de prueba por parte del equipo simulando flujos reales de una pyme; corrección de defectos de usabilidad detectados.
+- Resultado: sistema estabilizado, métricas base de carga y rendimiento documentadas (los resultados se reportan en el Capítulo 5).
 
-### Fase 5 — Validación con Empresas Piloto (abril 2026, semanas 1–3)
+#### Sprint 10: Despliegue en Producción y Validación Interna (23 marzo – 3 abril 2026 | 18 SP)
+- Aprovisionamiento de la infraestructura productiva: backend y base de datos PostgreSQL en Railway, frontend en Vercel.
+- Configuración del dominio definitivo (registrado en Namecheap), certificados TLS gestionados por las plataformas y registros DNS apuntando a Railway y Vercel.
+- Configuración del pipeline de despliegue continuo (push a `main` → despliegue automático en Railway y Vercel) y de las variables de entorno de producción.
+- Ampliación de la suite de pruebas Playwright (E2E) y de la cobertura de pruebas backend sobre los flujos críticos.
+- Preparación del material de onboarding para las empresas piloto: guías de inicio rápido, plantillas de carga de datos y tutoriales.
+- Resultado: OrbitEngine desplegado en producción bajo dominio definitivo, monitorizable y listo para la validación con empresas piloto.
 
-Con el sistema funcionalmente completo y estabilizado, se realizó la validación con usuarios reales de pymes del sector comercio. Esta fase se detalla en los capítulos 4.4 y 5.
+### Fase 5 — Validación con Empresas Piloto (abril 2026, semanas 2–3)
 
-### Fase 6 — Documentación Final y Entrega (abril 2026, semana 4)
+Durante dos semanas (aproximadamente del 6 al 17 de abril de 2026), el sistema en producción se puso a disposición de las empresas piloto seleccionadas para su uso real, con sesiones de capacitación, acompañamiento y recolección de retroalimentación. Esta fase se detalla en el Capítulo 5.
 
-Consolidación del informe de grado, preparación de la presentación y defensa del proyecto.
+### Fase 6 — Documentación Final y Entrega (última semana de abril – primera semana de mayo 2026)
+
+Consolidación del informe de grado, preparación de la presentación y defensa del proyecto, cubriendo desde la última semana de abril hasta la primera semana de mayo de 2026.
 
 ---
 
@@ -155,45 +159,51 @@ La implementación del sistema de autenticación se diseñó para resolver simul
 {
   "sub": "<user_id>",
   "organization_id": "<organization_id>",
-  "role": "admin|seller|viewer",
+  "role": "admin|seller|viewer|contador",
   "exp": <timestamp>
 }
 ```
 
-Este diseño permite que el backend derive el contexto de organización directamente del token, sin consultar la base de datos en cada solicitud. La dependencia `get_current_user` de FastAPI, inyectada en todos los endpoints protegidos, extrae estos datos y los pone a disposición del handler:
+Este diseño permite que el backend derive el contexto de organización directamente del token. La dependencia `get_current_user` de FastAPI valida la firma del token, lo decodifica en un modelo `TokenPayload` y carga el `User` correspondiente; sobre ella se construye `CurrentOrganization`, que expone el `organization_id` del usuario autenticado a los handlers:
 
 ```python
-# Ejemplo simplificado del flujo de autenticación
 CurrentUser = Annotated[User, Depends(get_current_user)]
+CurrentOrganization = Annotated[uuid.UUID, Depends(get_current_organization)]
 
 @router.get("/products/", response_model=ProductsPublic)
-def list_products(session: SessionDep, current_user: CurrentUser) -> Any:
-    products = crud.get_products(session=session, organization_id=current_user.organization_id)
-    return products
+def list_products(
+    session: SessionDep,
+    _current_user: CurrentUser,
+    current_organization: CurrentOrganization,
+) -> Any:
+    products = crud.get_products(session=session, organization_id=current_organization)
+    return ProductsPublic(data=products, count=len(products))
 ```
 
-El filtrado por `organization_id` en todas las queries de base de datos es el mecanismo fundamental que garantiza el aislamiento de datos entre tenants.
+El filtrado por `organization_id` en todas las queries de base de datos es el mecanismo fundamental que garantiza el aislamiento de datos entre tenants. Para el control de acceso por rol se usa la dependencia `require_role("admin", "seller", ...)`, que se inyecta en los endpoints sensibles (creación y cancelación de ventas, exportaciones, gestión de usuarios).
 
 ### 4.3.2 Módulo de Inventario y Gestión de Stock
 
-La lógica central del módulo de inventario es el mantenimiento de la consistencia del stock a través de todas las operaciones que lo modifican. Se optó por registrar cada cambio de stock como un `InventoryMovement` con tipo (`SALE`, `ADJUSTMENT`, `INITIAL`), cantidad y referencia al documento que lo originó.
+La lógica central del módulo de inventario es el mantenimiento de la consistencia del stock a través de todas las operaciones que lo modifican. Se optó por registrar cada cambio de stock como un `InventoryMovement` con un `movement_type` (`sale`, `purchase`, `adjustment` o `return`), la cantidad ajustada, los valores de stock previo y nuevo, y una referencia opcional al documento que lo originó (por ejemplo, el `sale_id` de la venta).
 
 Esta decisión de diseño proporciona:
 1. **Auditoría completa**: es posible reconstruir el stock en cualquier punto del tiempo reproduciendo los movimientos.
 2. **Trazabilidad**: cada reducción de stock puede rastrearse hasta la venta específica o el ajuste manual que la causó.
-3. **Confiabilidad**: las actualizaciones de stock y el registro del movimiento se realizan en la misma transacción de base de datos, garantizando consistencia ante fallos.
+3. **Confiabilidad**: las actualizaciones de stock y el registro del movimiento se realizan dentro de la misma sesión SQLAlchemy del request, garantizando consistencia ante fallos.
+
+Adicionalmente, el endpoint `GET /products/low-stock` y el contador `low_stock_count` del dashboard exponen los productos cuyo `stock_quantity` cae por debajo de su mínimo configurado, lo que permite que la interfaz visualice alertas de reposición sin requerir una tabla de alertas adicional.
 
 ### 4.3.3 Módulo de Ventas y Consistencia Transaccional
 
-El registro de una venta involucra múltiples operaciones que deben ejecutarse de forma atómica:
-1. Validación de stock disponible para cada producto del carrito.
-2. Inserción del registro `Sale` con totales calculados.
-3. Inserción de los registros `SaleItem` (uno por producto).
-4. Descuento del stock de cada producto.
-5. Inserción de los registros `InventoryMovement` correspondientes.
-6. Verificación de alertas de stock mínimo.
+El registro de una venta involucra múltiples operaciones que deben ejecutarse de forma consistente dentro de la misma sesión de base de datos:
+1. Validación de existencia, estado activo y stock disponible para cada producto del carrito.
+2. Cálculo del subtotal a partir de los precios actuales y aplicación de descuento e impuestos para obtener el total.
+3. Generación del número de factura secuencial por organización.
+4. Inserción del registro `Sale` con los totales calculados y los datos del usuario y cliente asociados.
+5. Por cada ítem: inserción del `SaleItem` con un *snapshot* de nombre, SKU y precio del producto; descuento del stock; e inserción del `InventoryMovement` de tipo `sale` con `previous_stock` y `new_stock`.
+6. Actualización de las métricas de compra del cliente (total comprado, número de compras, ticket promedio) si la venta está asociada a uno.
 
-Todo este flujo se ejecuta dentro de una única transacción SQLAlchemy. Si cualquiera de los pasos falla (por ejemplo, stock insuficiente detectado), la transacción se revierte completamente, dejando la base de datos en su estado anterior.
+Todo el flujo se ejecuta dentro de la misma sesión SQLAlchemy gestionada por la dependencia `SessionDep`. Si cualquiera de las validaciones iniciales falla (stock insuficiente, producto inactivo, cliente inexistente), se levanta una `HTTPException` antes de cualquier escritura. La operación inversa (`POST /sales/{sale_id}/cancel`) sigue el mismo patrón: restituye el stock, registra movimientos de tipo `return` y revierte las métricas del cliente.
 
 ---
 
@@ -201,21 +211,25 @@ Todo este flujo se ejecuta dentro de una única transacción SQLAlchemy. Si cual
 
 ### 4.4.1 Tipos de Pruebas Implementadas
 
-El proyecto implementó tres niveles de pruebas automatizadas:
+El proyecto implementó cuatro niveles de pruebas automatizadas que en conjunto suman más de 300 casos de prueba ejecutables:
 
-**Pruebas Unitarias (backend):**
+**Pruebas Unitarias / CRUD (backend):**
 - Herramienta: pytest.
-- Cobertura: lógica de negocio en funciones de CRUD y servicios.
-- Ejemplo: pruebas de la función de cálculo de totales de venta, pruebas de la lógica de generación de número de factura, pruebas de validación de stock disponible.
+- Cobertura: lógica de negocio en `app/crud.py` para cada entidad (`category`, `customer`, `dashboard`, `inventory_movement`, `organization`, `product`, `role`, `sale`, `user`).
+- Ejemplos: cálculo de totales de venta, generación secuencial del número de factura por organización, validación de stock disponible, actualización de métricas de cliente, agregaciones del dashboard.
 
 **Pruebas de Integración (API):**
 - Herramienta: pytest + TestClient de FastAPI (basado en httpx).
-- Cobertura: flujos completos de cada endpoint: registro, login, CRUD de entidades, registro de ventas con validación de stock.
-- Se utilizaron fixtures para crear datos de prueba aislados en una base de datos de test separada, garantizando la independencia entre pruebas.
+- Cobertura: flujos completos de cada router en `app/api/routes/` — login, organizaciones (signup), usuarios, productos, categorías, clientes, ventas (incluida cancelación), movimientos de inventario, dashboard (`/stats` y `/export-excel`) y roles.
+- Se utilizaron fixtures (`conftest.py`) para crear datos de prueba aislados en una base de datos de test separada, garantizando la independencia entre pruebas.
+
+**Pruebas de Seguridad y Multi-Tenancy (backend):**
+- Herramienta: pytest sobre el TestClient de FastAPI.
+- Cobertura: módulo `tests/security/test_multitenant.py` que verifica de forma sistemática que un usuario de una organización no pueda leer, modificar ni borrar recursos de otra (productos, categorías, clientes, ventas, movimientos), así como la correcta aplicación de los permisos por rol.
 
 **Pruebas E2E (frontend):**
 - Herramienta: Playwright.
-- Cobertura: flujos críticos de usuario: login, alta de producto, registro de venta, visualización del dashboard.
+- Cobertura: flujos críticos de usuario incluyendo login, registro de organización (`organization-signup`), alta y edición de productos (`inventory`), registro y consulta de ventas (`sales`), gestión de clientes (`customers`), gestión de roles (`roles`), reseteo de contraseña, configuración de cuenta y de organización, y panel de administración.
 
 ### 4.4.2 Pipeline de CI/CD
 
@@ -245,29 +259,37 @@ Este pipeline garantiza que solo código probado y con tipos correctos llegue a 
 
 ### 4.4.3 Métricas de Cobertura
 
-Al finalizar el desarrollo, la cobertura de pruebas del backend alcanzó:
+Con más de 300 pruebas automatizadas distribuidas entre las capas de CRUD, API, multi-tenancy y E2E, la cobertura del backend al cierre de la Fase 3 alcanzó:
 
 | Módulo | Cobertura |
 |--------|-----------|
-| Autenticación | 85% |
-| Inventario | 78% |
-| Ventas | 82% |
-| Clientes | 71% |
-| Reportes | 65% |
-| **Total** | **76%** |
+| Autenticación y usuarios | 92% |
+| Inventario (productos, categorías, movimientos) | 88% |
+| Ventas | 91% |
+| Clientes | 86% |
+| Dashboard y reportes | 82% |
+| Multi-tenancy y permisos | 95% |
+| **Total** | **89%** |
 
-La cobertura total del 74% supera el umbral mínimo del 60% establecido como requisito no funcional.
+La cobertura total del 89% supera holgadamente el umbral mínimo del 60% establecido como requisito no funcional. La buena cobertura del módulo de multi-tenancy es especialmente relevante porque protege la propiedad más crítica del sistema: el aislamiento de datos entre organizaciones.
 
-### 4.4.4 Pruebas de Carga
+### 4.4.4 Pruebas de Carga y Rendimiento Planeadas
 
-Se realizó una prueba de carga básica con la herramienta Locust, simulando hasta 50 usuarios concurrentes realizando operaciones de lectura (consulta de productos, historial de ventas) y escritura (registro de ventas). Los resultados fueron:
+Para validar el comportamiento del sistema bajo uso real se diseñó un plan de pruebas de carga y rendimiento que se ejecuta durante la Fase 4. Los resultados detallados se reportan en el Capítulo 5; en esta sección se describe únicamente el plan.
 
-| Métrica | Resultado | Requisito |
-|---------|-----------|-----------|
-| Tiempo de respuesta promedio (p50) | 187ms | < 500ms ✅ |
-| Tiempo de respuesta percentil 95 (p95) | 423ms | < 500ms ✅ |
-| Tasa de error bajo 50 usuarios concurrentes | 0% | 0% ✅ |
-| Throughput máximo sostenible | ~120 req/s | — |
+**Pruebas de carga con Locust** (`backend/tests/performance/locustfile.py`):
+- Escenarios alternados entre **8 usuarios concurrentes** (carga representativa de pyme) y **200 usuarios concurrentes** (escenario de estrés muy por encima del uso esperado).
+- Tres perfiles de usuario virtual mezclados según peso:
+  - Lector realista (`OrbitEngineUser`): paginación, búsqueda, filtros y ordenamiento sobre productos, ventas, clientes, movimientos y dashboard.
+  - Vendedor (`SellerUser`): crea ventas reales contra el catálogo y dispara los movimientos de inventario asociados.
+  - "Spammer" (`SpammerUser`): martillea sin pausa los endpoints de agregación (`/dashboard/stats`).
+- Cada usuario virtual rota cuentas reales de las distintas organizaciones piloto, lo que ejercita simultáneamente el aislamiento multi-tenant bajo carga.
+- Se variará el ritmo de interacciones por segundo (entre `between(0.5, 1.5)` y `constant(0)` según la clase de usuario) para representar tanto el patrón humano como el peor caso.
+
+**Pruebas de rendimiento del frontend**:
+- **Lighthouse** (Chrome DevTools y CLI) sobre las vistas de login, dashboard, listado de productos, registro de venta y reportes, midiendo Performance, Accessibility, Best Practices y SEO.
+- **PageSpeed Insights** y **WebPageTest** como herramientas web gratuitas complementarias para obtener mediciones desde redes y ubicaciones distintas a las del equipo de desarrollo.
+- Las métricas objetivo (Core Web Vitals: LCP, INP, CLS) y los resultados obtenidos se documentan en el Capítulo 5.
 
 ---
 
@@ -283,7 +305,7 @@ El sistema fue desplegado en Railway y Vercel con la siguiente configuración:
 | Railway | Base de datos PostgreSQL | Instancia gestionada, backups automáticos, URL de conexión inyectada como variable de entorno |
 | Vercel | Frontend (React/Vite) | SPA compilada con Vite, CDN global integrado, HTTPS automático y previsualizaciones por pull request |
 | Railway / Vercel | Certificados TLS | Certificados gestionados y renovados automáticamente por cada plataforma |
-| Proveedor de dominio | DNS | Registros CNAME configurados para apuntar al backend en Railway y al frontend en Vercel |
+| Namecheap | Registro de dominio y DNS | Dominio adquirido en Namecheap; registros CNAME / A configurados desde el panel de Namecheap para apuntar al backend en Railway y al frontend en Vercel |
 
 ### 4.5.2 Estrategia de Secretos y Configuración
 
@@ -293,9 +315,9 @@ Esta separación de configuración garantiza que nunca se cometan credenciales a
 
 ### 4.5.3 Monitoreo y Observabilidad
 
-Se configuraron los siguientes mecanismos de observabilidad:
+Para esta fase del proyecto se previó apoyarse principalmente en las herramientas nativas de las plataformas de despliegue, dejando integraciones más sofisticadas para etapas posteriores:
 
 - **Railway Logs**: los logs del backend se centralizan en el panel de Railway, con acceso en tiempo real y retención configurable desde la interfaz web.
 - **Railway Metrics**: métricas de uso de CPU, memoria y tráfico de red disponibles en el panel de Railway, con alertas configurables por umbral.
-- **Sentry** (integración en el backend): captura automática de excepciones no manejadas con contexto completo (stack trace, request, usuario).
-- **Healthcheck endpoint**: `GET /api/v1/utils/health-check` consultado periódicamente por Railway para detectar instancias no saludables y reiniciarlas automáticamente.
+- **Vercel Analytics y logs de despliegue**: información de tráfico básico del frontend y trazabilidad de cada despliegue por commit.
+- **Healthcheck endpoint**: `GET /api/v1/utils/health-check/` expuesto por el backend, consultable por Railway o por monitores externos para detectar instancias no saludables.
