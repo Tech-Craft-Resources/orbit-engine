@@ -314,13 +314,13 @@ Para validar el comportamiento del sistema bajo uso real se diseñó un plan de 
 
 El sistema fue desplegado en Railway y Vercel con la siguiente configuración:
 
-| Plataforma       | Componente                | Configuración                                                                                                                                           |
-| ---------------- | ------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Railway          | Backend API               | Servicio web desplegado desde imagen Docker; variables de entorno gestionadas en el panel de Railway                                                    |
-| Railway          | Base de datos PostgreSQL  | Instancia gestionada, backups automáticos, URL de conexión inyectada como variable de entorno                                                           |
-| Vercel           | Frontend (React/Vite)     | SPA compilada con Vite, CDN global integrado, HTTPS automático y previsualizaciones por pull request                                                    |
-| Railway / Vercel | Certificados TLS          | Certificados gestionados y renovados automáticamente por cada plataforma                                                                                |
-| Namecheap        | Registro de dominio y DNS | Dominio adquirido en Namecheap; registros CNAME / A configurados desde el panel de Namecheap para apuntar al backend en Railway y al frontend en Vercel |
+| Plataforma                | Componente                        | Configuración                                                                                                                                           |
+| ------------------------- | --------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Railway                   | Backend API                       | Servicio web desplegado desde imagen Docker; variables de entorno gestionadas en el panel de Railway                                                    |
+| Railway                   | Base de datos PostgreSQL          | Instancia gestionada, backups automáticos, URL de conexión inyectada como variable de entorno                                                           |
+| Vercel                    | Frontend (React/Vite)             | SPA compilada con Vite, CDN global integrado, HTTPS automático y previsualizaciones por pull request                                                    |
+| Railway / Vercel          | Certificados TLS                  | Certificados gestionados y renovados automáticamente por cada plataforma                                                                                |
+| Namecheap                 | Registro de dominio y DNS         | Dominio adquirido en Namecheap; registros CNAME / A configurados desde el panel de Namecheap para apuntar al backend en Railway y al frontend en Vercel |
 
 ### 4.5.2 Estrategia de Secretos y Configuración
 

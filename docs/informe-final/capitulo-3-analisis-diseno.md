@@ -78,69 +78,111 @@ Los requisitos funcionales se organizan por módulo. Cada requisito está identi
 
 #### RF-AUTH — Módulo de Autenticación y Usuarios
 
-| ID         | Requisito                                                                                                                                                  | Prioridad |
-| ---------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------- | --------- |
-| RF-AUTH-01 | El sistema debe permitir el registro de una nueva organización con nombre, email del administrador y contraseña.                                           | Alta      |
-| RF-AUTH-02 | El sistema debe autenticar usuarios mediante email y contraseña, generando un token JWT con tiempo de expiración configurable.                             | Alta      |
-| RF-AUTH-03 | El token JWT debe incluir el `user_id`, `organization_id` y `role` para que el backend pueda filtrar datos y verificar permisos sin consultas adicionales. | Alta      |
-| RF-AUTH-04 | El sistema debe implementar control de acceso basado en roles: Administrador, Vendedor y Visualizador.                                                     | Alta      |
-| RF-AUTH-05 | El sistema debe bloquear temporalmente una cuenta tras 5 intentos de inicio de sesión fallidos consecutivos.                                               | Media     |
-| RF-AUTH-06 | El sistema debe permitir la recuperación de contraseña mediante un enlace enviado al email del usuario.                                                    | Media     |
++--------------------------+------------------------------------------------------------------------------------------------------------------------------------------------------------+-----------------+
+| ID                       | Requisito                                                                                                                                                  | Prioridad       |
++==========================+============================================================================================================================================================+=================+
+| RF-AUTH-01               | El sistema debe permitir el registro de una nueva organización con nombre, email del administrador y contraseña.                                           | Alta            |
++--------------------------+------------------------------------------------------------------------------------------------------------------------------------------------------------+-----------------+
+| RF-AUTH-02               | El sistema debe autenticar usuarios mediante email y contraseña, generando un token JWT con tiempo de expiración configurable.                             | Alta            |
++--------------------------+------------------------------------------------------------------------------------------------------------------------------------------------------------+-----------------+
+| RF-AUTH-03               | El token JWT debe incluir el `user_id`, `organization_id` y `role` para que el backend pueda filtrar datos y verificar permisos sin consultas adicionales. | Alta            |
++--------------------------+------------------------------------------------------------------------------------------------------------------------------------------------------------+-----------------+
+| RF-AUTH-04               | El sistema debe implementar control de acceso basado en roles: Administrador, Vendedor y Visualizador.                                                     | Alta            |
++--------------------------+------------------------------------------------------------------------------------------------------------------------------------------------------------+-----------------+
+| RF-AUTH-05               | El sistema debe bloquear temporalmente una cuenta tras 5 intentos de inicio de sesión fallidos consecutivos.                                               | Media           |
++--------------------------+------------------------------------------------------------------------------------------------------------------------------------------------------------+-----------------+
+| RF-AUTH-06               | El sistema debe permitir la recuperación de contraseña mediante un enlace enviado al email del usuario.                                                    | Media           |
++--------------------------+------------------------------------------------------------------------------------------------------------------------------------------------------------+-----------------+
 
 #### RF-INV — Módulo de Gestión de Inventario
 
-| ID        | Requisito                                                                                                                                                                                             | Prioridad |
-| --------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------- |
-| RF-INV-01 | El sistema debe permitir crear, editar, desactivar y consultar productos con los campos: nombre, SKU, categoría, precio de costo, precio de venta, stock actual, stock mínimo, stock máximo e imagen. | Alta      |
-| RF-INV-02 | El sistema debe descontar automáticamente el stock de los productos al registrar una venta.                                                                                                           | Alta      |
-| RF-INV-03 | El sistema debe generar una alerta visible en el dashboard cuando el stock de un producto sea igual o inferior al stock mínimo configurado.                                                           | Alta      |
-| RF-INV-04 | El sistema debe registrar cada movimiento de stock (ventas, ajustes manuales, carga inicial) con fecha, cantidad, tipo de movimiento y usuario responsable.                                           | Alta      |
-| RF-INV-05 | El sistema debe permitir ajustes manuales de inventario con campo de justificación obligatorio.                                                                                                       | Media     |
-| RF-INV-06 | El sistema debe permitir organizar los productos en categorías definidas por la organización.                                                                                                         | Media     |
++--------------------------+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+---------------------+
+| ID                       | Requisito                                                                                                                                                                                             | Prioridad           |
++==========================+=======================================================================================================================================================================================================+=====================+
+| RF-INV-01                | El sistema debe permitir crear, editar, desactivar y consultar productos con los campos: nombre, SKU, categoría, precio de costo, precio de venta, stock actual, stock mínimo, stock máximo e imagen. | Alta                |
++--------------------------+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+---------------------+
+| RF-INV-02                | El sistema debe descontar automáticamente el stock de los productos al registrar una venta.                                                                                                           | Alta                |
++--------------------------+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+---------------------+
+| RF-INV-03                | El sistema debe generar una alerta visible en el dashboard cuando el stock de un producto sea igual o inferior al stock mínimo configurado.                                                           | Alta                |
++--------------------------+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+---------------------+
+| RF-INV-04                | El sistema debe registrar cada movimiento de stock (ventas, ajustes manuales, carga inicial) con fecha, cantidad, tipo de movimiento y usuario responsable.                                           | Alta                |
++--------------------------+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+---------------------+
+| RF-INV-05                | El sistema debe permitir ajustes manuales de inventario con campo de justificación obligatorio.                                                                                                       | Media               |
++--------------------------+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+---------------------+
+| RF-INV-06                | El sistema debe permitir organizar los productos en categorías definidas por la organización.                                                                                                         | Media               |
++--------------------------+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+---------------------+
 
 #### RF-SAL — Módulo de Gestión de Ventas
 
-| ID        | Requisito                                                                                                                           | Prioridad |
-| --------- | ----------------------------------------------------------------------------------------------------------------------------------- | --------- |
-| RF-SAL-01 | El sistema debe permitir registrar una venta seleccionando uno o más productos, con cantidad y precio unitario editable.            | Alta      |
-| RF-SAL-02 | El sistema debe calcular automáticamente el total de la venta, incluyendo descuentos si aplica.                                     | Alta      |
-| RF-SAL-03 | El sistema debe generar un número de factura único y secuencial por organización.                                                   | Alta      |
-| RF-SAL-04 | El sistema debe permitir asociar una venta a un cliente registrado.                                                                 | Media     |
-| RF-SAL-05 | El sistema debe registrar el método de pago (efectivo, tarjeta, transferencia).                                                     | Media     |
-| RF-SAL-06 | Solo el rol Administrador puede cancelar una venta registrada. La cancelación debe revertir el stock de los productos involucrados. | Alta      |
-| RF-SAL-07 | El historial de ventas debe ser filtrable por rango de fechas, cliente, vendedor y método de pago.                                  | Alta      |
++--------------------------+-------------------------------------------------------------------------------------------------------------------------------------+-----------------+
+| ID                       | Requisito                                                                                                                           | Prioridad       |
++==========================+=====================================================================================================================================+=================+
+| RF-SAL-01                | El sistema debe permitir registrar una venta seleccionando uno o más productos, con cantidad y precio unitario editable.            | Alta            |
++--------------------------+-------------------------------------------------------------------------------------------------------------------------------------+-----------------+
+| RF-SAL-02                | El sistema debe calcular automáticamente el total de la venta, incluyendo descuentos si aplica.                                     | Alta            |
++--------------------------+-------------------------------------------------------------------------------------------------------------------------------------+-----------------+
+| RF-SAL-03                | El sistema debe generar un número de factura único y secuencial por organización.                                                   | Alta            |
++--------------------------+-------------------------------------------------------------------------------------------------------------------------------------+-----------------+
+| RF-SAL-04                | El sistema debe permitir asociar una venta a un cliente registrado.                                                                 | Media           |
++--------------------------+-------------------------------------------------------------------------------------------------------------------------------------+-----------------+
+| RF-SAL-05                | El sistema debe registrar el método de pago (efectivo, tarjeta, transferencia).                                                     | Media           |
++--------------------------+-------------------------------------------------------------------------------------------------------------------------------------+-----------------+
+| RF-SAL-06                | Solo el rol Administrador puede cancelar una venta registrada. La cancelación debe revertir el stock de los productos involucrados. | Alta            |
++--------------------------+-------------------------------------------------------------------------------------------------------------------------------------+-----------------+
+| RF-SAL-07                | El historial de ventas debe ser filtrable por rango de fechas, cliente, vendedor y método de pago.                                  | Alta            |
++--------------------------+-------------------------------------------------------------------------------------------------------------------------------------+-----------------+
 
 #### RF-CUS — Módulo de Gestión de Clientes
 
-| ID        | Requisito                                                                                                         | Prioridad |
-| --------- | ----------------------------------------------------------------------------------------------------------------- | --------- |
-| RF-CUS-01 | El sistema debe permitir registrar clientes con: nombre, email, teléfono y documento de identidad.                | Alta      |
-| RF-CUS-02 | El sistema debe mostrar el historial de compras de cada cliente con totales y fechas.                             | Alta      |
-| RF-CUS-03 | El sistema debe calcular y mostrar métricas por cliente: total comprado, número de compras, frecuencia de compra. | Media     |
++--------------------------+-------------------------------------------------------------------------------------------------------------------+---------------+
+| ID                       | Requisito                                                                                                         | Prioridad     |
++==========================+===================================================================================================================+===============+
+| RF-CUS-01                | El sistema debe permitir registrar clientes con: nombre, email, teléfono y documento de identidad.                | Alta          |
++--------------------------+-------------------------------------------------------------------------------------------------------------------+---------------+
+| RF-CUS-02                | El sistema debe mostrar el historial de compras de cada cliente con totales y fechas.                             | Alta          |
++--------------------------+-------------------------------------------------------------------------------------------------------------------+---------------+
+| RF-CUS-03                | El sistema debe calcular y mostrar métricas por cliente: total comprado, número de compras, frecuencia de compra. | Media         |
++--------------------------+-------------------------------------------------------------------------------------------------------------------+---------------+
 
 #### RF-REP — Módulo de Reportes y Dashboard
 
-| ID        | Requisito                                                                                                                              | Prioridad |
-| --------- | -------------------------------------------------------------------------------------------------------------------------------------- | --------- |
-| RF-REP-01 | El dashboard debe mostrar en tiempo real: ventas del día, ventas del mes, productos con stock bajo y top 5 productos más vendidos.     | Alta      |
-| RF-REP-02 | El dashboard debe incluir un gráfico de línea de ventas de los últimos 7 días.                                                         | Alta      |
-| RF-REP-03 | El sistema debe generar reportes de ventas por período (diario, semanal, mensual).                                                     | Alta      |
-| RF-REP-04 | El sistema debe permitir exportar a Excel (.xlsx) los listados filtrados de inventario, ventas y clientes desde el módulo de reportes. | Media     |
-| RF-REP-05 | El sistema debe generar un reporte de estado de inventario con productos agrupados por categoría.                                      | Media     |
++--------------------------+----------------------------------------------------------------------------------------------------------------------------------------+-----------------+
+| ID                       | Requisito                                                                                                                              | Prioridad       |
++==========================+========================================================================================================================================+=================+
+| RF-REP-01                | El dashboard debe mostrar en tiempo real: ventas del día, ventas del mes, productos con stock bajo y top 5 productos más vendidos.     | Alta            |
++--------------------------+----------------------------------------------------------------------------------------------------------------------------------------+-----------------+
+| RF-REP-02                | El dashboard debe incluir un gráfico de línea de ventas de los últimos 7 días.                                                         | Alta            |
++--------------------------+----------------------------------------------------------------------------------------------------------------------------------------+-----------------+
+| RF-REP-03                | El sistema debe generar reportes de ventas por período (diario, semanal, mensual).                                                     | Alta            |
++--------------------------+----------------------------------------------------------------------------------------------------------------------------------------+-----------------+
+| RF-REP-04                | El sistema debe permitir exportar a Excel (.xlsx) los listados filtrados de inventario, ventas y clientes desde el módulo de reportes. | Media           |
++--------------------------+----------------------------------------------------------------------------------------------------------------------------------------+-----------------+
+| RF-REP-05                | El sistema debe generar un reporte de estado de inventario con productos agrupados por categoría.                                      | Media           |
++--------------------------+----------------------------------------------------------------------------------------------------------------------------------------+-----------------+
 
 ### 3.2.2 Requisitos No Funcionales
 
-| ID     | Categoría      | Requisito                                                                                                                                                   |
-| ------ | -------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| RNF-01 | Rendimiento    | El 95% de las respuestas de la API deben completarse en menos de 500ms bajo carga normal (hasta 50 usuarios concurrentes).                                  |
-| RNF-02 | Disponibilidad | El sistema debe garantizar una disponibilidad mínima del 95% mensual.                                                                                       |
-| RNF-03 | Seguridad      | Las contraseñas deben almacenarse con hash bcrypt (factor de coste ≥ 12).                                                                                   |
-| RNF-04 | Seguridad      | La comunicación entre cliente y servidor debe realizarse exclusivamente mediante HTTPS (TLS 1.2+).                                                          |
-| RNF-05 | Seguridad      | Todos los endpoints deben validar que el usuario autenticado pertenezca a la organización dueña del recurso solicitado.                                     |
-| RNF-06 | Usabilidad     | La interfaz debe permitir completar el flujo de registro de una venta en menos de 5 pasos y menos de 60 segundos para un vendedor entrenado.                |
-| RNF-07 | Usabilidad     | La interfaz debe ser responsive y funcional en dispositivos de 375px de ancho mínimo.                                                                       |
-| RNF-08 | Mantenibilidad | La cobertura de pruebas automatizadas del backend debe ser mínimo del 60%.                                                                                  |
-| RNF-09 | Escalabilidad  | La arquitectura debe soportar el incremento de tenants sin cambios estructurales, mediante escalado horizontal de los componentes de la capa de aplicación. |
++--------------------------+------------------------------+-------------------------------------------------------------------------------------------------------------------------------------------------------------+
+| ID                       | Categoría                    | Requisito                                                                                                                                                   |
++==========================+==============================+=============================================================================================================================================================+
+| RNF-01                   | Rendimiento                  | El 95% de las respuestas de la API deben completarse en menos de 500ms bajo carga normal (hasta 50 usuarios concurrentes).                                  |
++--------------------------+------------------------------+-------------------------------------------------------------------------------------------------------------------------------------------------------------+
+| RNF-02                   | Disponibilidad               | El sistema debe garantizar una disponibilidad mínima del 95% mensual.                                                                                       |
++--------------------------+------------------------------+-------------------------------------------------------------------------------------------------------------------------------------------------------------+
+| RNF-03                   | Seguridad                    | Las contraseñas deben almacenarse con hash bcrypt (factor de coste ≥ 12).                                                                                   |
++--------------------------+------------------------------+-------------------------------------------------------------------------------------------------------------------------------------------------------------+
+| RNF-04                   | Seguridad                    | La comunicación entre cliente y servidor debe realizarse exclusivamente mediante HTTPS (TLS 1.2+).                                                          |
++--------------------------+------------------------------+-------------------------------------------------------------------------------------------------------------------------------------------------------------+
+| RNF-05                   | Seguridad                    | Todos los endpoints deben validar que el usuario autenticado pertenezca a la organización dueña del recurso solicitado.                                     |
++--------------------------+------------------------------+-------------------------------------------------------------------------------------------------------------------------------------------------------------+
+| RNF-06                   | Usabilidad                   | La interfaz debe permitir completar el flujo de registro de una venta en menos de 5 pasos y menos de 60 segundos para un vendedor entrenado.                |
++--------------------------+------------------------------+-------------------------------------------------------------------------------------------------------------------------------------------------------------+
+| RNF-07                   | Usabilidad                   | La interfaz debe ser responsive y funcional en dispositivos de 375px de ancho mínimo.                                                                       |
++--------------------------+------------------------------+-------------------------------------------------------------------------------------------------------------------------------------------------------------+
+| RNF-08                   | Mantenibilidad               | La cobertura de pruebas automatizadas del backend debe ser mínimo del 60%.                                                                                  |
++--------------------------+------------------------------+-------------------------------------------------------------------------------------------------------------------------------------------------------------+
+| RNF-09                   | Escalabilidad                | La arquitectura debe soportar el incremento de tenants sin cambios estructurales, mediante escalado horizontal de los componentes de la capa de aplicación. |
++--------------------------+------------------------------+-------------------------------------------------------------------------------------------------------------------------------------------------------------+
 
 ## 3.3 Arquitectura del Sistema
 
@@ -148,14 +190,21 @@ Los requisitos funcionales se organizan por módulo. Cada requisito está identi
 
 Las principales decisiones de diseño arquitectónico del sistema se tomaron considerando las restricciones del proyecto (equipo de 3 personas, plazo de 7 meses, presupuesto acotado) y los requisitos no funcionales de escalabilidad, seguridad y mantenibilidad.
 
++---------------------------------------+------------------------------------+--------------------------------------------------------------------------------------------------------------------------------------------------------------+
 | Decisión                              | Alternativa considerada            | Justificación                                                                                                                                                |
-| ------------------------------------- | ---------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------ |
++=======================================+====================================+==============================================================================================================================================================+
 | SPA (React)                           | Server-side rendering (Next.js)    | Mayor interactividad sin recargas; la naturaleza de la aplicación (dashboard, tablas, formularios) se beneficia de la reactividad de un SPA.                 |
++---------------------------------------+------------------------------------+--------------------------------------------------------------------------------------------------------------------------------------------------------------+
 | REST API                              | GraphQL                            | Menor curva de aprendizaje, amplio soporte de herramientas, adecuado para el número de entidades del sistema.                                                |
++---------------------------------------+------------------------------------+--------------------------------------------------------------------------------------------------------------------------------------------------------------+
 | Multi-tenancy por campo discriminador | BD por tenant / esquema por tenant | Menor complejidad operativa y menor costo de infraestructura; adecuado para el número de tenants esperado en el MVP.                                         |
++---------------------------------------+------------------------------------+--------------------------------------------------------------------------------------------------------------------------------------------------------------+
 | Monolito modular                      | Microservicios                     | Apropiado para el tamaño del equipo y la fase de desarrollo; la modularidad interna permite extraer servicios en el futuro.                                  |
++---------------------------------------+------------------------------------+--------------------------------------------------------------------------------------------------------------------------------------------------------------+
 | PostgreSQL                            | MongoDB                            | Los datos del negocio (ventas, productos, clientes) son inherentemente relacionales; PostgreSQL ofrece garantías ACID necesarias para integridad financiera. |
++---------------------------------------+------------------------------------+--------------------------------------------------------------------------------------------------------------------------------------------------------------+
 | JWT sin estado                        | Sesiones en servidor (Redis)       | Permite escalado horizontal sin sincronización de sesiones entre instancias del backend.                                                                     |
++---------------------------------------+------------------------------------+--------------------------------------------------------------------------------------------------------------------------------------------------------------+
 
 ### 3.3.2 Vista de Componentes de Alto Nivel
 
@@ -214,57 +263,95 @@ El modelo de datos se organiza alrededor de las siguientes entidades:
 
 ### 3.4.3 Tabla: `organizations`
 
++------------+-----------------------+---------------------------+
 | Columna    | Tipo                  | Descripción               |
-| ---------- | --------------------- | ------------------------- |
++============+=======================+===========================+
 | id         | UUID PK               | Identificador único       |
++------------+-----------------------+---------------------------+
 | name       | VARCHAR(255) NOT NULL | Nombre de la organización |
++------------+-----------------------+---------------------------+
 | slug       | VARCHAR(100) UNIQUE   | Identificador en URL      |
++------------+-----------------------+---------------------------+
 | is_active  | BOOLEAN DEFAULT TRUE  | Estado de la organización |
++------------+-----------------------+---------------------------+
 | created_at | TIMESTAMP             | Fecha de registro         |
++------------+-----------------------+---------------------------+
 
 ### 3.4.4 Tabla: `users`
 
++-------------------------+--------------+---------------------------------+
 | Columna                 | Tipo         | Descripción                     |
-| ----------------------- | ------------ | ------------------------------- |
++=========================+==============+=================================+
 | id                      | UUID PK      | Identificador único             |
++-------------------------+--------------+---------------------------------+
 | organization_id         | UUID FK      | Organización a la que pertenece |
++-------------------------+--------------+---------------------------------+
 | role                    | ENUM         | admin / seller / viewer         |
++-------------------------+--------------+---------------------------------+
 | email                   | VARCHAR(255) | Email (único por organización)  |
++-------------------------+--------------+---------------------------------+
 | hashed_password         | VARCHAR(255) | Hash bcrypt                     |
++-------------------------+--------------+---------------------------------+
 | full_name               | VARCHAR(200) | Nombre completo                 |
++-------------------------+--------------+---------------------------------+
 | is_active               | BOOLEAN      | Estado del usuario              |
++-------------------------+--------------+---------------------------------+
 | created_at / updated_at | TIMESTAMP    | Auditoría                       |
++-------------------------+--------------+---------------------------------+
 
 ### 3.4.5 Tabla: `products`
 
++-----------------+---------------+------------------------------+
 | Columna         | Tipo          | Descripción                  |
-| --------------- | ------------- | ---------------------------- |
++=================+===============+==============================+
 | id              | UUID PK       | Identificador único          |
++-----------------+---------------+------------------------------+
 | organization_id | UUID FK       | Multi-tenancy                |
++-----------------+---------------+------------------------------+
 | category_id     | UUID FK       | Categoría del producto       |
++-----------------+---------------+------------------------------+
 | name            | VARCHAR(255)  | Nombre del producto          |
++-----------------+---------------+------------------------------+
 | sku             | VARCHAR(100)  | SKU (único por organización) |
++-----------------+---------------+------------------------------+
 | cost_price      | DECIMAL(12,2) | Precio de costo              |
++-----------------+---------------+------------------------------+
 | sale_price      | DECIMAL(12,2) | Precio de venta              |
++-----------------+---------------+------------------------------+
 | stock_quantity  | INTEGER       | Stock actual                 |
++-----------------+---------------+------------------------------+
 | min_stock       | INTEGER       | Stock mínimo para alerta     |
++-----------------+---------------+------------------------------+
 | max_stock       | INTEGER       | Stock máximo sugerido        |
++-----------------+---------------+------------------------------+
 | is_active       | BOOLEAN       | Estado del producto          |
++-----------------+---------------+------------------------------+
 
 ### 3.4.6 Tabla: `sales`
 
++-----------------+---------------+-------------------------------+
 | Columna         | Tipo          | Descripción                   |
-| --------------- | ------------- | ----------------------------- |
++=================+===============+===============================+
 | id              | UUID PK       | Identificador único           |
++-----------------+---------------+-------------------------------+
 | organization_id | UUID FK       | Multi-tenancy                 |
++-----------------+---------------+-------------------------------+
 | invoice_number  | VARCHAR(50)   | Número único de factura       |
++-----------------+---------------+-------------------------------+
 | customer_id     | UUID FK NULL  | Cliente asociado (opcional)   |
++-----------------+---------------+-------------------------------+
 | seller_id       | UUID FK       | Usuario que registró la venta |
++-----------------+---------------+-------------------------------+
 | total_amount    | DECIMAL(12,2) | Total de la venta             |
++-----------------+---------------+-------------------------------+
 | discount_amount | DECIMAL(12,2) | Descuento aplicado            |
++-----------------+---------------+-------------------------------+
 | payment_method  | ENUM          | cash / card / transfer        |
++-----------------+---------------+-------------------------------+
 | status          | ENUM          | completed / cancelled         |
++-----------------+---------------+-------------------------------+
 | created_at      | TIMESTAMP     | Fecha de la venta             |
++-----------------+---------------+-------------------------------+
 
 ### 3.4.7 Estrategia de Índices
 

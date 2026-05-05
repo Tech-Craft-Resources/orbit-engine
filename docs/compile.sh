@@ -21,6 +21,7 @@ pandoc \
   -o "$OUT_DIR/$OUTPUT_MAIN" \
   --pdf-engine=xelatex \
   --from="markdown+smart+pipe_tables" \
+  --lua-filter="$DIR/fix_tables.lua" \
   --syntax-highlighting=tango \
   --resource-path="$DIR" \
   --top-level-division=chapter

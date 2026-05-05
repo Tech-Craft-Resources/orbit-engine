@@ -52,16 +52,16 @@ Las pruebas de este capítulo se ejecutaron sobre un piloto compuesto por **ocho
 
 **Tabla 5.1.5.** Organizaciones del piloto técnico.
 
-| N°  | Nombre del _tenant_ | Naturaleza                                                | Sector / propósito                                                                                       |
-| --- | ------------------- | --------------------------------------------------------- | -------------------------------------------------------------------------------------------------------- |
-| 1   | **Frozt Bitez**     | **Empresa real**                                          | Pyme que adoptó OrbitEngine para sus operaciones reales                                                  |
-| 2   | **Miss Peggy**      | **Empresa real**                                          | Pyme de un sector distinto al de Frozt Bitez, que también adoptó la plataforma para sus operaciones      |
-| 3   | Lehgo               | Empresa ficticia de prueba (datos sintéticos)             | Generación de volumen de productos, ventas y movimientos para forzar consultas                           |
-| 4   | Ferrallas del Norte | Empresa ficticia de prueba (datos sintéticos)             | Generación de volumen de productos, ventas y movimientos para forzar consultas                           |
-| 5   | Sabor Caribe        | Empresa ficticia de prueba (datos sintéticos)             | Generación de volumen de productos, ventas y movimientos para forzar consultas                           |
-| 6   | Moda Andes          | Empresa ficticia de prueba (datos sintéticos)             | Generación de volumen de productos, ventas y movimientos para forzar consultas                           |
-| 7   | FarmaVida           | Empresa ficticia de prueba (datos sintéticos)             | Generación de volumen de productos, ventas y movimientos para forzar consultas                           |
-| 8   | Default del entorno | Datos de prueba — primera organización creada como _seed_ | Tenant base de pruebas internas; conserva información residual de las primeras iteraciones de desarrollo |
+| N°      | Nombre                  | Naturaleza                                                | Sector / propósito                                                                                       |
+| ------- | ----------------------- | --------------------------------------------------------- | -------------------------------------------------------------------------------------------------------- |
+| 1       | **Frozt Bitez**         | **Empresa real**                                          | Pyme que adoptó OrbitEngine para sus operaciones reales                                                  |
+| 2       | **Miss Peggy**          | **Empresa real**                                          | Pyme de un sector distinto al de Frozt Bitez, que también adoptó la plataforma para sus operaciones      |
+| 3       | Lehgo                   | Empresa ficticia de prueba (datos sintéticos)             | Generación de volumen de productos, ventas y movimientos para forzar consultas                           |
+| 4       | Ferrallas del Norte     | Empresa ficticia de prueba (datos sintéticos)             | Generación de volumen de productos, ventas y movimientos para forzar consultas                           |
+| 5       | Sabor Caribe            | Empresa ficticia de prueba (datos sintéticos)             | Generación de volumen de productos, ventas y movimientos para forzar consultas                           |
+| 6       | Moda Andes              | Empresa ficticia de prueba (datos sintéticos)             | Generación de volumen de productos, ventas y movimientos para forzar consultas                           |
+| 7       | FarmaVida               | Empresa ficticia de prueba (datos sintéticos)             | Generación de volumen de productos, ventas y movimientos para forzar consultas                           |
+| 8       | Default del entorno     | Datos de prueba — primera organización creada como _seed_ | Tenant base de pruebas internas; conserva información residual de las primeras iteraciones de desarrollo |
 
 **Resumen cuantitativo.**
 
@@ -91,11 +91,11 @@ Las pruebas se construyeron con **Locust** y están versionadas en el repositori
 
 El `locustfile.py` define tres clases de `HttpUser` que se mezclan según pesos relativos:
 
-| Perfil            | Peso | Comportamiento                                                                                                                                                                                        | Tiempo de espera    |
-| ----------------- | ---- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------- |
-| `OrbitEngineUser` | 3    | Lee dashboard, productos, ventas, clientes y categorías. Ejercita paginación extrema (`?limit=100&skip=0/100`), búsqueda (`?search=`), ordenamiento (`?sort_by=&sort_order=`) y filtros (`?status=`). | Entre 0,5 s y 1,5 s |
-| `SellerUser`      | 2    | Crea ventas reales contra el catálogo (`POST /sales/`), ajusta stock (`POST /products/{id}/adjust-stock`) y consulta movimientos.                                                                     | Entre 1 s y 2 s     |
-| `SpammerUser`     | 1    | Martillea sin pausa los endpoints de agregación (`/dashboard/stats`, `/sales/stats`, `/products/low-stock`) y peticiones a UUIDs inexistentes para ejercitar el camino de error 404.                  | `constant(0)`       |
+| Perfil                    | Peso     | Comportamiento                                                                                                             |
+| ------------------------- | -------- | -------------------------------------------------------------------------------------------------------------------------- |
+| OrbitEngineUser           | 3        | Lee dashboard, productos, ventas, clientes y categorías. Ejercita paginación extrema, búsqueda, ordenamiento y filtros.    |
+| SellerUser                | 2        | Crea ventas reales contra el catálogo, ajusta stock y consulta movimientos.                                                |
+| SpammerUser               | 1        | Martillea sin pausa los endpoints de agregación y peticiones a UUIDs inexistentes para ejercitar el camino de error 404.   |
 
 La rotación de cuentas se hace de forma cíclica y _thread-safe_ sobre la lista `ACCOUNTS`, que contiene credenciales válidas de las ocho organizaciones del piloto técnico descritas en la sección 5.1.5: las **dos empresas reales** (**Frozt Bitez** y **Miss Peggy**) y las **seis empresas ficticias de prueba** (**Lehgo**, **Ferrallas del Norte**, **Sabor Caribe**, **Moda Andes**, **FarmaVida** y **Default**). Esta rotación cumple dos funciones en paralelo: (i) cada usuario virtual ejercita el aislamiento por `organization_id` desde un _tenant_ distinto, validando la integridad multi-tenant bajo carga; (ii) las peticiones consultan tanto los volúmenes reales y acotados de Frozt Bitez y Miss Peggy como los volúmenes grandes generados por las seis empresas ficticias de prueba, lo que aporta un perfil de coste por consulta más representativo que el que obtendría un único _tenant_.
 
@@ -170,16 +170,55 @@ La tasa de fallos crece de manera monótona hasta el Test 05 (régimen de pico n
 
 ### 5.2.6 Comportamiento por Endpoint
 
-Los CSV permiten aislar el comportamiento de los endpoints más representativos a lo largo de los seis escenarios:
+Los CSV permiten aislar el comportamiento de los endpoints más representativos a lo largo de los seis escenarios. A continuación se presenta cada endpoint con su tabla de resultados y la observación correspondiente.
 
-| Endpoint                 | Test 01 mediana | Test 02 mediana | Test 06 mediana            | Observación                                                                                                                                  |
-| ------------------------ | --------------- | --------------- | -------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------- |
-| POST /login/access-token | 910 ms          | 1 200 ms        | 2 200 ms                   | Coste fijo dominado por el hashing bcrypt de la contraseña; el cuello no es de base de datos.                                                |
-| GET /products/           | 500 ms          | 730 ms          | 690 ms                     | Endpoint CRUD con paginación; el coste se mantiene acotado incluso bajo pico.                                                                |
-| GET /customers/          | 430 ms          | 540 ms          | 620 ms                     | Comportamiento similar al de productos.                                                                                                      |
-| GET /dashboard/stats     | 710 ms          | 850 ms          | 1 100 ms (con 19 % de 500) | Agregaciones costosas que se vuelven inestables bajo pico sostenido.                                                                         |
-| GET /sales/              | **7 500 ms**    | **7 700 ms**    | **8 600 ms**               | Latencia dominante en todos los regímenes; resultado de joins con SaleItem y agregaciones por venta sin paginación servidor-lado optimizada. |
-| POST /sales/             | —               | 2 500 ms        | —                          | Operación transaccional con escritura de Sale, SaleItem e InventoryMovement en la misma sesión SQLAlchemy.                                   |
+**`POST /login/access-token`**
+
+| Escenario | Test 01 | Test 02  | Test 03  | Test 04  | Test 05  | Test 06  |
+| --------- | ------- | -------- | -------- | -------- | -------- | -------- |
+| Mediana   | 910 ms  | 1 200 ms | 2 000 ms | 2 200 ms | 2 200 ms | -        |
+
+La mediana de este endpoint crece de forma progresiva desde 910 ms en carga normal hasta alcanzar una meseta en 2 200 ms durante los escenarios de saturación (Tests 04 y 05), lo que representa un incremento del 142 % respecto al valor de referencia. El hecho de que la mediana se estabilice en ese valor —en lugar de continuar creciendo— sugiere que el sistema de cola de FastAPI comienza a serializar las solicitudes de autenticación antes de procesarlas, limitando la degradación adicional. Este comportamiento es coherente con la naturaleza del flujo: el coste dominante no proviene de la base de datos sino del hashing bcrypt aplicado a la contraseña, una operación deliberadamente costosa por diseño de seguridad. La ausencia de datos para Test 06 indica que en ese escenario el endpoint no acumuló suficientes muestras representativas, posiblemente porque los usuarios virtuales ya disponían de sesión activa al inicio de la ronda de medición.
+
+**`GET /products/`**
+
+| Escenario | Test 01 | Test 02 | Test 03  | Test 04  | Test 05  | Test 06 |
+| --------- | ------- | ------- | -------- | -------- | -------- | ------- |
+| Mediana   | 500 ms  | 730 ms  | 1 100 ms | 4 000 ms | 4 000 ms | 690 ms  |
+
+Este endpoint evidencia dos fases de comportamiento claramente diferenciadas. En los regímenes de carga normal y estrés moderado (Tests 01 y 02), la mediana se mantiene controlada entre 500 ms y 730 ms, lo que refleja que la paginación del lado del servidor aísla eficazmente el coste por petición del volumen total de registros. Sin embargo, al entrar en el régimen de saturación (Tests 03 y 04), la mediana escala bruscamente hasta 4 000 ms, evidenciando que cuando la cola de workers se satura, las peticiones de lectura paginadas quedan represadas detrás de operaciones de mayor coste. El descenso a 690 ms en Test 06, con cuatro workers activos, es particularmente significativo: a pesar de que la concurrencia es mayor que en Tests 04 y 05, la duplicación de workers absorbe la contención y restaura la latencia a un nivel próximo al de estrés moderado, lo que confirma que la limitación en esos escenarios intermedios era de capacidad de procesamiento y no de diseño de la consulta.
+
+**`GET /customers/`**
+
+| Escenario | Test 01 | Test 02 | Test 03  | Test 04   | Test 05  | Test 06 |
+| --------- | ------- | ------- | -------- | --------- | -------- | ------- |
+| Mediana   | 430 ms  | 540 ms  | 1 500 ms | 31 000 ms | 1 200 ms | 620 ms  |
+
+Este endpoint sigue en términos generales el patrón de degradación de `GET /products/`, pero con una anomalía puntual de mayor magnitud en el escenario de saturación máxima: la mediana de Test 04 asciende a 31 000 ms, un valor que supera en más de veinte veces el registrado en Test 03 (1 500 ms) y que no tiene correlato proporcional en ningún otro endpoint de listado. Este pico se interpreta como el resultado de una cola de espera extrema sobre el pool de conexiones de la base de datos en un instante de saturación simultánea con las escrituras de `POST /sales/`, que en Test 04 también registran su valor máximo. La recuperación a 1 200 ms en Test 05 y a 620 ms en Test 06 confirma que el episodio fue transitorio y dependiente de la combinación particular de carga en ese escenario, y no de una degradación estructural del endpoint.
+
+**`GET /dashboard/stats`**
+
+| Escenario | Test 01 | Test 02 | Test 03  | Test 04  | Test 05  | Test 06            |
+| --------- | ------- | ------- | -------- | -------- | -------- | ------------------ |
+| Mediana   | 710 ms  | 850 ms  | 1 700 ms | 4 800 ms | 1 700 ms | 1 100 ms (19 % 500)|
+
+Este endpoint concentra las consultas de agregación más costosas del sistema —totales de ventas, unidades vendidas por período y niveles de stock— ejecutadas directamente contra PostgreSQL sin capa de caché intermedia. La progresión controlada de 710 ms a 850 ms entre los Tests 01 y 02 indica que la base de datos absorbe el incremento inicial de concurrencia sin saturarse. A partir del régimen de saturación, sin embargo, la mediana escala hasta 1 700 ms en Test 03 y alcanza su pico en 4 800 ms en Test 04, para luego retroceder a 1 700 ms en Test 05 y a 1 100 ms en Test 06. Este comportamiento no lineal —en el que Test 06 presenta la segunda mediana más baja pese a ser el escenario con mayor concurrencia— se explica en parte por la incorporación de cuatro workers en ese escenario, pero también por el hecho de que las respuestas fallidas (19 % de errores 500) cortan el ciclo de procesamiento antes de que las agregaciones completen, lo que artificialmente reduce la mediana de las peticiones que sí responden. Este endpoint constituye el candidato prioritario para la incorporación de una capa de caché distribuida en iteraciones futuras del sistema.
+
+**`GET /sales/`**
+
+| Escenario | Test 01      | Test 02      | Test 03  | Test 04  | Test 05   | Test 06      |
+| --------- | ------------ | ------------ | -------- | -------- | --------- | ------------ |
+| Mediana   | **7 500 ms** | **7 700 ms** | 8 500 ms | 8 900 ms | 11 000 ms | **8 600 ms** |
+
+Este endpoint constituye el principal cuello de botella del sistema en todos los regímenes evaluados, y su perfil de latencia es el más revelador del conjunto. La mediana de 7 500 ms registrada en carga normal —con apenas ocho usuarios concurrentes— demuestra que el problema es estructural e independiente de la presión competitiva: la consulta recorre la relación `Sale → SaleItem` mediante joins y ejecuta agregaciones por venta sobre el conjunto completo de registros, sin que el servidor aplique paginación optimizada que limite el volumen de trabajo por petición. La progresión entre los seis escenarios —7 500 ms, 7 700 ms, 8 500 ms, 8 900 ms, 11 000 ms y 8 600 ms— muestra un incremento sostenido pero relativamente contenido: el valor máximo (Test 05, 11 000 ms) solo es un 47 % superior al de referencia (Test 01, 7 500 ms), lo que contrasta con las variaciones de varios órdenes de magnitud que exhiben otros endpoints en saturación. Esta compresión del rango de degradación confirma que el factor dominante es el coste intrínseco de la consulta, no la contención de recursos, y que la solución debe buscarse en la optimización de la capa de datos —paginación del lado del servidor, desnormalización selectiva o materialización de vistas— y no en el escalado de la infraestructura.
+
+**`POST /sales/`**
+
+| Escenario | Test 01 | Test 02  | Test 03  | Test 04   | Test 05  | Test 06 |
+| --------- | ------- | -------- | -------- | --------- | -------- | ------- |
+| Mediana   | —       | 2 500 ms | 3 300 ms | 31 000 ms | 6 800 ms | —       |
+
+Este endpoint presenta la trayectoria de degradación más pronunciada del conjunto, así como el valor pico más alto registrado en toda la batería de pruebas. Bajo estrés moderado (Test 02) la mediana se sitúa en 2 500 ms, lo que refleja el coste base de una operación transaccional que agrupa tres escrituras atómicas en la misma sesión SQLAlchemy: la creación del registro `Sale`, la inserción de los correspondientes `SaleItem` y el ajuste del `InventoryMovement`. Al entrar en saturación, la mediana escala a 3 300 ms en Test 03 y colapsa a 31 000 ms en Test 04, el valor más elevado registrado en toda la batería. Este episodio de saturación extrema es el resultado directo de la contención sobre los bloqueos de fila que protegen el stock disponible: cuando múltiples transacciones concurrentes intentan actualizar el inventario de los mismos productos, las colas de espera sobre esos bloqueos se acumulan de forma no lineal. La recuperación a 6 800 ms en Test 05 sugiere que la reducción en la duración total de ese escenario y el consecuente menor solapamiento de transacciones aliviaron parcialmente la contención. La ausencia de datos en Test 01 y Test 06 obedece a que el volumen de peticiones en esos escenarios no generó muestras estadísticamente representativas para esta operación de escritura.
 
 ### 5.2.7 Cumplimiento del RNF-01
 
