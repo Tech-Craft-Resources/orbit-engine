@@ -35,7 +35,7 @@ $outputAnexos = "anexos.pdf"
 Write-Host "Compilando anexos..." -ForegroundColor Cyan
 
 pandoc `
-  "$dir\metadata.yaml" `
+  "$dir\metadata-anexos.yaml" `
   "$dir\anexo-a-manual-usuario.md" `
   "$dir\anexo-b-manual-despliegue.md" `
   "$dir\anexo-c-documentacion-tecnica.md" `
