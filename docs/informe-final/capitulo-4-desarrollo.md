@@ -20,13 +20,13 @@ Las ceremonias mantenidas fueron:
 
 ### 4.1.2 Herramientas del Proceso
 
-| Herramienta | Propósito |
-|---|---|
-| GitHub Projects | Gestión del backlog, kanban de sprints |
+| Herramienta          | Propósito                                        |
+| -------------------- | ------------------------------------------------ |
+| GitHub Projects      | Gestión del backlog, kanban de sprints           |
 | GitHub (repositorio) | Control de versiones, pull requests, code review |
-| GitHub Actions | CI/CD: pruebas automatizadas y despliegue |
-| Discord | Comunicación del equipo, standups asincrónicos |
-| Figma | Diseño de wireframes y mockups de UI |
+| GitHub Actions       | CI/CD: pruebas automatizadas y despliegue        |
+| Discord              | Comunicación del equipo, standups asincrónicos   |
+| Figma                | Diseño de wireframes y mockups de UI             |
 
 ### 4.1.3 Estructura del Equipo
 
@@ -52,8 +52,6 @@ Se establecieron las siguientes prácticas de calidad desde el inicio del proyec
 - Tipado estricto con TypeScript.
 - Linting y formateo con Biome.
 - Generación automática del cliente de API desde el schema OpenAPI (`bun run generate-client`) para garantizar la sincronización entre frontend y backend.
-
----
 
 ## 4.2 Fases y Sprints de Desarrollo
 
@@ -162,8 +160,6 @@ Del 27 de abril al 4 de mayo de 2026, el sistema en producción se puso a dispos
 
 Consolidación del informe de grado, preparación de la presentación y defensa del proyecto del 5 al 15 de mayo de 2026.
 
----
-
 ## 4.3 Implementación de Módulos Clave
 
 ### 4.3.1 Sistema de Autenticación y Multi-Tenancy
@@ -221,8 +217,6 @@ El registro de una venta involucra múltiples operaciones que deben ejecutarse d
 6. Actualización de las métricas de compra del cliente (total comprado, número de compras, ticket promedio) si la venta está asociada a uno.
 
 Todo el flujo se ejecuta dentro de la misma sesión SQLAlchemy gestionada por la dependencia `SessionDep`. Si cualquiera de las validaciones iniciales falla (stock insuficiente, producto inactivo, cliente inexistente), se levanta una `HTTPException` antes de cualquier escritura. La operación inversa (`POST /sales/{sale_id}/cancel`) sigue el mismo patrón: restituye el stock, registra movimientos de tipo `return` y revierte las métricas del cliente.
-
----
 
 ## 4.4 Estrategia y Resultados de Pruebas
 
@@ -282,15 +276,15 @@ Este pipeline garantiza que solo código probado y con tipos correctos llegue a 
 
 Con más de 300 pruebas automatizadas distribuidas entre las capas de CRUD, API, multi-tenancy y E2E, la cobertura del backend al cierre de la Fase 3 alcanzó:
 
-| Módulo | Cobertura |
-|---|---|
-| Autenticación y usuarios | 92% |
-| Inventario (productos, categorías, movimientos) | 88% |
-| Ventas | 91% |
-| Clientes | 86% |
-| Dashboard y reportes | 82% |
-| Multi-tenancy y permisos | 95% |
-| **Total** | **89%** |
+| Módulo                                          | Cobertura |
+| ----------------------------------------------- | --------- |
+| Autenticación y usuarios                        | 92%       |
+| Inventario (productos, categorías, movimientos) | 88%       |
+| Ventas                                          | 91%       |
+| Clientes                                        | 86%       |
+| Dashboard y reportes                            | 82%       |
+| Multi-tenancy y permisos                        | 95%       |
+| **Total**                                       | **89%**   |
 
 La cobertura total del 89% supera holgadamente el umbral mínimo del 60% establecido como requisito no funcional. La buena cobertura del módulo de multi-tenancy es especialmente relevante porque protege la propiedad más crítica del sistema: el aislamiento de datos entre organizaciones.
 
@@ -314,21 +308,19 @@ Para validar el comportamiento del sistema bajo uso real se diseñó un plan de 
 - **PageSpeed Insights** y **WebPageTest** como herramientas web gratuitas complementarias para obtener mediciones desde redes y ubicaciones distintas a las del equipo de desarrollo.
 - Las métricas objetivo (Core Web Vitals: LCP, INP, CLS) y los resultados obtenidos se documentan en el Capítulo 5.
 
----
-
 ## 4.5 Infraestructura de Despliegue
 
 ### 4.5.1 Arquitectura de Producción
 
 El sistema fue desplegado en Railway y Vercel con la siguiente configuración:
 
-| Plataforma | Componente | Configuración |
-|---|---|---|
-| Railway | Backend API | Servicio web desplegado desde imagen Docker; variables de entorno gestionadas en el panel de Railway |
-| Railway | Base de datos PostgreSQL | Instancia gestionada, backups automáticos, URL de conexión inyectada como variable de entorno |
-| Vercel | Frontend (React/Vite) | SPA compilada con Vite, CDN global integrado, HTTPS automático y previsualizaciones por pull request |
-| Railway / Vercel | Certificados TLS | Certificados gestionados y renovados automáticamente por cada plataforma |
-| Namecheap | Registro de dominio y DNS | Dominio adquirido en Namecheap; registros CNAME / A configurados desde el panel de Namecheap para apuntar al backend en Railway y al frontend en Vercel |
+| Plataforma       | Componente                | Configuración                                                                                                                                           |
+| ---------------- | ------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Railway          | Backend API               | Servicio web desplegado desde imagen Docker; variables de entorno gestionadas en el panel de Railway                                                    |
+| Railway          | Base de datos PostgreSQL  | Instancia gestionada, backups automáticos, URL de conexión inyectada como variable de entorno                                                           |
+| Vercel           | Frontend (React/Vite)     | SPA compilada con Vite, CDN global integrado, HTTPS automático y previsualizaciones por pull request                                                    |
+| Railway / Vercel | Certificados TLS          | Certificados gestionados y renovados automáticamente por cada plataforma                                                                                |
+| Namecheap        | Registro de dominio y DNS | Dominio adquirido en Namecheap; registros CNAME / A configurados desde el panel de Namecheap para apuntar al backend en Railway y al frontend en Vercel |
 
 ### 4.5.2 Estrategia de Secretos y Configuración
 

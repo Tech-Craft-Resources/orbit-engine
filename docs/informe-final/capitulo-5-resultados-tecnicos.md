@@ -76,8 +76,6 @@ Las pruebas de este capítulo se ejecutaron sobre un piloto compuesto por **ocho
 
 Esta composición es coherente con el alcance de un piloto técnico: **Frozt Bitez y Miss Peggy** aportan realismo cualitativo sobre el comportamiento productivo del sistema, mientras que **Lehgo, Ferrallas del Norte, Sabor Caribe, Moda Andes, FarmaVida y Default** aportan el volumen sintético necesario para evidenciar el coste de las consultas en condiciones próximas a las de un sistema en producción a mayor escala.
 
----
-
 ## 5.2 Pruebas de Carga (Backend / API) — Locust
 
 ### 5.2.1 Diseño del Experimento
@@ -93,11 +91,11 @@ Las pruebas se construyeron con **Locust** y están versionadas en el repositori
 
 El `locustfile.py` define tres clases de `HttpUser` que se mezclan según pesos relativos:
 
-| Perfil | Peso | Comportamiento | Tiempo de espera |
-| ----------------- | ---- | -------------- | ---------------- |
-| `OrbitEngineUser` | 3 | Lee dashboard, productos, ventas, clientes y categorías. Ejercita paginación extrema (`?limit=100&skip=0/100`), búsqueda (`?search=`), ordenamiento (`?sort_by=&sort_order=`) y filtros (`?status=`). | Entre 0,5 s y 1,5 s |
-| `SellerUser` | 2 | Crea ventas reales contra el catálogo (`POST /sales/`), ajusta stock (`POST /products/{id}/adjust-stock`) y consulta movimientos. | Entre 1 s y 2 s |
-| `SpammerUser` | 1 | Martillea sin pausa los endpoints de agregación (`/dashboard/stats`, `/sales/stats`, `/products/low-stock`) y peticiones a UUIDs inexistentes para ejercitar el camino de error 404. | `constant(0)` |
+| Perfil            | Peso | Comportamiento                                                                                                                                                                                        | Tiempo de espera    |
+| ----------------- | ---- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------- |
+| `OrbitEngineUser` | 3    | Lee dashboard, productos, ventas, clientes y categorías. Ejercita paginación extrema (`?limit=100&skip=0/100`), búsqueda (`?search=`), ordenamiento (`?sort_by=&sort_order=`) y filtros (`?status=`). | Entre 0,5 s y 1,5 s |
+| `SellerUser`      | 2    | Crea ventas reales contra el catálogo (`POST /sales/`), ajusta stock (`POST /products/{id}/adjust-stock`) y consulta movimientos.                                                                     | Entre 1 s y 2 s     |
+| `SpammerUser`     | 1    | Martillea sin pausa los endpoints de agregación (`/dashboard/stats`, `/sales/stats`, `/products/low-stock`) y peticiones a UUIDs inexistentes para ejercitar el camino de error 404.                  | `constant(0)`       |
 
 La rotación de cuentas se hace de forma cíclica y _thread-safe_ sobre la lista `ACCOUNTS`, que contiene credenciales válidas de las ocho organizaciones del piloto técnico descritas en la sección 5.1.5: las **dos empresas reales** (**Frozt Bitez** y **Miss Peggy**) y las **seis empresas ficticias de prueba** (**Lehgo**, **Ferrallas del Norte**, **Sabor Caribe**, **Moda Andes**, **FarmaVida** y **Default**). Esta rotación cumple dos funciones en paralelo: (i) cada usuario virtual ejercita el aislamiento por `organization_id` desde un _tenant_ distinto, validando la integridad multi-tenant bajo carga; (ii) las peticiones consultan tanto los volúmenes reales y acotados de Frozt Bitez y Miss Peggy como los volúmenes grandes generados por las seis empresas ficticias de prueba, lo que aporta un perfil de coste por consulta más representativo que el que obtendría un único _tenant_.
 
@@ -174,14 +172,14 @@ La tasa de fallos crece de manera monótona hasta el Test 05 (régimen de pico n
 
 Los CSV permiten aislar el comportamiento de los endpoints más representativos a lo largo de los seis escenarios:
 
-| Endpoint | Test 01 mediana | Test 02 mediana | Test 06 mediana | Observación |
-| -------- | --------------- | --------------- | --------------- | ----------- |
-| POST /login/access-token | 910 ms | 1 200 ms | 2 200 ms | Coste fijo dominado por el hashing bcrypt de la contraseña; el cuello no es de base de datos. |
-| GET /products/ | 500 ms | 730 ms | 690 ms | Endpoint CRUD con paginación; el coste se mantiene acotado incluso bajo pico. |
-| GET /customers/ | 430 ms | 540 ms | 620 ms | Comportamiento similar al de productos. |
-| GET /dashboard/stats | 710 ms | 850 ms | 1 100 ms (con 19 % de 500) | Agregaciones costosas que se vuelven inestables bajo pico sostenido. |
-| GET /sales/ | **7 500 ms** | **7 700 ms** | **8 600 ms** | Latencia dominante en todos los regímenes; resultado de joins con SaleItem y agregaciones por venta sin paginación servidor-lado optimizada. |
-| POST /sales/ | — | 2 500 ms | — | Operación transaccional con escritura de Sale, SaleItem e InventoryMovement en la misma sesión SQLAlchemy. |
+| Endpoint                 | Test 01 mediana | Test 02 mediana | Test 06 mediana            | Observación                                                                                                                                  |
+| ------------------------ | --------------- | --------------- | -------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------- |
+| POST /login/access-token | 910 ms          | 1 200 ms        | 2 200 ms                   | Coste fijo dominado por el hashing bcrypt de la contraseña; el cuello no es de base de datos.                                                |
+| GET /products/           | 500 ms          | 730 ms          | 690 ms                     | Endpoint CRUD con paginación; el coste se mantiene acotado incluso bajo pico.                                                                |
+| GET /customers/          | 430 ms          | 540 ms          | 620 ms                     | Comportamiento similar al de productos.                                                                                                      |
+| GET /dashboard/stats     | 710 ms          | 850 ms          | 1 100 ms (con 19 % de 500) | Agregaciones costosas que se vuelven inestables bajo pico sostenido.                                                                         |
+| GET /sales/              | **7 500 ms**    | **7 700 ms**    | **8 600 ms**               | Latencia dominante en todos los regímenes; resultado de joins con SaleItem y agregaciones por venta sin paginación servidor-lado optimizada. |
+| POST /sales/             | —               | 2 500 ms        | —                          | Operación transaccional con escritura de Sale, SaleItem e InventoryMovement en la misma sesión SQLAlchemy.                                   |
 
 ### 5.2.7 Cumplimiento del RNF-01
 
@@ -192,8 +190,6 @@ El RNF-01 exige que el 95 % de las respuestas se complete en menos de 500 ms baj
 - El único endpoint que se aleja del umbral de manera estructural es `GET /sales/`, cuyo coste alto es independiente de la concurrencia y se origina en la composición del _payload_ (joins con `SaleItem` y agregaciones por venta) más que en una limitación de la infraestructura. Este comportamiento queda registrado como punto de optimización futura.
 
 Por lo tanto, **el RNF-01 se considera cumplido a cabalidad para el entorno de desarrollo y despliegue dimensionado para esta aplicación**, donde el perfil de uso esperado (≤ 50 usuarios concurrentes por organización) está totalmente cubierto por la combinación de servicio backend y configuración de workers descritos en la sección 5.1.2. Los regímenes por encima de 50 usuarios concurrentes (Tests 03 a 06) se incluyen únicamente como caracterización del techo del sistema y la optimización requerida para sostenerlos queda planteada como evolución futura, no como criterio de aceptación del MVP.
-
----
 
 ## 5.3 Pruebas de Rendimiento (Frontend / Web Vitals)
 
@@ -206,22 +202,24 @@ Se ejecutó Lighthouse desde Chrome DevTools sobre la página pública (_landing
 **Tabla 5.3.1.** Puntajes y Web Vitals de Lighthouse por vista y organización. La columna _Tipo_ indica si el _tenant_ corresponde a una empresa real del piloto o a un _tenant_ sintético de prueba.
 
 ```{=latex}
+
 ```
 
-| Vista | Organización | Tipo | Perf. | Accesib. | Best Pract. | SEO | FCP | LCP | TBT | CLS |
-| ----------- | -------------- | ------------------ | ----- | -------- | ----------- | --- | ----- | ----- | ---- | ----- |
-| Landing (/) | — | Página | 92 | 96 | 96 | 92 | 1,1 s | 1,6 s | 0 ms | 0 |
-| Dashboard | Lehgo | Ficticia | 90 | 96 | 100 | 83 | 1,2 s | 1,6 s | 0 ms | 0,017 |
-| Dashboard | **Miss Peggy** | **Real** | 91 | 96 | 100 | 83 | 1,1 s | 1,6 s | 0 ms | 0,021 |
-| Dashboard | Moda Andes | Ficticia | 91 | 96 | 100 | 83 | 1,1 s | 1,6 s | 0 ms | 0,017 |
-| Inventario | Lehgo | Ficticia | 92 | 89 | 100 | 83 | 1,0 s | 1,5 s | 0 ms | 0 |
-| Inventario | **Miss Peggy** | **Real** | 92 | 89 | 100 | 83 | 1,1 s | 1,5 s | 0 ms | 0 |
-| Inventario | Moda Andes | Ficticia | 92 | 89 | 100 | 83 | 1,1 s | 1,5 s | 0 ms | 0 |
-| Ventas | Lehgo | Ficticia | 92 | 88 | 100 | 83 | 1,1 s | 1,5 s | 0 ms | 0 |
-| Ventas | **Miss Peggy** | **Real** | 93 | 88 | 100 | 83 | 1,0 s | 1,5 s | 0 ms | 0 |
-| Ventas | Moda Andes | Ficticia | 93 | 88 | 100 | 83 | 1,0 s | 1,5 s | 0 ms | 0 |
+| Vista       | Organización   | Tipo     | Perf. | Accesib. | Best Pract. | SEO | FCP   | LCP   | TBT  | CLS   |
+| ----------- | -------------- | -------- | ----- | -------- | ----------- | --- | ----- | ----- | ---- | ----- |
+| Landing (/) | —              | Página   | 92    | 96       | 96          | 92  | 1,1 s | 1,6 s | 0 ms | 0     |
+| Dashboard   | Lehgo          | Ficticia | 90    | 96       | 100         | 83  | 1,2 s | 1,6 s | 0 ms | 0,017 |
+| Dashboard   | **Miss Peggy** | **Real** | 91    | 96       | 100         | 83  | 1,1 s | 1,6 s | 0 ms | 0,021 |
+| Dashboard   | Moda Andes     | Ficticia | 91    | 96       | 100         | 83  | 1,1 s | 1,6 s | 0 ms | 0,017 |
+| Inventario  | Lehgo          | Ficticia | 92    | 89       | 100         | 83  | 1,0 s | 1,5 s | 0 ms | 0     |
+| Inventario  | **Miss Peggy** | **Real** | 92    | 89       | 100         | 83  | 1,1 s | 1,5 s | 0 ms | 0     |
+| Inventario  | Moda Andes     | Ficticia | 92    | 89       | 100         | 83  | 1,1 s | 1,5 s | 0 ms | 0     |
+| Ventas      | Lehgo          | Ficticia | 92    | 88       | 100         | 83  | 1,1 s | 1,5 s | 0 ms | 0     |
+| Ventas      | **Miss Peggy** | **Real** | 93    | 88       | 100         | 83  | 1,0 s | 1,5 s | 0 ms | 0     |
+| Ventas      | Moda Andes     | Ficticia | 93    | 88       | 100         | 83  | 1,0 s | 1,5 s | 0 ms | 0     |
 
 ```{=latex}
+
 ```
 
 Las puntuaciones de Performance se mantienen entre **90 y 93** en todas las vistas y organizaciones, y las diferencias entre los tres _tenants_ medidos son menores a 1 punto. Esto es particularmente relevante porque la muestra confronta de manera explícita una empresa real (**Miss Peggy**) con dos empresas ficticias de prueba que cargan al sistema con volúmenes sintéticos mucho mayores (**Lehgo** y **Moda Andes**): el rendimiento percibido del frontend resulta **insensible al volumen y a los datos específicos** de cada organización dentro del rango medido, lo que valida que el coste del cliente no se ve afectado por los grandes volúmenes generados por las empresas ficticias de prueba. Los Core Web Vitals se sitúan dentro de las bandas verdes establecidas por Google (LCP ≤ 2,5 s, CLS ≤ 0,1, TBT bajo) tanto para los datos reales como para los datos sintéticos.
@@ -267,8 +265,6 @@ Consolidando las tres herramientas:
 - **CLS** (objetivo ≤ 0,1): cumplido en todas las vistas y herramientas (máximo registrado: 0,021 en Lighthouse Dashboard de Miss Peggy).
 - **TBT / INP** (objetivo TBT < 200 ms): cumplido con holgura. El máximo registrado es 80 ms en PageSpeed móvil de la landing.
 
----
-
 ## 5.4 Síntesis de Cumplimiento de Requisitos No Funcionales
 
 A continuación se presenta el cumplimiento consolidado de los Requisitos No Funcionales (RNF) que aplican a la validación técnica:
@@ -288,8 +284,6 @@ A continuación se presenta el cumplimiento consolidado de los Requisitos No Fun
 - RNF-09: Escalabilidad horizontal de la capa de aplicación.
   Resultado: Cumplido a nivel arquitectónico. El sistema soporta multi-tenancy bajo carga sin filtraciones, como se verifica en la sección 5.2.1, y la degradación bajo picos de carga es la esperada para una configuración de 2 a 4 workers sobre una sola instancia, según el escenario. Esto confirma que la arquitectura admite escalado horizontal sin cambios estructurales.
   Evidencia: Ver Sección 5.2.5.
-
----
 
 ## 5.5 Interpretación y Limitaciones
 

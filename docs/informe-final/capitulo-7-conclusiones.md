@@ -6,15 +6,11 @@
 
 Esta sección presenta las conclusiones del proyecto OrbitEngine organizadas por cada uno de los cinco objetivos específicos planteados en el Capítulo 1.
 
----
-
 **Objetivo 1**: _Diseñar la arquitectura técnica de una plataforma SaaS multi-tenant que garantice el aislamiento de datos entre organizaciones, la escalabilidad horizontal y la seguridad de la información._
 
 Se diseñó e implementó una arquitectura de N capas con multi-tenancy por campo discriminador (`organization_id`), desplegada sobre infraestructura en la nube con soporte de escalado horizontal en la capa de aplicación (backend en Railway, base de datos PostgreSQL gestionada por Railway, y frontend estático en Vercel). La arquitectura adoptada demostró ser adecuada para el alcance del proyecto: el mecanismo de aislamiento de datos mediante el filtrado sistemático por `organization_id` en todas las operaciones de base de datos, combinado con la inclusión del contexto de organización en el token JWT, garantizó que no se produjeran filtraciones de datos entre tenants durante las pruebas de integración ni durante el período de uso en producción.
 
 Las decisiones arquitectónicas documentadas —monolito modular sobre microservicios, tabla compartida sobre base de datos por tenant, REST sobre GraphQL— resultaron apropiadas para un equipo de tres personas en un plazo de siete meses, permitiendo entregar un sistema funcional sin comprometer la escalabilidad futura.
-
----
 
 **Objetivo 2**: _Desarrollar los módulos de gestión operativa esenciales conforme a los requisitos levantados con usuarios reales de pymes._
 
@@ -22,23 +18,17 @@ Los cinco módulos de gestión operativa planteados en el alcance —autenticaci
 
 Un hallazgo del proceso de validación fue la importancia de las alertas de stock bajo como funcionalidad de alto impacto percibido por los usuarios: fue consistentemente señalada como una de las características más valiosas del sistema, confirmando la priorización realizada en la fase de diseño.
 
----
-
 **Objetivo 3**: _Construir un sistema de reportes y analítica que proporcione KPIs en tiempo real en el dashboard y exportación a Excel de los listados operativos._
 
 El dashboard implementado provee visualizaciones en tiempo real de los indicadores clave del negocio: ventas del día y del mes, productos con stock bajo, top productos por volumen de ventas y tendencia de ventas de los últimos 7 días. Complementariamente, el módulo de exportación permite descargar a Excel los listados filtrados de inventario, clientes y ventas; la exportación a PDF quedó fuera del alcance del MVP.
 
 Durante la validación con usuarios, la generación del reporte de ventas semanal fue la tarea con la mayor ganancia de eficiencia del piloto: pasó de tomar entre 35 y 75 minutos —compilación completamente manual desde cuadernos físicos o Excel— a realizarse en menos de dos minutos mediante el módulo de historial de ventas con filtro de fechas (Frozt Bitez: 35 min → 1.2 min, −97 %; Miss Peggy: 60 min → 1.4 min, −98 %; Luana Handmade: 75 min → 1.6 min, −98 %). La reducción fue, en los tres casos, de un orden de magnitud.
 
----
-
 **Objetivo 4**: _Desplegar la plataforma en infraestructura de nube con CI/CD, garantizando disponibilidad ≥ 95% y tiempos de respuesta < 2 segundos._
 
 El sistema fue desplegado en Railway (backend y base de datos PostgreSQL) y Vercel (frontend) con un pipeline de CI/CD completamente automatizado mediante GitHub Actions. Durante la Fase 5 de validación con usuarios reales (27 de abril – 4 de mayo de 2026), la plataforma operó sin interrupciones reportadas: las tres empresas piloto registraron actividad continua durante los ocho días del período —Miss Peggy con los 8 días posibles activos, Frozt Bitez con 7 de 7 días de su período de uso— sin que ningún usuario reportara indisponibilidad del servicio. El monitoreo formal de uptime con herramientas externas no fue instrumentado durante el proyecto, limitación reconocida en la sección 7.4.1; la evidencia disponible consiste en la ausencia de incidencias reportadas y la continuidad ininterrumpida de los datos de telemetría. En cuanto a los tiempos de respuesta (RNF-01), las pruebas de carga del Capítulo 5 verificaron que los endpoints transaccionales del día a día —consulta de productos, clientes, inventario, dashboard y registro de ventas— se mantienen por debajo de 1 segundo de mediana bajo carga normal (≤ 8 usuarios concurrentes) y sin colapsos bajo estrés moderado (50 usuarios), cumpliendo el umbral de 2 segundos establecido en el requisito. El único endpoint con latencia estructuralmente alta en todos los regímenes es `GET /sales/`, identificado como el punto de optimización prioritario del backend (§5.2.4.1 y §7.5.1).
 
 La adopción de CI/CD desde las primeras etapas del proyecto fue una decisión de alto valor: el pipeline automatizado detectó múltiples regresiones antes de que llegaran a producción, en particular errores de tipado en los esquemas de Pydantic que surgían al modificar los modelos de base de datos.
-
----
 
 **Objetivo 5**: _Validar la solución mediante pruebas con al menos dos empresas piloto, midiendo el impacto en la eficiencia operativa a través de métricas cuantitativas y cualitativas._
 
@@ -50,8 +40,6 @@ La validación se llevó a cabo con **tres empresas piloto** durante un período
 
 Estos resultados, en conjunto, respaldan la hipótesis general del proyecto: una plataforma SaaS multi-tenant bien diseñada es capaz de mejorar la eficiencia operativa y la gestión de procesos en pymes latinoamericanas, con evidencia cuantitativa de impacto real en las tres organizaciones participantes.
 
----
-
 ## 7.2 Conclusión General
 
 OrbitEngine demostró ser una solución técnicamente viable y funcionalmente completa para la gestión operativa de pymes del sector comercio y servicios. El proyecto logró construir, desplegar y validar con usuarios reales una plataforma SaaS multi-tenant que integra gestión de inventario, ventas, clientes y reportes operativos en un período de siete meses con un equipo de tres personas.
@@ -60,19 +48,15 @@ La principal contribución del proyecto radica en demostrar que es posible desar
 
 Desde el punto de vista académico, el proyecto contribuye con evidencia empírica sobre el impacto de la digitalización en la eficiencia operativa de pymes latinoamericanas, un área con literatura creciente pero aún con escasez de estudios de caso con sistemas desarrollados específicamente para este contexto regional.
 
----
-
 ## 7.3 Cumplimiento de Hipótesis
 
 La siguiente tabla sintetiza el veredicto de validación de cada hipótesis a partir de los datos del Capítulo 6. Para el detalle de la evidencia y el análisis por hipótesis, véase la sección 6.9.
 
-| Hipótesis | Enunciado resumido | Criterio | Resultado | Veredicto |
-|---|---|---|---|---|
-| **H1** | Reducción ≥ 30 % en tiempo de tareas administrativas | Promedio global ≥ 30 % en ≥ 3 de 4 tareas, las 3 empresas | **−71 %** promedio global (rango: −38 % a −98 %) | **Confirmada** |
-| **H2** | Reducción ≥ 40 pp en tasa de discrepancias de inventario | ≥ 2 de 3 empresas con reducción ≥ 40 pp | **−12 pp** (Miss Peggy, única empresa con datos pre/post comparables) | **Mixta** — dirección confirmada, magnitud no alcanzada |
-| **H3** | Score SUS ≥ 68 (usabilidad aceptable) | Score SUS medio global ≥ 68 | **77.5 / 100** (DE = 2.9; mínimo individual: 75.0) | **Confirmada** |
-
----
+| Hipótesis | Enunciado resumido                                       | Criterio                                                  | Resultado                                                             | Veredicto                                               |
+| --------- | -------------------------------------------------------- | --------------------------------------------------------- | --------------------------------------------------------------------- | ------------------------------------------------------- |
+| **H1**    | Reducción ≥ 30 % en tiempo de tareas administrativas     | Promedio global ≥ 30 % en ≥ 3 de 4 tareas, las 3 empresas | **−71 %** promedio global (rango: −38 % a −98 %)                      | **Confirmada**                                          |
+| **H2**    | Reducción ≥ 40 pp en tasa de discrepancias de inventario | ≥ 2 de 3 empresas con reducción ≥ 40 pp                   | **−12 pp** (Miss Peggy, única empresa con datos pre/post comparables) | **Mixta** — dirección confirmada, magnitud no alcanzada |
+| **H3**    | Score SUS ≥ 68 (usabilidad aceptable)                    | Score SUS medio global ≥ 68                               | **77.5 / 100** (DE = 2.9; mínimo individual: 75.0)                    | **Confirmada**                                          |
 
 ## 7.4 Limitaciones del Proyecto
 
@@ -93,8 +77,6 @@ Las limitaciones del proyecto se agrupan en dos categorías: técnicas y de vali
 ### 7.4.2 Limitaciones de la Validación con Usuarios
 
 Las limitaciones específicas de la validación con usuarios se detallan en la sección 6.10 del Capítulo 6. Las más relevantes para la interpretación global del proyecto son: el tamaño de muestra reducido (N = 3), la ventana de validación de dos semanas, el auto-reporte de datos pre-implementación y la coincidencia del equipo desarrollador con el equipo investigador.
-
----
 
 ## 7.5 Recomendaciones de Optimización Derivadas de los Hallazgos
 
@@ -138,8 +120,6 @@ Las entrevistas semiestructuradas del Capítulo 6 identificaron las siguientes m
 
 4. **Fotografías en el catálogo de productos** (Luana Handmade). Claudia González (Luana) señaló que la ausencia de imágenes en el módulo de inventario la obliga a seguir enviando fotos por WhatsApp cuando una clienta consulta por un producto. Incorporar un campo de imagen por SKU —con carga desde dispositivo o URL— permitiría mostrar el catálogo directamente desde el sistema y reforzaría su utilidad como herramienta de atención al cliente, especialmente en emprendimientos de producto artesanal donde la imagen es parte central de la oferta.
 
----
-
 ## 7.6 Trabajo Futuro
 
 ### 7.6.1 Evolución del Producto
@@ -175,8 +155,6 @@ La integración de capacidades de aprendizaje automático en los flujos de decis
 2. **Estudio comparativo entre sectores.** Las tres empresas del piloto actual operan en sectores distintos. Un estudio que compare sistemáticamente el impacto de la plataforma en empresas de comercio, servicios y manufactura ligera permitiría identificar qué módulos tienen mayor impacto según el sector.
 
 3. **Evaluación de la curva de aprendizaje.** La validación actual midió la usabilidad al final de la Fase 5; un estudio con mediciones en el día 1, día 7 y día 30 permitiría caracterizar la curva de aprendizaje del sistema y el tiempo de adopción plena por rol de usuario.
-
----
 
 ## 7.7 Reflexión Final
 

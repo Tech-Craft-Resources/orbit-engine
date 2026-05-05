@@ -59,8 +59,6 @@ Si olvidó su contraseña:
 
 Para cerrar sesión, hacer clic en el **ícono de usuario** en la barra lateral izquierda y seleccionar **"Cerrar sesión"**. La sesión expira automáticamente después de 8 días de inactividad.
 
----
-
 ## A.3 Navegación General
 
 Una vez dentro del sistema, la interfaz se divide en:
@@ -71,16 +69,14 @@ Una vez dentro del sistema, la interfaz se divide en:
 
 Los módulos disponibles son:
 
-| Módulo | Ruta | Acceso |
-|---|---|---|
-| Dashboard | `/dashboard` | Todos los usuarios |
-| Inventario | `/dashboard/inventory` | Todos los usuarios |
-| Ventas | `/dashboard/sales` | Todos los usuarios |
-| Clientes | `/dashboard/customers` | Todos los usuarios |
-| Administración | `/dashboard/admin` | Solo Administradores |
-| Configuración | `/dashboard/settings` | Todos los usuarios |
-
----
+| Módulo         | Ruta                   | Acceso               |
+| -------------- | ---------------------- | -------------------- |
+| Dashboard      | `/dashboard`           | Todos los usuarios   |
+| Inventario     | `/dashboard/inventory` | Todos los usuarios   |
+| Ventas         | `/dashboard/sales`     | Todos los usuarios   |
+| Clientes       | `/dashboard/customers` | Todos los usuarios   |
+| Administración | `/dashboard/admin`     | Solo Administradores |
+| Configuración  | `/dashboard/settings`  | Todos los usuarios   |
 
 ## A.4 Dashboard — Panel de Indicadores
 
@@ -96,8 +92,6 @@ El dashboard muestra un resumen del estado del negocio en tiempo real para la or
 - **Ventas por día** — gráfica de barras con la evolución diaria de ventas.
 
 El dashboard se actualiza automáticamente con cada consulta. No requiere acción adicional del usuario.
-
----
 
 ## A.5 Módulo de Inventario
 
@@ -162,19 +156,17 @@ El ajuste queda registrado en el historial de movimientos con el tipo `adjustmen
 
 El historial registra todos los cambios de stock de cada producto:
 
-| Tipo de movimiento | Descripción |
-|---|---|
-| `sale` | Salida generada por una venta |
-| `adjustment` | Entrada o salida manual |
-| `return` | Entrada por devolución o cancelación de venta |
-| `purchase` | Entrada por compra |
+| Tipo de movimiento | Descripción                                   |
+| ------------------ | --------------------------------------------- |
+| `sale`             | Salida generada por una venta                 |
+| `adjustment`       | Entrada o salida manual                       |
+| `return`           | Entrada por devolución o cancelación de venta |
+| `purchase`         | Entrada por compra                            |
 
 Para ver el historial de un producto:
 
 1. En la tabla de productos, hacer clic en el menú de acciones (⋮) → **"Ver historial de movimientos"**.
 2. Se muestra la tabla con fecha, tipo, cantidad, stock anterior y stock resultante, y el usuario que realizó el movimiento.
-
----
 
 ## A.6 Módulo de Ventas
 
@@ -228,8 +220,6 @@ La tabla de ventas permite:
 - Filtrar por **estado** (`completed`, `cancelled`) y **método de pago**.
 - Ordenar por cualquier columna.
 
----
-
 ## A.7 Módulo de Clientes
 
 El módulo permite gestionar el directorio de clientes de la organización y consultar su historial de compras.
@@ -258,8 +248,6 @@ El módulo permite gestionar el directorio de clientes de la organización y con
 - Hacer clic en el menú de acciones (⋮) → **"Ver historial de compras"**.
 - Se muestran todas las ventas asociadas al cliente con fecha, número de factura, total y estado.
 - Se visualizan también los indicadores: **total acumulado de compras**, **número de compras** y **fecha de última compra**.
-
----
 
 ## A.8 Módulo de Administración
 
@@ -293,8 +281,6 @@ El nuevo usuario puede ingresar inmediatamente con las credenciales proporcionad
 - Confirmar la acción en el diálogo de confirmación.
 
 > **Advertencia:** Esta acción es permanente. El historial de ventas y movimientos del usuario permanece registrado.
-
----
 
 ## A.9 Configuración
 
@@ -340,8 +326,6 @@ En la pestaña **"Cuenta"**:
 
 > **Nota:** La eliminación de cuenta no elimina el historial de transacciones asociadas.
 
----
-
 ## A.10 Preguntas Frecuentes
 
 **¿Puedo usar OrbitEngine desde el celular?**  
@@ -364,7 +348,5 @@ Los listados de inventario, ventas y clientes pueden exportarse a Excel (.xlsx) 
 
 **¿Qué navegadores son compatibles?**  
 OrbitEngine es compatible con las versiones recientes de Chrome, Firefox, Edge y Safari. No se garantiza compatibilidad con Internet Explorer.
-
----
 
 _Documento generado como parte del proyecto de grado — Universidad Sergio Arboleda, Semillero de Software como Innovación, Abril 2026._

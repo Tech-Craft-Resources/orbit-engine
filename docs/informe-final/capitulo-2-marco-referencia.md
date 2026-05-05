@@ -10,11 +10,11 @@ Esta sección define los conceptos fundamentales sobre los que se sustenta el pr
 
 La definición de pyme varía según el país y el organismo de referencia. En América Latina, los criterios más comunes consideran el número de empleados y el volumen de ventas anuales. La CEPAL (2022) y el Banco Mundial utilizan como referencia general la siguiente clasificación:
 
-| Categoría | Empleados | Ventas anuales (USD) |
-|---|---|---|
-| Microempresa | 1–9 | < 100.000 |
-| Pequeña empresa | 10–49 | 100.000 – 1.000.000 |
-| Mediana empresa | 50–249 | 1.000.000 – 10.000.000 |
+| Categoría       | Empleados | Ventas anuales (USD)   |
+| --------------- | --------- | ---------------------- |
+| Microempresa    | 1–9       | < 100.000              |
+| Pequeña empresa | 10–49     | 100.000 – 1.000.000    |
+| Mediana empresa | 50–249    | 1.000.000 – 10.000.000 |
 
 Para el contexto de este proyecto, el término "pyme" se utiliza con énfasis en el segmento de pequeñas empresas de comercio minorista y mayorista, con equipos de entre 2 y 30 personas, operaciones presenciales o híbridas, y necesidades de gestión de inventario físico, registro de ventas y seguimiento de clientes.
 
@@ -46,11 +46,11 @@ El concepto de multi-tenancy (multi-arrendamiento) describe una arquitectura de 
 
 Existen tres enfoques principales de implementación:
 
-| Enfoque | Descripción | Aislamiento | Costo |
-|---|---|---|---|
-| Base de datos por tenant | Cada cliente tiene su propia BD | Alto | Alto |
-| Esquema por tenant | Una BD, esquemas separados | Medio | Medio |
-| Tabla compartida + discriminador | Una BD, filas diferenciadas por `tenant_id` | Bajo-Medio | Bajo |
+| Enfoque                          | Descripción                                 | Aislamiento | Costo |
+| -------------------------------- | ------------------------------------------- | ----------- | ----- |
+| Base de datos por tenant         | Cada cliente tiene su propia BD             | Alto        | Alto  |
+| Esquema por tenant               | Una BD, esquemas separados                  | Medio       | Medio |
+| Tabla compartida + discriminador | Una BD, filas diferenciadas por `tenant_id` | Bajo-Medio  | Bajo  |
 
 OrbitEngine implementa el tercer enfoque: todas las organizaciones comparten las mismas tablas, y cada registro lleva asociado un campo `organization_id` que actúa como discriminador. El acceso a los datos se filtra automáticamente en cada operación, garantizando el aislamiento sin multiplicar el costo de infraestructura.
 
@@ -75,8 +75,6 @@ En OrbitEngine se definen tres roles:
 Continuous Integration/Continuous Delivery (CI/CD) es un conjunto de prácticas de ingeniería de software que automatiza el proceso de verificación, construcción y despliegue del código. Un pipeline de CI/CD ejecuta, ante cada cambio en el repositorio, una secuencia de pasos: pruebas automatizadas, análisis estático, construcción de artefactos y despliegue en los ambientes correspondientes (Fowler & Foemmel, 2006).
 
 La adopción de CI/CD en OrbitEngine, implementada mediante GitHub Actions, garantiza que cada versión desplegada en producción ha pasado exitosamente por la suite de pruebas, reduciendo la probabilidad de introducir regresiones.
-
----
 
 ## 2.2 Estado del Arte
 
@@ -128,16 +126,16 @@ Siigo (Colombia) y Defontana (Chile) son soluciones SaaS con foco contable-tribu
 
 La siguiente tabla sintetiza la comparación entre las soluciones analizadas y OrbitEngine en las dimensiones relevantes para el segmento objetivo:
 
-| Criterio | Odoo | Zoho | QuickBooks | Alegra | OrbitEngine |
-|---|---|---|---|---|---|
-| Modelo de entrega | On-premise / SaaS | SaaS | SaaS | SaaS | SaaS |
-| Precio accesible para pymes pequeñas | Medio | No | No | Sí | Sí (objetivo) |
-| Gestión de inventario avanzada | Sí | Parcial | No | Básica | Sí |
-| Gestión de clientes (CRM) | Sí | Sí | Básica | No | Sí |
-| Dashboard y KPIs integrados | Sí | Sí | Parcial | Básico | Sí |
-| Localización latinoamericana | Parcial | Parcial | Baja | Alta | Media |
-| Curva de aprendizaje para no técnicos | Alta | Alta | Media | Baja | Baja (objetivo) |
-| Multi-tenant nativo | Sí | Sí | No | No | Sí |
+| Criterio                              | Odoo              | Zoho    | QuickBooks | Alegra | OrbitEngine     |
+| ------------------------------------- | ----------------- | ------- | ---------- | ------ | --------------- |
+| Modelo de entrega                     | On-premise / SaaS | SaaS    | SaaS       | SaaS   | SaaS            |
+| Precio accesible para pymes pequeñas  | Medio             | No      | No         | Sí     | Sí (objetivo)   |
+| Gestión de inventario avanzada        | Sí                | Parcial | No         | Básica | Sí              |
+| Gestión de clientes (CRM)             | Sí                | Sí      | Básica     | No     | Sí              |
+| Dashboard y KPIs integrados           | Sí                | Sí      | Parcial    | Básico | Sí              |
+| Localización latinoamericana          | Parcial           | Parcial | Baja       | Alta   | Media           |
+| Curva de aprendizaje para no técnicos | Alta              | Alta    | Media      | Baja   | Baja (objetivo) |
+| Multi-tenant nativo                   | Sí                | Sí      | No         | No     | Sí              |
 
 El análisis evidencia que ninguna de las soluciones disponibles combina en un único producto, accesible para el segmento de pymes latinoamericanas, la gestión operativa completa (inventario, ventas, clientes) con un dashboard de KPIs integrado, bajo una curva de aprendizaje adecuada para usuarios no técnicos. Esta brecha constituye el espacio que OrbitEngine busca ocupar.
 
@@ -158,8 +156,6 @@ Guo et al. (2017) propusieron un modelo de evaluación de arquitecturas multi-te
 #### Usabilidad en Sistemas ERP para Usuarios No Técnicos
 
 Zhang et al. (2021) realizaron un estudio de usabilidad con empleados de pymes latinoamericanas usando tres sistemas ERP distintos. Sus resultados mostraron que la tasa de abandono durante el onboarding aumenta un 45% cuando el sistema requiere más de 5 pasos para completar una tarea común (como registrar una venta). Este hallazgo motivó el énfasis en la experiencia de usuario (UX) de OrbitEngine, con flujos de trabajo optimizados para minimizar la fricción.
-
----
 
 ## 2.3 Marco Tecnológico
 

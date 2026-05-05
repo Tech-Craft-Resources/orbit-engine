@@ -10,7 +10,7 @@
 
 Nicolás Rodríguez Forero  
 Daniel Velasco González  
-Fabián Rincón Suárez  
+Fabián Rincón Suárez
 
 \vspace{1.5cm}
 
@@ -18,20 +18,18 @@ Fabián Rincón Suárez
 
 Directores:  
 Juan Pablo Ospina López  
-Camilo Enrique Rodríguez Torres  
+Camilo Enrique Rodríguez Torres
 
 \vspace{1.5cm}
 
 **Universidad Sergio Arboleda**  
 Escuela de Ciencias Exactas e Ingeniería  
-Pregrado en Ciencias de la Computación e Inteligencia Artificial  
+Pregrado en Ciencias de la Computación e Inteligencia Artificial
 
 Bogotá, Colombia  
 Abril de 2026
 
 \newpage
-
----
 
 ## Página de Aprobación
 
@@ -75,8 +73,6 @@ Bogotá, Colombia — Abril de 2026
 
 \newpage
 
----
-
 ## Resumen
 
 Las pequeñas y medianas empresas (pymes) de América Latina enfrentan una brecha estructural de digitalización en la gestión de sus operaciones internas. La mayoría administra inventario, ventas y clientes mediante hojas de cálculo o registros manuales, sin acceso a herramientas integradas y accesibles que proporcionen visibilidad en tiempo real del estado del negocio. Las soluciones ERP existentes en el mercado son, o bien demasiado costosas y complejas para este segmento, o bien insuficientes en sus capacidades operativas para cubrir el ciclo comercial completo.
@@ -85,13 +81,11 @@ El presente trabajo describe el diseño, desarrollo y validación de OrbitEngine
 
 El proyecto se desarrolló en siete meses por un equipo de tres personas bajo una metodología Scrum adaptada al contexto académico. El backend fue construido con FastAPI y SQLModel sobre PostgreSQL; el frontend con React 19 y TypeScript; y el sistema fue desplegado en Railway (backend y base de datos PostgreSQL) y Vercel (frontend) mediante un pipeline de integración y entrega continua (CI/CD) automatizado con GitHub Actions. La arquitectura multi-tenant adoptada garantiza el aislamiento total de datos entre organizaciones mediante un discriminador `organization_id` aplicado sistemáticamente en todas las tablas de negocio y en el token JWT de autenticación.
 
-La plataforma fue validada con empresas piloto del sector comercio, midiendo el impacto en la eficiencia operativa a través de la reducción de tiempos en tareas administrativas, la disminución de errores de inventario y encuestas de usabilidad basadas en la escala SUS (*System Usability Scale*). Los resultados obtenidos evidencian mejoras significativas en la gestión operativa de las empresas participantes y confirman la viabilidad técnica y funcional de la solución propuesta.
+La plataforma fue validada con empresas piloto del sector comercio, midiendo el impacto en la eficiencia operativa a través de la reducción de tiempos en tareas administrativas, la disminución de errores de inventario y encuestas de usabilidad basadas en la escala SUS (_System Usability Scale_). Los resultados obtenidos evidencian mejoras significativas en la gestión operativa de las empresas participantes y confirman la viabilidad técnica y funcional de la solución propuesta.
 
 **Palabras clave:** SaaS, pymes, gestión operativa, inventario, ventas, multi-tenancy, FastAPI, React, Railway, Vercel, arquitectura en capas.
 
 \newpage
-
----
 
 ## Abstract
 

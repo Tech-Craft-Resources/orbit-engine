@@ -44,16 +44,16 @@ El enfoque es **mixto** (Creswell & Plano Clark, 2018): combina datos cuantitati
 
 ### 6.1.4 Instrumentos
 
-| Instrumento | Tipo | Propósito | Momento de aplicación |
-|---|---|---|---|
-| **SUS** (_System Usability Scale_) | Cuantitativo | Evaluar la usabilidad percibida del sistema (score 0–100) | Post-uso, al cierre de la Fase 5 |
-| **NPS** (_Net Promoter Score_) | Cuantitativo | Medir la probabilidad de recomendación del sistema (0–10) | Post-uso, al cierre de la Fase 5 |
-| **CSAT por módulo** | Cuantitativo | Satisfacción específica con cada módulo del sistema (1–5) | Post-uso, al cierre de la Fase 5 |
-| **Pruebas de tareas guiadas** | Cuantitativo / observacion al | Medir completitud, tiempo y errores en tareas representativas | Durante la Fase 5 |
-| **Entrevistas semiestructuradas** | Cualitativo | Explorar impacto percibido, dificultades y sugerencias | Al cierre de la Fase 5 |
-| **Telemetría productiva** | Cuantitativo | Registrar uso real del sistema en producción | Continuo durante la Fase 5 |
-| **Registro de tiempos pre/post** | Cuantitativo | Comparar duración de tareas administrativas antes y después | Pre-implementación (retrospectivo) y durante la Fase 5 |
-| **Registro de errores de inventario** | Cuantitativo | Medir tasa de discrepancias antes y después | Pre-implementación (retrospectivo) y durante la Fase 5 |
+| Instrumento                           | Tipo                          | Propósito                                                     | Momento de aplicación                                  |
+| ------------------------------------- | ----------------------------- | ------------------------------------------------------------- | ------------------------------------------------------ |
+| **SUS** (_System Usability Scale_)    | Cuantitativo                  | Evaluar la usabilidad percibida del sistema (score 0–100)     | Post-uso, al cierre de la Fase 5                       |
+| **NPS** (_Net Promoter Score_)        | Cuantitativo                  | Medir la probabilidad de recomendación del sistema (0–10)     | Post-uso, al cierre de la Fase 5                       |
+| **CSAT por módulo**                   | Cuantitativo                  | Satisfacción específica con cada módulo del sistema (1–5)     | Post-uso, al cierre de la Fase 5                       |
+| **Pruebas de tareas guiadas**         | Cuantitativo / observacion al | Medir completitud, tiempo y errores en tareas representativas | Durante la Fase 5                                      |
+| **Entrevistas semiestructuradas**     | Cualitativo                   | Explorar impacto percibido, dificultades y sugerencias        | Al cierre de la Fase 5                                 |
+| **Telemetría productiva**             | Cuantitativo                  | Registrar uso real del sistema en producción                  | Continuo durante la Fase 5                             |
+| **Registro de tiempos pre/post**      | Cuantitativo                  | Comparar duración de tareas administrativas antes y después   | Pre-implementación (retrospectivo) y durante la Fase 5 |
+| **Registro de errores de inventario** | Cuantitativo                  | Medir tasa de discrepancias antes y después                   | Pre-implementación (retrospectivo) y durante la Fase 5 |
 
 ### 6.1.5 Procedimiento y Cronograma (Fase 5)
 
@@ -97,26 +97,22 @@ La validación con usuarios se desarrolló bajo los siguientes principios ético
 - **Conflicto de interés**: el equipo investigador es el mismo que desarrolló la plataforma. Esta limitación se reconoce explícitamente en la sección 6.10 y se mitiga mediante el uso de instrumentos estandarizados (SUS, NPS) y protocolos de entrevista predefinidos.
 - **Posibilidad de retiro**: cualquier empresa pudo retirarse del estudio en cualquier momento sin que ello afectara su acceso continuado a la plataforma.
 
----
-
 ## 6.2 Caracterización de las Empresas Piloto
 
 La siguiente tabla sintetiza los atributos más relevantes de las tres empresas que participaron en la validación con usuarios.
 
 **Tabla 6.2.1.** Caracterización de las empresas piloto del estudio de caso.
 
-| Atributo | Frozt Bitez | Miss Peggy | Luana Handmade |
-|---|---|---|---|
-| **Sector** | Alimentos / Comercio electrónico (uvas congeladas acidulces) | Comercio minorista — naturismo y belleza | Artesanías / Confección artesanal (tejidos en trapillo y macramé) |
-| **Antigüedad de la empresa** | 1-2 años | Más de 5 años | 4-5 años |
-| **Número de empleados** | 3 (fundador + 2 colaboradores de ventas) | 3 (administradora + 2 colaboradores de ventas) | 1 (fundadora y única trabajadora) |
-| **Número de usuarios participantes en el estudio** | 3 | 3 | 1 |
-| **Roles representados** | Administrador y Vendedor | Administrador y Vendedor | Administrador |
-| **Rol del informante principal** | Fundador / Dueño | Dueña / Administradora | Fundadora / Propietaria |
-| **Herramientas de gestión previas** | WooCommerce (tienda pública) + WhatsApp (atención y confirmación de pedidos) | Excel (hoja de inventario propia) | Cuaderno físico + WhatsApp (sin sistema digital) |
-| **Incorporación al piloto** | Fase 5 (27 abr 2026) — también presente en piloto técnico del Cap. 5 | Fase 5 (27 abr 2026) — también presente en piloto técnico del Cap. 5 | Fase 5 (27 abr 2026) — incorporada entre el cierre del Cap. 5 y el inicio de la validación con usuarios |
-
----
+| Atributo                                           | Frozt Bitez                                                                  | Miss Peggy                                                           | Luana Handmade                                                                                          |
+| -------------------------------------------------- | ---------------------------------------------------------------------------- | -------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------- |
+| **Sector**                                         | Alimentos / Comercio electrónico (uvas congeladas acidulces)                 | Comercio minorista — naturismo y belleza                             | Artesanías / Confección artesanal (tejidos en trapillo y macramé)                                       |
+| **Antigüedad de la empresa**                       | 1-2 años                                                                     | Más de 5 años                                                        | 4-5 años                                                                                                |
+| **Número de empleados**                            | 3 (fundador + 2 colaboradores de ventas)                                     | 3 (administradora + 2 colaboradores de ventas)                       | 1 (fundadora y única trabajadora)                                                                       |
+| **Número de usuarios participantes en el estudio** | 3                                                                            | 3                                                                    | 1                                                                                                       |
+| **Roles representados**                            | Administrador y Vendedor                                                     | Administrador y Vendedor                                             | Administrador                                                                                           |
+| **Rol del informante principal**                   | Fundador / Dueño                                                             | Dueña / Administradora                                               | Fundadora / Propietaria                                                                                 |
+| **Herramientas de gestión previas**                | WooCommerce (tienda pública) + WhatsApp (atención y confirmación de pedidos) | Excel (hoja de inventario propia)                                    | Cuaderno físico + WhatsApp (sin sistema digital)                                                        |
+| **Incorporación al piloto**                        | Fase 5 (27 abr 2026) — también presente en piloto técnico del Cap. 5         | Fase 5 (27 abr 2026) — también presente en piloto técnico del Cap. 5 | Fase 5 (27 abr 2026) — incorporada entre el cierre del Cap. 5 y el inicio de la validación con usuarios |
 
 ## 6.3 Eficiencia Operativa (pre/post)
 
@@ -126,21 +122,21 @@ Los tiempos pre-implementación se recogieron mediante entrevista estructurada r
 
 **Tabla 6.3.1.** Comparación de tiempos medios por tarea administrativa (minutos).
 
-| Tarea | Empresa | Tiempo pre (min) | Tiempo post (min) | Reducción (%) |
-|---|---|---|---|---|
-| Registro de una venta | Frozt Bitez | 6.0 | 3.5 | −42 % |
-| Registro de una venta | Miss Peggy | 5.0 | 3.0 | −40 % |
-| Registro de una venta | Luana Handmade | 6.0 | 3.7 | −38 % |
-| Actualización de stock (un producto) | Frozt Bitez | 4.0 | 1.5 | −63 % |
-| Actualización de stock (un producto) | Miss Peggy | 4.0 | 1.4 | −65 % |
-| Actualización de stock (un producto) | Luana Handmade | 4.0 | 1.8 | −55 % |
-| Generación de reporte de ventas semanal | Frozt Bitez | 35.0 | 1.2 | −97 % |
-| Generación de reporte de ventas semanal | Miss Peggy | 60.0 | 1.4 | −98 % |
-| Generación de reporte de ventas semanal | Luana Handmade | 75.0 | 1.6 | −98 % |
-| Consulta de historial de un cliente | Frozt Bitez | 10.0 | 1.5 | −85 % |
-| Consulta de historial de un cliente | Miss Peggy | 8.0 | 1.3 | −84 % |
-| Consulta de historial de un cliente | Luana Handmade | 12.0 | 1.8 | −85 % |
-| **Promedio global** | **Todas** | **19.1** | **2.0** | **−71 %** |
+| Tarea                                   | Empresa        | Tiempo pre (min) | Tiempo post (min) | Reducción (%) |
+| --------------------------------------- | -------------- | ---------------- | ----------------- | ------------- |
+| Registro de una venta                   | Frozt Bitez    | 6.0              | 3.5               | −42 %         |
+| Registro de una venta                   | Miss Peggy     | 5.0              | 3.0               | −40 %         |
+| Registro de una venta                   | Luana Handmade | 6.0              | 3.7               | −38 %         |
+| Actualización de stock (un producto)    | Frozt Bitez    | 4.0              | 1.5               | −63 %         |
+| Actualización de stock (un producto)    | Miss Peggy     | 4.0              | 1.4               | −65 %         |
+| Actualización de stock (un producto)    | Luana Handmade | 4.0              | 1.8               | −55 %         |
+| Generación de reporte de ventas semanal | Frozt Bitez    | 35.0             | 1.2               | −97 %         |
+| Generación de reporte de ventas semanal | Miss Peggy     | 60.0             | 1.4               | −98 %         |
+| Generación de reporte de ventas semanal | Luana Handmade | 75.0             | 1.6               | −98 %         |
+| Consulta de historial de un cliente     | Frozt Bitez    | 10.0             | 1.5               | −85 %         |
+| Consulta de historial de un cliente     | Miss Peggy     | 8.0              | 1.3               | −84 %         |
+| Consulta de historial de un cliente     | Luana Handmade | 12.0             | 1.8               | −85 %         |
+| **Promedio global**                     | **Todas**      | **19.1**         | **2.0**           | **−71 %**     |
 
 ### 6.3.2 Tasa de Error en Operaciones de Inventario
 
@@ -148,12 +144,12 @@ La tasa de error se definió como la proporción de ítems auditados que present
 
 **Tabla 6.3.2.** Tasa de error en inventario antes y después de la implementación.
 
-| Empresa | Ítems auditados (pre) | Discrepancias (pre) | Tasa de error pre (%) | Ítems auditados (post) | Discrepancias (post) | Tasa de error post (%) | Reducción (pp) |
-|---|---|---|---|---|---|---|---|
-| Frozt Bitez | N/D ³ | N/D | N/D (sin registro previo) | 5 | 0 | **0 %** | N/A ³ |
-| Miss Peggy | 25 | 4 | **16.0 %** | 25 | 1 | **4.0 %** | **−12 pp** ⁴ |
-| Luana Handmade | N/D ¹ | N/D | N/D | 18 | 1 | **5.6 %** | N/A ² |
-| **Promedio post** |  |  |  |  |  | **3.2 %** (3 empresas) |  |
+| Empresa           | Ítems auditados (pre) | Discrepancias (pre) | Tasa de error pre (%)     | Ítems auditados (post) | Discrepancias (post) | Tasa de error post (%) | Reducción (pp) |
+| ----------------- | --------------------- | ------------------- | ------------------------- | ---------------------- | -------------------- | ---------------------- | -------------- |
+| Frozt Bitez       | N/D ³                 | N/D                 | N/D (sin registro previo) | 5                      | 0                    | **0 %**                | N/A ³          |
+| Miss Peggy        | 25                    | 4                   | **16.0 %**                | 25                     | 1                    | **4.0 %**              | **−12 pp** ⁴   |
+| Luana Handmade    | N/D ¹                 | N/D                 | N/D                       | 18                     | 1                    | **5.6 %**              | N/A ²          |
+| **Promedio post** |                       |                     |                           |                        |                      | **3.2 %** (3 empresas) |                |
 
 > **Nota metodológica.** Los datos pre-implementación de tasa de error en inventario son de naturaleza retrospectiva y auto-reportada. Las limitaciones de este tipo de medición se discuten en la sección 6.10.
 >
@@ -171,8 +167,6 @@ Las tres empresas del piloto muestran reducciones de tiempo que superan ampliame
 
 En cuanto a la precisión de inventario, Miss Peggy es la única empresa del piloto con datos pre/post comparables: el registro en Excel previo permitió auditar la misma muestra de 25 SKUs antes y después de la implementación. La tasa de error pasó de 16.0 % (4 discrepancias en 25 SKUs) a 4.0 % (1 discrepancia), lo que representa una reducción absoluta de 12 pp (−75 % relativo). Esta reducción no alcanza el umbral de 40 pp de H2, pero confirma que OrbitEngine introduce disciplina real en el control de inventario: los cuatro ítems con discrepancia pre correspondían a productos de alta rotación cuyas ventas no se habían descontado del Excel por el registro en lotes; bajo OrbitEngine, cada venta descuenta automáticamente el stock. La discrepancia post restante fue operacional (una recepción de mercancía aún no ingresada), no sistemática. Frozt Bitez y Luana, que carecían de registro formal previo, registraron tasas post de 0 % y 5.6 % respectivamente, mostrando que OrbitEngine introduce un nivel de control antes inexistente en ambas organizaciones.
 
----
-
 ## 6.4 Pruebas de Tareas Guiadas
 
 Las pruebas de tareas guiadas se realizaron con cada usuario participante en una sesión individual facilitada por un miembro del equipo investigador. Se eligieron tareas representativas de los módulos principales del sistema. Se registraron: éxito/fallo en la completitud, tiempo medio de ejecución, número de errores (acciones incorrectas o recuperaciones) y severidad observada.
@@ -181,16 +175,16 @@ Las pruebas de tareas guiadas se realizaron con cada usuario participante en una
 
 **Tabla 6.4.1.** Resultados de las pruebas de tareas guiadas (agregado por tarea).
 
-| N° | Tarea | Usuarios que completaron (n / total) | Tasa de éxito (%) | Tiempo medio (s) | Errores observados (media) | Severidad máxima |
-|---|---|---|---|---|---|---|
-| T1 | Iniciar sesión y navegar al Dashboard | 7 / 7 | **100 %** | 76 | 0.00 | 0 |
-| T2 | Crear un producto nuevo en inventario | 7 / 7 | **100 %** | 190 | 1.00 | 1 |
-| T3 | Registrar un movimiento de entrada de stock | 7 / 7 | **100 %** | 110 | 0.43 | 1 |
-| T4 | Registrar una venta nueva (múltiples productos) | 7 / 7 | **100 %** | 211 | 0.57 | 1 |
-| T5 | Consultar el historial de ventas con filtro de fechas | 7 / 7 | **100 %** | 101 | 0.71 | 1 |
-| T6 | Buscar un cliente y revisar su historial de compras | 7 / 7 | **100 %** | 87 | 0.00 | 0 |
-| T7 | Exportar el listado de inventario a Excel | 7 / 7 | **100 %** | 84 | 0.43 | 2 |
-| T8 | Crear un usuario nuevo con rol Vendedor | 3 / 3 admins ⁵ | **100 %** | 154 | 0.33 | 2 |
+| N°  | Tarea                                                 | Usuarios que completaron (n / total) | Tasa de éxito (%) | Tiempo medio (s) | Errores observados (media) | Severidad máxima |
+| --- | ----------------------------------------------------- | ------------------------------------ | ----------------- | ---------------- | -------------------------- | ---------------- |
+| T1  | Iniciar sesión y navegar al Dashboard                 | 7 / 7                                | **100 %**         | 76               | 0.00                       | 0                |
+| T2  | Crear un producto nuevo en inventario                 | 7 / 7                                | **100 %**         | 190              | 1.00                       | 1                |
+| T3  | Registrar un movimiento de entrada de stock           | 7 / 7                                | **100 %**         | 110              | 0.43                       | 1                |
+| T4  | Registrar una venta nueva (múltiples productos)       | 7 / 7                                | **100 %**         | 211              | 0.57                       | 1                |
+| T5  | Consultar el historial de ventas con filtro de fechas | 7 / 7                                | **100 %**         | 101              | 0.71                       | 1                |
+| T6  | Buscar un cliente y revisar su historial de compras   | 7 / 7                                | **100 %**         | 87               | 0.00                       | 0                |
+| T7  | Exportar el listado de inventario a Excel             | 7 / 7                                | **100 %**         | 84               | 0.43                       | 2                |
+| T8  | Crear un usuario nuevo con rol Vendedor               | 3 / 3 admins ⁵                       | **100 %**         | 154              | 0.33                       | 2                |
 
 > ⁵ T8 aplica únicamente a usuarios con rol Administrador: U1 (Frozt Bitez), U4 (Miss Peggy) y U7 (Luana Handmade).
 
@@ -202,8 +196,6 @@ Las pruebas de tareas guiadas se realizaron con cada usuario participante en una
 
 Con los siete usuarios del piloto, la tasa de éxito global definitiva es del 100 % (37/37 combinaciones Tarea × Usuario aplicables). El error más recurrente sigue siendo la confusión de categoría padre / subcategoría hoja en T2 (presente en 7 de 7 usuarios). La severidad máxima alcanzada es 2, registrada de forma independiente en T7 (U2, U6, U7) y en T8 (U7), lo que confirma que la ubicación del botón de exportación y el formulario de creación de usuarios son los dos puntos de fricción más consistentes del sistema. No se registraron errores críticos (severidad 3) en ningún usuario ni tarea.
 
----
-
 ## 6.5 Encuesta de Usabilidad — SUS
 
 ### 6.5.1 Score por Usuario y Agregado por Empresa
@@ -212,39 +204,39 @@ El instrumento SUS (_System Usability Scale_, Brooke, 1996) consiste en diez afi
 
 **Tabla 6.5.1.a.** Scores SUS individuales por usuario.
 
-| Empresa | Usuario | Ítem 1 | Ítem 2 | Ítem 3 | Ítem 4 | Ítem 5 | Ítem 6 | Ítem 7 | Ítem 8 | Ítem 9 | Ítem 10 | **Score SUS** |
-|---|---|---|---|---|---|---|---|---|---|---|---|---|
-| Frozt Bitez | U1 | 5 | 1 | 4 | 2 | 5 | 2 | 4 | 2 | 4 | 2 | **82.5** |
-| Frozt Bitez | U2 | 5 | 2 | 4 | 2 | 4 | 2 | 4 | 2 | 4 | 3 | **75.0** |
-| Frozt Bitez | U3 | 4 | 2 | 4 | 2 | 5 | 2 | 4 | 2 | 4 | 2 | **77.5** |
-| Miss Peggy | U4 | 5 | 2 | 4 | 2 | 5 | 2 | 4 | 2 | 4 | 2 | **80.0** |
-| Miss Peggy | U5 | 5 | 2 | 4 | 2 | 4 | 2 | 4 | 2 | 4 | 2 | **77.5** |
-| Miss Peggy | U6 | 5 | 2 | 4 | 2 | 4 | 2 | 4 | 2 | 4 | 3 | **75.0** |
-| Luana Handmade | U7 | 5 | 2 | 4 | 3 | 5 | 2 | 4 | 2 | 4 | 3 | **75.0** |
+| Empresa        | Usuario | Ítem 1 | Ítem 2 | Ítem 3 | Ítem 4 | Ítem 5 | Ítem 6 | Ítem 7 | Ítem 8 | Ítem 9 | Ítem 10 | **Score SUS** |
+| -------------- | ------- | ------ | ------ | ------ | ------ | ------ | ------ | ------ | ------ | ------ | ------- | ------------- |
+| Frozt Bitez    | U1      | 5      | 1      | 4      | 2      | 5      | 2      | 4      | 2      | 4      | 2       | **82.5**      |
+| Frozt Bitez    | U2      | 5      | 2      | 4      | 2      | 4      | 2      | 4      | 2      | 4      | 3       | **75.0**      |
+| Frozt Bitez    | U3      | 4      | 2      | 4      | 2      | 5      | 2      | 4      | 2      | 4      | 2       | **77.5**      |
+| Miss Peggy     | U4      | 5      | 2      | 4      | 2      | 5      | 2      | 4      | 2      | 4      | 2       | **80.0**      |
+| Miss Peggy     | U5      | 5      | 2      | 4      | 2      | 4      | 2      | 4      | 2      | 4      | 2       | **77.5**      |
+| Miss Peggy     | U6      | 5      | 2      | 4      | 2      | 4      | 2      | 4      | 2      | 4      | 3       | **75.0**      |
+| Luana Handmade | U7      | 5      | 2      | 4      | 3      | 5      | 2      | 4      | 2      | 4      | 3       | **75.0**      |
 
 > U1–U3 corresponden a los tres usuarios de Frozt Bitez; U4–U6 a los tres de Miss Peggy; U7 a Claudia González (única usuaria de Luana Handmade).
 
 **Tabla 6.5.1.b.** Score SUS agregado por empresa.
 
-| Empresa | N usuarios | Score SUS medio | Clasificación (Bangor et al., 2008) |
-|---|---|---|---|
-| Frozt Bitez | 3 | **78.3** | A/B — Bueno (72.5–85.4) |
-| Miss Peggy | 3 | **77.5** | A/B — Bueno (72.5–85.4) |
-| Luana Handmade | 1 | **75.0** | A/B — Bueno (72.5–85.4) |
+| Empresa        | N usuarios | Score SUS medio | Clasificación (Bangor et al., 2008) |
+| -------------- | ---------- | --------------- | ----------------------------------- |
+| Frozt Bitez    | 3          | **78.3**        | A/B — Bueno (72.5–85.4)             |
+| Miss Peggy     | 3          | **77.5**        | A/B — Bueno (72.5–85.4)             |
+| Luana Handmade | 1          | **75.0**        | A/B — Bueno (72.5–85.4)             |
 
 ### 6.5.2 Score Global del Piloto vs. Benchmark 68
 
 **Tabla 6.5.2.** Score SUS global del piloto comparado con el benchmark de referencia.
 
-| Métrica | Valor |
-|---|---|
-| N total de usuarios | **7** |
-| Score SUS medio global | **77.5** |
-| Desviación estándar | 2.9 |
-| Score mínimo individual | 75.0 (U2, U6 y U7) |
-| Score máximo individual | 82.5 (U1) |
-| Benchmark de usabilidad "aceptable" (Bangor et al., 2008) | 68 |
-| ¿Supera el benchmark? | **Sí — los 7 usuarios superan 68** |
+| Métrica                                                   | Valor                              |
+| --------------------------------------------------------- | ---------------------------------- |
+| N total de usuarios                                       | **7**                              |
+| Score SUS medio global                                    | **77.5**                           |
+| Desviación estándar                                       | 2.9                                |
+| Score mínimo individual                                   | 75.0 (U2, U6 y U7)                 |
+| Score máximo individual                                   | 82.5 (U1)                          |
+| Benchmark de usabilidad "aceptable" (Bangor et al., 2008) | 68                                 |
+| ¿Supera el benchmark?                                     | **Sí — los 7 usuarios superan 68** |
 
 Con los siete usuarios del piloto, el score SUS medio definitivo es de **77.5**, superando el umbral de 68 puntos de H3 por 9.5 puntos. Todos los usuarios individuales están por encima del umbral, con el mínimo en 75.0 (U2, U6 y U7) y el máximo en 82.5 (U1). Miss Peggy (77.5) y Frozt Bitez (78.3) obtienen scores prácticamente idénticos; Luana Handmade (75.0) puntúa ligeramente por debajo, resultado coherente con la menor experiencia previa en software de gestión de su única usuaria. La dispersión es baja (DE = 2.9) e indica que la percepción de usabilidad es consistente a través de los tres perfiles del estudio —desde el microemprendimiento unipersonal hasta la tienda con catálogo de 280 SKUs—. Que los tres usuarios de menor experiencia del piloto (U6 de Miss Peggy, U7 de Luana Handmade, U2 de Frozt Bitez) obtengan scores iguales o superiores a 75.0 es el hallazgo de mayor robustez para H3.
 
@@ -252,20 +244,18 @@ Con los siete usuarios del piloto, el score SUS medio definitivo es de **77.5**,
 
 **Tabla 6.5.3.** Media de respuesta por ítem SUS — valor ajustado (rango 0–4), todos los 7 usuarios.
 
-| Ítem | Enunciado (resumido) | Tipo | Media (0–4) | Observaciones |
-|---|---|---|---|---|
-| 1 | Me gustaría usar este sistema frecuentemente | Positivo | **3.86** | Ítem más alto del instrumento. Todos los usuarios dan 4 excepto U3 (3). Refleja intención de uso continuado unánime. |
-| 2 | El sistema es innecesariamente complejo | Negativo | **3.14** | U1 = 4 (ítem más positivo de U1); resto = 3. Percepciones bajas de complejidad en todos los perfiles. |
-| 3 | El sistema es fácil de usar | Positivo | **3.00** | Homogéneo (3 en todos los usuarios). Indica facilidad percibida consistente. |
-| 4 | Necesité apoyo técnico para usar el sistema | Negativo | **2.86** | U7 = 2 (único caso con ajuste menor). Refleja la curva de aprendizaje más alta de Luana Handmade. Ítem más bajo junto a 10. |
-| 5 | Las funciones del sistema están bien integradas | Positivo | **3.57** | Segundo ítem más alto. U1, U4 y U7 dan 4; resto 3. La integración funcional es percibida positivamente en los tres perfiles. |
-| 6 | Hay demasiada inconsistencia en el sistema | Negativo | **3.00** | Homogéneo (3 en todos). Baja percepción de inconsistencia. |
-| 7 | La mayoría de personas aprendería rápido | Positivo | **3.00** | Homogéneo. Curva de aprendizaje percibida como accesible. |
-| 8 | El sistema es engorroso de usar | Negativo | **3.00** | Homogéneo. Nula percepción de sistema engorroso. |
-| 9 | Me sentí muy confiado usando el sistema | Positivo | **3.00** | Homogéneo. Confianza percibida consistente tras una sesión de uso. |
-| 10 | Tuve que aprender mucho antes de poder usarlo | Negativo | **2.57** | Ítem más bajo del instrumento. U2, U6 y U7 dan ajuste 2 (respuesta cruda = 3), consistente con la fricción inicial observada en T2 y T7. |
-
----
+| Ítem | Enunciado (resumido)                            | Tipo     | Media (0–4) | Observaciones                                                                                                                            |
+| ---- | ----------------------------------------------- | -------- | ----------- | ---------------------------------------------------------------------------------------------------------------------------------------- |
+| 1    | Me gustaría usar este sistema frecuentemente    | Positivo | **3.86**    | Ítem más alto del instrumento. Todos los usuarios dan 4 excepto U3 (3). Refleja intención de uso continuado unánime.                     |
+| 2    | El sistema es innecesariamente complejo         | Negativo | **3.14**    | U1 = 4 (ítem más positivo de U1); resto = 3. Percepciones bajas de complejidad en todos los perfiles.                                    |
+| 3    | El sistema es fácil de usar                     | Positivo | **3.00**    | Homogéneo (3 en todos los usuarios). Indica facilidad percibida consistente.                                                             |
+| 4    | Necesité apoyo técnico para usar el sistema     | Negativo | **2.86**    | U7 = 2 (único caso con ajuste menor). Refleja la curva de aprendizaje más alta de Luana Handmade. Ítem más bajo junto a 10.              |
+| 5    | Las funciones del sistema están bien integradas | Positivo | **3.57**    | Segundo ítem más alto. U1, U4 y U7 dan 4; resto 3. La integración funcional es percibida positivamente en los tres perfiles.             |
+| 6    | Hay demasiada inconsistencia en el sistema      | Negativo | **3.00**    | Homogéneo (3 en todos). Baja percepción de inconsistencia.                                                                               |
+| 7    | La mayoría de personas aprendería rápido        | Positivo | **3.00**    | Homogéneo. Curva de aprendizaje percibida como accesible.                                                                                |
+| 8    | El sistema es engorroso de usar                 | Negativo | **3.00**    | Homogéneo. Nula percepción de sistema engorroso.                                                                                         |
+| 9    | Me sentí muy confiado usando el sistema         | Positivo | **3.00**    | Homogéneo. Confianza percibida consistente tras una sesión de uso.                                                                       |
+| 10   | Tuve que aprender mucho antes de poder usarlo   | Negativo | **2.57**    | Ítem más bajo del instrumento. U2, U6 y U7 dan ajuste 2 (respuesta cruda = 3), consistente con la fricción inicial observada en T2 y T7. |
 
 ## 6.6 Satisfacción Específica
 
@@ -275,12 +265,12 @@ El NPS se calculó a partir de la pregunta: _"En una escala de 0 a 10, ¿qué ta
 
 **Tabla 6.6.1.** Resultados NPS por empresa y global.
 
-| Empresa | N respondientes | Promotores (9–10) | Pasivos (7–8) | Detractores (0–6) | NPS |
-|---|---|---|---|---|---|
-| Frozt Bitez | 3 | 2 (U1, U3) | 1 (U2) | 0 | **+67** |
-| Miss Peggy | 3 | 1 (U5) | 2 (U4, U6) | 0 | **+33** |
-| Luana Handmade | 1 | 0 | 1 (Claudia G.) | 0 | **0** ¹ |
-| **Global** | **7** | **3 (42.9 %)** | **4 (57.1 %)** | **0 (0 %)** | **+43** |
+| Empresa        | N respondientes | Promotores (9–10) | Pasivos (7–8)  | Detractores (0–6) | NPS     |
+| -------------- | --------------- | ----------------- | -------------- | ----------------- | ------- |
+| Frozt Bitez    | 3               | 2 (U1, U3)        | 1 (U2)         | 0                 | **+67** |
+| Miss Peggy     | 3               | 1 (U5)            | 2 (U4, U6)     | 0                 | **+33** |
+| Luana Handmade | 1               | 0                 | 1 (Claudia G.) | 0                 | **0** ¹ |
+| **Global**     | **7**           | **3 (42.9 %)**    | **4 (57.1 %)** | **0 (0 %)**       | **+43** |
 
 > Referencia: un NPS positivo (> 0) se considera satisfactorio; un NPS ≥ 50 se considera excelente (Reichheld, 2003).
 >
@@ -292,32 +282,30 @@ El CSAT se midió con la pregunta: _"¿Qué tan satisfecho estás con este módu
 
 **Tabla 6.6.2.** Scores CSAT medios por módulo y por empresa (escala 1–5).
 
-| Módulo | Frozt Bitez | Miss Peggy | Luana Handmade | Media global (3 empresas) |
-|---|---|---|---|---|
-| Inventario (productos y stock) | **4.0** | **4.3** | **4.0** | **4.1** |
-| Ventas | **4.7** | **4.7** | **4.0** | **4.5** |
-| Clientes | **4.7** | **4.7** | **5.0** | **4.8** |
-| Dashboard y KPIs | **4.0** | **4.0** | **4.0** | **4.0** |
-| Reportes y exportación | **4.3** | **3.7** | **3.0** | **3.7** |
-| Gestión de usuarios y roles | **4.0** | **4.0** | **4.0** | **4.0** |
-| **CSAT global** | **4.3** | **4.2** | **4.0** | **4.2** |
+| Módulo                         | Frozt Bitez | Miss Peggy | Luana Handmade | Media global (3 empresas) |
+| ------------------------------ | ----------- | ---------- | -------------- | ------------------------- |
+| Inventario (productos y stock) | **4.0**     | **4.3**    | **4.0**        | **4.1**                   |
+| Ventas                         | **4.7**     | **4.7**    | **4.0**        | **4.5**                   |
+| Clientes                       | **4.7**     | **4.7**    | **5.0**        | **4.8**                   |
+| Dashboard y KPIs               | **4.0**     | **4.0**    | **4.0**        | **4.0**                   |
+| Reportes y exportación         | **4.3**     | **3.7**    | **3.0**        | **3.7**                   |
+| Gestión de usuarios y roles    | **4.0**     | **4.0**    | **4.0**        | **4.0**                   |
+| **CSAT global**                | **4.3**     | **4.2**    | **4.0**        | **4.2**                   |
 
 ### 6.6.3 Ranking de Módulos
 
 **Ranking definitivo (3 empresas):**
 
-| Posición | Módulo | CSAT medio |
-|---|---|---|
-| 1° | Clientes | **4.8** |
-| 2° | Ventas | **4.5** |
-| 3° | Inventario | **4.1** |
-| 3° | Gestión de usuarios y roles | **4.0** |
-| 3° | Dashboard y KPIs | **4.0** |
-| 6° | Reportes y exportación | **3.7** |
+| Posición | Módulo                      | CSAT medio |
+| -------- | --------------------------- | ---------- |
+| 1°       | Clientes                    | **4.8**    |
+| 2°       | Ventas                      | **4.5**    |
+| 3°       | Inventario                  | **4.1**    |
+| 3°       | Gestión de usuarios y roles | **4.0**    |
+| 3°       | Dashboard y KPIs            | **4.0**    |
+| 6°       | Reportes y exportación      | **3.7**    |
 
 El módulo de **Clientes** lidera con 4.8/5: las tres empresas coinciden en que la centralización del historial de compras es el cambio más tangible frente a sus flujos previos (cuaderno en Miss Peggy, WhatsApp en Frozt Bitez y Luana). El módulo de **Ventas** confirma su segunda posición (4.5), con U4 y U5 de Miss Peggy dando el máximo (5/5) junto con U1 de Frozt Bitez. El módulo de **Reportes y exportación** es el de menor satisfacción relativa (3.7): en Luana es 3.0 (sin experiencia previa en exportaciones), en Miss Peggy es 3.7 (U4 compara con capacidades de su Excel) y en Frozt Bitez es 4.3 (equipo más analítico y familiarizado con herramientas de datos). Este patrón sugiere que las expectativas del módulo de reportes crecen con el perfil digital del usuario.
-
----
 
 ## 6.7 Telemetría de Uso en Producción
 
@@ -325,17 +313,17 @@ Los datos de telemetría se extrajeron directamente de la base de datos PostgreS
 
 **Tabla 6.7.1.** Actividad registrada en producción durante la Fase 5 (por empresa).
 
-| Métrica | Frozt Bitez | Miss Peggy | Luana Handmade |
-|---|---|---|---|
-| Días activos (de 8 posibles) ¹ | **7 / 7** ² | **8 / 8** ³ | **5** |
-| Sesiones totales iniciadas | N/D ⁴ | N/D ⁴ | N/D ⁴ |
-| Usuarios únicos activos | **3** | **3** | **1** |
-| Productos creados o editados | **5** | **24** | **18** |
-| Ventas registradas | **22** | **34** | **14** |
-| Movimientos de inventario registrados | **38** | **62** | **24** |
-| Clientes creados o actualizados | **12** | **18** | **8** |
-| Exportaciones realizadas (Excel) | **2** | **3** | **1** |
-| Módulos utilizados (de 6 posibles) | **6 / 6** | **6 / 6** | **6 / 6** |
+| Métrica                               | Frozt Bitez | Miss Peggy  | Luana Handmade |
+| ------------------------------------- | ----------- | ----------- | -------------- |
+| Días activos (de 8 posibles) ¹        | **7 / 7** ² | **8 / 8** ³ | **5**          |
+| Sesiones totales iniciadas            | N/D ⁴       | N/D ⁴       | N/D ⁴          |
+| Usuarios únicos activos               | **3**       | **3**       | **1**          |
+| Productos creados o editados          | **5**       | **24**      | **18**         |
+| Ventas registradas                    | **22**      | **34**      | **14**         |
+| Movimientos de inventario registrados | **38**      | **62**      | **24**         |
+| Clientes creados o actualizados       | **12**      | **18**      | **8**          |
+| Exportaciones realizadas (Excel)      | **2**       | **3**       | **1**          |
+| Módulos utilizados (de 6 posibles)    | **6 / 6**   | **6 / 6**   | **6 / 6**      |
 
 > ¹ La Fase 5 comprende 8 días calendario (27-abr a 4-may); el viernes 1-may es festivo (Día del Trabajo) y el domingo 3-may no hubo actividad registrada en Luana Handmade. Días activos de Luana: lun 27, mar 28, mié 29, jue 30, sáb 2 y lun 4.
 >
@@ -351,21 +339,19 @@ Frozt Bitez registró el mayor volumen de ventas del piloto (22 transacciones en
 
 Miss Peggy registró el mayor volumen de actividad del piloto en términos absolutos: 34 transacciones (29 completadas y 5 canceladas), 62 movimientos de inventario y los únicos 8 días activos completos de los 8 posibles. El pico de ventas se produjo el sábado 2-may (8 ventas) y el lunes 4-may (8 ventas, repunte post-festivo), coherente con el patrón de negocio documentado. Las 24 carga de productos durante la Fase 5 representan solo ~8.6 % del catálogo total (~280 SKUs), lo que refleja un onboarding gradual —esperable en un catálogo tan amplio— que continuó en paralelo al uso productivo. Las 5 ventas canceladas (~14.7 % del total) son atribuibles al período de aprendizaje: ventas de prueba canceladas durante el onboarding. Las 3 exportaciones a Excel corresponden estrictamente a las sesiones guiadas de T7 (una por usuario), sin exportaciones orgánicas fuera de las sesiones, patrón idéntico al de Frozt Bitez y Luana Handmade en el primer período de adopción.
 
----
-
 ## 6.8 Hallazgos Cualitativos de las Entrevistas
 
 Las entrevistas semiestructuradas de cierre se realizaron con el informante principal de cada empresa al término de la Fase 5. Las entrevistas tuvieron una duración de entre 20 y 35 minutos. La entrevista de Luana Handmade se realizó presencialmente en el taller de la empresa (Boyacá, 2-may-2026) sin grabación de audio —a solicitud de la informante—; el facilitador tomó notas extensas durante la sesión. La entrevista de Frozt Bitez se realizó el 3-may-2026 de forma presencial con Cesar Julian Espinoza Suarez (U1); el informante no autorizó la grabación de audio, por lo que el facilitador tomó notas extensas durante la sesión. La entrevista de Miss Peggy se realizó el 3-may-2026 de forma presencial en la tienda (Bogotá) con Carolina Forero (U4, dueña y administradora); la informante no autorizó la grabación de audio, por lo que el facilitador tomó notas extensas durante la sesión. El análisis siguió el enfoque de **codificación temática** (Braun & Clarke, 2006): los investigadores identificaron patrones recurrentes en las notas de cada sesión y los agruparon en temas emergentes.
 
 ### 6.8.1 Temas Emergentes
 
-| N° | Tema emergente | Descripción | Empresas (disponibles) |
-|---|---|---|---|
-| T1 | **Acceso rápido al historial de clientes** | El módulo de Clientes elimina la necesidad de buscar en conversaciones de WhatsApp o en cuadernos/archivos físicos para recuperar el historial de compras de un cliente específico. Las tres empresas lo identifican como uno de los cambios más tangibles y valorados. | Luana Handmade Sí · Frozt Bitez Sí · Miss Peggy Sí |
-| T2 | **Curva de aprendizaje inicial y adaptación** | Los usuarios reportan una fricción inicial que se supera en 1-2 días de uso regular. La fricción varía según el perfil: más pronunciada en Luana (sin experiencia previa en software de gestión), moderada en Miss Peggy (U4 cómoda desde el día 1 por su experiencia en Excel; U5 y U6 en ~día y medio) y mínima en Frozt Bitez (equipo joven con experiencia en WooCommerce). | Luana Handmade Sí · Frozt Bitez Sí · Miss Peggy Sí |
-| T3 | **Visibilidad de datos para toma de decisiones** | El acceso a datos de rotación por SKU y al dashboard empieza a influir en decisiones operativas (qué producir, qué reponer, qué pedir), aunque de forma incipiente en el período de la Fase 5. Las alertas de stock mínimo sustituyen en Miss Peggy al control de memoria que Carolina hacía con el Excel; en Frozt Bitez ya influyen en las cantidades del siguiente lote. | Luana Handmade Sí · Frozt Bitez Sí · Miss Peggy Sí |
-| T4 | **Funcionalidades sectoriales ausentes** | Las sugerencias de mejora varían por perfil de negocio: Luana señaló la ausencia de imágenes en el catálogo; Frozt Bitez, la falta de integración con WooCommerce; Miss Peggy identificó dos funcionalidades críticas para el sector naturista —lector de código de barras y control de fechas de vencimiento por lote— que condicionan su adopción permanente. | Luana Handmade Sí (fotos) · Frozt Bitez Sí (integración WooCommerce) · Miss Peggy Sí (barras + vencimientos) |
-| T5 | **Decisión de continuidad diferenciada por perfil de negocio** | La continuidad post-piloto varía: Frozt Bitez, afirmativa y sin condiciones (OrbitEngine como back-office permanente); Miss Peggy, condicionada a funcionalidades técnicas sectoriales (código de barras + control de vencimientos), no al precio; Luana Handmade, condicionada al precio del servicio una vez finalizado el período de prueba. | Luana Handmade Sí (condicionada al precio) · Frozt Bitez Sí (afirmativa) · Miss Peggy Sí (condicionada técnicamente) |
+| N°  | Tema emergente                                                 | Descripción                                                                                                                                                                                                                                                                                                                                                                     | Empresas (disponibles)                                                                                               |
+| --- | -------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------- |
+| T1  | **Acceso rápido al historial de clientes**                     | El módulo de Clientes elimina la necesidad de buscar en conversaciones de WhatsApp o en cuadernos/archivos físicos para recuperar el historial de compras de un cliente específico. Las tres empresas lo identifican como uno de los cambios más tangibles y valorados.                                                                                                         | Luana Handmade Sí · Frozt Bitez Sí · Miss Peggy Sí                                                                   |
+| T2  | **Curva de aprendizaje inicial y adaptación**                  | Los usuarios reportan una fricción inicial que se supera en 1-2 días de uso regular. La fricción varía según el perfil: más pronunciada en Luana (sin experiencia previa en software de gestión), moderada en Miss Peggy (U4 cómoda desde el día 1 por su experiencia en Excel; U5 y U6 en ~día y medio) y mínima en Frozt Bitez (equipo joven con experiencia en WooCommerce). | Luana Handmade Sí · Frozt Bitez Sí · Miss Peggy Sí                                                                   |
+| T3  | **Visibilidad de datos para toma de decisiones**               | El acceso a datos de rotación por SKU y al dashboard empieza a influir en decisiones operativas (qué producir, qué reponer, qué pedir), aunque de forma incipiente en el período de la Fase 5. Las alertas de stock mínimo sustituyen en Miss Peggy al control de memoria que Carolina hacía con el Excel; en Frozt Bitez ya influyen en las cantidades del siguiente lote.     | Luana Handmade Sí · Frozt Bitez Sí · Miss Peggy Sí                                                                   |
+| T4  | **Funcionalidades sectoriales ausentes**                       | Las sugerencias de mejora varían por perfil de negocio: Luana señaló la ausencia de imágenes en el catálogo; Frozt Bitez, la falta de integración con WooCommerce; Miss Peggy identificó dos funcionalidades críticas para el sector naturista —lector de código de barras y control de fechas de vencimiento por lote— que condicionan su adopción permanente.                 | Luana Handmade Sí (fotos) · Frozt Bitez Sí (integración WooCommerce) · Miss Peggy Sí (barras + vencimientos)         |
+| T5  | **Decisión de continuidad diferenciada por perfil de negocio** | La continuidad post-piloto varía: Frozt Bitez, afirmativa y sin condiciones (OrbitEngine como back-office permanente); Miss Peggy, condicionada a funcionalidades técnicas sectoriales (código de barras + control de vencimientos), no al precio; Luana Handmade, condicionada al precio del servicio una vez finalizado el período de prueba.                                 | Luana Handmade Sí (condicionada al precio) · Frozt Bitez Sí (afirmativa) · Miss Peggy Sí (condicionada técnicamente) |
 
 ### 6.8.2 Citas Representativas
 
@@ -443,8 +429,6 @@ Antes de OrbitEngine, Claudia gestionaba toda la operación con un cuaderno fís
 
 La incorporación de OrbitEngine se concretó en el onboarding del 30 de abril de 2026. A pesar de ser la usuaria con menor experiencia previa en software de gestión del piloto, Claudia completó las 8 tareas guiadas el 2 de mayo con una tasa de éxito del 100 % y obtuvo un score SUS de 75.0 (categoría "Bueno"). El módulo de Clientes fue el más valorado (CSAT = 5/5): resolver en segundos lo que antes le tomaba doce minutos es, para ella, el cambio más tangible. El reporte semanal pasó de hora y cuarto con cuaderno y calculadora a menos de dos minutos con el filtro de ventas. Como principal sugerencia para el equipo, Claudia solicitó la incorporación de fotografías en el catálogo de productos, funcionalidad que le permitiría mostrar el sistema directamente a sus clientas en lugar de seguir enviando fotos por WhatsApp. Planea continuar usando OrbitEngine siempre que el precio sea accesible para un microemprendimiento de su escala.
 
----
-
 ## 6.9 Validación de Hipótesis
 
 Esta sección contrasta cada hipótesis planteada en 6.1.6 con la evidencia recopilada durante la Fase 5, siguiendo un criterio de cumplimiento explícito.
@@ -481,13 +465,11 @@ Los siete usuarios superan individualmente el umbral de 68 puntos: U1 (82.5), U2
 
 ### 6.9.4 Tabla Resumen de Validación de Hipótesis
 
-| Hipótesis | Criterio de cumplimiento | Evidencia (3 empresas, 7 usuarios) | Veredicto final |
-|---|---|---|---|
-| **H1** — Eficiencia Operativa | Reducción ≥ 30% en tiempo (≥ 3 de 4 tareas, promedio de 3 empresas) | Frozt Bitez: −72 % prom. · Miss Peggy: −72 % prom. · Luana: −69 % prom. Promedio global: **−71 %**. Las 4 tareas superan el umbral en las 3 empresas. | **Confirmada** |
-| **H2** — Precisión en Inventario | Reducción ≥ 40 pp en tasa de discrepancias (≥ 2 de 3 empresas) | Miss Peggy: 16.0 % a 4.0 % (−12 pp, −75 % relativo). Frozt Bitez: pre = N/D · post = 0 %. Luana: pre = N/D · post = 5.6 %. Solo 1 empresa tiene datos pre/post comparables y su reducción (12 pp) no alcanza el umbral (40 pp). | **Mixta** — dirección confirmada, magnitud no alcanzada |
-| **H3** — Usabilidad | Score SUS medio global ≥ 68 (todos los usuarios) | Frozt Bitez: 78.3 · Miss Peggy: 77.5 · Luana: 75.0. Score global 7 usuarios: **77.5** (DE = 2.9). Todos los usuarios individuales ≥ 75.0. | **Confirmada** |
-
----
+| Hipótesis                        | Criterio de cumplimiento                                            | Evidencia (3 empresas, 7 usuarios)                                                                                                                                                                                              | Veredicto final                                         |
+| -------------------------------- | ------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------- |
+| **H1** — Eficiencia Operativa    | Reducción ≥ 30% en tiempo (≥ 3 de 4 tareas, promedio de 3 empresas) | Frozt Bitez: −72 % prom. · Miss Peggy: −72 % prom. · Luana: −69 % prom. Promedio global: **−71 %**. Las 4 tareas superan el umbral en las 3 empresas.                                                                           | **Confirmada**                                          |
+| **H2** — Precisión en Inventario | Reducción ≥ 40 pp en tasa de discrepancias (≥ 2 de 3 empresas)      | Miss Peggy: 16.0 % a 4.0 % (−12 pp, −75 % relativo). Frozt Bitez: pre = N/D · post = 0 %. Luana: pre = N/D · post = 5.6 %. Solo 1 empresa tiene datos pre/post comparables y su reducción (12 pp) no alcanza el umbral (40 pp). | **Mixta** — dirección confirmada, magnitud no alcanzada |
+| **H3** — Usabilidad              | Score SUS medio global ≥ 68 (todos los usuarios)                    | Frozt Bitez: 78.3 · Miss Peggy: 77.5 · Luana: 75.0. Score global 7 usuarios: **77.5** (DE = 2.9). Todos los usuarios individuales ≥ 75.0.                                                                                       | **Confirmada**                                          |
 
 ## 6.10 Limitaciones de la Validación con Usuarios
 

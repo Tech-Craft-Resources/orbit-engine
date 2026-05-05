@@ -18,8 +18,6 @@ Las soluciones existentes en el mercado presentan limitaciones específicas para
 
 Se identifica así un problema de investigación y desarrollo bien definido: **la inexistencia de una plataforma SaaS integrada, accesible y orientada al contexto latinoamericano, que combine la gestión operativa esencial de una pyme —inventario, ventas, clientes y reportes— bajo un modelo de precios y complejidad adecuados para este segmento.**
 
----
-
 ## 1.2 Justificación
 
 ### 1.2.1 Justificación Económica y Social
@@ -48,8 +46,6 @@ En segundo lugar, la validación del sistema sigue un diseño cuasi-experimental
 
 En tercer lugar, el proyecto se inscribe en la línea de trabajo del semillero _Software como Innovación_ y articula de manera integral las competencias formativas del pregrado en Ciencias de la Computación e Inteligencia Artificial: ingeniería de requisitos, arquitectura de software, desarrollo full-stack, despliegue en la nube, validación experimental y comunicación de resultados. Lo anterior justifica su carácter como proyecto de grado y no como un desarrollo de software meramente aplicado.
 
----
-
 ## 1.3 Objetivos
 
 ### 1.3.1 Objetivo General
@@ -67,8 +63,6 @@ Desarrollar e implementar una plataforma SaaS multi-tenant para la gestión inte
 4. **Desplegar** la plataforma en infraestructura de nube (Railway para el backend y la base de datos, Vercel para el frontend) con un pipeline de integración y entrega continua (CI/CD), garantizando una disponibilidad mínima del 95% y tiempos de respuesta inferiores a 2 segundos para operaciones transaccionales.
 
 5. **Validar** la solución mediante pruebas de usabilidad y rendimiento con al menos dos empresas piloto, midiendo el impacto en la eficiencia operativa a través de métricas cuantitativas (reducción de tiempo en tareas, tasa de error) y cualitativas (satisfacción de usuario).
-
----
 
 ## 1.4 Alcance y Limitaciones
 
@@ -112,8 +106,6 @@ Las siguientes características quedan fuera del alcance del MVP y podrán abord
 2. Las empresas piloto están dispuestas a cargar sus datos de productos, clientes y stock inicial para comenzar a operar con el sistema.
 3. El equipo de desarrollo cuenta con cuentas activas en Railway y Vercel con planes adecuados para el despliegue de la plataforma.
 
----
-
 ## 1.5 Metodología
 
 El proyecto se desarrolló bajo un enfoque de investigación aplicada con componente de desarrollo de software. Se adoptó la metodología ágil Scrum adaptada para equipos académicos, organizando el desarrollo en sprints de dos semanas durante un período de siete meses (octubre 2025 – abril 2026).
@@ -125,8 +117,6 @@ La investigación siguió las siguientes etapas:
 3. **Estabilización y refinamiento** (febrero – marzo 2026): corrección de errores, mejoras de experiencia de usuario, pruebas de carga y consolidación del despliegue en producción.
 4. **Validación con empresas piloto** (abril 2026, semanas 1–3): pruebas con usuarios reales, recolección de métricas de eficiencia operativa y encuestas de usabilidad.
 5. **Documentación y entrega** (abril 2026, semana 4): consolidación del informe final, análisis de resultados y defensa del proyecto.
-
----
 
 ## 1.6 Estructura del Documento
 
