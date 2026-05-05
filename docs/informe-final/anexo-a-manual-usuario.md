@@ -12,8 +12,6 @@ Este manual describe el uso de OrbitEngine para los usuarios finales de la plata
 
 El sistema opera completamente desde el navegador web, sin necesidad de instalar software adicional. Cada empresa (organización) tiene su propio espacio de trabajo completamente aislado de las demás.
 
----
-
 ## A.2 Acceso a la Plataforma
 
 ### A.2.1 Página de inicio
