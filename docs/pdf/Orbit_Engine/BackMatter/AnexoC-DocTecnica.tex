@@ -10,12 +10,12 @@ Universidad Sergio Arboleda, Semillero de Software como Innovación
 
 \subsection{Backend}\label{backend}
 
-{\def\LTcaptype{none} % do not increment counter
 \begin{longtable}[]{@{}
   >{\raggedright\arraybackslash}p{(\linewidth - 6\tabcolsep) * \real{0.2283}}
   >{\raggedright\arraybackslash}p{(\linewidth - 6\tabcolsep) * \real{0.1848}}
   >{\raggedright\arraybackslash}p{(\linewidth - 6\tabcolsep) * \real{0.0761}}
   >{\raggedright\arraybackslash}p{(\linewidth - 6\tabcolsep) * \real{0.5109}}@{}}
+\caption[Backend]{Backend}\tabularnewline
 \toprule\noalign{}
 \begin{minipage}[b]{\linewidth}\raggedright
 Componente
@@ -45,16 +45,15 @@ Verificación de tipos & Mypy & 1.x & Chequeo de tipos estático en modo estrict
 Testing & Pytest + Coverage & 8.x & Pruebas unitarias e integración \\
 Monitoring & Sentry (opcional) & N/A & Rastreo de errores en producción \\
 \end{longtable}
-}
 
 \subsection{Frontend}\label{frontend}
 
-{\def\LTcaptype{none} % do not increment counter
 \begin{longtable}[]{@{}
   >{\raggedright\arraybackslash}p{(\linewidth - 6\tabcolsep) * \real{0.1839}}
   >{\raggedright\arraybackslash}p{(\linewidth - 6\tabcolsep) * \real{0.1839}}
   >{\raggedright\arraybackslash}p{(\linewidth - 6\tabcolsep) * \real{0.0805}}
   >{\raggedright\arraybackslash}p{(\linewidth - 6\tabcolsep) * \real{0.5517}}@{}}
+\caption[Frontend]{Frontend}\tabularnewline
 \toprule\noalign{}
 \begin{minipage}[b]{\linewidth}\raggedright
 Componente
@@ -86,15 +85,14 @@ Notificaciones & Sonner & 1.x & Toasts y notificaciones \\
 Linter/Formatter & Biome & 1.x & Análisis estático y formato \\
 E2E Testing & Playwright & 1.x & Pruebas end-to-end en navegador \\
 \end{longtable}
-}
 
 \subsection{Infraestructura}\label{infraestructura}
 
-{\def\LTcaptype{none} % do not increment counter
 \begin{longtable}[]{@{}
   >{\raggedright\arraybackslash}p{(\linewidth - 4\tabcolsep) * \real{0.1806}}
   >{\raggedright\arraybackslash}p{(\linewidth - 4\tabcolsep) * \real{0.2361}}
   >{\raggedright\arraybackslash}p{(\linewidth - 4\tabcolsep) * \real{0.5833}}@{}}
+\caption[Infraestructura]{Infraestructura}\tabularnewline
 \toprule\noalign{}
 \begin{minipage}[b]{\linewidth}\raggedright
 Componente
@@ -114,7 +112,6 @@ CI/CD & GitHub Actions & Pipeline de integración y entrega continua \\
 Panel de BD & Adminer & Administración web de PostgreSQL \\
 Email (dev) & Mailcatcher & Interceptor SMTP para desarrollo \\
 \end{longtable}
-}
 
 \section{Estructura del Proyecto}\label{estructura-del-proyecto}
 
@@ -251,8 +248,8 @@ OrbitEngine usa \textbf{JWT Bearer Tokens} siguiendo el estándar OAuth2 Passwor
 
 \textbf{Parámetros del token:}
 
-{\def\LTcaptype{none} % do not increment counter
 \begin{longtable}[]{@{}ll@{}}
+\caption[Flujo de autenticación]{Flujo de autenticación}\tabularnewline
 \toprule\noalign{}
 Parámetro & Valor \\
 \midrule\noalign{}
@@ -264,7 +261,6 @@ Payload \texttt{sub} & UUID del usuario (\texttt{str}) \\
 Expiración & 8 días (11,520 minutos) \\
 Clave de firma & \texttt{SECRET\_KEY} del entorno \\
 \end{longtable}
-}
 
 \subsection{Control de acceso basado en roles (RBAC)}\label{control-de-acceso-basado-en-roles-rbac}
 
@@ -284,10 +280,10 @@ Los roles se almacenan en la tabla \texttt{roles} con permisos como array JSONB.
 
 \textbf{Dependencias de autenticación disponibles:}
 
-{\def\LTcaptype{none} % do not increment counter
 \begin{longtable}[]{@{}
   >{\raggedright\arraybackslash}p{(\linewidth - 2\tabcolsep) * \real{0.2877}}
   >{\raggedright\arraybackslash}p{(\linewidth - 2\tabcolsep) * \real{0.7123}}@{}}
+\caption[Control de acceso basado en roles (RBAC)]{Control de acceso basado en roles (RBAC)}\tabularnewline
 \toprule\noalign{}
 \begin{minipage}[b]{\linewidth}\raggedright
 Tipo anotado
@@ -303,7 +299,6 @@ Descripción
 \texttt{CurrentOrganization} & UUID de organización extraído del \texttt{CurrentUser} \\
 \texttt{SessionDep} & Sesión de base de datos SQLModel \\
 \end{longtable}
-}
 
 \subsection{Protección contra fuerza bruta}\label{protecciuxf3n-contra-fuerza-bruta}
 
@@ -315,12 +310,12 @@ Todos los endpoints están prefijados con \texttt{/api/v1}. La documentación in
 
 \subsection{\texorpdfstring{Autenticación (\texttt{/login})}{Autenticación (/login)}}\label{autenticaciuxf3n-login}
 
-{\def\LTcaptype{none} % do not increment counter
 \begin{longtable}[]{@{}
   >{\raggedright\arraybackslash}p{(\linewidth - 6\tabcolsep) * \real{0.0857}}
   >{\raggedright\arraybackslash}p{(\linewidth - 6\tabcolsep) * \real{0.4000}}
   >{\raggedright\arraybackslash}p{(\linewidth - 6\tabcolsep) * \real{0.0571}}
   >{\raggedright\arraybackslash}p{(\linewidth - 6\tabcolsep) * \real{0.4571}}@{}}
+\caption[Autenticación (/login)]{Autenticación (/login)}\tabularnewline
 \toprule\noalign{}
 \begin{minipage}[b]{\linewidth}\raggedright
 Método
@@ -340,17 +335,16 @@ POST & \texttt{/login/test-token} & Sí & Verificar validez del token \\
 POST & \texttt{/password-recovery/\{email\}} & No & Solicitar enlace de recuperación \\
 POST & \texttt{/reset-password} & No & Restablecer contraseña con token \\
 \end{longtable}
-}
 
 \subsection{\texorpdfstring{Usuarios (\texttt{/users})}{Usuarios (/users)}}\label{usuarios-users}
 
-{\def\LTcaptype{none} % do not increment counter
 \begin{longtable}[]{@{}
   >{\raggedright\arraybackslash}p{(\linewidth - 8\tabcolsep) * \real{0.0789}}
   >{\raggedright\arraybackslash}p{(\linewidth - 8\tabcolsep) * \real{0.2632}}
   >{\raggedright\arraybackslash}p{(\linewidth - 8\tabcolsep) * \real{0.0526}}
   >{\raggedright\arraybackslash}p{(\linewidth - 8\tabcolsep) * \real{0.1316}}
   >{\raggedright\arraybackslash}p{(\linewidth - 8\tabcolsep) * \real{0.4737}}@{}}
+\caption[Usuarios (/users)]{Usuarios (/users)}\tabularnewline
 \toprule\noalign{}
 \begin{minipage}[b]{\linewidth}\raggedright
 Método
@@ -377,17 +371,16 @@ GET & \texttt{/users/\{user\_id\}} & Sí & admin & Obtener usuario por ID \\
 PATCH & \texttt{/users/\{user\_id\}} & Sí & admin & Actualizar usuario \\
 DELETE & \texttt{/users/\{user\_id\}} & Sí & admin & Eliminar usuario \\
 \end{longtable}
-}
 
 \subsection{\texorpdfstring{Organizaciones (\texttt{/organizations})}{Organizaciones (/organizations)}}\label{organizaciones-organizations}
 
-{\def\LTcaptype{none} % do not increment counter
 \begin{longtable}[]{@{}
   >{\raggedright\arraybackslash}p{(\linewidth - 8\tabcolsep) * \real{0.0952}}
   >{\raggedright\arraybackslash}p{(\linewidth - 8\tabcolsep) * \real{0.2667}}
   >{\raggedright\arraybackslash}p{(\linewidth - 8\tabcolsep) * \real{0.0571}}
   >{\raggedright\arraybackslash}p{(\linewidth - 8\tabcolsep) * \real{0.1238}}
   >{\raggedright\arraybackslash}p{(\linewidth - 8\tabcolsep) * \real{0.4286}}@{}}
+\caption[Organizaciones (/organizations)]{Organizaciones (/organizations)}\tabularnewline
 \toprule\noalign{}
 \multicolumn{5}{@{}>{\raggedright\arraybackslash}p{(\linewidth - 8\tabcolsep) * \real{0.9714} + 8\tabcolsep}@{}}{%
 \begin{minipage}[b]{\linewidth}\raggedright
@@ -405,16 +398,15 @@ PATCH \textbar{} /organizations/me \textbar{} Sí \textbar{} admin \textbar{} Ac
 \multicolumn{5}{@{}>{\raggedright\arraybackslash}p{(\linewidth - 8\tabcolsep) * \real{0.9714} + 8\tabcolsep}@{}}{%
 POST \textbar{} /organizations/signup \textbar{} No \textbar{} N/A \textbar{} Registro de nueva organización + admin \textbar{}} \\
 \end{longtable}
-}
 
 \subsection{\texorpdfstring{Roles (\texttt{/roles})}{Roles (/roles)}}\label{roles-roles}
 
-{\def\LTcaptype{none} % do not increment counter
 \begin{longtable}[]{@{}
   >{\raggedright\arraybackslash}p{(\linewidth - 6\tabcolsep) * \real{0.0968}}
   >{\raggedright\arraybackslash}p{(\linewidth - 6\tabcolsep) * \real{0.1452}}
   >{\raggedright\arraybackslash}p{(\linewidth - 6\tabcolsep) * \real{0.0645}}
   >{\raggedright\arraybackslash}p{(\linewidth - 6\tabcolsep) * \real{0.6935}}@{}}
+\caption[Roles (/roles)]{Roles (/roles)}\tabularnewline
 \toprule\noalign{}
 \begin{minipage}[b]{\linewidth}\raggedright
 Método
@@ -431,17 +423,16 @@ Descripción
 \endlastfoot
 GET & \texttt{/roles/} & Sí & Listar roles disponibles en la organización \\
 \end{longtable}
-}
 
 \subsection{\texorpdfstring{Categorías (\texttt{/categories})}{Categorías (/categories)}}\label{categoruxedas-categories}
 
-{\def\LTcaptype{none} % do not increment counter
 \begin{longtable}[]{@{}
   >{\raggedright\arraybackslash}p{(\linewidth - 8\tabcolsep) * \real{0.0690}}
   >{\raggedright\arraybackslash}p{(\linewidth - 8\tabcolsep) * \real{0.2069}}
   >{\raggedright\arraybackslash}p{(\linewidth - 8\tabcolsep) * \real{0.0460}}
   >{\raggedright\arraybackslash}p{(\linewidth - 8\tabcolsep) * \real{0.1149}}
   >{\raggedright\arraybackslash}p{(\linewidth - 8\tabcolsep) * \real{0.5632}}@{}}
+\caption[Categorías (/categories)]{Categorías (/categories)}\tabularnewline
 \toprule\noalign{}
 \begin{minipage}[b]{\linewidth}\raggedright
 Método
@@ -464,17 +455,16 @@ GET & \texttt{/categories/\{id\}} & Sí & Cualquiera & Obtener categoría por ID
 PATCH & \texttt{/categories/\{id\}} & Sí & admin & Actualizar categoría \\
 DELETE & \texttt{/categories/\{id\}} & Sí & admin & Eliminar / desactivar categoría \\
 \end{longtable}
-}
 
 \subsection{\texorpdfstring{Productos (\texttt{/products})}{Productos (/products)}}\label{productos-products}
 
-{\def\LTcaptype{none} % do not increment counter
 \begin{longtable}[]{@{}
   >{\raggedright\arraybackslash}p{(\linewidth - 8\tabcolsep) * \real{0.0714}}
   >{\raggedright\arraybackslash}p{(\linewidth - 8\tabcolsep) * \real{0.2540}}
   >{\raggedright\arraybackslash}p{(\linewidth - 8\tabcolsep) * \real{0.0476}}
   >{\raggedright\arraybackslash}p{(\linewidth - 8\tabcolsep) * \real{0.1032}}
   >{\raggedright\arraybackslash}p{(\linewidth - 8\tabcolsep) * \real{0.5000}}@{}}
+\caption[Productos (/products)]{Productos (/products)}\tabularnewline
 \toprule\noalign{}
 \begin{minipage}[b]{\linewidth}\raggedright
 Método
@@ -502,17 +492,16 @@ POST \textbar{} /products/\{id\}/stock-adjust \textbar{} Sí \textbar{} admin \t
 \multicolumn{5}{@{}>{\raggedright\arraybackslash}p{(\linewidth - 8\tabcolsep) * \real{0.9762} + 8\tabcolsep}@{}}{%
 GET \textbar{} /products/\{id\}/movements \textbar{} Sí \textbar{} Cualquiera \textbar{} Historial de movimientos del producto \textbar{}} \\
 \end{longtable}
-}
 
 \subsection{\texorpdfstring{Clientes (\texttt{/customers})}{Clientes (/customers)}}\label{clientes-customers}
 
-{\def\LTcaptype{none} % do not increment counter
 \begin{longtable}[]{@{}
   >{\raggedright\arraybackslash}p{(\linewidth - 8\tabcolsep) * \real{0.0732}}
   >{\raggedright\arraybackslash}p{(\linewidth - 8\tabcolsep) * \real{0.2805}}
   >{\raggedright\arraybackslash}p{(\linewidth - 8\tabcolsep) * \real{0.0488}}
   >{\raggedright\arraybackslash}p{(\linewidth - 8\tabcolsep) * \real{0.1220}}
   >{\raggedright\arraybackslash}p{(\linewidth - 8\tabcolsep) * \real{0.4756}}@{}}
+\caption[Clientes (/customers)]{Clientes (/customers)}\tabularnewline
 \toprule\noalign{}
 \begin{minipage}[b]{\linewidth}\raggedright
 Método
@@ -536,17 +525,16 @@ PATCH & \texttt{/customers/\{id\}} & Sí & Cualquiera & Actualizar cliente \\
 DELETE & \texttt{/customers/\{id\}} & Sí & admin & Desactivar cliente \\
 GET & \texttt{/customers/\{id\}/sales} & Sí & Cualquiera & Historial de compras del cliente \\
 \end{longtable}
-}
 
 \subsection{\texorpdfstring{Ventas (\texttt{/sales})}{Ventas (/sales)}}\label{ventas-sales}
 
-{\def\LTcaptype{none} % do not increment counter
 \begin{longtable}[]{@{}
   >{\raggedright\arraybackslash}p{(\linewidth - 8\tabcolsep) * \real{0.0583}}
   >{\raggedright\arraybackslash}p{(\linewidth - 8\tabcolsep) * \real{0.1942}}
   >{\raggedright\arraybackslash}p{(\linewidth - 8\tabcolsep) * \real{0.0388}}
   >{\raggedright\arraybackslash}p{(\linewidth - 8\tabcolsep) * \real{0.0971}}
   >{\raggedright\arraybackslash}p{(\linewidth - 8\tabcolsep) * \real{0.6117}}@{}}
+\caption[Ventas (/sales)]{Ventas (/sales)}\tabularnewline
 \toprule\noalign{}
 \begin{minipage}[b]{\linewidth}\raggedright
 Método
@@ -568,16 +556,15 @@ POST & \texttt{/sales/} & Sí & Cualquiera & Registrar venta (descuenta stock au
 GET & \texttt{/sales/\{id\}} & Sí & Cualquiera & Obtener venta por ID \\
 POST & \texttt{/sales/\{id\}/cancel} & Sí & admin & Cancelar venta (revierte stock) \\
 \end{longtable}
-}
 
 \subsection{\texorpdfstring{Movimientos de inventario (\texttt{/inventory-movements})}{Movimientos de inventario (/inventory-movements)}}\label{movimientos-de-inventario-inventory-movements}
 
-{\def\LTcaptype{none} % do not increment counter
 \begin{longtable}[]{@{}
   >{\raggedright\arraybackslash}p{(\linewidth - 6\tabcolsep) * \real{0.0638}}
   >{\raggedright\arraybackslash}p{(\linewidth - 6\tabcolsep) * \real{0.2447}}
   >{\raggedright\arraybackslash}p{(\linewidth - 6\tabcolsep) * \real{0.0426}}
   >{\raggedright\arraybackslash}p{(\linewidth - 6\tabcolsep) * \real{0.6489}}@{}}
+\caption[Movimientos de inventario (/inventory-movements)]{Movimientos de inventario (/inventory-movements)}\tabularnewline
 \toprule\noalign{}
 \begin{minipage}[b]{\linewidth}\raggedright
 Método
@@ -594,16 +581,15 @@ Descripción
 \endlastfoot
 GET & \texttt{/inventory-movements/} & Sí & Listar movimientos (\texttt{product\_id}, \texttt{movement\_type}, \texttt{sort\_by}) \\
 \end{longtable}
-}
 
 \subsection{\texorpdfstring{Dashboard (\texttt{/dashboard})}{Dashboard (/dashboard)}}\label{dashboard-dashboard}
 
-{\def\LTcaptype{none} % do not increment counter
 \begin{longtable}[]{@{}
   >{\raggedright\arraybackslash}p{(\linewidth - 6\tabcolsep) * \real{0.0833}}
   >{\raggedright\arraybackslash}p{(\linewidth - 6\tabcolsep) * \real{0.2500}}
   >{\raggedright\arraybackslash}p{(\linewidth - 6\tabcolsep) * \real{0.0556}}
   >{\raggedright\arraybackslash}p{(\linewidth - 6\tabcolsep) * \real{0.6111}}@{}}
+\caption[Dashboard (/dashboard)]{Dashboard (/dashboard)}\tabularnewline
 \toprule\noalign{}
 \begin{minipage}[b]{\linewidth}\raggedright
 Método
@@ -620,7 +606,6 @@ Descripción
 \endlastfoot
 GET & \texttt{/dashboard/stats} & Sí & Estadísticas consolidadas de la organización \\
 \end{longtable}
-}
 
 \textbf{Respuesta de \texttt{/dashboard/stats}:}
 
@@ -646,12 +631,12 @@ GET & \texttt{/dashboard/stats} & Sí & Estadísticas consolidadas de la organiz
 
 \subsection{Utilidades}\label{utilidades}
 
-{\def\LTcaptype{none} % do not increment counter
 \begin{longtable}[]{@{}
   >{\raggedright\arraybackslash}p{(\linewidth - 6\tabcolsep) * \real{0.0923}}
   >{\raggedright\arraybackslash}p{(\linewidth - 6\tabcolsep) * \real{0.3385}}
   >{\raggedright\arraybackslash}p{(\linewidth - 6\tabcolsep) * \real{0.0615}}
   >{\raggedright\arraybackslash}p{(\linewidth - 6\tabcolsep) * \real{0.5077}}@{}}
+\caption[Utilidades]{Utilidades}\tabularnewline
 \toprule\noalign{}
 \begin{minipage}[b]{\linewidth}\raggedright
 Método
@@ -668,7 +653,6 @@ Descripción
 \endlastfoot
 GET & \texttt{/utils/health-check/} & No & Health check del servicio backend \\
 \end{longtable}
-}
 
 \section{Modelos de Datos}\label{modelos-de-datos}
 
@@ -884,11 +868,11 @@ La configuración se carga desde el archivo \texttt{.env} usando Pydantic-Settin
 
 \subsection{Variables requeridas}\label{variables-requeridas}
 
-{\def\LTcaptype{none} % do not increment counter
 \begin{longtable}[]{@{}
   >{\raggedright\arraybackslash}p{(\linewidth - 4\tabcolsep) * \real{0.3662}}
   >{\raggedright\arraybackslash}p{(\linewidth - 4\tabcolsep) * \real{0.1408}}
   >{\raggedright\arraybackslash}p{(\linewidth - 4\tabcolsep) * \real{0.4930}}@{}}
+\caption[Variables requeridas]{Variables requeridas}\tabularnewline
 \toprule\noalign{}
 \begin{minipage}[b]{\linewidth}\raggedright
 Variable
@@ -909,16 +893,15 @@ Descripción
 \texttt{FIRST\_SUPERUSER} & \texttt{EmailStr} & Email del superusuario inicial \\
 \texttt{FIRST\_SUPERUSER\_PASSWORD} & \texttt{str} & Contraseña del superusuario inicial \\
 \end{longtable}
-}
 
 \subsection{Variables opcionales con valores por defecto}\label{variables-opcionales-con-valores-por-defecto}
 
-{\def\LTcaptype{none} % do not increment counter
 \begin{longtable}[]{@{}
   >{\raggedright\arraybackslash}p{(\linewidth - 6\tabcolsep) * \real{0.2353}}
   >{\raggedright\arraybackslash}p{(\linewidth - 6\tabcolsep) * \real{0.1765}}
   >{\raggedright\arraybackslash}p{(\linewidth - 6\tabcolsep) * \real{0.2206}}
   >{\raggedright\arraybackslash}p{(\linewidth - 6\tabcolsep) * \real{0.3529}}@{}}
+\caption[Variables opcionales con valores por defecto]{Variables opcionales con valores por defecto}\tabularnewline
 \toprule\noalign{}
 \multicolumn{4}{@{}>{\raggedright\arraybackslash}p{(\linewidth - 6\tabcolsep) * \real{0.9853} + 6\tabcolsep}@{}}{%
 \begin{minipage}[b]{\linewidth}\raggedright
@@ -959,14 +942,13 @@ EMAIL\_RESET\_TOKEN \textbar{} int \textbar{} 48 \textbar{} Expiración del toke
 \multicolumn{4}{@{}>{\raggedright\arraybackslash}p{(\linewidth - 6\tabcolsep) * \real{0.9853} + 6\tabcolsep}@{}}{%
 SENTRY\_DSN \textbar{} HttpUrl \textbar{} None \textbar{} None \textbar{} DSN de Sentry para error tracking \textbar{}} \\
 \end{longtable}
-}
 
 \subsection{\texorpdfstring{Propiedades calculadas (no en \texttt{.env})}{Propiedades calculadas (no en .env)}}\label{propiedades-calculadas-no-en-.env}
 
-{\def\LTcaptype{none} % do not increment counter
 \begin{longtable}[]{@{}
   >{\raggedright\arraybackslash}p{(\linewidth - 2\tabcolsep) * \real{0.2874}}
   >{\raggedright\arraybackslash}p{(\linewidth - 2\tabcolsep) * \real{0.7126}}@{}}
+\caption[Propiedades calculadas (no en .env)]{Propiedades calculadas (no en .env)}\tabularnewline
 \toprule\noalign{}
 \begin{minipage}[b]{\linewidth}\raggedright
 Propiedad
@@ -981,7 +963,6 @@ Descripción
 \texttt{all\_cors\_origins} & \texttt{BACKEND\_CORS\_ORIGINS} + \texttt{FRONTEND\_HOST} \\
 \texttt{emails\_enabled} & \texttt{True} si \texttt{SMTP\_HOST} y \texttt{EMAILS\_FROM\_EMAIL} están configurados \\
 \end{longtable}
-}
 
 \section{Convenciones de Código}\label{convenciones-de-cuxf3digo}
 
@@ -1169,10 +1150,10 @@ backend/tests/
 
 \textbf{Fixtures disponibles en conftest.py:}
 
-{\def\LTcaptype{none} % do not increment counter
 \begin{longtable}[]{@{}
   >{\raggedright\arraybackslash}p{(\linewidth - 2\tabcolsep) * \real{0.3462}}
   >{\raggedright\arraybackslash}p{(\linewidth - 2\tabcolsep) * \real{0.6538}}@{}}
+\caption[Backend (pytest)]{Backend (pytest)}\tabularnewline
 \toprule\noalign{}
 \begin{minipage}[b]{\linewidth}\raggedright
 Fixture
@@ -1188,7 +1169,6 @@ Descripción
 \texttt{superuser\_token\_headers} & Headers con token del superusuario \\
 \texttt{normal\_user\_token\_headers} & Headers con token de usuario normal \\
 \end{longtable}
-}
 
 \textbf{Ejecutar pruebas:}
 

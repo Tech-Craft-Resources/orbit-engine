@@ -135,11 +135,11 @@ Los requisitos funcionales se organizan por módulo. Cada requisito está identi
 
 \subsubsection{RF-AUTH. Módulo de Autenticación y Usuarios}\label{rf-auth.-muxf3dulo-de-autenticaciuxf3n-y-usuarios}
 
-{\def\LTcaptype{none} % do not increment counter
 \begin{longtable}[]{@{}
   >{\raggedright\arraybackslash}p{(\linewidth - 4\tabcolsep) * \real{0.1330}}
   >{\raggedright\arraybackslash}p{(\linewidth - 4\tabcolsep) * \real{0.7734}}
   >{\raggedright\arraybackslash}p{(\linewidth - 4\tabcolsep) * \real{0.0887}}@{}}
+\caption[Módulo de Autenticación y Usuarios]{Módulo de Autenticación y Usuarios}\tabularnewline
 \toprule\noalign{}
 \begin{minipage}[b]{\linewidth}\raggedright
 ID
@@ -159,15 +159,14 @@ RF-AUTH-04 & El sistema debe implementar control de acceso basado en roles: Admi
 RF-AUTH-05 & El sistema debe bloquear temporalmente una cuenta tras 5 intentos de inicio de sesión fallidos consecutivos. & Media \\
 RF-AUTH-06 & El sistema debe permitir la recuperación de contraseña mediante un enlace enviado al email del usuario. & Media \\
 \end{longtable}
-}
 
 \subsubsection{RF-INV. Módulo de Gestión de Inventario}\label{rf-inv.-muxf3dulo-de-gestiuxf3n-de-inventario}
 
-{\def\LTcaptype{none} % do not increment counter
 \begin{longtable}[]{@{}
   >{\raggedright\arraybackslash}p{(\linewidth - 4\tabcolsep) * \real{0.1080}}
   >{\raggedright\arraybackslash}p{(\linewidth - 4\tabcolsep) * \real{0.8000}}
   >{\raggedright\arraybackslash}p{(\linewidth - 4\tabcolsep) * \real{0.0880}}@{}}
+\caption[Módulo de Gestión de Inventario]{Módulo de Gestión de Inventario}\tabularnewline
 \toprule\noalign{}
 \begin{minipage}[b]{\linewidth}\raggedright
 ID
@@ -187,15 +186,14 @@ RF-INV-04 & El sistema debe registrar cada movimiento de stock (ventas, ajustes 
 RF-INV-05 & El sistema debe permitir ajustes manuales de inventario con campo de justificación obligatorio. & Media \\
 RF-INV-06 & El sistema debe permitir organizar los productos en categorías definidas por la organización. & Media \\
 \end{longtable}
-}
 
 \subsubsection{RF-SAL. Módulo de Gestión de Ventas}\label{rf-sal.-muxf3dulo-de-gestiuxf3n-de-ventas}
 
-{\def\LTcaptype{none} % do not increment counter
 \begin{longtable}[]{@{}
   >{\raggedright\arraybackslash}p{(\linewidth - 4\tabcolsep) * \real{0.1500}}
   >{\raggedright\arraybackslash}p{(\linewidth - 4\tabcolsep) * \real{0.7444}}
   >{\raggedright\arraybackslash}p{(\linewidth - 4\tabcolsep) * \real{0.1000}}@{}}
+\caption[Módulo de Gestión de Ventas]{Módulo de Gestión de Ventas}\tabularnewline
 \toprule\noalign{}
 \begin{minipage}[b]{\linewidth}\raggedright
 ID
@@ -216,15 +214,14 @@ RF-SAL-05 & El sistema debe registrar el método de pago (efectivo, tarjeta, tra
 RF-SAL-06 & Solo el rol Administrador puede cancelar una venta registrada. La cancelación debe revertir el stock de los productos involucrados. & Alta \\
 RF-SAL-07 & El historial de ventas debe ser filtrable por rango de fechas, cliente, vendedor y método de pago. & Alta \\
 \end{longtable}
-}
 
 \subsubsection{RF-CUS. Módulo de Gestión de Clientes}\label{rf-cus.-muxf3dulo-de-gestiuxf3n-de-clientes}
 
-{\def\LTcaptype{none} % do not increment counter
 \begin{longtable}[]{@{}
   >{\raggedright\arraybackslash}p{(\linewidth - 4\tabcolsep) * \real{0.1688}}
   >{\raggedright\arraybackslash}p{(\linewidth - 4\tabcolsep) * \real{0.7250}}
   >{\raggedright\arraybackslash}p{(\linewidth - 4\tabcolsep) * \real{0.1000}}@{}}
+\caption[Módulo de Gestión de Clientes]{Módulo de Gestión de Clientes}\tabularnewline
 \toprule\noalign{}
 \begin{minipage}[b]{\linewidth}\raggedright
 ID
@@ -241,15 +238,14 @@ RF-CUS-01 & El sistema debe permitir registrar clientes con: nombre, email, tel�
 RF-CUS-02 & El sistema debe mostrar el historial de compras de cada cliente con totales y fechas. & Alta \\
 RF-CUS-03 & El sistema debe calcular y mostrar métricas por cliente: total comprado, número de compras, frecuencia de compra. & Media \\
 \end{longtable}
-}
 
 \subsubsection{RF-REP. Módulo de Reportes y Dashboard}\label{rf-rep.-muxf3dulo-de-reportes-y-dashboard}
 
-{\def\LTcaptype{none} % do not increment counter
 \begin{longtable}[]{@{}
   >{\raggedright\arraybackslash}p{(\linewidth - 4\tabcolsep) * \real{0.1475}}
   >{\raggedright\arraybackslash}p{(\linewidth - 4\tabcolsep) * \real{0.7486}}
   >{\raggedright\arraybackslash}p{(\linewidth - 4\tabcolsep) * \real{0.0984}}@{}}
+\caption[Módulo de Reportes y Dashboard]{Módulo de Reportes y Dashboard}\tabularnewline
 \toprule\noalign{}
 \begin{minipage}[b]{\linewidth}\raggedright
 ID
@@ -268,15 +264,14 @@ RF-REP-03 & El sistema debe generar reportes de ventas por período (diario, sem
 RF-REP-04 & El sistema debe permitir exportar a Excel (.xlsx) los listados filtrados de inventario, ventas y clientes desde el módulo de reportes. & Media \\
 RF-REP-05 & El sistema debe generar un reporte de estado de inventario con productos agrupados por categoría. & Media \\
 \end{longtable}
-}
 
 \subsection{Requisitos No Funcionales}\label{requisitos-no-funcionales}
 
-{\def\LTcaptype{none} % do not increment counter
 \begin{longtable}[]{@{}
   >{\raggedright\arraybackslash}p{(\linewidth - 4\tabcolsep) * \real{0.1244}}
   >{\raggedright\arraybackslash}p{(\linewidth - 4\tabcolsep) * \real{0.1429}}
   >{\raggedright\arraybackslash}p{(\linewidth - 4\tabcolsep) * \real{0.7281}}@{}}
+\caption[Requisitos No Funcionales]{Requisitos No Funcionales}\tabularnewline
 \toprule\noalign{}
 \begin{minipage}[b]{\linewidth}\raggedright
 ID
@@ -299,7 +294,6 @@ RNF-07 & Usabilidad & La interfaz debe ser responsive y funcional en dispositivo
 RNF-08 & Mantenibilidad & La cobertura de pruebas automatizadas del backend debe ser mínimo del 60\%. \\
 RNF-09 & Escalabilidad & La arquitectura debe soportar el incremento de tenants sin cambios estructurales, mediante escalado horizontal de los componentes de la capa de aplicación. \\
 \end{longtable}
-}
 
 \section{Arquitectura del Sistema}\label{arquitectura-del-sistema}
 
@@ -307,11 +301,11 @@ RNF-09 & Escalabilidad & La arquitectura debe soportar el incremento de tenants 
 
 Las principales decisiones de diseño arquitectónico del sistema se tomaron considerando las restricciones del proyecto (equipo de 3 personas, plazo de 7 meses, presupuesto acotado) y los requisitos no funcionales de escalabilidad, seguridad y mantenibilidad.
 
-{\def\LTcaptype{none} % do not increment counter
 \begin{longtable}[]{@{}
   >{\raggedright\arraybackslash}p{(\linewidth - 4\tabcolsep) * \real{0.1688}}
   >{\raggedright\arraybackslash}p{(\linewidth - 4\tabcolsep) * \real{0.1561}}
   >{\raggedright\arraybackslash}p{(\linewidth - 4\tabcolsep) * \real{0.6709}}@{}}
+\caption[Decisiones Arquitectónicas]{Decisiones Arquitectónicas}\tabularnewline
 \toprule\noalign{}
 \begin{minipage}[b]{\linewidth}\raggedright
 Decisión
@@ -331,7 +325,6 @@ Monolito modular & Microservicios & Apropiado para el tamaño del equipo y la fa
 PostgreSQL & MongoDB & Los datos del negocio (ventas, productos, clientes) son inherentemente relacionales; PostgreSQL ofrece garantías ACID necesarias para integridad financiera. \\
 JWT sin estado & Sesiones en servidor (Redis) & Permite escalado horizontal sin sincronización de sesiones entre instancias del backend. \\
 \end{longtable}
-}
 
 \subsection{Vista de Componentes de Alto Nivel}\label{vista-de-componentes-de-alto-nivel}
 
@@ -416,11 +409,11 @@ El modelo de datos se organiza alrededor de las siguientes entidades:
 
 \subsection{\texorpdfstring{Tabla: \texttt{organizations}}{Tabla: organizations}}\label{tabla-organizations}
 
-{\def\LTcaptype{none} % do not increment counter
 \begin{longtable}[]{@{}
   >{\raggedright\arraybackslash}p{(\linewidth - 4\tabcolsep) * \real{0.1806}}
   >{\raggedright\arraybackslash}p{(\linewidth - 4\tabcolsep) * \real{0.3333}}
   >{\raggedright\arraybackslash}p{(\linewidth - 4\tabcolsep) * \real{0.3889}}@{}}
+\caption[Tabla: organizations]{Tabla: organizations}\tabularnewline
 \toprule\noalign{}
 \begin{minipage}[b]{\linewidth}\raggedright
 Columna
@@ -439,15 +432,14 @@ slug & VARCHAR(100) UNIQUE & Identificador en URL \\
 is\_active & BOOLEAN DEFAULT TRUE & Estado de la organización \\
 created\_at & TIMESTAMP & Fecha de registro \\
 \end{longtable}
-}
 
 \subsection{\texorpdfstring{Tabla: \texttt{users}}{Tabla: users}}\label{tabla-users}
 
-{\def\LTcaptype{none} % do not increment counter
 \begin{longtable}[]{@{}
   >{\raggedright\arraybackslash}p{(\linewidth - 4\tabcolsep) * \real{0.3421}}
   >{\raggedright\arraybackslash}p{(\linewidth - 4\tabcolsep) * \real{0.1974}}
   >{\raggedright\arraybackslash}p{(\linewidth - 4\tabcolsep) * \real{0.4474}}@{}}
+\caption[Tabla: users]{Tabla: users}\tabularnewline
 \toprule\noalign{}
 \begin{minipage}[b]{\linewidth}\raggedright
 Columna
@@ -469,15 +461,14 @@ full\_name & VARCHAR(200) & Nombre completo \\
 is\_active & BOOLEAN & Estado del usuario \\
 created\_at / updated\_at & TIMESTAMP & Auditoría \\
 \end{longtable}
-}
 
 \subsection{\texorpdfstring{Tabla: \texttt{products}}{Tabla: products}}\label{tabla-products}
 
-{\def\LTcaptype{none} % do not increment counter
 \begin{longtable}[]{@{}
   >{\raggedright\arraybackslash}p{(\linewidth - 4\tabcolsep) * \real{0.2500}}
   >{\raggedright\arraybackslash}p{(\linewidth - 4\tabcolsep) * \real{0.2222}}
   >{\raggedright\arraybackslash}p{(\linewidth - 4\tabcolsep) * \real{0.4306}}@{}}
+\caption[Tabla: products]{Tabla: products}\tabularnewline
 \toprule\noalign{}
 \begin{minipage}[b]{\linewidth}\raggedright
 Columna
@@ -502,15 +493,14 @@ min\_stock & INTEGER & Stock mínimo para alerta \\
 max\_stock & INTEGER & Stock máximo sugerido \\
 is\_active & BOOLEAN & Estado del producto \\
 \end{longtable}
-}
 
 \subsection{\texorpdfstring{Tabla: \texttt{sales}}{Tabla: sales}}\label{tabla-sales}
 
-{\def\LTcaptype{none} % do not increment counter
 \begin{longtable}[]{@{}
   >{\raggedright\arraybackslash}p{(\linewidth - 4\tabcolsep) * \real{0.2500}}
   >{\raggedright\arraybackslash}p{(\linewidth - 4\tabcolsep) * \real{0.2222}}
   >{\raggedright\arraybackslash}p{(\linewidth - 4\tabcolsep) * \real{0.4444}}@{}}
+\caption[Tabla: sales]{Tabla: sales}\tabularnewline
 \toprule\noalign{}
 \begin{minipage}[b]{\linewidth}\raggedright
 Columna
@@ -534,7 +524,6 @@ payment\_method & ENUM & cash / card / transfer \\
 status & ENUM & completed / cancelled \\
 created\_at & TIMESTAMP & Fecha de la venta \\
 \end{longtable}
-}
 
 \subsection{Estrategia de Índices}\label{estrategia-de-uxedndices}
 

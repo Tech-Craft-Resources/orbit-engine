@@ -10,8 +10,8 @@ Esta sección define los conceptos fundamentales sobre los que se sustenta el pr
 
 La definición de pyme varía según el país y el organismo de referencia. En América Latina, los criterios más comunes consideran el número de empleados y el volumen de ventas anuales. La CEPAL (2022) y el Banco Mundial utilizan como referencia general la siguiente clasificación:
 
-{\def\LTcaptype{none} % do not increment counter
 \begin{longtable}[]{@{}lll@{}}
+\caption[Pequeña y Mediana Empresa (Pyme)]{Pequeña y Mediana Empresa (Pyme)}\tabularnewline
 \toprule\noalign{}
 Categoría & Empleados & Ventas anuales (USD) \\
 \midrule\noalign{}
@@ -22,7 +22,6 @@ Microempresa & 1--9 & \textless{} 100.000 \\
 Pequeña empresa & 10--49 & 100.000 -- 1.000.000 \\
 Mediana empresa & 50--249 & 1.000.000 -- 10.000.000 \\
 \end{longtable}
-}
 
 Para el contexto de este proyecto, el término ``pyme'' se utiliza con énfasis en el segmento de pequeñas empresas de comercio minorista y mayorista, con equipos de entre 2 y 30 personas, operaciones presenciales o híbridas, y necesidades de gestión de inventario físico, registro de ventas y seguimiento de clientes.
 
@@ -60,12 +59,12 @@ El concepto de multi-tenancy (multi-arrendamiento) describe una arquitectura de 
 
 Existen tres enfoques principales de implementación:
 
-{\def\LTcaptype{none} % do not increment counter
 \begin{longtable}[]{@{}
   >{\raggedright\arraybackslash}p{(\linewidth - 6\tabcolsep) * \real{0.3516}}
   >{\raggedright\arraybackslash}p{(\linewidth - 6\tabcolsep) * \real{0.4725}}
   >{\raggedright\arraybackslash}p{(\linewidth - 6\tabcolsep) * \real{0.1209}}
   >{\raggedright\arraybackslash}p{(\linewidth - 6\tabcolsep) * \real{0.0549}}@{}}
+\caption[Arquitectura Multi-Tenant]{Arquitectura Multi-Tenant}\tabularnewline
 \toprule\noalign{}
 \begin{minipage}[b]{\linewidth}\raggedright
 Enfoque
@@ -84,7 +83,6 @@ Base de datos por tenant & Cada cliente tiene su propia BD & Alto & Alto \\
 Esquema por tenant & Una BD, esquemas separados & Medio & Medio \\
 Tabla compartida + discriminador & Una BD, filas diferenciadas por \texttt{tenant\_id} & Bajo-Medio & Bajo \\
 \end{longtable}
-}
 
 OrbitEngine implementa el tercer enfoque: todas las organizaciones comparten las mismas tablas, y cada registro lleva asociado un campo \texttt{organization\_id} que actúa como discriminador. El acceso a los datos se filtra automáticamente en cada operación, garantizando el aislamiento sin multiplicar el costo de infraestructura.
 
@@ -166,7 +164,6 @@ Siigo (Colombia) y Defontana (Chile) son soluciones SaaS con foco contable-tribu
 
 La siguiente tabla sintetiza la comparación entre las soluciones analizadas y OrbitEngine en las dimensiones relevantes para el segmento objetivo:
 
-{\def\LTcaptype{none} % do not increment counter
 \begin{longtable}[]{@{}
   >{\raggedright\arraybackslash}p{(\linewidth - 10\tabcolsep) * \real{0.4022}}
   >{\raggedright\arraybackslash}p{(\linewidth - 10\tabcolsep) * \real{0.1848}}
@@ -174,6 +171,7 @@ La siguiente tabla sintetiza la comparación entre las soluciones analizadas y O
   >{\raggedright\arraybackslash}p{(\linewidth - 10\tabcolsep) * \real{0.1087}}
   >{\raggedright\arraybackslash}p{(\linewidth - 10\tabcolsep) * \real{0.0652}}
   >{\raggedright\arraybackslash}p{(\linewidth - 10\tabcolsep) * \real{0.1630}}@{}}
+\caption[Análisis Comparativo]{Análisis Comparativo}\tabularnewline
 \toprule\noalign{}
 \begin{minipage}[b]{\linewidth}\raggedright
 Criterio
@@ -201,7 +199,6 @@ Localización latinoamericana & Parcial & Parcial & Baja & Alta & Media \\
 Curva de aprendizaje para no técnicos & Alta & Alta & Media & Baja & Baja (objetivo) \\
 Multi-tenant nativo & Sí & Sí & No & No & Sí \\
 \end{longtable}
-}
 
 El análisis evidencia que ninguna de las soluciones disponibles combina en un único producto, accesible para el segmento de pymes latinoamericanas, la gestión operativa completa (inventario, ventas, clientes) con un dashboard de KPIs integrado, bajo una curva de aprendizaje adecuada para usuarios no técnicos. Esta brecha constituye el espacio que OrbitEngine busca ocupar.
 

@@ -55,12 +55,12 @@ Estos criterios delimitan de forma concreta cómo juzgar el éxito o insuficienc
 
 \subsection{Herramientas Empleadas}\label{herramientas-empleadas}
 
-{\def\LTcaptype{none} % do not increment counter
 \begin{longtable}[]{@{}
   >{\raggedright\arraybackslash}p{(\linewidth - 6\tabcolsep) * \real{0.1302}}
   >{\raggedright\arraybackslash}p{(\linewidth - 6\tabcolsep) * \real{0.3964}}
   >{\raggedright\arraybackslash}p{(\linewidth - 6\tabcolsep) * \real{0.1065}}
   >{\raggedright\arraybackslash}p{(\linewidth - 6\tabcolsep) * \real{0.3669}}@{}}
+\caption[Herramientas Empleadas]{Herramientas Empleadas}\tabularnewline
 \toprule\noalign{}
 \begin{minipage}[b]{\linewidth}\raggedright
 Herramienta
@@ -80,20 +80,18 @@ Tipo de medición
 \textbf{PageSpeed Insights} & Web pública de Google (Lighthouse 13.0.1 con Headless Chromium 146) & Frontend & Auditoría desde infraestructura de Google (escritorio y móvil) \\
 \textbf{WebPageTest} & versión 26.03 & Frontend & Carga real con captura de waterfall y video \\
 \end{longtable}
-}
 
 \subsection{Composición del Piloto Técnico}\label{composiciuxf3n-del-piloto-tuxe9cnico}
 
 Las pruebas de este capítulo se ejecutaron sobre un piloto compuesto por \textbf{ocho organizaciones registradas en producción}, con una composición deliberadamente mixta diseñada para combinar realismo de uso con presión sintética sobre el sistema. La siguiente tabla detalla la naturaleza de cada una de las ocho organizaciones.
 
-\textbf{Tabla 5.1.5.} Organizaciones del piloto técnico.
 
-{\def\LTcaptype{none} % do not increment counter
 \begin{longtable}[]{@{}
   >{\raggedright\arraybackslash}p{(\linewidth - 6\tabcolsep) * \real{0.0366}}
   >{\raggedright\arraybackslash}p{(\linewidth - 6\tabcolsep) * \real{0.1204}}
   >{\raggedright\arraybackslash}p{(\linewidth - 6\tabcolsep) * \real{0.2984}}
   >{\raggedright\arraybackslash}p{(\linewidth - 6\tabcolsep) * \real{0.5445}}@{}}
+\caption[Organizaciones del piloto técnico]{Organizaciones del piloto técnico}\tabularnewline
 \toprule\noalign{}
 \begin{minipage}[b]{\linewidth}\raggedright
 N°
@@ -117,15 +115,14 @@ Sector / propósito
 7 & FarmaVida & Empresa ficticia de prueba (datos sintéticos) & Generación de volumen de productos, ventas y movimientos para forzar consultas \\
 8 & Default del entorno & Datos de prueba: primera organización creada como \emph{seed} & Tenant base de pruebas internas; conserva información residual de las primeras iteraciones de desarrollo \\
 \end{longtable}
-}
 
 \textbf{Resumen cuantitativo.}
 
-{\def\LTcaptype{none} % do not increment counter
 \begin{longtable}[]{@{}
   >{\raggedright\arraybackslash}p{(\linewidth - 4\tabcolsep) * \real{0.6735}}
   >{\raggedright\arraybackslash}p{(\linewidth - 4\tabcolsep) * \real{0.0816}}
   >{\raggedright\arraybackslash}p{(\linewidth - 4\tabcolsep) * \real{0.2449}}@{}}
+\caption[Composición del Piloto Técnico]{Composición del Piloto Técnico}\tabularnewline
 \toprule\noalign{}
 \begin{minipage}[b]{\linewidth}\raggedright
 Tipo de organización
@@ -142,7 +139,6 @@ Proporción de la muestra
 \textbf{Empresas ficticias de prueba / datos de prueba} & 6 & 75 \% \\
 \textbf{Total} & \textbf{8} & \textbf{100 \%} \\
 \end{longtable}
-}
 
 \begin{itemize}
 \tightlist
@@ -177,11 +173,11 @@ Las pruebas se construyeron con \textbf{Locust} y están versionadas en el repos
 
 El \texttt{locustfile.py} define tres clases de \texttt{HttpUser} que se mezclan según pesos relativos:
 
-{\def\LTcaptype{none} % do not increment counter
 \begin{longtable}[]{@{}
   >{\raggedright\arraybackslash}p{(\linewidth - 4\tabcolsep) * \real{0.1613}}
   >{\raggedright\arraybackslash}p{(\linewidth - 4\tabcolsep) * \real{0.0516}}
   >{\raggedright\arraybackslash}p{(\linewidth - 4\tabcolsep) * \real{0.7871}}@{}}
+\caption[Perfiles de Usuario Virtual]{Perfiles de Usuario Virtual}\tabularnewline
 \toprule\noalign{}
 \begin{minipage}[b]{\linewidth}\raggedright
 Perfil
@@ -198,7 +194,6 @@ OrbitEngineUser & 3 & Lee dashboard, productos, ventas, clientes y categorías. 
 SellerUser & 2 & Crea ventas reales contra el catálogo, ajusta stock y consulta movimientos. \\
 SpammerUser & 1 & Martillea sin pausa los endpoints de agregación y peticiones a UUIDs inexistentes para ejercitar el camino de error 404. \\
 \end{longtable}
-}
 
 La rotación de cuentas se hace de forma cíclica y \emph{thread-safe} sobre la lista \texttt{ACCOUNTS}, que contiene credenciales válidas de las ocho organizaciones del piloto técnico descritas en la sección 5.1.5: las \textbf{dos empresas reales} (\textbf{Frozt Bitez} y \textbf{Miss Peggy}) y las \textbf{seis empresas ficticias de prueba} (\textbf{Lehgo}, \textbf{Ferrallas del Norte}, \textbf{Sabor Caribe}, \textbf{Moda Andes}, \textbf{FarmaVida} y \textbf{Default}). Esta rotación cumple dos funciones en paralelo: (i) cada usuario virtual ejercita el aislamiento por \texttt{organization\_id} desde un \emph{tenant} distinto, validando la integridad multi-tenant bajo carga; (ii) las peticiones consultan tanto los volúmenes reales y acotados de Frozt Bitez y Miss Peggy como los volúmenes grandes generados por las seis empresas ficticias de prueba, lo que aporta un perfil de coste por consulta más representativo que el que obtendría un único \emph{tenant}.
 
@@ -216,7 +211,6 @@ Se ejecutaron seis escenarios consecutivos contra \texttt{https://api.orbitengin
   \textbf{Pico} (\textasciitilde200 usuarios, ajustando la duración para acotar el daño en los regímenes de saturación).
 \end{itemize}
 
-{\def\LTcaptype{none} % do not increment counter
 \begin{longtable}[]{@{}
   >{\raggedright\arraybackslash}p{(\linewidth - 12\tabcolsep) * \real{0.0918}}
   >{\raggedright\arraybackslash}p{(\linewidth - 12\tabcolsep) * \real{0.3980}}
@@ -225,6 +219,7 @@ Se ejecutaron seis escenarios consecutivos contra \texttt{https://api.orbitengin
   >{\raggedright\arraybackslash}p{(\linewidth - 12\tabcolsep) * \real{0.0612}}
   >{\raggedright\arraybackslash}p{(\linewidth - 12\tabcolsep) * \real{0.1429}}
   >{\raggedright\arraybackslash}p{(\linewidth - 12\tabcolsep) * \real{0.0918}}@{}}
+\caption[Escenarios Ejecutados]{Escenarios Ejecutados}\tabularnewline
 \toprule\noalign{}
 \begin{minipage}[b]{\linewidth}\raggedright
 Escenario
@@ -252,7 +247,6 @@ Test 04 & Saturación & 1 min 10 s & 360 & 41 & \textbf{11,4 \%} & 6,97 \\
 Test 05 & Saturación severa & 51 s & 358 & 79 & \textbf{22,1 \%} & 5,07 \\
 Test 06 & Pico sostenido (\textasciitilde200 usuarios) & 10 min 05 s & 7 331 & 1 408 & \textbf{19,2 \%} & 12,12 \\
 \end{longtable}
-}
 
 \begin{quote}
 Los CSV completos de cada escenario (\texttt{Test0X-Requests.csv}, \texttt{Test0X-Failures.csv} y, cuando aplica, \texttt{Test0X-Exception.csv}), así como los reportes HTML generados por Locust, no se incluyen en este repositorio público; para acceder a los soportes correspondientes, consultar a los desarrolladores del proyecto.
@@ -264,7 +258,6 @@ Los CSV completos de cada escenario (\texttt{Test0X-Requests.csv}, \texttt{Test0
 
 Es el escenario de referencia y representa el régimen al que se diseñó el sistema. Con aproximadamente ocho usuarios virtuales se completaron \textbf{235 peticiones sin fallos}.
 
-{\def\LTcaptype{none} % do not increment counter
 \begin{longtable}[]{@{}
   >{\raggedright\arraybackslash}p{(\linewidth - 12\tabcolsep) * \real{0.2625}}
   >{\raggedright\arraybackslash}p{(\linewidth - 12\tabcolsep) * \real{0.0750}}
@@ -273,6 +266,7 @@ Es el escenario de referencia y representa el régimen al que se diseñó el sis
   >{\raggedright\arraybackslash}p{(\linewidth - 12\tabcolsep) * \real{0.1500}}
   >{\raggedright\arraybackslash}p{(\linewidth - 12\tabcolsep) * \real{0.1500}}
   >{\raggedright\arraybackslash}p{(\linewidth - 12\tabcolsep) * \real{0.1500}}@{}}
+\caption[Test 01]{Test 01. Carga Normal de Pyme}\tabularnewline
 \toprule\noalign{}
 \begin{minipage}[b]{\linewidth}\raggedright
 Endpoint
@@ -303,7 +297,6 @@ P99
 /sales/ & GET & 23 & \textbf{7 500 ms} & \textbf{7 501 ms} & \textbf{7 600 ms} & \textbf{7 600 ms} \\
 \textbf{Agregado} & N/A & 235 & 520 ms & 1 254 ms & 7 500 ms & 7 600 ms \\
 \end{longtable}
-}
 
 Observación clave: la mediana global (520 ms) y la mediana de los endpoints CRUD se sitúan en el orden de cientos de milisegundos, pero el endpoint \texttt{GET\ /sales/} consume sistemáticamente \textbf{alrededor de 7,5 segundos por petición} incluso sin concurrencia significativa. Este endpoint domina el percentil 95 global y es responsable de que el agregado se aleje de los 500 ms exigidos por el RNF-01.
 
@@ -333,7 +326,6 @@ Es el escenario más extenso (10 min 05 s) y el más exigente. Para sostener el 
 
 Consolidando los seis escenarios se obtiene la siguiente curva de comportamiento:
 
-{\def\LTcaptype{none} % do not increment counter
 \begin{longtable}[]{@{}
   >{\raggedright\arraybackslash}p{(\linewidth - 12\tabcolsep) * \real{0.2353}}
   >{\raggedright\arraybackslash}p{(\linewidth - 12\tabcolsep) * \real{0.1176}}
@@ -342,6 +334,7 @@ Consolidando los seis escenarios se obtiene la siguiente curva de comportamiento
   >{\raggedright\arraybackslash}p{(\linewidth - 12\tabcolsep) * \real{0.1324}}
   >{\raggedright\arraybackslash}p{(\linewidth - 12\tabcolsep) * \real{0.1324}}
   >{\raggedright\arraybackslash}p{(\linewidth - 12\tabcolsep) * \real{0.1324}}@{}}
+\caption[Curva de Degradación]{Curva de Degradación}\tabularnewline
 \toprule\noalign{}
 \begin{minipage}[b]{\linewidth}\raggedright
 Métrica
@@ -367,7 +360,6 @@ P95 agregado & 7 500 ms & 7 800 ms & 36 000 ms & 33 000 ms & 58 000 ms & 29 000 
 Tasa de fallos & 0,0 \% & 1,7 \% & 6,4 \% & 11,4 \% & 22,1 \% & 19,2 \% \\
 RPS efectivo & 2,4 & 16,3 & 11,6 & 7,0 & 5,1 & 12,1 \\
 \end{longtable}
-}
 
 La tasa de fallos crece de manera monótona hasta el Test 05 (régimen de pico no sostenido, ejecutado todavía con 2 workers) y luego se estabiliza alrededor del 19 \% en el Test 06, ya con 4 workers, donde la duración prolongada permite caracterizar mejor el techo del sistema. El RPS efectivo es máximo bajo estrés moderado (Test 02) y disminuye en los regímenes de saturación porque la mayor parte de los hilos de los workers quedan ocupados respondiendo peticiones lentas, lo que confirma un \emph{throughput collapse} clásico cuando se rebasa la capacidad nominal de la configuración desplegada.
 
@@ -377,7 +369,6 @@ Los CSV permiten aislar el comportamiento de los endpoints más representativos 
 
 \textbf{\texttt{POST\ /login/access-token}}
 
-{\def\LTcaptype{none} % do not increment counter
 \begin{longtable}[]{@{}
   >{\raggedright\arraybackslash}p{(\linewidth - 12\tabcolsep) * \real{0.1607}}
   >{\raggedright\arraybackslash}p{(\linewidth - 12\tabcolsep) * \real{0.1250}}
@@ -386,6 +377,7 @@ Los CSV permiten aislar el comportamiento de los endpoints más representativos 
   >{\raggedright\arraybackslash}p{(\linewidth - 12\tabcolsep) * \real{0.1429}}
   >{\raggedright\arraybackslash}p{(\linewidth - 12\tabcolsep) * \real{0.1429}}
   >{\raggedright\arraybackslash}p{(\linewidth - 12\tabcolsep) * \real{0.1429}}@{}}
+\caption[Comportamiento por Endpoint]{Comportamiento por Endpoint}\tabularnewline
 \toprule\noalign{}
 \begin{minipage}[b]{\linewidth}\raggedright
 Escenario
@@ -408,13 +400,11 @@ Test 06
 \endlastfoot
 Mediana & 910 ms & 1 200 ms & 2 000 ms & 2 200 ms & 2 200 ms & - \\
 \end{longtable}
-}
 
 La mediana de este endpoint crece de forma progresiva desde 910 ms en carga normal hasta alcanzar una meseta en 2 200 ms durante los escenarios de saturación (Tests 04 y 05), lo que representa un incremento del 142 \% respecto al valor de referencia. El hecho de que la mediana se estabilice en ese valor, en lugar de continuar creciendo, sugiere que el sistema de cola de FastAPI comienza a serializar las solicitudes de autenticación antes de procesarlas, limitando la degradación adicional. Este comportamiento es coherente con la naturaleza del flujo: el coste dominante no proviene de la base de datos sino del hashing bcrypt aplicado a la contraseña, una operación deliberadamente costosa por diseño de seguridad. La ausencia de datos para Test 06 indica que en ese escenario el endpoint no acumuló suficientes muestras representativas, posiblemente porque los usuarios virtuales ya disponían de sesión activa al inicio de la ronda de medición.
 
 \textbf{\texttt{GET\ /products/}}
 
-{\def\LTcaptype{none} % do not increment counter
 \begin{longtable}[]{@{}
   >{\raggedright\arraybackslash}p{(\linewidth - 12\tabcolsep) * \real{0.1667}}
   >{\raggedright\arraybackslash}p{(\linewidth - 12\tabcolsep) * \real{0.1296}}
@@ -423,6 +413,7 @@ La mediana de este endpoint crece de forma progresiva desde 910 ms en carga norm
   >{\raggedright\arraybackslash}p{(\linewidth - 12\tabcolsep) * \real{0.1481}}
   >{\raggedright\arraybackslash}p{(\linewidth - 12\tabcolsep) * \real{0.1481}}
   >{\raggedright\arraybackslash}p{(\linewidth - 12\tabcolsep) * \real{0.1296}}@{}}
+\caption[Comportamiento por Endpoint (parte 2)]{Comportamiento por Endpoint (parte 2)}\tabularnewline
 \toprule\noalign{}
 \begin{minipage}[b]{\linewidth}\raggedright
 Escenario
@@ -445,13 +436,11 @@ Test 06
 \endlastfoot
 Mediana & 500 ms & 730 ms & 1 100 ms & 4 000 ms & 4 000 ms & 690 ms \\
 \end{longtable}
-}
 
 Este endpoint evidencia dos fases de comportamiento claramente diferenciadas. En los regímenes de carga normal y estrés moderado (Tests 01 y 02), la mediana se mantiene controlada entre 500 ms y 730 ms, lo que refleja que la paginación del lado del servidor aísla eficazmente el coste por petición del volumen total de registros. Sin embargo, al entrar en el régimen de saturación (Tests 03 y 04), la mediana escala bruscamente hasta 4 000 ms, evidenciando que cuando la cola de workers se satura, las peticiones de lectura paginadas quedan represadas detrás de operaciones de mayor coste. El descenso a 690 ms en Test 06, con cuatro workers activos, es particularmente significativo: a pesar de que la concurrencia es mayor que en Tests 04 y 05, la duplicación de workers absorbe la contención y restaura la latencia a un nivel próximo al de estrés moderado, lo que confirma que la limitación en esos escenarios intermedios era de capacidad de procesamiento y no de diseño de la consulta.
 
 \textbf{\texttt{GET\ /customers/}}
 
-{\def\LTcaptype{none} % do not increment counter
 \begin{longtable}[]{@{}
   >{\raggedright\arraybackslash}p{(\linewidth - 12\tabcolsep) * \real{0.1636}}
   >{\raggedright\arraybackslash}p{(\linewidth - 12\tabcolsep) * \real{0.1273}}
@@ -460,6 +449,7 @@ Este endpoint evidencia dos fases de comportamiento claramente diferenciadas. En
   >{\raggedright\arraybackslash}p{(\linewidth - 12\tabcolsep) * \real{0.1636}}
   >{\raggedright\arraybackslash}p{(\linewidth - 12\tabcolsep) * \real{0.1455}}
   >{\raggedright\arraybackslash}p{(\linewidth - 12\tabcolsep) * \real{0.1273}}@{}}
+\caption[Comportamiento por Endpoint (parte 3)]{Comportamiento por Endpoint (parte 3)}\tabularnewline
 \toprule\noalign{}
 \begin{minipage}[b]{\linewidth}\raggedright
 Escenario
@@ -482,13 +472,11 @@ Test 06
 \endlastfoot
 Mediana & 430 ms & 540 ms & 1 500 ms & 31 000 ms & 1 200 ms & 620 ms \\
 \end{longtable}
-}
 
 Este endpoint sigue en términos generales el patrón de degradación de \texttt{GET\ /products/}, pero con una anomalía puntual de mayor magnitud en el escenario de saturación máxima: la mediana de Test 04 asciende a 31 000 ms, un valor que supera en más de veinte veces el registrado en Test 03 (1 500 ms) y que no tiene correlato proporcional en ningún otro endpoint de listado. Este pico se interpreta como el resultado de una cola de espera extrema sobre el pool de conexiones de la base de datos en un instante de saturación simultánea con las escrituras de \texttt{POST\ /sales/}, que en Test 04 también registran su valor máximo. La recuperación a 1 200 ms en Test 05 y a 620 ms en Test 06 confirma que el episodio fue transitorio y dependiente de la combinación particular de carga en ese escenario, y no de una degradación estructural del endpoint.
 
 \textbf{\texttt{GET\ /dashboard/stats}}
 
-{\def\LTcaptype{none} % do not increment counter
 \begin{longtable}[]{@{}
   >{\raggedright\arraybackslash}p{(\linewidth - 12\tabcolsep) * \real{0.1385}}
   >{\raggedright\arraybackslash}p{(\linewidth - 12\tabcolsep) * \real{0.1077}}
@@ -497,6 +485,7 @@ Este endpoint sigue en términos generales el patrón de degradación de \texttt
   >{\raggedright\arraybackslash}p{(\linewidth - 12\tabcolsep) * \real{0.1231}}
   >{\raggedright\arraybackslash}p{(\linewidth - 12\tabcolsep) * \real{0.1231}}
   >{\raggedright\arraybackslash}p{(\linewidth - 12\tabcolsep) * \real{0.2769}}@{}}
+\caption[Comportamiento por Endpoint (parte 4)]{Comportamiento por Endpoint (parte 4)}\tabularnewline
 \toprule\noalign{}
 \begin{minipage}[b]{\linewidth}\raggedright
 Escenario
@@ -519,13 +508,11 @@ Test 06
 \endlastfoot
 Mediana & 710 ms & 850 ms & 1 700 ms & 4 800 ms & 1 700 ms & 1 100 ms (19 \% 500) \\
 \end{longtable}
-}
 
 Este endpoint concentra las consultas de agregación más costosas del sistema (totales de ventas, unidades vendidas por período y niveles de stock) ejecutadas directamente contra PostgreSQL sin capa de caché intermedia. La progresión controlada de 710 ms a 850 ms entre los Tests 01 y 02 indica que la base de datos absorbe el incremento inicial de concurrencia sin saturarse. A partir del régimen de saturación, sin embargo, la mediana escala hasta 1 700 ms en Test 03 y alcanza su pico en 4 800 ms en Test 04, para luego retroceder a 1 700 ms en Test 05 y a 1 100 ms en Test 06. Este comportamiento no lineal, en el que Test 06 presenta la segunda mediana más baja pese a ser el escenario con mayor concurrencia, se explica en parte por la incorporación de cuatro workers en ese escenario, pero también por el hecho de que las respuestas fallidas (19 \% de errores 500) cortan el ciclo de procesamiento antes de que las agregaciones completen, lo que artificialmente reduce la mediana de las peticiones que sí responden. Este endpoint constituye el candidato prioritario para la incorporación de una capa de caché distribuida en iteraciones futuras del sistema.
 
 \textbf{\texttt{GET\ /sales/}}
 
-{\def\LTcaptype{none} % do not increment counter
 \begin{longtable}[]{@{}
   >{\raggedright\arraybackslash}p{(\linewidth - 12\tabcolsep) * \real{0.1286}}
   >{\raggedright\arraybackslash}p{(\linewidth - 12\tabcolsep) * \real{0.1714}}
@@ -534,6 +521,7 @@ Este endpoint concentra las consultas de agregación más costosas del sistema (
   >{\raggedright\arraybackslash}p{(\linewidth - 12\tabcolsep) * \real{0.1143}}
   >{\raggedright\arraybackslash}p{(\linewidth - 12\tabcolsep) * \real{0.1286}}
   >{\raggedright\arraybackslash}p{(\linewidth - 12\tabcolsep) * \real{0.1714}}@{}}
+\caption[Comportamiento por Endpoint (parte 5)]{Comportamiento por Endpoint (parte 5)}\tabularnewline
 \toprule\noalign{}
 \begin{minipage}[b]{\linewidth}\raggedright
 Escenario
@@ -556,13 +544,11 @@ Test 06
 \endlastfoot
 Mediana & \textbf{7 500 ms} & \textbf{7 700 ms} & 8 500 ms & 8 900 ms & 11 000 ms & \textbf{8 600 ms} \\
 \end{longtable}
-}
 
 Este endpoint constituye el principal cuello de botella del sistema en todos los regímenes evaluados, y su perfil de latencia es el más revelador del conjunto. La mediana de 7 500 ms registrada en carga normal, con apenas ocho usuarios concurrentes, demuestra que el problema es estructural e independiente de la presión competitiva: la consulta recorre la relación \texttt{Sale\ →\ SaleItem} mediante joins y ejecuta agregaciones por venta sobre el conjunto completo de registros, sin que el servidor aplique paginación optimizada que limite el volumen de trabajo por petición. La progresión entre los seis escenarios (7 500 ms, 7 700 ms, 8 500 ms, 8 900 ms, 11 000 ms y 8 600 ms) muestra un incremento sostenido pero relativamente contenido: el valor máximo (Test 05, 11 000 ms) solo es un 47 \% superior al de referencia (Test 01, 7 500 ms), lo que contrasta con las variaciones de varios órdenes de magnitud que exhiben otros endpoints en saturación. Esta compresión del rango de degradación confirma que el factor dominante es el coste intrínseco de la consulta, no la contención de recursos, y que la solución debe buscarse en la optimización de la capa de datos (paginación del lado del servidor, desnormalización selectiva o materialización de vistas) y no en el escalado de la infraestructura.
 
 \textbf{\texttt{POST\ /sales/}}
 
-{\def\LTcaptype{none} % do not increment counter
 \begin{longtable}[]{@{}
   >{\raggedright\arraybackslash}p{(\linewidth - 12\tabcolsep) * \real{0.1607}}
   >{\raggedright\arraybackslash}p{(\linewidth - 12\tabcolsep) * \real{0.1250}}
@@ -571,6 +557,7 @@ Este endpoint constituye el principal cuello de botella del sistema en todos los
   >{\raggedright\arraybackslash}p{(\linewidth - 12\tabcolsep) * \real{0.1607}}
   >{\raggedright\arraybackslash}p{(\linewidth - 12\tabcolsep) * \real{0.1429}}
   >{\raggedright\arraybackslash}p{(\linewidth - 12\tabcolsep) * \real{0.1250}}@{}}
+\caption[Comportamiento por Endpoint (parte 6)]{Comportamiento por Endpoint (parte 6)}\tabularnewline
 \toprule\noalign{}
 \begin{minipage}[b]{\linewidth}\raggedright
 Escenario
@@ -593,7 +580,6 @@ Test 06
 \endlastfoot
 Mediana & N/A & 2 500 ms & 3 300 ms & 31 000 ms & 6 800 ms & N/A \\
 \end{longtable}
-}
 
 Este endpoint presenta la trayectoria de degradación más pronunciada del conjunto, así como el valor pico más alto registrado en toda la batería de pruebas. Bajo estrés moderado (Test 02) la mediana se sitúa en 2 500 ms, lo que refleja el coste base de una operación transaccional que agrupa tres escrituras atómicas en la misma sesión SQLAlchemy: la creación del registro \texttt{Sale}, la inserción de los correspondientes \texttt{SaleItem} y el ajuste del \texttt{InventoryMovement}. Al entrar en saturación, la mediana escala a 3 300 ms en Test 03 y colapsa a 31 000 ms en Test 04, el valor más elevado registrado en toda la batería. Este episodio de saturación extrema es el resultado directo de la contención sobre los bloqueos de fila que protegen el stock disponible: cuando múltiples transacciones concurrentes intentan actualizar el inventario de los mismos productos, las colas de espera sobre esos bloqueos se acumulan de forma no lineal. La recuperación a 6 800 ms en Test 05 sugiere que la reducción en la duración total de ese escenario y el consecuente menor solapamiento de transacciones aliviaron parcialmente la contención. La ausencia de datos en Test 01 y Test 06 obedece a que el volumen de peticiones en esos escenarios no generó muestras estadísticamente representativas para esta operación de escritura.
 
@@ -621,9 +607,7 @@ Las pruebas de rendimiento del frontend se ejecutaron sobre el despliegue produc
 
 Se ejecutó Lighthouse desde Chrome DevTools sobre la página pública (\emph{landing}) y sobre las vistas internas del dashboard accedidas con sesión iniciada para \textbf{tres de las ocho organizaciones del piloto técnico} descritas en la sección 5.1.5: \textbf{Miss Peggy} (empresa real), \textbf{Lehgo} (empresa ficticia de prueba) y \textbf{Moda Andes} (empresa ficticia de prueba). Esta selección busca contrastar deliberadamente el comportamiento del frontend bajo dos perfiles de datos muy distintos: por un lado, los volúmenes reales y acotados de \textbf{Miss Peggy}, una de las dos pymes que adoptaron la plataforma; por otro lado, los volúmenes sintéticos elevados que aportan \textbf{Lehgo} y \textbf{Moda Andes} en su rol de empresas ficticias de prueba. La otra empresa real del piloto, \textbf{Frozt Bitez}, no se incluyó en este barrido de Lighthouse para evitar exponer información comercial específica de su operación; sus métricas se ejercitan indirectamente a través de las pruebas de carga del backend (sección 5.2). Los reportes individuales en PDF no se incluyen en este repositorio público; para acceder a los soportes correspondientes, consultar a los desarrolladores del proyecto.
 
-\textbf{Tabla 5.3.1.} Puntajes y Web Vitals de Lighthouse por vista y organización. La columna \emph{Tipo} indica si el \emph{tenant} corresponde a una empresa real del piloto o a un \emph{tenant} sintético de prueba.
 
-{\def\LTcaptype{none} % do not increment counter
 \begin{longtable}[]{@{}
   >{\raggedright\arraybackslash}p{(\linewidth - 20\tabcolsep) * \real{0.1392}}
   >{\raggedright\arraybackslash}p{(\linewidth - 20\tabcolsep) * \real{0.1772}}
@@ -636,6 +620,7 @@ Se ejecutó Lighthouse desde Chrome DevTools sobre la página pública (\emph{la
   >{\raggedright\arraybackslash}p{(\linewidth - 20\tabcolsep) * \real{0.0633}}
   >{\raggedright\arraybackslash}p{(\linewidth - 20\tabcolsep) * \real{0.0506}}
   >{\raggedright\arraybackslash}p{(\linewidth - 20\tabcolsep) * \real{0.0633}}@{}}
+\caption[Puntajes y Web Vitals de Lighthouse por vista y organización]{Puntajes y Web Vitals de Lighthouse por vista y organización. La columna \emph{Tipo} indica si el \emph{tenant} corresponde a una empresa real del piloto o a un \emph{tenant} sintético de prueba}\tabularnewline
 \toprule\noalign{}
 \begin{minipage}[b]{\linewidth}\raggedright
 Vista
@@ -675,7 +660,6 @@ Ventas & Lehgo & Ficticia & 92 & 88 & 100 & 83 & 1,1 s & 1,5 s & 0 ms & 0 \\
 Ventas & \textbf{Miss Peggy} & \textbf{Real} & 93 & 88 & 100 & 83 & 1,0 s & 1,5 s & 0 ms & 0 \\
 Ventas & Moda Andes & Ficticia & 93 & 88 & 100 & 83 & 1,0 s & 1,5 s & 0 ms & 0 \\
 \end{longtable}
-}
 
 Las puntuaciones de Performance se mantienen entre \textbf{90 y 93} en todas las vistas y organizaciones, y las diferencias entre los tres \emph{tenants} medidos son menores a 1 punto. Esto es particularmente relevante porque la muestra confronta de manera explícita una empresa real (\textbf{Miss Peggy}) con dos empresas ficticias de prueba que cargan al sistema con volúmenes sintéticos mucho mayores (\textbf{Lehgo} y \textbf{Moda Andes}): el rendimiento percibido del frontend resulta \textbf{insensible al volumen y a los datos específicos} de cada organización dentro del rango medido, lo que valida que el coste del cliente no se ve afectado por los grandes volúmenes generados por las empresas ficticias de prueba. Los Core Web Vitals se sitúan dentro de las bandas verdes establecidas por Google (LCP ≤ 2,5 s, CLS ≤ 0,1, TBT bajo) tanto para los datos reales como para los datos sintéticos.
 
@@ -687,9 +671,7 @@ PageSpeed Insights ejecutó Lighthouse 13.0.1 desde la infraestructura de Google
 \emph{Nota sobre el etiquetado de archivos}: los reportes nominados \texttt{Login\_PC.pdf} y \texttt{Login\_Tel.pdf} analizan la URL \texttt{https://orbitengine.lat/dashboard}. Como PageSpeed se ejecuta sin sesión iniciada, dicha URL fue redirigida automáticamente al formulario de login (\texttt{/login?reason=auth-required}). Por tanto, la página efectivamente medida es la \textbf{pantalla de acceso (Login)}, y bajo esa etiqueta se reportan los resultados.
 \end{quote}
 
-\textbf{Tabla 5.3.2.} PageSpeed Insights: escritorio vs.~móvil.
 
-{\def\LTcaptype{none} % do not increment counter
 \begin{longtable}[]{@{}
   >{\raggedright\arraybackslash}p{(\linewidth - 20\tabcolsep) * \real{0.1538}}
   >{\raggedright\arraybackslash}p{(\linewidth - 20\tabcolsep) * \real{0.1429}}
@@ -702,6 +684,7 @@ PageSpeed Insights ejecutó Lighthouse 13.0.1 desde la infraestructura de Google
   >{\raggedright\arraybackslash}p{(\linewidth - 20\tabcolsep) * \real{0.0549}}
   >{\raggedright\arraybackslash}p{(\linewidth - 20\tabcolsep) * \real{0.0549}}
   >{\raggedright\arraybackslash}p{(\linewidth - 20\tabcolsep) * \real{0.1209}}@{}}
+\caption[PageSpeed Insights: escritorio vs.~móvil]{PageSpeed Insights: escritorio vs.~móvil}\tabularnewline
 \toprule\noalign{}
 \begin{minipage}[b]{\linewidth}\raggedright
 Vista
@@ -735,7 +718,6 @@ Landing & Móvil & 83 & 96 & 100 & 92 & 3,4 s & 3,4 s & 80 ms & 0 & 3,8 s \\
 Acceso (Login) & Escritorio & \textbf{95} & 94 & 100 & 83 & 0,8 s & 1,4 s & 0 ms & 0 & 1,0 s \\
 Acceso (Login) & Móvil & 87 & 94 & 100 & 83 & 3,2 s & 3,2 s & 20 ms & 0,001 & 3,2 s \\
 \end{longtable}
-}
 
 Las dos observaciones más relevantes son:
 
@@ -751,9 +733,7 @@ Las dos observaciones más relevantes son:
 
 WebPageTest 26.03 ejecutó pasadas reales sobre las páginas pública (\texttt{/}) y de acceso (\texttt{/dashboard} redirigido a \texttt{/login}), grabando video del rendering progresivo y produciendo el waterfall completo de cada recurso. Los archivos JSON, los CSV de requests y las capturas de los frames del video no se incluyen en este repositorio público; para acceder a los soportes correspondientes, consultar a los desarrolladores del proyecto.
 
-\textbf{Tabla 5.3.3.} Métricas clave reportadas por WebPageTest.
 
-{\def\LTcaptype{none} % do not increment counter
 \begin{longtable}[]{@{}
   >{\raggedright\arraybackslash}p{(\linewidth - 18\tabcolsep) * \real{0.1505}}
   >{\raggedright\arraybackslash}p{(\linewidth - 18\tabcolsep) * \real{0.0538}}
@@ -765,6 +745,7 @@ WebPageTest 26.03 ejecutó pasadas reales sobre las páginas pública (\texttt{/
   >{\raggedright\arraybackslash}p{(\linewidth - 18\tabcolsep) * \real{0.1183}}
   >{\raggedright\arraybackslash}p{(\linewidth - 18\tabcolsep) * \real{0.1290}}
   >{\raggedright\arraybackslash}p{(\linewidth - 18\tabcolsep) * \real{0.1613}}@{}}
+\caption[Métricas clave reportadas por WebPageTest]{Métricas clave reportadas por WebPageTest}\tabularnewline
 \toprule\noalign{}
 \begin{minipage}[b]{\linewidth}\raggedright
 Vista
@@ -794,7 +775,6 @@ Bytes recibidos
 Landing (\texttt{/}) & 46 ms & N/A & N/A & N/A & N/A & N/A & N/A & \textasciitilde752 ms & 3,9 MB \\
 Acceso (Login) & 88 ms & 600 ms & 911 ms & 1 044 ms & 59 ms & 0,004 & 785 & 752 ms & 3,9 MB \\
 \end{longtable}
-}
 
 La secuencia visual del rendering progresivo quedó documentada en cinco capturas (frames sucesivos del video) por vista, que permiten verificar que la interfaz alcanza el estado \emph{Visually Complete} alrededor de los 900--1 000 ms desde el inicio de la navegación. Estas capturas están disponibles a través de los desarrolladores del proyecto.
 

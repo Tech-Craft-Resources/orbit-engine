@@ -63,6 +63,9 @@ convert "anexo-a-manual-usuario.md"     "BackMatter/AnexoA-ManualUsuario.tex"
 convert "anexo-b-manual-despliegue.md"  "BackMatter/AnexoB-Despliegue.tex"
 convert "anexo-c-documentacion-tecnica.md" "BackMatter/AnexoC-DocTecnica.tex"
 
+echo "== Captions de tablas (para \\listoftables) =="
+python3 add-table-captions.py
+
 echo "== Imágenes =="
 cp "$SRC/images/OrbitEngine_DER.drawio.png" "$DST/Images/informe/"
 cp "$SRC/images/Vista de Componentes de Alto Nivel.png" "$DST/Images/informe/"

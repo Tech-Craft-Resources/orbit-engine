@@ -32,10 +32,10 @@ Las ceremonias mantenidas fueron:
 
 \subsection{Herramientas del Proceso}\label{herramientas-del-proceso}
 
-{\def\LTcaptype{none} % do not increment counter
 \begin{longtable}[]{@{}
   >{\raggedright\arraybackslash}p{(\linewidth - 2\tabcolsep) * \real{0.2941}}
   >{\raggedright\arraybackslash}p{(\linewidth - 2\tabcolsep) * \real{0.7059}}@{}}
+\caption[Herramientas del Proceso]{Herramientas del Proceso}\tabularnewline
 \toprule\noalign{}
 \begin{minipage}[b]{\linewidth}\raggedright
 Herramienta
@@ -52,7 +52,6 @@ GitHub Actions & CI/CD: pruebas automatizadas y despliegue \\
 Discord & Comunicación del equipo, standups asincrónicos \\
 Figma & Diseño de wireframes y mockups de UI \\
 \end{longtable}
-}
 
 \subsection{Estructura del Equipo}\label{estructura-del-equipo}
 
@@ -443,8 +442,8 @@ Este pipeline garantiza que solo código probado y con tipos correctos llegue a 
 
 Con más de 300 pruebas automatizadas distribuidas entre las capas de CRUD, API, multi-tenancy y E2E, la cobertura del backend al cierre de la Fase 3 alcanzó:
 
-{\def\LTcaptype{none} % do not increment counter
 \begin{longtable}[]{@{}ll@{}}
+\caption[Métricas de Cobertura]{Métricas de Cobertura}\tabularnewline
 \toprule\noalign{}
 Módulo & Cobertura \\
 \midrule\noalign{}
@@ -459,7 +458,6 @@ Dashboard y reportes & 82\% \\
 Multi-tenancy y permisos & 95\% \\
 \textbf{Total} & \textbf{89\%} \\
 \end{longtable}
-}
 
 La cobertura total del 89\% supera holgadamente el umbral mínimo del 60\% establecido como requisito no funcional. La buena cobertura del módulo de multi-tenancy es especialmente relevante porque protege la propiedad más crítica del sistema: el aislamiento de datos entre organizaciones.
 
@@ -509,11 +507,11 @@ Para validar el comportamiento del sistema bajo uso real se diseñó un plan de 
 
 El sistema fue desplegado en Railway y Vercel con la siguiente configuración:
 
-{\def\LTcaptype{none} % do not increment counter
 \begin{longtable}[]{@{}
   >{\raggedright\arraybackslash}p{(\linewidth - 4\tabcolsep) * \real{0.1196}}
   >{\raggedright\arraybackslash}p{(\linewidth - 4\tabcolsep) * \real{0.1579}}
   >{\raggedright\arraybackslash}p{(\linewidth - 4\tabcolsep) * \real{0.7225}}@{}}
+\caption[Arquitectura de Producción]{Arquitectura de Producción}\tabularnewline
 \toprule\noalign{}
 \begin{minipage}[b]{\linewidth}\raggedright
 Plataforma
@@ -532,7 +530,6 @@ Vercel & Frontend (React/Vite) & SPA compilada con Vite, CDN global integrado, H
 Railway / Vercel & Certificados TLS & Certificados gestionados y renovados automáticamente por cada plataforma \\
 Namecheap & Registro de dominio y DNS & Dominio adquirido en Namecheap; registros CNAME / A configurados desde el panel de Namecheap para apuntar al backend en Railway y al frontend en Vercel \\
 \end{longtable}
-}
 
 \subsection{Estrategia de Secretos y Configuración}\label{estrategia-de-secretos-y-configuraciuxf3n}
 

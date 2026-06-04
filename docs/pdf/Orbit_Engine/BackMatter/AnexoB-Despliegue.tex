@@ -10,11 +10,11 @@ Universidad Sergio Arboleda, Semillero de Software como Innovación
 
 OrbitEngine utiliza \textbf{Docker Compose} como orquestador de contenedores en todos los entornos. La arquitectura de despliegue se compone de los siguientes servicios:
 
-{\def\LTcaptype{none} % do not increment counter
 \begin{longtable}[]{@{}
   >{\raggedright\arraybackslash}p{(\linewidth - 4\tabcolsep) * \real{0.1529}}
   >{\raggedright\arraybackslash}p{(\linewidth - 4\tabcolsep) * \real{0.2824}}
   >{\raggedright\arraybackslash}p{(\linewidth - 4\tabcolsep) * \real{0.5647}}@{}}
+\caption[Visión General]{Visión General}\tabularnewline
 \toprule\noalign{}
 \begin{minipage}[b]{\linewidth}\raggedright
 Servicio
@@ -35,7 +35,6 @@ Descripción
 \texttt{proxy} & \texttt{traefik:3.6} & Reverse proxy y gestor de rutas HTTP/HTTPS \\
 \texttt{mailcatcher} & \texttt{schickling/mailcatcher} & Servidor SMTP de prueba (solo dev) \\
 \end{longtable}
-}
 
 El enrutamiento externo se gestiona con \textbf{Traefik}, que expone los servicios bajo subdominios configurados y maneja la terminación TLS automática mediante Let's Encrypt en producción.
 
@@ -43,11 +42,11 @@ El enrutamiento externo se gestiona con \textbf{Traefik}, que expone los servici
 
 \subsection{Herramientas requeridas}\label{herramientas-requeridas}
 
-{\def\LTcaptype{none} % do not increment counter
 \begin{longtable}[]{@{}
   >{\raggedright\arraybackslash}p{(\linewidth - 4\tabcolsep) * \real{0.1489}}
   >{\raggedright\arraybackslash}p{(\linewidth - 4\tabcolsep) * \real{0.1489}}
   >{\raggedright\arraybackslash}p{(\linewidth - 4\tabcolsep) * \real{0.7021}}@{}}
+\caption[Herramientas requeridas]{Herramientas requeridas}\tabularnewline
 \toprule\noalign{}
 \begin{minipage}[b]{\linewidth}\raggedright
 Herramienta
@@ -66,12 +65,11 @@ Git & 2.x & Control de versiones \\
 \texttt{uv} & 0.4+ & Gestor de dependencias Python (para desarrollo local sin Docker) \\
 Bun & 1.x & Runtime JS / gestor de paquetes (para desarrollo local sin Docker) \\
 \end{longtable}
-}
 
 \subsection{Puertos utilizados}\label{puertos-utilizados}
 
-{\def\LTcaptype{none} % do not increment counter
 \begin{longtable}[]{@{}lll@{}}
+\caption[Puertos utilizados]{Puertos utilizados}\tabularnewline
 \toprule\noalign{}
 Puerto & Servicio & Entorno \\
 \midrule\noalign{}
@@ -88,7 +86,6 @@ Puerto & Servicio & Entorno \\
 1025 & Mailcatcher SMTP & Dev \\
 1080 & Mailcatcher UI & Dev \\
 \end{longtable}
-}
 
 \section{Configuración de Variables de Entorno}\label{configuraciuxf3n-de-variables-de-entorno}
 
@@ -172,8 +169,8 @@ Este comando:
 
 \subsection{URLs del entorno local}\label{urls-del-entorno-local}
 
-{\def\LTcaptype{none} % do not increment counter
 \begin{longtable}[]{@{}ll@{}}
+\caption[URLs del entorno local]{URLs del entorno local}\tabularnewline
 \toprule\noalign{}
 Servicio & URL \\
 \midrule\noalign{}
@@ -188,7 +185,6 @@ Adminer & http://localhost:8080 \\
 Traefik Dashboard & http://localhost:8090 \\
 Mailcatcher UI & http://localhost:1080 \\
 \end{longtable}
-}
 
 \subsection{Detener el entorno}\label{detener-el-entorno}
 
@@ -256,10 +252,10 @@ Revisar el archivo generado en \texttt{backend/app/alembic/versions/} antes de a
 
 Las migraciones actuales del esquema son:
 
-{\def\LTcaptype{none} % do not increment counter
 \begin{longtable}[]{@{}
   >{\raggedright\arraybackslash}p{(\linewidth - 2\tabcolsep) * \real{0.3784}}
   >{\raggedright\arraybackslash}p{(\linewidth - 2\tabcolsep) * \real{0.6216}}@{}}
+\caption[Migraciones del proyecto]{Migraciones del proyecto}\tabularnewline
 \toprule\noalign{}
 \begin{minipage}[b]{\linewidth}\raggedright
 Archivo
@@ -277,7 +273,6 @@ Descripción
 \texttt{005\_inventory\_movements.py} & Tabla \texttt{inventory\_movements} \\
 \texttt{006\_sales.py} & Tablas \texttt{sales} y \texttt{sale\_items} \\
 \end{longtable}
-}
 
 \section{Pruebas}\label{pruebas}
 
@@ -492,11 +487,11 @@ Los servicios se levantan en este orden:
 
 \section{Solución de Problemas}\label{soluciuxf3n-de-problemas}
 
-{\def\LTcaptype{none} % do not increment counter
 \begin{longtable}[]{@{}
   >{\raggedright\arraybackslash}p{(\linewidth - 4\tabcolsep) * \real{0.2044}}
   >{\raggedright\arraybackslash}p{(\linewidth - 4\tabcolsep) * \real{0.1989}}
   >{\raggedright\arraybackslash}p{(\linewidth - 4\tabcolsep) * \real{0.5967}}@{}}
+\caption[Solución de Problemas]{Solución de Problemas}\tabularnewline
 \toprule\noalign{}
 \begin{minipage}[b]{\linewidth}\raggedright
 Problema
@@ -517,6 +512,5 @@ Emails no se envían (producción) & SMTP mal configurado & Verificar \texttt{SM
 Traefik no renueva el certificado TLS & Puerto 80 bloqueado o DNS incorrecto & Verificar que el dominio resuelva a la IP correcta y el puerto 80 esté abierto. \\
 Error \texttt{UNIQUE\ constraint} al insertar & Dato duplicado en BD & Verificar que el SKU, slug u otro campo único no esté repetido. \\
 \end{longtable}
-}
 
 \emph{Documento generado como parte del proyecto de grado. Universidad Sergio Arboleda, Semillero de Software como Innovación, Abril 2026.}
