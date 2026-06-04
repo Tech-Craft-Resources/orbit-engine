@@ -1,4 +1,4 @@
-\chapter{Análisis y Diseño del Sistema}\label{anuxe1lisis-y-diseuxf1o-del-sistema}
+\chapter{Capítulo 3. Análisis y Diseño del Sistema}\label{capuxedtulo-3.-anuxe1lisis-y-diseuxf1o-del-sistema}
 
 \begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
 
@@ -23,7 +23,7 @@ El levantamiento de requisitos para OrbitEngine se realizó mediante un proceso 
 
 OrbitEngine contempla tres perfiles de usuario, formalizados como roles dentro del modelo de control de acceso basado en roles (RBAC) del sistema. Cada perfil se describe mediante cuatro dimensiones: rol dentro del negocio, responsabilidades funcionales, permisos y alcance en el sistema, y necesidades de información; que sustentan tanto las decisiones de diseño de la interfaz como las restricciones implementadas a nivel de los endpoints de la API.
 
-\textbf{Perfil 1 --- Administrador}
+\textbf{Perfil 1. Administrador}
 
 \begin{itemize}
 \tightlist
@@ -37,7 +37,7 @@ OrbitEngine contempla tres perfiles de usuario, formalizados como roles dentro d
   \emph{Necesidades de información}: indicadores agregados en tiempo real (ventas del día y del mes, productos con stock bajo, top de productos y tendencia de ventas) y reportes exportables que sirvan como insumo para análisis externo o para la rendición de cuentas contable.
 \end{itemize}
 
-\textbf{Perfil 2 --- Vendedor}
+\textbf{Perfil 2. Vendedor}
 
 \begin{itemize}
 \tightlist
@@ -51,12 +51,12 @@ OrbitEngine contempla tres perfiles de usuario, formalizados como roles dentro d
   \emph{Necesidades de información}: respuesta inmediata en consultas de catálogo y stock, flujo de registro de ventas optimizado para el menor número posible de pasos, y acceso rápido al historial reciente de un cliente durante la atención.
 \end{itemize}
 
-\textbf{Perfil 3 --- Visualizador}
+\textbf{Perfil 3. Visualizador}
 
 \begin{itemize}
 \tightlist
 \item
-  \emph{Rol dentro del negocio}: analista o asesor ---frecuentemente externo, como un contador o consultor--- que requiere visibilidad sobre la operación sin intervenir directamente en ella. Su valor agregado reside en la interpretación de los datos del negocio.
+  \emph{Rol dentro del negocio}: analista o asesor (frecuentemente externo, como un contador o consultor) que requiere visibilidad sobre la operación sin intervenir directamente en ella. Su valor agregado reside en la interpretación de los datos del negocio.
 \item
   \emph{Responsabilidades funcionales}: revisar indicadores de desempeño, auditar registros de ventas y movimientos de inventario, y exportar listados operativos para su análisis posterior en herramientas externas.
 \item
@@ -133,7 +133,7 @@ A continuación se presentan las historias de usuario más representativas por m
 
 Los requisitos funcionales se organizan por módulo. Cada requisito está identificado con un código único, su prioridad y criterios de aceptación.
 
-\subsubsection{RF-AUTH --- Módulo de Autenticación y Usuarios}\label{rf-auth-muxf3dulo-de-autenticaciuxf3n-y-usuarios}
+\subsubsection{RF-AUTH. Módulo de Autenticación y Usuarios}\label{rf-auth.-muxf3dulo-de-autenticaciuxf3n-y-usuarios}
 
 {\def\LTcaptype{none} % do not increment counter
 \begin{longtable}[]{@{}
@@ -161,7 +161,7 @@ RF-AUTH-06 & El sistema debe permitir la recuperación de contraseña mediante u
 \end{longtable}
 }
 
-\subsubsection{RF-INV --- Módulo de Gestión de Inventario}\label{rf-inv-muxf3dulo-de-gestiuxf3n-de-inventario}
+\subsubsection{RF-INV. Módulo de Gestión de Inventario}\label{rf-inv.-muxf3dulo-de-gestiuxf3n-de-inventario}
 
 {\def\LTcaptype{none} % do not increment counter
 \begin{longtable}[]{@{}
@@ -189,7 +189,7 @@ RF-INV-06 & El sistema debe permitir organizar los productos en categorías defi
 \end{longtable}
 }
 
-\subsubsection{RF-SAL --- Módulo de Gestión de Ventas}\label{rf-sal-muxf3dulo-de-gestiuxf3n-de-ventas}
+\subsubsection{RF-SAL. Módulo de Gestión de Ventas}\label{rf-sal.-muxf3dulo-de-gestiuxf3n-de-ventas}
 
 {\def\LTcaptype{none} % do not increment counter
 \begin{longtable}[]{@{}
@@ -218,7 +218,7 @@ RF-SAL-07 & El historial de ventas debe ser filtrable por rango de fechas, clien
 \end{longtable}
 }
 
-\subsubsection{RF-CUS --- Módulo de Gestión de Clientes}\label{rf-cus-muxf3dulo-de-gestiuxf3n-de-clientes}
+\subsubsection{RF-CUS. Módulo de Gestión de Clientes}\label{rf-cus.-muxf3dulo-de-gestiuxf3n-de-clientes}
 
 {\def\LTcaptype{none} % do not increment counter
 \begin{longtable}[]{@{}
@@ -243,7 +243,7 @@ RF-CUS-03 & El sistema debe calcular y mostrar métricas por cliente: total comp
 \end{longtable}
 }
 
-\subsubsection{RF-REP --- Módulo de Reportes y Dashboard}\label{rf-rep-muxf3dulo-de-reportes-y-dashboard}
+\subsubsection{RF-REP. Módulo de Reportes y Dashboard}\label{rf-rep.-muxf3dulo-de-reportes-y-dashboard}
 
 {\def\LTcaptype{none} % do not increment counter
 \begin{longtable}[]{@{}
@@ -374,7 +374,7 @@ Este enfoque garantiza que, incluso si un token JWT es comprometido, el atacante
 
 A continuación se describen, en términos funcionales, los dos flujos transversales más representativos del sistema. Estos flujos articulan las responsabilidades del cliente, del backend y de la base de datos, y permiten ilustrar la interacción entre los componentes presentados en las secciones anteriores.
 
-\textbf{Flujo de autenticación.} El proceso se inicia cuando el usuario suministra sus credenciales ---correo electrónico y contraseña--- en la interfaz del cliente. El cliente envía estas credenciales al endpoint de autenticación del backend mediante una solicitud cifrada por TLS. El backend localiza al usuario en la base de datos, verifica la contraseña contra el hash almacenado y, en caso de éxito, emite un JSON Web Token firmado que incorpora como claims el identificador del usuario, el identificador de la organización a la que pertenece, su rol asignado y la marca de expiración. El cliente recibe el token, lo conserva en una capa de estado en memoria del navegador y lo incluye en la cabecera \emph{Authorization} de todas las solicitudes posteriores, lo cual permite al backend autorizar cada operación sin necesidad de mantener sesiones en servidor.
+\textbf{Flujo de autenticación.} El proceso se inicia cuando el usuario suministra sus credenciales (correo electrónico y contraseña) en la interfaz del cliente. El cliente envía estas credenciales al endpoint de autenticación del backend mediante una solicitud cifrada por TLS. El backend localiza al usuario en la base de datos, verifica la contraseña contra el hash almacenado y, en caso de éxito, emite un JSON Web Token firmado que incorpora como claims el identificador del usuario, el identificador de la organización a la que pertenece, su rol asignado y la marca de expiración. El cliente recibe el token, lo conserva en una capa de estado en memoria del navegador y lo incluye en la cabecera \emph{Authorization} de todas las solicitudes posteriores, lo cual permite al backend autorizar cada operación sin necesidad de mantener sesiones en servidor.
 
 \textbf{Flujo de registro de una venta.} El usuario con rol de vendedor selecciona los productos a facturar, sus cantidades y, opcionalmente, el cliente asociado a la transacción. Al confirmar la operación, el cliente envía la información al backend, que ejecuta la lógica de negocio dentro de una transacción atómica para garantizar la consistencia: en primer lugar, verifica que exista stock suficiente para cada uno de los productos solicitados; a continuación, calcula los totales aplicando los descuentos y demás reglas comerciales pertinentes; luego, genera un número de factura secuencial dentro del ámbito de la organización. Acto seguido, persiste el registro de la venta junto con sus ítems detallados, descuenta el stock de cada producto y registra los movimientos de inventario correspondientes para conservar la trazabilidad. Finalmente, evalúa si algún producto ha quedado por debajo de su nivel mínimo configurado y, de ser así, dispara la alerta correspondiente. La operación concluye con la confirmación al cliente, que muestra al usuario el número de factura asignado y la información resumida de la transacción.
 

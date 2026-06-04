@@ -1,8 +1,8 @@
-\chapter{Documentación Técnica}\label{documentaciuxf3n-tuxe9cnica}
+\chapter{Anexo C. Documentación Técnica}\label{anexo-c.-documentaciuxf3n-tuxe9cnica}
 
-\textbf{OrbitEngine} --- Plataforma SaaS para la Gestión de Procesos Internos en Pymes\\
+\textbf{OrbitEngine}: Plataforma SaaS para la Gestión de Procesos Internos en Pymes\\
 Versión: 1.0 \textbar{} Abril 2026\\
-Universidad Sergio Arboleda --- Semillero de Software como Innovación
+Universidad Sergio Arboleda, Semillero de Software como Innovación
 
 \begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
 
@@ -43,7 +43,7 @@ Configuración & Pydantic-Settings & 2.x & Variables de entorno tipadas \\
 Linter/Formatter & Ruff & 0.6+ & Análisis estático y formato de código \\
 Verificación de tipos & Mypy & 1.x & Chequeo de tipos estático en modo estricto \\
 Testing & Pytest + Coverage & 8.x & Pruebas unitarias e integración \\
-Monitoring & Sentry (opcional) & --- & Rastreo de errores en producción \\
+Monitoring & Sentry (opcional) & N/A & Rastreo de errores en producción \\
 \end{longtable}
 }
 
@@ -77,10 +77,10 @@ Server state & TanStack Query & 5.x & Cache y sincronización de datos del servi
 Tablas & TanStack Table & 8.x & Tablas con sorting/filtering/paginación \\
 Formularios & React Hook Form & 7.x & Manejo de formularios con rendimiento optimizado \\
 Validación & Zod & 3.x & Schemas de validación con inferencia de tipos \\
-UI Components & Shadcn/ui & --- & Componentes base sobre Radix UI \\
+UI Components & Shadcn/ui & N/A & Componentes base sobre Radix UI \\
 Estilos & Tailwind CSS & 4.x & Utilidades CSS de bajo nivel \\
 Gráficos & Recharts & 2.x & Gráficas para el dashboard \\
-HTTP Client & Axios (generado) & --- & Cliente OpenAPI auto-generado \\
+HTTP Client & Axios (generado) & N/A & Cliente OpenAPI auto-generado \\
 Notificaciones & Sonner & 1.x & Toasts y notificaciones \\
 Íconos & Lucide React & 0.4+ & Librería de íconos SVG \\
 Linter/Formatter & Biome & 1.x & Análisis estático y formato \\
@@ -246,7 +246,7 @@ OrbitEngine usa \textbf{JWT Bearer Tokens} siguiendo el estándar OAuth2 Passwor
 \item
   El backend decodifica el token, extrae el \texttt{sub} (UUID del usuario) y carga el usuario de la BD.
 \item
-  La organización del usuario se extrae de \texttt{user.organization\_id} --- no del token directamente.
+  La organización del usuario se extrae de \texttt{user.organization\_id}, no del token directamente.
 \end{enumerate}
 
 \textbf{Parámetros del token:}
@@ -309,7 +309,7 @@ Descripción
 
 El modelo \texttt{User} incluye campos \texttt{failed\_login\_attempts} y \texttt{locked\_until}. Tras N intentos fallidos consecutivos, la cuenta se bloquea temporalmente.
 
-\section{API REST --- Referencia de Endpoints}\label{api-rest-referencia-de-endpoints}
+\section{API REST. Referencia de Endpoints}\label{api-rest.-referencia-de-endpoints}
 
 Todos los endpoints están prefijados con \texttt{/api/v1}. La documentación interactiva se sirve en \texttt{/docs} (Swagger UI) y \texttt{/redoc}.
 
@@ -403,7 +403,7 @@ Ver datos de la organización actual \textbar{}} \\
 \multicolumn{5}{@{}>{\raggedright\arraybackslash}p{(\linewidth - 8\tabcolsep) * \real{0.9714} + 8\tabcolsep}@{}}{%
 PATCH \textbar{} /organizations/me \textbar{} Sí \textbar{} admin \textbar{} Actualizar nombre/slug/descripción \textbar{}} \\
 \multicolumn{5}{@{}>{\raggedright\arraybackslash}p{(\linewidth - 8\tabcolsep) * \real{0.9714} + 8\tabcolsep}@{}}{%
-POST \textbar{} /organizations/signup \textbar{} No \textbar{} --- \textbar{} Registro de nueva organización + admin \textbar{}} \\
+POST \textbar{} /organizations/signup \textbar{} No \textbar{} N/A \textbar{} Registro de nueva organización + admin \textbar{}} \\
 \end{longtable}
 }
 
@@ -1049,13 +1049,13 @@ Descripción
 \begin{itemize}
 \tightlist
 \item
-  \texttt{400} --- Solicitud inválida (datos incorrectos)
+  \texttt{400}: Solicitud inválida (datos incorrectos)
 \item
-  \texttt{403} --- Sin permisos / credenciales inválidas
+  \texttt{403}: Sin permisos / credenciales inválidas
 \item
-  \texttt{404} --- Recurso no encontrado
+  \texttt{404}: Recurso no encontrado
 \item
-  \texttt{409} --- Conflicto (recurso duplicado)
+  \texttt{409}: Conflicto (recurso duplicado)
 \end{itemize}
 
 \textbf{Multi-tenancy:} \textbf{todas} las consultas de negocio incluyen filtro \texttt{organization\_id\ =\ current\_organization}. El valor se extrae del usuario autenticado, nunca del cuerpo del request.
@@ -1101,11 +1101,11 @@ Descripción
 \begin{itemize}
 \tightlist
 \item
-  \texttt{src/client/**} --- auto-generado desde OpenAPI
+  \texttt{src/client/**}: auto-generado desde OpenAPI
 \item
-  \texttt{src/components/ui/**} --- componentes Shadcn/ui
+  \texttt{src/components/ui/**}: componentes Shadcn/ui
 \item
-  \texttt{src/routeTree.gen.ts} --- auto-generado por TanStack Router
+  \texttt{src/routeTree.gen.ts}: auto-generado por TanStack Router
 \end{itemize}
 
 \section{Pipeline de CI/CD}\label{pipeline-de-cicd}
@@ -1118,9 +1118,9 @@ El repositorio incluye workflows de GitHub Actions:
 \def\labelenumi{\arabic{enumi}.}
 \tightlist
 \item
-  \textbf{Backend:} Ejecuta \texttt{uv\ run\ bash\ scripts/test.sh} --- incluye Mypy, Ruff y Pytest con cobertura.
+  \textbf{Backend:} Ejecuta \texttt{uv\ run\ bash\ scripts/test.sh}; incluye Mypy, Ruff y Pytest con cobertura.
 \item
-  \textbf{Frontend:} Ejecuta \texttt{bun\ run\ lint} --- Biome linting y verificación de tipos TypeScript.
+  \textbf{Frontend:} Ejecuta \texttt{bun\ run\ lint}; Biome linting y verificación de tipos TypeScript.
 \end{enumerate}
 
 \subsection{Workflow de despliegue}\label{workflow-de-despliegue}
@@ -1253,4 +1253,4 @@ OrbitEngine implementa multi-tenancy mediante \textbf{aislamiento por discrimina
 
 Esta estrategia garantiza aislamiento completo de datos entre tenants sin necesidad de esquemas o bases de datos separadas, facilitando el mantenimiento y la escalabilidad horizontal.
 
-\emph{Documento generado como parte del proyecto de grado --- Universidad Sergio Arboleda, Semillero de Software como Innovación, Abril 2026.}
+\emph{Documento generado como parte del proyecto de grado. Universidad Sergio Arboleda, Semillero de Software como Innovación, Abril 2026.}

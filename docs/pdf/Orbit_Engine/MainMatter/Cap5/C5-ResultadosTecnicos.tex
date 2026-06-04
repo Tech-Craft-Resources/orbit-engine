@@ -1,7 +1,7 @@
-\chapter{Resultados Técnicos}\label{resultados-tuxe9cnicos}
+\chapter{Capítulo 5. Resultados Técnicos}\label{capuxedtulo-5.-resultados-tuxe9cnicos}
 
 \begin{quote}
-Este capítulo reporta exclusivamente la \textbf{validación técnica} del sistema OrbitEngine: pruebas de carga sobre el backend con Locust y pruebas de rendimiento del frontend con Lighthouse, PageSpeed Insights y WebPageTest. Los \textbf{resultados de la validación con usuarios} (eficiencia operativa, satisfacción, completitud de tareas) se presentan en el Capítulo 6 --- \emph{Resultados de Usuarios}. Las \textbf{acciones de mejora} derivadas de los hallazgos aquí descritos se discuten en el capítulo de Conclusiones.
+Este capítulo reporta exclusivamente la \textbf{validación técnica} del sistema OrbitEngine: pruebas de carga sobre el backend con Locust y pruebas de rendimiento del frontend con Lighthouse, PageSpeed Insights y WebPageTest. Los \textbf{resultados de la validación con usuarios} (eficiencia operativa, satisfacción, completitud de tareas) se presentan en el Capítulo 6, \emph{Resultados de Usuarios}. Las \textbf{acciones de mejora} derivadas de los hallazgos aquí descritos se discuten en el capítulo de Conclusiones.
 \end{quote}
 
 \begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
@@ -25,7 +25,7 @@ La validación técnica se planteó tres objetivos verificables:
 
 \subsection{Ambiente de Pruebas}\label{ambiente-de-pruebas}
 
-Todas las mediciones técnicas se realizaron sobre el entorno de producción real del sistema, siguiendo la configuración detallada en el capítulo anterior. El backend, construido en FastAPI, estaba desplegado en la plataforma Railway, ejecutándose como un servicio web sin réplicas horizontales, es decir, con una única instancia principal. Para adecuarse al nivel de exigencia de cada escenario, se configuró el paralelismo interno del servidor ajustando la cantidad de workers: en los tests 01 a 05 se dispuso de dos workers de FastAPI, mientras que para el test 06---que correspondía a un escenario de carga pico sostenida---se aumentó a cuatro workers, permitiendo simular mayor concurrencia en la aplicación.
+Todas las mediciones técnicas se realizaron sobre el entorno de producción real del sistema, siguiendo la configuración detallada en el capítulo anterior. El backend, construido en FastAPI, estaba desplegado en la plataforma Railway, ejecutándose como un servicio web sin réplicas horizontales, es decir, con una única instancia principal. Para adecuarse al nivel de exigencia de cada escenario, se configuró el paralelismo interno del servidor ajustando la cantidad de workers: en los tests 01 a 05 se dispuso de dos workers de FastAPI, mientras que para el test 06, que correspondía a un escenario de carga pico sostenida, se aumentó a cuatro workers, permitiendo simular mayor concurrencia en la aplicación.
 
 La base de datos utilizada en todas las pruebas fue PostgreSQL, también gestionada desde Railway. Se trataba de una única instancia compartida, sin réplicas de lectura, lo que significa que todas las operaciones (tanto de lectura como de escritura) recaían sobre el mismo servidor de base de datos.
 
@@ -115,7 +115,7 @@ Sector / propósito
 5 & Sabor Caribe & Empresa ficticia de prueba (datos sintéticos) & Generación de volumen de productos, ventas y movimientos para forzar consultas \\
 6 & Moda Andes & Empresa ficticia de prueba (datos sintéticos) & Generación de volumen de productos, ventas y movimientos para forzar consultas \\
 7 & FarmaVida & Empresa ficticia de prueba (datos sintéticos) & Generación de volumen de productos, ventas y movimientos para forzar consultas \\
-8 & Default del entorno & Datos de prueba --- primera organización creada como \emph{seed} & Tenant base de pruebas internas; conserva información residual de las primeras iteraciones de desarrollo \\
+8 & Default del entorno & Datos de prueba: primera organización creada como \emph{seed} & Tenant base de pruebas internas; conserva información residual de las primeras iteraciones de desarrollo \\
 \end{longtable}
 }
 
@@ -147,14 +147,14 @@ Proporción de la muestra
 \begin{itemize}
 \tightlist
 \item
-  \textbf{Empresas reales (25 \% de la muestra) --- Frozt Bitez y Miss Peggy.} Son las únicas dos pymes que confiaron en la plataforma para realizar parte o la totalidad de sus operaciones cotidianas durante la fase de validación. Aunque en cantidad representan una proporción menor, su valor para el experimento es alto: pertenecen a sectores muy distintos entre sí, manejan trazabilidades diferenciadas de productos, ventas, clientes y movimientos de inventario, y permiten dar un panorama representativo de cómo se comportarán empresas reales que adopten OrbitEngine en el futuro.
+  \textbf{Empresas reales (25 \% de la muestra): Frozt Bitez y Miss Peggy.} Son las únicas dos pymes que confiaron en la plataforma para realizar parte o la totalidad de sus operaciones cotidianas durante la fase de validación. Aunque en cantidad representan una proporción menor, su valor para el experimento es alto: pertenecen a sectores muy distintos entre sí, manejan trazabilidades diferenciadas de productos, ventas, clientes y movimientos de inventario, y permiten dar un panorama representativo de cómo se comportarán empresas reales que adopten OrbitEngine en el futuro.
 \item
-  \textbf{Empresas ficticias de prueba (75 \% de la muestra) --- Lehgo, Ferrallas del Norte, Sabor Caribe, Moda Andes, FarmaVida y Default.} Son seis organizaciones creadas por el equipo de desarrollo con el único objetivo de \textbf{poblar el sistema con grandes volúmenes de productos, ventas, clientes, movimientos de inventario y reportes}, de modo que las consultas, agregaciones y filtros del backend trabajen sobre conjuntos de datos suficientemente grandes para forzar respuestas más complejas del servidor. Estas organizaciones \textbf{no representan negocios reales}; en lo que sigue se nombrarán siempre como \emph{empresas ficticias de prueba} o \emph{datos de prueba}. \emph{Default} es, además, la primera organización creada en el entorno y conserva información residual de las pruebas iniciales del equipo, por lo que cumple un papel adicional como \emph{tenant} base.
+  \textbf{Empresas ficticias de prueba (75 \% de la muestra): Lehgo, Ferrallas del Norte, Sabor Caribe, Moda Andes, FarmaVida y Default.} Son seis organizaciones creadas por el equipo de desarrollo con el único objetivo de \textbf{poblar el sistema con grandes volúmenes de productos, ventas, clientes, movimientos de inventario y reportes}, de modo que las consultas, agregaciones y filtros del backend trabajen sobre conjuntos de datos suficientemente grandes para forzar respuestas más complejas del servidor. Estas organizaciones \textbf{no representan negocios reales}; en lo que sigue se nombrarán siempre como \emph{empresas ficticias de prueba} o \emph{datos de prueba}. \emph{Default} es, además, la primera organización creada en el entorno y conserva información residual de las pruebas iniciales del equipo, por lo que cumple un papel adicional como \emph{tenant} base.
 \end{itemize}
 
 Esta composición es coherente con el alcance de un piloto técnico: \textbf{Frozt Bitez y Miss Peggy} aportan realismo cualitativo sobre el comportamiento productivo del sistema, mientras que \textbf{Lehgo, Ferrallas del Norte, Sabor Caribe, Moda Andes, FarmaVida y Default} aportan el volumen sintético necesario para evidenciar el coste de las consultas en condiciones próximas a las de un sistema en producción a mayor escala.
 
-\section{Pruebas de Carga (Backend / API) --- Locust}\label{pruebas-de-carga-backend-api-locust}
+\section{Pruebas de Carga (Backend / API) con Locust}\label{pruebas-de-carga-backend-api-con-locust}
 
 \subsection{Diseño del Experimento}\label{diseuxf1o-del-experimento}
 
@@ -260,7 +260,7 @@ Los CSV completos de cada escenario (\texttt{Test0X-Requests.csv}, \texttt{Test0
 
 \subsection{Resultados por Escenario}\label{resultados-por-escenario}
 
-\subsubsection{Test 01 --- Carga Normal de Pyme}\label{test-01-carga-normal-de-pyme}
+\subsubsection{Test 01. Carga Normal de Pyme}\label{test-01.-carga-normal-de-pyme}
 
 Es el escenario de referencia y representa el régimen al que se diseñó el sistema. Con aproximadamente ocho usuarios virtuales se completaron \textbf{235 peticiones sin fallos}.
 
@@ -301,13 +301,13 @@ P99
 /products/ & GET & 45 & 500 ms & 515 ms & 710 ms & 920 ms \\
 /products/low-stock & GET & 21 & 430 ms & 472 ms & 840 ms & 850 ms \\
 /sales/ & GET & 23 & \textbf{7 500 ms} & \textbf{7 501 ms} & \textbf{7 600 ms} & \textbf{7 600 ms} \\
-\textbf{Agregado} & --- & 235 & 520 ms & 1 254 ms & 7 500 ms & 7 600 ms \\
+\textbf{Agregado} & N/A & 235 & 520 ms & 1 254 ms & 7 500 ms & 7 600 ms \\
 \end{longtable}
 }
 
 Observación clave: la mediana global (520 ms) y la mediana de los endpoints CRUD se sitúan en el orden de cientos de milisegundos, pero el endpoint \texttt{GET\ /sales/} consume sistemáticamente \textbf{alrededor de 7,5 segundos por petición} incluso sin concurrencia significativa. Este endpoint domina el percentil 95 global y es responsable de que el agregado se aleje de los 500 ms exigidos por el RNF-01.
 
-\subsubsection{Test 02 --- Estrés Moderado (\textasciitilde50 usuarios)}\label{test-02-estruxe9s-moderado-50-usuarios}
+\subsubsection{Test 02. Estrés Moderado (\textasciitilde50 usuarios)}\label{test-02.-estruxe9s-moderado-50-usuarios}
 
 Con \textasciitilde50 usuarios virtuales sostenidos durante poco más de tres minutos, el sistema procesa \textbf{2 973 peticiones} con una tasa de fallos del 1,7 \%. Los fallos se concentran en dos categorías:
 
@@ -321,11 +321,11 @@ Con \textasciitilde50 usuarios virtuales sostenidos durante poco más de tres mi
 
 El sistema sostiene \textbf{16,3 RPS} con la mediana global en 1 000 ms y el percentil 95 alrededor de 7,8 s, todavía dominado por \texttt{GET\ /sales/} y por \texttt{GET\ /sales/?limit=500\ {[}spam{]}}, cuyo P95 alcanza 30 s.
 
-\subsubsection{Tests 03 a 05 --- Régimen de Saturación}\label{tests-03-a-05-ruxe9gimen-de-saturaciuxf3n}
+\subsubsection{Tests 03 a 05. Régimen de Saturación}\label{tests-03-a-05.-ruxe9gimen-de-saturaciuxf3n}
 
 Los escenarios 03, 04 y 05 reflejan la transición desde el estrés moderado hacia la saturación. Las tasas de fallos crecen del 6,4 \% al 22,1 \% y los percentiles superiores se desplazan al rango de las decenas de segundos. Los 500 dejan de concentrarse en \texttt{POST\ /sales/} y aparecen también en \texttt{GET\ /dashboard/stats}, \texttt{GET\ /products/?search=}, \texttt{GET\ /customers/?search=} y \texttt{GET\ /products/\{id\}/movements}. La duración total de cada test se acortó deliberadamente para no comprometer la disponibilidad del sistema durante períodos prolongados.
 
-\subsubsection{Test 06 --- Pico Sostenido (\textasciitilde200 usuarios)}\label{test-06-pico-sostenido-200-usuarios}
+\subsubsection{Test 06. Pico Sostenido (\textasciitilde200 usuarios)}\label{test-06.-pico-sostenido-200-usuarios}
 
 Es el escenario más extenso (10 min 05 s) y el más exigente. Para sostener el régimen de pico se incrementó la concurrencia interna del backend de 2 a \textbf{4 workers de FastAPI} sobre la misma instancia de Railway. Sobre \textbf{7 331 peticiones} se registran \textbf{1 408 fallos} (19,2 \%), todos clasificados como 500 (errores del lado del servidor) y distribuidos sobre los endpoints de lectura masiva: \texttt{GET\ /dashboard/stats} (323), \texttt{GET\ /products/} (314), \texttt{GET\ /sales/} (238), \texttt{GET\ /customers/} (191), \texttt{GET\ /categories/} (120), \texttt{GET\ /inventory-movements/} (117) y \texttt{GET\ /products/low-stock} (105). El sistema sigue procesando 12 RPS pero la mediana global se sitúa en 1 300 ms y el P95 en 29 s, evidenciando que la configuración de 4 workers, aun siendo el doble de la utilizada en los escenarios previos, no logra absorber un régimen de \textasciitilde200 usuarios concurrentes sostenido durante diez minutos.
 
@@ -410,7 +410,7 @@ Mediana & 910 ms & 1 200 ms & 2 000 ms & 2 200 ms & 2 200 ms & - \\
 \end{longtable}
 }
 
-La mediana de este endpoint crece de forma progresiva desde 910 ms en carga normal hasta alcanzar una meseta en 2 200 ms durante los escenarios de saturación (Tests 04 y 05), lo que representa un incremento del 142 \% respecto al valor de referencia. El hecho de que la mediana se estabilice en ese valor ---en lugar de continuar creciendo--- sugiere que el sistema de cola de FastAPI comienza a serializar las solicitudes de autenticación antes de procesarlas, limitando la degradación adicional. Este comportamiento es coherente con la naturaleza del flujo: el coste dominante no proviene de la base de datos sino del hashing bcrypt aplicado a la contraseña, una operación deliberadamente costosa por diseño de seguridad. La ausencia de datos para Test 06 indica que en ese escenario el endpoint no acumuló suficientes muestras representativas, posiblemente porque los usuarios virtuales ya disponían de sesión activa al inicio de la ronda de medición.
+La mediana de este endpoint crece de forma progresiva desde 910 ms en carga normal hasta alcanzar una meseta en 2 200 ms durante los escenarios de saturación (Tests 04 y 05), lo que representa un incremento del 142 \% respecto al valor de referencia. El hecho de que la mediana se estabilice en ese valor, en lugar de continuar creciendo, sugiere que el sistema de cola de FastAPI comienza a serializar las solicitudes de autenticación antes de procesarlas, limitando la degradación adicional. Este comportamiento es coherente con la naturaleza del flujo: el coste dominante no proviene de la base de datos sino del hashing bcrypt aplicado a la contraseña, una operación deliberadamente costosa por diseño de seguridad. La ausencia de datos para Test 06 indica que en ese escenario el endpoint no acumuló suficientes muestras representativas, posiblemente porque los usuarios virtuales ya disponían de sesión activa al inicio de la ronda de medición.
 
 \textbf{\texttt{GET\ /products/}}
 
@@ -521,7 +521,7 @@ Mediana & 710 ms & 850 ms & 1 700 ms & 4 800 ms & 1 700 ms & 1 100 ms (19 \% 500
 \end{longtable}
 }
 
-Este endpoint concentra las consultas de agregación más costosas del sistema ---totales de ventas, unidades vendidas por período y niveles de stock--- ejecutadas directamente contra PostgreSQL sin capa de caché intermedia. La progresión controlada de 710 ms a 850 ms entre los Tests 01 y 02 indica que la base de datos absorbe el incremento inicial de concurrencia sin saturarse. A partir del régimen de saturación, sin embargo, la mediana escala hasta 1 700 ms en Test 03 y alcanza su pico en 4 800 ms en Test 04, para luego retroceder a 1 700 ms en Test 05 y a 1 100 ms en Test 06. Este comportamiento no lineal ---en el que Test 06 presenta la segunda mediana más baja pese a ser el escenario con mayor concurrencia--- se explica en parte por la incorporación de cuatro workers en ese escenario, pero también por el hecho de que las respuestas fallidas (19 \% de errores 500) cortan el ciclo de procesamiento antes de que las agregaciones completen, lo que artificialmente reduce la mediana de las peticiones que sí responden. Este endpoint constituye el candidato prioritario para la incorporación de una capa de caché distribuida en iteraciones futuras del sistema.
+Este endpoint concentra las consultas de agregación más costosas del sistema (totales de ventas, unidades vendidas por período y niveles de stock) ejecutadas directamente contra PostgreSQL sin capa de caché intermedia. La progresión controlada de 710 ms a 850 ms entre los Tests 01 y 02 indica que la base de datos absorbe el incremento inicial de concurrencia sin saturarse. A partir del régimen de saturación, sin embargo, la mediana escala hasta 1 700 ms en Test 03 y alcanza su pico en 4 800 ms en Test 04, para luego retroceder a 1 700 ms en Test 05 y a 1 100 ms en Test 06. Este comportamiento no lineal, en el que Test 06 presenta la segunda mediana más baja pese a ser el escenario con mayor concurrencia, se explica en parte por la incorporación de cuatro workers en ese escenario, pero también por el hecho de que las respuestas fallidas (19 \% de errores 500) cortan el ciclo de procesamiento antes de que las agregaciones completen, lo que artificialmente reduce la mediana de las peticiones que sí responden. Este endpoint constituye el candidato prioritario para la incorporación de una capa de caché distribuida en iteraciones futuras del sistema.
 
 \textbf{\texttt{GET\ /sales/}}
 
@@ -558,7 +558,7 @@ Mediana & \textbf{7 500 ms} & \textbf{7 700 ms} & 8 500 ms & 8 900 ms & 11 000 m
 \end{longtable}
 }
 
-Este endpoint constituye el principal cuello de botella del sistema en todos los regímenes evaluados, y su perfil de latencia es el más revelador del conjunto. La mediana de 7 500 ms registrada en carga normal ---con apenas ocho usuarios concurrentes--- demuestra que el problema es estructural e independiente de la presión competitiva: la consulta recorre la relación \texttt{Sale\ →\ SaleItem} mediante joins y ejecuta agregaciones por venta sobre el conjunto completo de registros, sin que el servidor aplique paginación optimizada que limite el volumen de trabajo por petición. La progresión entre los seis escenarios ---7 500 ms, 7 700 ms, 8 500 ms, 8 900 ms, 11 000 ms y 8 600 ms--- muestra un incremento sostenido pero relativamente contenido: el valor máximo (Test 05, 11 000 ms) solo es un 47 \% superior al de referencia (Test 01, 7 500 ms), lo que contrasta con las variaciones de varios órdenes de magnitud que exhiben otros endpoints en saturación. Esta compresión del rango de degradación confirma que el factor dominante es el coste intrínseco de la consulta, no la contención de recursos, y que la solución debe buscarse en la optimización de la capa de datos ---paginación del lado del servidor, desnormalización selectiva o materialización de vistas--- y no en el escalado de la infraestructura.
+Este endpoint constituye el principal cuello de botella del sistema en todos los regímenes evaluados, y su perfil de latencia es el más revelador del conjunto. La mediana de 7 500 ms registrada en carga normal, con apenas ocho usuarios concurrentes, demuestra que el problema es estructural e independiente de la presión competitiva: la consulta recorre la relación \texttt{Sale\ →\ SaleItem} mediante joins y ejecuta agregaciones por venta sobre el conjunto completo de registros, sin que el servidor aplique paginación optimizada que limite el volumen de trabajo por petición. La progresión entre los seis escenarios (7 500 ms, 7 700 ms, 8 500 ms, 8 900 ms, 11 000 ms y 8 600 ms) muestra un incremento sostenido pero relativamente contenido: el valor máximo (Test 05, 11 000 ms) solo es un 47 \% superior al de referencia (Test 01, 7 500 ms), lo que contrasta con las variaciones de varios órdenes de magnitud que exhiben otros endpoints en saturación. Esta compresión del rango de degradación confirma que el factor dominante es el coste intrínseco de la consulta, no la contención de recursos, y que la solución debe buscarse en la optimización de la capa de datos (paginación del lado del servidor, desnormalización selectiva o materialización de vistas) y no en el escalado de la infraestructura.
 
 \textbf{\texttt{POST\ /sales/}}
 
@@ -591,7 +591,7 @@ Test 06
 \endhead
 \bottomrule\noalign{}
 \endlastfoot
-Mediana & --- & 2 500 ms & 3 300 ms & 31 000 ms & 6 800 ms & --- \\
+Mediana & N/A & 2 500 ms & 3 300 ms & 31 000 ms & 6 800 ms & N/A \\
 \end{longtable}
 }
 
@@ -664,7 +664,7 @@ CLS
 \endhead
 \bottomrule\noalign{}
 \endlastfoot
-Landing (/) & --- & Página & 92 & 96 & 96 & 92 & 1,1 s & 1,6 s & 0 ms & 0 \\
+Landing (/) & N/A & Página & 92 & 96 & 96 & 92 & 1,1 s & 1,6 s & 0 ms & 0 \\
 Dashboard & Lehgo & Ficticia & 90 & 96 & 100 & 83 & 1,2 s & 1,6 s & 0 ms & 0,017 \\
 Dashboard & \textbf{Miss Peggy} & \textbf{Real} & 91 & 96 & 100 & 83 & 1,1 s & 1,6 s & 0 ms & 0,021 \\
 Dashboard & Moda Andes & Ficticia & 91 & 96 & 100 & 83 & 1,1 s & 1,6 s & 0 ms & 0,017 \\
@@ -687,7 +687,7 @@ PageSpeed Insights ejecutó Lighthouse 13.0.1 desde la infraestructura de Google
 \emph{Nota sobre el etiquetado de archivos}: los reportes nominados \texttt{Login\_PC.pdf} y \texttt{Login\_Tel.pdf} analizan la URL \texttt{https://orbitengine.lat/dashboard}. Como PageSpeed se ejecuta sin sesión iniciada, dicha URL fue redirigida automáticamente al formulario de login (\texttt{/login?reason=auth-required}). Por tanto, la página efectivamente medida es la \textbf{pantalla de acceso (Login)}, y bajo esa etiqueta se reportan los resultados.
 \end{quote}
 
-\textbf{Tabla 5.3.2.} PageSpeed Insights --- escritorio vs.~móvil.
+\textbf{Tabla 5.3.2.} PageSpeed Insights: escritorio vs.~móvil.
 
 {\def\LTcaptype{none} % do not increment counter
 \begin{longtable}[]{@{}
@@ -791,7 +791,7 @@ Bytes recibidos
 \endhead
 \bottomrule\noalign{}
 \endlastfoot
-Landing (\texttt{/}) & 46 ms & --- & --- & --- & --- & --- & --- & \textasciitilde752 ms & 3,9 MB \\
+Landing (\texttt{/}) & 46 ms & N/A & N/A & N/A & N/A & N/A & N/A & \textasciitilde752 ms & 3,9 MB \\
 Acceso (Login) & 88 ms & 600 ms & 911 ms & 1 044 ms & 59 ms & 0,004 & 785 & 752 ms & 3,9 MB \\
 \end{longtable}
 }
