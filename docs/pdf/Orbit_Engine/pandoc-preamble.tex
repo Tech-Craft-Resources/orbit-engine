@@ -108,6 +108,22 @@
 \providecommand{\passthrough}[1]{#1}
 
 % Enlaces de imágenes/figuras de Pandoc dentro de \includegraphics
+% Pandoc 3.x define \pandocbounded en su template con lógica de escalado
+% (usa \Gscale@div de graphicx para ajustar al ancho/alto del texto).
+% NO redefinir como no-op aquí; dejar que la definición nativa de Pandoc
+% prevalezca. Si el template de Pandoc no está presente (compilación directa
+% de .tex sin Pandoc), se provee un fallback seguro.
 \makeatletter
-\providecommand{\pandocbounded}[1]{#1}
+\@ifundefined{pandocbounded}{% fallback si no viene del template Pandoc
+  \newsavebox\pandoc@box
+  \newcommand*{\pandocbounded}[1]{%
+    \sbox\pandoc@box{#1}%
+    \Gscale@div\@tempa{\textheight}{\dimexpr\ht\pandoc@box+\dp\pandoc@box\relax}%
+    \Gscale@div\@tempb{\linewidth}{\wd\pandoc@box}%
+    \ifdim\@tempb\p@<\@tempa\p@\let\@tempa\@tempb\fi
+    \ifdim\@tempa\p@<\p@\scalebox{\@tempa}{\usebox\pandoc@box}%
+    \else\usebox\pandoc@box%
+    \fi%
+  }%
+}{}
 \makeatother

@@ -25,3 +25,7 @@ docs/pdf/Orbit_Engine/*.lof
 docs/pdf/Orbit_Engine/*.lot
 docs/pdf/Orbit_Engine/missfont.log
 docs/informe-final.pdf
+# Local Pi runtime state
+.atl/
+.pi/
+.pi-lens/
