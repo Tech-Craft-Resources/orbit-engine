@@ -1,0 +1,1256 @@
+\chapter{Documentación Técnica}\label{documentaciuxf3n-tuxe9cnica}
+
+\textbf{OrbitEngine} --- Plataforma SaaS para la Gestión de Procesos Internos en Pymes\\
+Versión: 1.0 \textbar{} Abril 2026\\
+Universidad Sergio Arboleda --- Semillero de Software como Innovación
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\section{Stack Tecnológico}\label{stack-tecnoluxf3gico}
+
+\subsection{Backend}\label{backend}
+
+{\def\LTcaptype{none} % do not increment counter
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\linewidth - 6\tabcolsep) * \real{0.2283}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 6\tabcolsep) * \real{0.1848}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 6\tabcolsep) * \real{0.0761}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 6\tabcolsep) * \real{0.5109}}@{}}
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+Componente
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Tecnología
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Versión
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Propósito
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+Lenguaje & Python & 3.10+ & Lenguaje principal del backend \\
+Framework web & FastAPI & 0.115+ & API REST asíncrona con tipado estricto \\
+ORM + Schemas & SQLModel & 0.0.21+ & Modelos compartidos entre SQLAlchemy y Pydantic \\
+Motor de BD & SQLAlchemy & 2.x & Capa de abstracción de base de datos \\
+Driver PostgreSQL & Psycopg3 & 3.x & Conector PostgreSQL para Python \\
+Migraciones & Alembic & 1.x & Gestión de migraciones de esquema \\
+Autenticación & PyJWT & 2.x & Generación y verificación de tokens JWT \\
+Hash de contraseñas & Pwdlib & 0.2+ & Hashing seguro con bcrypt \\
+Validación & Pydantic & 2.x & Schemas de entrada/salida de datos \\
+Configuración & Pydantic-Settings & 2.x & Variables de entorno tipadas \\
+Linter/Formatter & Ruff & 0.6+ & Análisis estático y formato de código \\
+Verificación de tipos & Mypy & 1.x & Chequeo de tipos estático en modo estricto \\
+Testing & Pytest + Coverage & 8.x & Pruebas unitarias e integración \\
+Monitoring & Sentry (opcional) & --- & Rastreo de errores en producción \\
+\end{longtable}
+}
+
+\subsection{Frontend}\label{frontend}
+
+{\def\LTcaptype{none} % do not increment counter
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\linewidth - 6\tabcolsep) * \real{0.1839}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 6\tabcolsep) * \real{0.1839}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 6\tabcolsep) * \real{0.0805}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 6\tabcolsep) * \real{0.5517}}@{}}
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+Componente
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Tecnología
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Versión
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Propósito
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+Lenguaje & TypeScript & 5.x & Tipado estático sobre JavaScript \\
+Framework UI & React & 19.x & Librería de componentes reactivos \\
+Build tool & Vite & 6.x & Empaquetado y servidor de desarrollo \\
+Router & TanStack Router & 1.x & Enrutamiento con tipado por archivo \\
+Server state & TanStack Query & 5.x & Cache y sincronización de datos del servidor \\
+Tablas & TanStack Table & 8.x & Tablas con sorting/filtering/paginación \\
+Formularios & React Hook Form & 7.x & Manejo de formularios con rendimiento optimizado \\
+Validación & Zod & 3.x & Schemas de validación con inferencia de tipos \\
+UI Components & Shadcn/ui & --- & Componentes base sobre Radix UI \\
+Estilos & Tailwind CSS & 4.x & Utilidades CSS de bajo nivel \\
+Gráficos & Recharts & 2.x & Gráficas para el dashboard \\
+HTTP Client & Axios (generado) & --- & Cliente OpenAPI auto-generado \\
+Notificaciones & Sonner & 1.x & Toasts y notificaciones \\
+Íconos & Lucide React & 0.4+ & Librería de íconos SVG \\
+Linter/Formatter & Biome & 1.x & Análisis estático y formato \\
+E2E Testing & Playwright & 1.x & Pruebas end-to-end en navegador \\
+\end{longtable}
+}
+
+\subsection{Infraestructura}\label{infraestructura}
+
+{\def\LTcaptype{none} % do not increment counter
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\linewidth - 4\tabcolsep) * \real{0.1806}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 4\tabcolsep) * \real{0.2361}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 4\tabcolsep) * \real{0.5833}}@{}}
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+Componente
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Tecnología
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Propósito
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+Base de datos & PostgreSQL 18 & Almacenamiento relacional principal \\
+Contenedores & Docker Compose v2 & Orquestación de servicios \\
+Reverse proxy & Traefik 3.6 & Enrutamiento HTTP/HTTPS + TLS automático \\
+CI/CD & GitHub Actions & Pipeline de integración y entrega continua \\
+Panel de BD & Adminer & Administración web de PostgreSQL \\
+Email (dev) & Mailcatcher & Interceptor SMTP para desarrollo \\
+\end{longtable}
+}
+
+\section{Estructura del Proyecto}\label{estructura-del-proyecto}
+
+\begin{verbatim}
+orbit-engine/
+├── .env                        # Variables de entorno (no incluir en git)
+├── compose.yml                 # Configuración Docker Compose base
+├── compose.override.yml        # Sobreescrituras para desarrollo local
+├── compose.traefik.yml         # Traefik para producción
+├── pyproject.toml              # Configuración Ruff y Mypy (nivel raíz)
+│
+├── backend/
+│   ├── Dockerfile
+│   ├── pyproject.toml          # Dependencias Python (uv)
+│   ├── scripts/
+│   │   ├── prestart.sh         # Ejecutado por el servicio prestart
+│   │   ├── test.sh             # Script de pruebas con cobertura
+│   │   ├── lint.sh             # Mypy + Ruff check
+│   │   └── format.sh           # Ruff format
+│   └── app/
+│       ├── main.py             # Punto de entrada FastAPI + registro de routers
+│       ├── models.py           # Todos los modelos SQLModel + schemas Pydantic
+│       ├── crud.py             # Operaciones de base de datos
+│       ├── utils.py            # Helpers (email, generación de tokens)
+│       ├── backend_pre_start.py # Script de inicialización
+│       ├── initial_data.py     # Seed de datos iniciales (roles, superusuario)
+│       ├── api/
+│       │   ├── deps.py         # Dependencias FastAPI (auth, sesión, roles)
+│       │   └── routes/
+│       │       ├── login.py            # Autenticación y recuperación de contraseña
+│       │       ├── users.py            # Gestión de usuarios
+│       │       ├── organizations.py    # Registro y configuración de organización
+│       │       ├── roles.py            # Listado de roles
+│       │       ├── categories.py       # CRUD de categorías
+│       │       ├── products.py         # CRUD de productos + stock
+│       │       ├── customers.py        # CRUD de clientes
+│       │       ├── sales.py            # Registro y gestión de ventas
+│       │       ├── inventory_movements.py  # Historial de movimientos
+│       │       ├── dashboard.py        # Estadísticas del dashboard
+│       │       ├── utils.py            # Health check
+│       │       └── private.py          # Endpoints de superusuario
+│       ├── core/
+│       │   ├── config.py       # Settings con Pydantic-Settings
+│       │   ├── db.py           # Engine SQLAlchemy
+│       │   └── security.py     # JWT, hashing de contraseñas
+│       └── alembic/
+│           ├── env.py
+│           └── versions/
+│               ├── 001_initial_schema.py   # organizations, roles, users
+│               ├── 002_categories.py
+│               ├── 003_products.py
+│               ├── 004_customers.py
+│               ├── 005_inventory_movements.py
+│               └── 006_sales.py
+│
+├── frontend/
+│   ├── Dockerfile
+│   ├── package.json
+│   ├── vite.config.ts
+│   ├── openapi-ts.config.ts    # Configuración del generador de cliente API
+│   └── src/
+│       ├── main.tsx            # Punto de entrada React
+│       ├── routeTree.gen.ts    # Árbol de rutas auto-generado (no editar)
+│       ├── utils.ts            # Helpers compartidos
+│       ├── client/             # Cliente API auto-generado (no editar)
+│       │   ├── index.ts
+│       │   ├── sdk.gen.ts      # Funciones de llamada a la API
+│       │   ├── types.gen.ts    # Tipos TypeScript desde OpenAPI
+│       │   ├── schemas.gen.ts
+│       │   └── core/           # Configuración Axios
+│       ├── components/
+│       │   ├── Admin/          # Componentes de gestión de usuarios
+│       │   ├── Common/         # Componentes reutilizables (DataTable, layouts)
+│       │   ├── Customers/      # Componentes del módulo de clientes
+│       │   ├── Inventory/      # Componentes del módulo de inventario
+│       │   ├── Landing/        # Componentes de la página pública
+│       │   ├── Pending/        # Componentes de estados de carga
+│       │   ├── Sales/          # Componentes del módulo de ventas
+│       │   ├── Sidebar/        # Navegación principal
+│       │   ├── UserSettings/   # Configuración de perfil y organización
+│       │   ├── theme-provider.tsx
+│       │   └── ui/             # Componentes Shadcn/ui (no editar)
+│       ├── hooks/
+│       │   ├── useAuth.ts
+│       │   ├── useCopyToClipboard.ts
+│       │   ├── useCustomToast.ts
+│       │   ├── useDebounce.ts
+│       │   ├── useMobile.ts
+│       │   └── useScrollAnimation.ts
+│       ├── lib/
+│       │   └── utils.ts        # cn() helper para Tailwind
+│       └── routes/
+│           ├── __root.tsx      # Layout raíz con providers
+│           ├── index.tsx       # Landing page (/)
+│           ├── login.tsx       # Inicio de sesión (/login)
+│           ├── signup.tsx      # Registro de usuario (/signup)
+│           ├── signup-org.tsx  # Registro de organización (/signup-org)
+│           ├── recover-password.tsx
+│           ├── reset-password.tsx
+│           └── dashboard/
+│               ├── index.tsx   # Dashboard KPIs (/dashboard)
+│               ├── inventory.tsx
+│               ├── sales.tsx
+│               ├── customers.tsx
+│               ├── admin.tsx
+│               └── settings.tsx
+│
+└── docs/
+    └── informe-final/          # Documentación del proyecto de grado
+\end{verbatim}
+
+\section{Autenticación y Autorización}\label{autenticaciuxf3n-y-autorizaciuxf3n}
+
+\subsection{Flujo de autenticación}\label{flujo-de-autenticaciuxf3n}
+
+OrbitEngine usa \textbf{JWT Bearer Tokens} siguiendo el estándar OAuth2 Password Flow:
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  El cliente envía credenciales a \texttt{POST\ /api/v1/login/access-token}.
+\item
+  El backend valida las credenciales, verifica que la cuenta no esté bloqueada.
+\item
+  Si son válidas, retorna un \texttt{access\_token} JWT.
+\item
+  El cliente incluye el token en el header \texttt{Authorization:\ Bearer\ \textless{}token\textgreater{}} en cada request.
+\item
+  El backend decodifica el token, extrae el \texttt{sub} (UUID del usuario) y carga el usuario de la BD.
+\item
+  La organización del usuario se extrae de \texttt{user.organization\_id} --- no del token directamente.
+\end{enumerate}
+
+\textbf{Parámetros del token:}
+
+{\def\LTcaptype{none} % do not increment counter
+\begin{longtable}[]{@{}ll@{}}
+\toprule\noalign{}
+Parámetro & Valor \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+Algoritmo & HS256 \\
+Payload \texttt{sub} & UUID del usuario (\texttt{str}) \\
+Expiración & 8 días (11,520 minutos) \\
+Clave de firma & \texttt{SECRET\_KEY} del entorno \\
+\end{longtable}
+}
+
+\subsection{Control de acceso basado en roles (RBAC)}\label{control-de-acceso-basado-en-roles-rbac}
+
+Los roles se almacenan en la tabla \texttt{roles} con permisos como array JSONB. La verificación en los endpoints usa la dependencia \texttt{require\_role()}:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# Solo administradores pueden crear usuarios}
+\AttributeTok{@router.post}\NormalTok{(}\StringTok{"/"}\NormalTok{, dependencies}\OperatorTok{=}\NormalTok{[Depends(require\_role(}\StringTok{"admin"}\NormalTok{))])}
+\KeywordTok{def}\NormalTok{ create\_user(...) }\OperatorTok{{-}\textgreater{}}\NormalTok{ Any: ...}
+
+\CommentTok{\# Administradores y vendedores pueden registrar ventas}
+\AttributeTok{@router.post}\NormalTok{(}\StringTok{"/"}\NormalTok{, dependencies}\OperatorTok{=}\NormalTok{[Depends(require\_role(}\StringTok{"admin"}\NormalTok{, }\StringTok{"seller"}\NormalTok{))])}
+\KeywordTok{def}\NormalTok{ create\_sale(...) }\OperatorTok{{-}\textgreater{}}\NormalTok{ Any: ...}
+\end{Highlighting}
+\end{Shaded}
+
+\textbf{Dependencias de autenticación disponibles:}
+
+{\def\LTcaptype{none} % do not increment counter
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\linewidth - 2\tabcolsep) * \real{0.2877}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 2\tabcolsep) * \real{0.7123}}@{}}
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+Tipo anotado
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Descripción
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+\texttt{CurrentUser} & Usuario autenticado; error 403 si token inválido \\
+\texttt{CurrentAdminUser} & Usuario autenticado con rol \texttt{admin}; error 403 si no \\
+\texttt{CurrentOrganization} & UUID de organización extraído del \texttt{CurrentUser} \\
+\texttt{SessionDep} & Sesión de base de datos SQLModel \\
+\end{longtable}
+}
+
+\subsection{Protección contra fuerza bruta}\label{protecciuxf3n-contra-fuerza-bruta}
+
+El modelo \texttt{User} incluye campos \texttt{failed\_login\_attempts} y \texttt{locked\_until}. Tras N intentos fallidos consecutivos, la cuenta se bloquea temporalmente.
+
+\section{API REST --- Referencia de Endpoints}\label{api-rest-referencia-de-endpoints}
+
+Todos los endpoints están prefijados con \texttt{/api/v1}. La documentación interactiva se sirve en \texttt{/docs} (Swagger UI) y \texttt{/redoc}.
+
+\subsection{\texorpdfstring{Autenticación (\texttt{/login})}{Autenticación (/login)}}\label{autenticaciuxf3n-login}
+
+{\def\LTcaptype{none} % do not increment counter
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\linewidth - 6\tabcolsep) * \real{0.0857}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 6\tabcolsep) * \real{0.4000}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 6\tabcolsep) * \real{0.0571}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 6\tabcolsep) * \real{0.4571}}@{}}
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+Método
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Ruta
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Auth
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Descripción
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+POST & \texttt{/login/access-token} & No & Obtener token JWT (login) \\
+POST & \texttt{/login/test-token} & Sí & Verificar validez del token \\
+POST & \texttt{/password-recovery/\{email\}} & No & Solicitar enlace de recuperación \\
+POST & \texttt{/reset-password} & No & Restablecer contraseña con token \\
+\end{longtable}
+}
+
+\subsection{\texorpdfstring{Usuarios (\texttt{/users})}{Usuarios (/users)}}\label{usuarios-users}
+
+{\def\LTcaptype{none} % do not increment counter
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\linewidth - 8\tabcolsep) * \real{0.0789}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 8\tabcolsep) * \real{0.2632}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 8\tabcolsep) * \real{0.0526}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 8\tabcolsep) * \real{0.1316}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 8\tabcolsep) * \real{0.4737}}@{}}
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+Método
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Ruta
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Auth
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Rol mínimo
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Descripción
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+GET & \texttt{/users/} & Sí & admin & Listar usuarios de la organización \\
+POST & \texttt{/users/} & Sí & admin & Crear usuario en la organización \\
+GET & \texttt{/users/me} & Sí & Cualquiera & Obtener perfil propio \\
+PATCH & \texttt{/users/me} & Sí & Cualquiera & Actualizar nombre/apellido/teléfono \\
+DELETE & \texttt{/users/me} & Sí & Cualquiera & Eliminar cuenta propia (soft delete) \\
+PATCH & \texttt{/users/me/password} & Sí & Cualquiera & Cambiar contraseña \\
+GET & \texttt{/users/\{user\_id\}} & Sí & admin & Obtener usuario por ID \\
+PATCH & \texttt{/users/\{user\_id\}} & Sí & admin & Actualizar usuario \\
+DELETE & \texttt{/users/\{user\_id\}} & Sí & admin & Eliminar usuario \\
+\end{longtable}
+}
+
+\subsection{\texorpdfstring{Organizaciones (\texttt{/organizations})}{Organizaciones (/organizations)}}\label{organizaciones-organizations}
+
+{\def\LTcaptype{none} % do not increment counter
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\linewidth - 8\tabcolsep) * \real{0.0952}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 8\tabcolsep) * \real{0.2667}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 8\tabcolsep) * \real{0.0571}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 8\tabcolsep) * \real{0.1238}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 8\tabcolsep) * \real{0.4286}}@{}}
+\toprule\noalign{}
+\multicolumn{5}{@{}>{\raggedright\arraybackslash}p{(\linewidth - 8\tabcolsep) * \real{0.9714} + 8\tabcolsep}@{}}{%
+\begin{minipage}[b]{\linewidth}\raggedright
+Método \textbar{} Ruta \textbar{} Auth\textbar{} Rol mínimo \textbar{} Descripción \textbar{}
+\end{minipage}} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+\multicolumn{3}{@{}>{\raggedright\arraybackslash}p{(\linewidth - 8\tabcolsep) * \real{0.4190} + 4\tabcolsep}}{%
+GET \textbar{} /organizations/me \textbar{} Sí \textbar{} Cualquiera} & \multicolumn{2}{>{\raggedright\arraybackslash}p{(\linewidth - 8\tabcolsep) * \real{0.5524} + 2\tabcolsep}@{}}{%
+Ver datos de la organización actual \textbar{}} \\
+\multicolumn{5}{@{}>{\raggedright\arraybackslash}p{(\linewidth - 8\tabcolsep) * \real{0.9714} + 8\tabcolsep}@{}}{%
+PATCH \textbar{} /organizations/me \textbar{} Sí \textbar{} admin \textbar{} Actualizar nombre/slug/descripción \textbar{}} \\
+\multicolumn{5}{@{}>{\raggedright\arraybackslash}p{(\linewidth - 8\tabcolsep) * \real{0.9714} + 8\tabcolsep}@{}}{%
+POST \textbar{} /organizations/signup \textbar{} No \textbar{} --- \textbar{} Registro de nueva organización + admin \textbar{}} \\
+\end{longtable}
+}
+
+\subsection{\texorpdfstring{Roles (\texttt{/roles})}{Roles (/roles)}}\label{roles-roles}
+
+{\def\LTcaptype{none} % do not increment counter
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\linewidth - 6\tabcolsep) * \real{0.0968}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 6\tabcolsep) * \real{0.1452}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 6\tabcolsep) * \real{0.0645}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 6\tabcolsep) * \real{0.6935}}@{}}
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+Método
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Ruta
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Auth
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Descripción
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+GET & \texttt{/roles/} & Sí & Listar roles disponibles en la organización \\
+\end{longtable}
+}
+
+\subsection{\texorpdfstring{Categorías (\texttt{/categories})}{Categorías (/categories)}}\label{categoruxedas-categories}
+
+{\def\LTcaptype{none} % do not increment counter
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\linewidth - 8\tabcolsep) * \real{0.0690}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 8\tabcolsep) * \real{0.2069}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 8\tabcolsep) * \real{0.0460}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 8\tabcolsep) * \real{0.1149}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 8\tabcolsep) * \real{0.5632}}@{}}
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+Método
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Ruta
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Auth
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Rol mínimo
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Descripción
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+GET & \texttt{/categories/} & Sí & Cualquiera & Listar categorías (soporta \texttt{search}, \texttt{is\_active}) \\
+POST & \texttt{/categories/} & Sí & admin & Crear categoría \\
+GET & \texttt{/categories/\{id\}} & Sí & Cualquiera & Obtener categoría por ID \\
+PATCH & \texttt{/categories/\{id\}} & Sí & admin & Actualizar categoría \\
+DELETE & \texttt{/categories/\{id\}} & Sí & admin & Eliminar / desactivar categoría \\
+\end{longtable}
+}
+
+\subsection{\texorpdfstring{Productos (\texttt{/products})}{Productos (/products)}}\label{productos-products}
+
+{\def\LTcaptype{none} % do not increment counter
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\linewidth - 8\tabcolsep) * \real{0.0714}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 8\tabcolsep) * \real{0.2540}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 8\tabcolsep) * \real{0.0476}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 8\tabcolsep) * \real{0.1032}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 8\tabcolsep) * \real{0.5000}}@{}}
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+Método
+\end{minipage} & \multicolumn{4}{>{\raggedright\arraybackslash}p{(\linewidth - 8\tabcolsep) * \real{0.9048} + 6\tabcolsep}@{}}{%
+\begin{minipage}[b]{\linewidth}\raggedright
+Ruta \textbar{} Auth\textbar{} Rol mínimo \textbar{} Descripción \textbar{}
+\end{minipage}} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+\multicolumn{5}{@{}>{\raggedright\arraybackslash}p{(\linewidth - 8\tabcolsep) * \real{0.9762} + 8\tabcolsep}@{}}{%
+GET \textbar{} /products/ \textbar{} Sí \textbar{} Cualquiera \textbar{} Listar productos (search, is\_active, category\_id, sort\_by) \textbar{}} \\
+\multicolumn{5}{@{}>{\raggedright\arraybackslash}p{(\linewidth - 8\tabcolsep) * \real{0.9762} + 8\tabcolsep}@{}}{%
+POST \textbar{} /products/ \textbar{} Sí \textbar{} admin \textbar{} Crear producto \textbar{}} \\
+\multicolumn{2}{@{}>{\raggedright\arraybackslash}p{(\linewidth - 8\tabcolsep) * \real{0.3254} + 2\tabcolsep}}{%
+GET \textbar{} /products/\{id\} \textbar{} Sí \textbar{} Cualquiera} & \multicolumn{3}{>{\raggedright\arraybackslash}p{(\linewidth - 8\tabcolsep) * \real{0.6508} + 4\tabcolsep}@{}}{%
+Obtener producto por ID \textbar{}} \\
+\multicolumn{4}{@{}>{\raggedright\arraybackslash}p{(\linewidth - 8\tabcolsep) * \real{0.4762} + 6\tabcolsep}}{%
+PATCH \textbar{} /products/\{id\} \textbar{} Sí \textbar{} admin \textbar{} Actualizar producto} & \\
+DELETE & \multicolumn{4}{>{\raggedright\arraybackslash}p{(\linewidth - 8\tabcolsep) * \real{0.9048} + 6\tabcolsep}@{}}{%
+/products/\{id\} \textbar{} Sí \textbar{} admin \textbar{} Eliminar / desactivar producto \textbar{}} \\
+\multicolumn{5}{@{}>{\raggedright\arraybackslash}p{(\linewidth - 8\tabcolsep) * \real{0.9762} + 8\tabcolsep}@{}}{%
+POST \textbar{} /products/\{id\}/stock-adjust \textbar{} Sí \textbar{} admin \textbar{} Ajuste manual de stock \textbar{}} \\
+\multicolumn{5}{@{}>{\raggedright\arraybackslash}p{(\linewidth - 8\tabcolsep) * \real{0.9762} + 8\tabcolsep}@{}}{%
+GET \textbar{} /products/\{id\}/movements \textbar{} Sí \textbar{} Cualquiera \textbar{} Historial de movimientos del producto \textbar{}} \\
+\end{longtable}
+}
+
+\subsection{\texorpdfstring{Clientes (\texttt{/customers})}{Clientes (/customers)}}\label{clientes-customers}
+
+{\def\LTcaptype{none} % do not increment counter
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\linewidth - 8\tabcolsep) * \real{0.0732}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 8\tabcolsep) * \real{0.2805}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 8\tabcolsep) * \real{0.0488}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 8\tabcolsep) * \real{0.1220}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 8\tabcolsep) * \real{0.4756}}@{}}
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+Método
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Ruta
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Auth
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Rol mínimo
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Descripción
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+GET & \texttt{/customers/} & Sí & Cualquiera & Listar clientes (\texttt{search}, \texttt{is\_active}) \\
+POST & \texttt{/customers/} & Sí & Cualquiera & Registrar cliente \\
+GET & \texttt{/customers/\{id\}} & Sí & Cualquiera & Obtener cliente por ID \\
+PATCH & \texttt{/customers/\{id\}} & Sí & Cualquiera & Actualizar cliente \\
+DELETE & \texttt{/customers/\{id\}} & Sí & admin & Desactivar cliente \\
+GET & \texttt{/customers/\{id\}/sales} & Sí & Cualquiera & Historial de compras del cliente \\
+\end{longtable}
+}
+
+\subsection{\texorpdfstring{Ventas (\texttt{/sales})}{Ventas (/sales)}}\label{ventas-sales}
+
+{\def\LTcaptype{none} % do not increment counter
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\linewidth - 8\tabcolsep) * \real{0.0583}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 8\tabcolsep) * \real{0.1942}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 8\tabcolsep) * \real{0.0388}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 8\tabcolsep) * \real{0.0971}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 8\tabcolsep) * \real{0.6117}}@{}}
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+Método
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Ruta
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Auth
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Rol mínimo
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Descripción
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+GET & \texttt{/sales/} & Sí & Cualquiera & Listar ventas (\texttt{search}, \texttt{status}, \texttt{payment\_method}, \texttt{sort\_by}) \\
+POST & \texttt{/sales/} & Sí & Cualquiera & Registrar venta (descuenta stock automáticamente) \\
+GET & \texttt{/sales/\{id\}} & Sí & Cualquiera & Obtener venta por ID \\
+POST & \texttt{/sales/\{id\}/cancel} & Sí & admin & Cancelar venta (revierte stock) \\
+\end{longtable}
+}
+
+\subsection{\texorpdfstring{Movimientos de inventario (\texttt{/inventory-movements})}{Movimientos de inventario (/inventory-movements)}}\label{movimientos-de-inventario-inventory-movements}
+
+{\def\LTcaptype{none} % do not increment counter
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\linewidth - 6\tabcolsep) * \real{0.0638}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 6\tabcolsep) * \real{0.2447}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 6\tabcolsep) * \real{0.0426}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 6\tabcolsep) * \real{0.6489}}@{}}
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+Método
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Ruta
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Auth
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Descripción
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+GET & \texttt{/inventory-movements/} & Sí & Listar movimientos (\texttt{product\_id}, \texttt{movement\_type}, \texttt{sort\_by}) \\
+\end{longtable}
+}
+
+\subsection{\texorpdfstring{Dashboard (\texttt{/dashboard})}{Dashboard (/dashboard)}}\label{dashboard-dashboard}
+
+{\def\LTcaptype{none} % do not increment counter
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\linewidth - 6\tabcolsep) * \real{0.0833}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 6\tabcolsep) * \real{0.2500}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 6\tabcolsep) * \real{0.0556}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 6\tabcolsep) * \real{0.6111}}@{}}
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+Método
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Ruta
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Auth
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Descripción
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+GET & \texttt{/dashboard/stats} & Sí & Estadísticas consolidadas de la organización \\
+\end{longtable}
+}
+
+\textbf{Respuesta de \texttt{/dashboard/stats}:}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{\{}
+  \DataTypeTok{"sales\_today"}\FunctionTok{:} \FunctionTok{\{} \DataTypeTok{"count"}\FunctionTok{:} \DecValTok{5}\FunctionTok{,} \DataTypeTok{"total"}\FunctionTok{:} \StringTok{"250000.00"} \FunctionTok{\},}
+  \DataTypeTok{"sales\_month"}\FunctionTok{:} \FunctionTok{\{} \DataTypeTok{"count"}\FunctionTok{:} \DecValTok{42}\FunctionTok{,} \DataTypeTok{"total"}\FunctionTok{:} \StringTok{"1850000.00"} \FunctionTok{\},}
+  \DataTypeTok{"low\_stock\_count"}\FunctionTok{:} \DecValTok{3}\FunctionTok{,}
+  \DataTypeTok{"average\_ticket"}\FunctionTok{:} \StringTok{"44047.62"}\FunctionTok{,}
+  \DataTypeTok{"top\_products"}\FunctionTok{:} \OtherTok{[}
+    \FunctionTok{\{}
+      \DataTypeTok{"product\_id"}\FunctionTok{:} \StringTok{"..."}\FunctionTok{,}
+      \DataTypeTok{"product\_name"}\FunctionTok{:} \StringTok{"Producto A"}\FunctionTok{,}
+      \DataTypeTok{"quantity\_sold"}\FunctionTok{:} \DecValTok{15}\FunctionTok{,}
+      \DataTypeTok{"revenue"}\FunctionTok{:} \StringTok{"450000.00"}
+    \FunctionTok{\}}
+  \OtherTok{]}\FunctionTok{,}
+  \DataTypeTok{"sales\_by\_day"}\FunctionTok{:} \OtherTok{[}\FunctionTok{\{} \DataTypeTok{"date"}\FunctionTok{:} \StringTok{"2026{-}04{-}01"}\FunctionTok{,} \DataTypeTok{"count"}\FunctionTok{:} \DecValTok{3}\FunctionTok{,} \DataTypeTok{"total"}\FunctionTok{:} \StringTok{"120000.00"} \FunctionTok{\}}\OtherTok{]}
+\FunctionTok{\}}
+\end{Highlighting}
+\end{Shaded}
+
+\subsection{Utilidades}\label{utilidades}
+
+{\def\LTcaptype{none} % do not increment counter
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\linewidth - 6\tabcolsep) * \real{0.0923}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 6\tabcolsep) * \real{0.3385}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 6\tabcolsep) * \real{0.0615}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 6\tabcolsep) * \real{0.5077}}@{}}
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+Método
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Ruta
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Auth
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Descripción
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+GET & \texttt{/utils/health-check/} & No & Health check del servicio backend \\
+\end{longtable}
+}
+
+\section{Modelos de Datos}\label{modelos-de-datos}
+
+\subsection{Organization}\label{organization}
+
+\begin{verbatim}
+organizations
+├── id              UUID           PK
+├── name            VARCHAR(255)   NOT NULL
+├── slug            VARCHAR(100)   UNIQUE, INDEX
+├── description     TEXT           NULLABLE
+├── logo_url        VARCHAR(500)   NULLABLE
+├── is_active       BOOLEAN        DEFAULT true
+├── created_at      TIMESTAMPTZ    NOT NULL
+└── updated_at      TIMESTAMPTZ    NOT NULL
+
+Índices: idx_organizations_slug (unique), idx_organizations_is_active
+\end{verbatim}
+
+\textbf{Validación del slug:} expresión regular \texttt{\^{}{[}a-z0-9-{]}\{3,50\}\$} (solo minúsculas, números y guiones).
+
+\subsection{Role}\label{role}
+
+\begin{verbatim}
+roles
+├── id              INTEGER        PK (autoincrement)
+├── name            VARCHAR(50)    UNIQUE, INDEX
+├── description     TEXT           NULLABLE
+├── permissions     JSONB          DEFAULT []
+└── created_at      TIMESTAMPTZ    NOT NULL
+
+Índices: idx_roles_name (unique)
+\end{verbatim}
+
+\subsection{User}\label{user}
+
+\begin{verbatim}
+users
+├── id                     UUID           PK
+├── organization_id        UUID           FK → organizations.id, INDEX
+├── role_id                INTEGER        FK → roles.id, INDEX
+├── email                  VARCHAR(255)   INDEX
+├── first_name             VARCHAR(100)   NOT NULL
+├── last_name              VARCHAR(100)   NOT NULL
+├── phone                  VARCHAR(50)    NULLABLE
+├── avatar_url             VARCHAR(500)   NULLABLE
+├── hashed_password        VARCHAR(255)   NOT NULL
+├── is_active              BOOLEAN        DEFAULT true
+├── is_verified            BOOLEAN        DEFAULT false
+├── last_login_at          TIMESTAMPTZ    NULLABLE
+├── failed_login_attempts  INTEGER        DEFAULT 0
+├── locked_until           TIMESTAMPTZ    NULLABLE
+├── created_at             TIMESTAMPTZ    NOT NULL
+├── updated_at             TIMESTAMPTZ    NOT NULL
+└── deleted_at             TIMESTAMPTZ    NULLABLE (soft delete)
+
+Restricciones: UNIQUE(organization_id, email)
+Índices: idx_users_organization_id, idx_users_role_id, idx_users_is_active
+\end{verbatim}
+
+\subsection{Category}\label{category}
+
+\begin{verbatim}
+categories
+├── id              UUID           PK
+├── organization_id UUID           FK → organizations.id, INDEX
+├── parent_id       UUID           FK → categories.id, NULLABLE (jerarquía)
+├── name            VARCHAR(255)   NOT NULL
+├── description     TEXT           NULLABLE
+├── is_active       BOOLEAN        DEFAULT true
+├── created_at      TIMESTAMPTZ    NOT NULL
+├── updated_at      TIMESTAMPTZ    NOT NULL
+└── deleted_at      TIMESTAMPTZ    NULLABLE (soft delete)
+
+Restricciones: UNIQUE(organization_id, name, parent_id)
+Índices: idx_categories_organization_id, idx_categories_parent_id, idx_categories_is_active
+\end{verbatim}
+
+\subsection{Product}\label{product}
+
+\begin{verbatim}
+products
+├── id              UUID               PK
+├── organization_id UUID               FK → organizations.id, INDEX
+├── category_id     UUID               FK → categories.id, NULLABLE
+├── name            VARCHAR(255)       NOT NULL
+├── sku             VARCHAR(100)       NOT NULL
+├── description     TEXT               NULLABLE
+├── image_url       VARCHAR(500)       NULLABLE
+├── cost_price      NUMERIC(12,2)      DEFAULT 0
+├── sale_price      NUMERIC(12,2)      DEFAULT 0
+├── stock_quantity  INTEGER            DEFAULT 0
+├── stock_min       INTEGER            DEFAULT 0
+├── stock_max       INTEGER            NULLABLE
+├── unit            VARCHAR(50)        DEFAULT 'unit'
+├── barcode         VARCHAR(100)       NULLABLE
+├── is_active       BOOLEAN            DEFAULT true
+├── created_at      TIMESTAMPTZ        NOT NULL
+├── updated_at      TIMESTAMPTZ        NOT NULL
+└── deleted_at      TIMESTAMPTZ        NULLABLE (soft delete)
+
+Restricciones: UNIQUE(organization_id, sku)
+Índices: idx_products_organization_id, idx_products_category_id, idx_products_is_active, idx_products_sku
+\end{verbatim}
+
+\textbf{Stock bajo:} un producto está en alerta cuando \texttt{stock\_quantity\ ≤\ stock\_min}.
+
+\subsection{Customer}\label{customer}
+
+\begin{verbatim}
+customers
+├── id                UUID           PK
+├── organization_id   UUID           FK → organizations.id, INDEX
+├── document_type     VARCHAR(50)    NOT NULL (CC, NIT, Pasaporte, Otro)
+├── document_number   VARCHAR(50)    NOT NULL
+├── first_name        VARCHAR(100)   NOT NULL
+├── last_name         VARCHAR(100)   NOT NULL
+├── email             VARCHAR(255)   NULLABLE, INDEX
+├── phone             VARCHAR(50)    NULLABLE, INDEX
+├── address           TEXT           NULLABLE
+├── city              VARCHAR(100)   NULLABLE
+├── country           VARCHAR(100)   NULLABLE
+├── notes             TEXT           NULLABLE
+├── is_active         BOOLEAN        DEFAULT true
+├── total_purchases   NUMERIC(12,2)  DEFAULT 0 (actualizado automáticamente)
+├── purchases_count   INTEGER        DEFAULT 0 (actualizado automáticamente)
+├── last_purchase_at  TIMESTAMPTZ    NULLABLE (actualizado automáticamente)
+├── created_at        TIMESTAMPTZ    NOT NULL
+├── updated_at        TIMESTAMPTZ    NOT NULL
+└── deleted_at        TIMESTAMPTZ    NULLABLE (soft delete)
+
+Restricciones: UNIQUE(organization_id, document_number)
+Índices: idx_customers_organization_id, idx_customers_email, idx_customers_phone, idx_customers_is_active
+\end{verbatim}
+
+\subsection{Sale}\label{sale}
+
+\begin{verbatim}
+sales
+├── id                   UUID           PK
+├── organization_id      UUID           FK → organizations.id, INDEX
+├── customer_id          UUID           FK → customers.id, NULLABLE
+├── user_id              UUID           FK → users.id, INDEX
+├── invoice_number       VARCHAR(100)   NOT NULL
+├── sale_date            TIMESTAMPTZ    NOT NULL
+├── subtotal             NUMERIC(12,2)  DEFAULT 0
+├── discount             NUMERIC(12,2)  DEFAULT 0
+├── tax                  NUMERIC(12,2)  DEFAULT 0
+├── total                NUMERIC(12,2)  DEFAULT 0
+├── payment_method       VARCHAR(50)    DEFAULT 'cash' (cash/card/transfer/other)
+├── status               VARCHAR(50)    DEFAULT 'completed' (completed/cancelled/pending)
+├── notes                TEXT           NULLABLE
+├── cancelled_at         TIMESTAMPTZ    NULLABLE
+├── cancelled_by         UUID           FK → users.id, NULLABLE
+├── cancellation_reason  TEXT           NULLABLE
+├── created_at           TIMESTAMPTZ    NOT NULL
+└── updated_at           TIMESTAMPTZ    NOT NULL
+
+Restricciones: UNIQUE(organization_id, invoice_number)
+Índices: idx_sales_organization_id, idx_sales_customer_id, idx_sales_user_id,
+         idx_sales_status, idx_sales_sale_date, idx_sales_invoice_number
+\end{verbatim}
+
+\textbf{Fórmula:} \texttt{total\ =\ subtotal\ -\ discount\ +\ tax}
+
+\subsection{SaleItem}\label{saleitem}
+
+\begin{verbatim}
+sale_items
+├── id            UUID           PK
+├── sale_id       UUID           FK → sales.id, INDEX
+├── product_id    UUID           FK → products.id, INDEX
+├── product_name  VARCHAR(255)   NOT NULL (snapshot al momento de la venta)
+├── product_sku   VARCHAR(100)   NOT NULL (snapshot)
+├── quantity      INTEGER        NOT NULL
+├── unit_price    NUMERIC(12,2)  NOT NULL
+├── subtotal      NUMERIC(12,2)  NOT NULL
+└── created_at    TIMESTAMPTZ    NOT NULL
+
+Índices: idx_sale_items_sale_id, idx_sale_items_product_id
+\end{verbatim}
+
+\begin{quote}
+Los campos \texttt{product\_name} y \texttt{product\_sku} son snapshots del producto en el momento de la venta. Si el producto se edita posteriormente, el historial de ventas conserva los datos originales.
+\end{quote}
+
+\subsection{InventoryMovement}\label{inventorymovement}
+
+\begin{verbatim}
+inventory_movements
+├── id              UUID           PK
+├── organization_id UUID           FK → organizations.id, INDEX
+├── product_id      UUID           FK → products.id, INDEX
+├── user_id         UUID           FK → users.id, INDEX
+├── movement_type   VARCHAR(50)    NOT NULL (sale/adjustment/return/purchase)
+├── quantity        INTEGER        NOT NULL (positivo = entrada, negativo = salida)
+├── previous_stock  INTEGER        NOT NULL
+├── new_stock       INTEGER        NOT NULL
+├── reference_id    UUID           NULLABLE (FK al objeto de origen)
+├── reference_type  VARCHAR(50)    NULLABLE (sale/adjustment/return)
+├── reason          TEXT           NULLABLE
+└── created_at      TIMESTAMPTZ    NOT NULL
+
+Índices: idx_inventory_movements_organization_id, idx_inventory_movements_product_id,
+         idx_inventory_movements_user_id, idx_inventory_movements_movement_type,
+         idx_inventory_movements_created_at,
+         idx_inventory_movements_reference (reference_type, reference_id)
+\end{verbatim}
+
+\section{Variables de Entorno}\label{variables-de-entorno}
+
+La configuración se carga desde el archivo \texttt{.env} usando Pydantic-Settings. Todas las variables se validan al iniciar el servicio.
+
+\subsection{Variables requeridas}\label{variables-requeridas}
+
+{\def\LTcaptype{none} % do not increment counter
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\linewidth - 4\tabcolsep) * \real{0.3662}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 4\tabcolsep) * \real{0.1408}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 4\tabcolsep) * \real{0.4930}}@{}}
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+Variable
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Tipo
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Descripción
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+\texttt{PROJECT\_NAME} & \texttt{str} & Nombre del proyecto \\
+\texttt{SECRET\_KEY} & \texttt{str} & Clave para firmar los JWT \\
+\texttt{POSTGRES\_SERVER} & \texttt{str} & Host del servidor PostgreSQL \\
+\texttt{POSTGRES\_USER} & \texttt{str} & Usuario de PostgreSQL \\
+\texttt{POSTGRES\_DB} & \texttt{str} & Nombre de la base de datos \\
+\texttt{FIRST\_SUPERUSER} & \texttt{EmailStr} & Email del superusuario inicial \\
+\texttt{FIRST\_SUPERUSER\_PASSWORD} & \texttt{str} & Contraseña del superusuario inicial \\
+\end{longtable}
+}
+
+\subsection{Variables opcionales con valores por defecto}\label{variables-opcionales-con-valores-por-defecto}
+
+{\def\LTcaptype{none} % do not increment counter
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\linewidth - 6\tabcolsep) * \real{0.2353}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 6\tabcolsep) * \real{0.1765}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 6\tabcolsep) * \real{0.2206}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 6\tabcolsep) * \real{0.3529}}@{}}
+\toprule\noalign{}
+\multicolumn{4}{@{}>{\raggedright\arraybackslash}p{(\linewidth - 6\tabcolsep) * \real{0.9853} + 6\tabcolsep}@{}}{%
+\begin{minipage}[b]{\linewidth}\raggedright
+Variable \textbar{} Tipo \textbar{} Default \textbar{} Descripción \textbar{}
+\end{minipage}} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+\multicolumn{4}{@{}>{\raggedright\arraybackslash}p{(\linewidth - 6\tabcolsep) * \real{0.9853} + 6\tabcolsep}@{}}{%
+POSTGRES\_PORT \textbar{} int \textbar{} 5432 \textbar{} Puerto de PostgreSQL \textbar{}} \\
+\multicolumn{4}{@{}>{\raggedright\arraybackslash}p{(\linewidth - 6\tabcolsep) * \real{0.9853} + 6\tabcolsep}@{}}{%
+POSTGRES\_PASS \textbar{} str \textbar{} ``\,'' \textbar{} Contraseña de PostgreSQL \textbar{}} \\
+\multicolumn{4}{@{}>{\raggedright\arraybackslash}p{(\linewidth - 6\tabcolsep) * \real{0.9853} + 6\tabcolsep}@{}}{%
+ACCESS\_TOKEN \textbar{} int \textbar{} 11520 \textbar{} Expiración del JWT (8 días) \textbar{}} \\
+\multicolumn{4}{@{}>{\raggedright\arraybackslash}p{(\linewidth - 6\tabcolsep) * \real{0.9853} + 6\tabcolsep}@{}}{%
+FRONTEND\_HOST \textbar{} str \textbar{} http://localhost:5173 \textbar{} URL del frontend para CORS \textbar{}} \\
+CORS\_ORIGINS \textbar{} list{[}str{]} \textbar{} {[}{]} & \multicolumn{3}{>{\raggedright\arraybackslash}p{(\linewidth - 6\tabcolsep) * \real{0.7500} + 4\tabcolsep}@{}}{%
+Orígenes adicionales CORS \textbar{}} \\
+\multicolumn{4}{@{}>{\raggedright\arraybackslash}p{(\linewidth - 6\tabcolsep) * \real{0.9853} + 6\tabcolsep}@{}}{%
+ENVIRONMENT \textbar{} Literal \textbar{} ``local'' \textbar{} local \textbar{} staging \textbar{} production \textbar{}} \\
+\multicolumn{4}{@{}>{\raggedright\arraybackslash}p{(\linewidth - 6\tabcolsep) * \real{0.9853} + 6\tabcolsep}@{}}{%
+SMTP\_HOST \textbar{} str \textbar{} None \textbar{} None \textbar{} Host SMTP para envío de emails \textbar{}} \\
+\multicolumn{4}{@{}>{\raggedright\arraybackslash}p{(\linewidth - 6\tabcolsep) * \real{0.9853} + 6\tabcolsep}@{}}{%
+SMTP\_PORT \textbar{} int \textbar{} 587 \textbar{} Puerto SMTP \textbar{}} \\
+\multicolumn{4}{@{}>{\raggedright\arraybackslash}p{(\linewidth - 6\tabcolsep) * \real{0.9853} + 6\tabcolsep}@{}}{%
+SMTP\_TLS \textbar{} bool \textbar{} True \textbar{} Usar TLS en SMTP \textbar{}} \\
+\multicolumn{4}{@{}>{\raggedright\arraybackslash}p{(\linewidth - 6\tabcolsep) * \real{0.9853} + 6\tabcolsep}@{}}{%
+SMTP\_SSL \textbar{} bool \textbar{} False \textbar{} Usar SSL en SMTP \textbar{}} \\
+\multicolumn{4}{@{}>{\raggedright\arraybackslash}p{(\linewidth - 6\tabcolsep) * \real{0.9853} + 6\tabcolsep}@{}}{%
+SMTP\_USER \textbar{} str \textbar{} None \textbar{} None \textbar{} Usuario SMTP \textbar{}} \\
+\multicolumn{4}{@{}>{\raggedright\arraybackslash}p{(\linewidth - 6\tabcolsep) * \real{0.9853} + 6\tabcolsep}@{}}{%
+SMTP\_PASSWORD \textbar{} str \textbar{} None \textbar{} None \textbar{} Contraseña SMTP \textbar{}} \\
+\multicolumn{4}{@{}>{\raggedright\arraybackslash}p{(\linewidth - 6\tabcolsep) * \real{0.9853} + 6\tabcolsep}@{}}{%
+EMAILS\_FROM \textbar{} EmailStr \textbar{} None \textbar{} None \textbar{} Email remitente \textbar{}} \\
+\multicolumn{4}{@{}>{\raggedright\arraybackslash}p{(\linewidth - 6\tabcolsep) * \real{0.9853} + 6\tabcolsep}@{}}{%
+EMAIL\_RESET\_TOKEN \textbar{} int \textbar{} 48 \textbar{} Expiración del token de reset \textbar{}} \\
+\multicolumn{4}{@{}>{\raggedright\arraybackslash}p{(\linewidth - 6\tabcolsep) * \real{0.9853} + 6\tabcolsep}@{}}{%
+SENTRY\_DSN \textbar{} HttpUrl \textbar{} None \textbar{} None \textbar{} DSN de Sentry para error tracking \textbar{}} \\
+\end{longtable}
+}
+
+\subsection{\texorpdfstring{Propiedades calculadas (no en \texttt{.env})}{Propiedades calculadas (no en .env)}}\label{propiedades-calculadas-no-en-.env}
+
+{\def\LTcaptype{none} % do not increment counter
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\linewidth - 2\tabcolsep) * \real{0.2874}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 2\tabcolsep) * \real{0.7126}}@{}}
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+Propiedad
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Descripción
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+\texttt{SQLALCHEMY\_DATABASE\_URI} & URI completa de conexión a PostgreSQL \\
+\texttt{all\_cors\_origins} & \texttt{BACKEND\_CORS\_ORIGINS} + \texttt{FRONTEND\_HOST} \\
+\texttt{emails\_enabled} & \texttt{True} si \texttt{SMTP\_HOST} y \texttt{EMAILS\_FROM\_EMAIL} están configurados \\
+\end{longtable}
+}
+
+\section{Convenciones de Código}\label{convenciones-de-cuxf3digo}
+
+\subsection{Backend (Python)}\label{backend-python}
+
+\textbf{Orden de imports:}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# 1. Biblioteca estándar}
+\ImportTok{import}\NormalTok{ uuid}
+\ImportTok{from}\NormalTok{ typing }\ImportTok{import}\NormalTok{ Any}
+\ImportTok{from}\NormalTok{ decimal }\ImportTok{import}\NormalTok{ Decimal}
+
+\CommentTok{\# 2. Terceros}
+\ImportTok{from}\NormalTok{ fastapi }\ImportTok{import}\NormalTok{ APIRouter, HTTPException}
+\ImportTok{from}\NormalTok{ sqlmodel }\ImportTok{import}\NormalTok{ SQLModel, Field}
+
+\CommentTok{\# 3. Locales}
+\ImportTok{from}\NormalTok{ app.api.deps }\ImportTok{import}\NormalTok{ CurrentUser, SessionDep}
+\ImportTok{from}\NormalTok{ app.models }\ImportTok{import}\NormalTok{ ProductCreate, ProductPublic}
+\end{Highlighting}
+\end{Shaded}
+
+\textbf{Nomenclatura:}
+
+\begin{itemize}
+\tightlist
+\item
+  Funciones y variables: \texttt{snake\_case}
+\item
+  Clases y modelos: \texttt{PascalCase}
+\item
+  Modelos de BD: singular (\texttt{Product}, \texttt{Sale})
+\item
+  Schemas: \texttt{\{Modelo\}Create}, \texttt{\{Modelo\}Update}, \texttt{\{Modelo\}Public}, \texttt{\{Modelo\}sPublic}
+\item
+  Aliases de tipo: \texttt{PascalCase} con \texttt{Annotated} (\texttt{CurrentUser}, \texttt{SessionDep})
+\end{itemize}
+
+\textbf{Anotaciones de tipo:} obligatorias en todas las funciones. Usar \texttt{str\ \textbar{}\ None} (no \texttt{Optional{[}str{]}}).
+
+\textbf{Patrón de rutas:}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\AttributeTok{@router.post}\NormalTok{(}\StringTok{"/"}\NormalTok{, response\_model}\OperatorTok{=}\NormalTok{ProductPublic)}
+\KeywordTok{def}\NormalTok{ create\_product(}
+    \OperatorTok{*}\NormalTok{,}
+\NormalTok{    session: SessionDep,}
+\NormalTok{    current\_user: CurrentUser,}
+\NormalTok{    current\_organization: CurrentOrganization,}
+\NormalTok{    product\_in: ProductCreate,}
+\NormalTok{) }\OperatorTok{{-}\textgreater{}}\NormalTok{ Any:}
+\NormalTok{    product }\OperatorTok{=}\NormalTok{ Product.model\_validate(product\_in, update}\OperatorTok{=}\NormalTok{\{}\StringTok{"organization\_id"}\NormalTok{: current\_organization\})}
+\NormalTok{    session.add(product)}
+\NormalTok{    session.commit()}
+\NormalTok{    session.refresh(product)}
+    \ControlFlowTok{return}\NormalTok{ product}
+\end{Highlighting}
+\end{Shaded}
+
+\textbf{Códigos HTTP usados:}
+
+\begin{itemize}
+\tightlist
+\item
+  \texttt{400} --- Solicitud inválida (datos incorrectos)
+\item
+  \texttt{403} --- Sin permisos / credenciales inválidas
+\item
+  \texttt{404} --- Recurso no encontrado
+\item
+  \texttt{409} --- Conflicto (recurso duplicado)
+\end{itemize}
+
+\textbf{Multi-tenancy:} \textbf{todas} las consultas de negocio incluyen filtro \texttt{organization\_id\ =\ current\_organization}. El valor se extrae del usuario autenticado, nunca del cuerpo del request.
+
+\subsection{Frontend (TypeScript/React)}\label{frontend-typescriptreact}
+
+\textbf{Orden de imports:}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{// 1. Externos}
+\ImportTok{import}\NormalTok{ \{ useState \} }\ImportTok{from} \StringTok{"react"}\OperatorTok{;}
+\ImportTok{import}\NormalTok{ \{ useMutation}\OperatorTok{,}\NormalTok{ useQueryClient \} }\ImportTok{from} \StringTok{"@tanstack/react{-}query"}\OperatorTok{;}
+\ImportTok{import}\NormalTok{ \{ z \} }\ImportTok{from} \StringTok{"zod"}\OperatorTok{;}
+
+\CommentTok{// 2. Internos (alias @/)}
+\ImportTok{import}\NormalTok{ \{ ProductsService \} }\ImportTok{from} \StringTok{"@/client"}\OperatorTok{;}
+\ImportTok{import}\NormalTok{ \{ DataTable \} }\ImportTok{from} \StringTok{"@/components/Common/DataTable"}\OperatorTok{;}
+\ImportTok{import}\NormalTok{ \{ useCustomToast \} }\ImportTok{from} \StringTok{"@/hooks/useCustomToast"}\OperatorTok{;}
+\end{Highlighting}
+\end{Shaded}
+
+\textbf{Componentes:} solo funcionales, un componente por archivo, nombre de archivo en \texttt{PascalCase}.
+
+\textbf{Patrón de mutación:}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{const}\NormalTok{ mutation }\OperatorTok{=} \FunctionTok{useMutation}\NormalTok{(\{}
+\NormalTok{  mutationFn}\OperatorTok{:}\NormalTok{ (data}\OperatorTok{:}\NormalTok{ ProductCreate) }\KeywordTok{=\textgreater{}}
+\NormalTok{    ProductsService}\OperatorTok{.}\FunctionTok{createProduct}\NormalTok{(\{ requestBody}\OperatorTok{:}\NormalTok{ data \})}\OperatorTok{,}
+\NormalTok{  onSuccess}\OperatorTok{:}\NormalTok{ () }\KeywordTok{=\textgreater{}} \FunctionTok{showSuccessToast}\NormalTok{(}\StringTok{"Producto creado"}\NormalTok{)}\OperatorTok{,}
+\NormalTok{  onError}\OperatorTok{:}\NormalTok{ (err) }\KeywordTok{=\textgreater{}} \FunctionTok{handleError}\NormalTok{(err)}\OperatorTok{,}
+\NormalTok{  onSettled}\OperatorTok{:}\NormalTok{ () }\KeywordTok{=\textgreater{}}\NormalTok{ queryClient}\OperatorTok{.}\FunctionTok{invalidateQueries}\NormalTok{(\{ queryKey}\OperatorTok{:}\NormalTok{ [}\StringTok{"products"}\NormalTok{] \})}\OperatorTok{,}
+\NormalTok{\})}\OperatorTok{;}
+\end{Highlighting}
+\end{Shaded}
+
+\textbf{Validación de formularios:} React Hook Form + Zod schemas con \texttt{zodResolver}.
+
+\textbf{No editar:}
+
+\begin{itemize}
+\tightlist
+\item
+  \texttt{src/client/**} --- auto-generado desde OpenAPI
+\item
+  \texttt{src/components/ui/**} --- componentes Shadcn/ui
+\item
+  \texttt{src/routeTree.gen.ts} --- auto-generado por TanStack Router
+\end{itemize}
+
+\section{Pipeline de CI/CD}\label{pipeline-de-cicd}
+
+El repositorio incluye workflows de GitHub Actions:
+
+\subsection{\texorpdfstring{Workflow de pruebas (en cada PR y push a \texttt{main})}{Workflow de pruebas (en cada PR y push a main)}}\label{workflow-de-pruebas-en-cada-pr-y-push-a-main}
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  \textbf{Backend:} Ejecuta \texttt{uv\ run\ bash\ scripts/test.sh} --- incluye Mypy, Ruff y Pytest con cobertura.
+\item
+  \textbf{Frontend:} Ejecuta \texttt{bun\ run\ lint} --- Biome linting y verificación de tipos TypeScript.
+\end{enumerate}
+
+\subsection{Workflow de despliegue}\label{workflow-de-despliegue}
+
+Al hacer merge a \texttt{main}:
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  Construye las imágenes Docker de backend y frontend.
+\item
+  Las etiqueta con el hash del commit y con \texttt{latest}.
+\item
+  Las publica en el registro de imágenes.
+\item
+  Actualiza los contenedores en el servidor de producción via SSH.
+\end{enumerate}
+
+\section{Estructura de Pruebas}\label{estructura-de-pruebas}
+
+\subsection{Backend (pytest)}\label{backend-pytest}
+
+\begin{verbatim}
+backend/tests/
+├── conftest.py                     # Fixtures globales: db, client, auth headers
+├── api/routes/
+│   ├── test_login.py               # Autenticación, recuperación de contraseña
+│   ├── test_users.py               # CRUD de usuarios, cambio de contraseña
+│   ├── test_categories.py          # CRUD de categorías
+│   ├── test_products.py            # CRUD de productos, ajuste de stock
+│   ├── test_customers.py           # CRUD de clientes, historial de compras
+│   ├── test_sales.py               # Registro y cancelación de ventas
+│   ├── test_inventory_movements.py # Listado de movimientos
+│   ├── test_dashboard.py           # Estadísticas del dashboard
+│   └── test_private.py             # Endpoints de superusuario
+└── crud/
+    ├── test_user.py
+    ├── test_category.py
+    ├── test_product.py
+    ├── test_customer.py
+    ├── test_sale.py
+    ├── test_inventory_movement.py
+    └── test_dashboard.py
+\end{verbatim}
+
+\textbf{Fixtures disponibles en conftest.py:}
+
+{\def\LTcaptype{none} % do not increment counter
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\linewidth - 2\tabcolsep) * \real{0.3462}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 2\tabcolsep) * \real{0.6538}}@{}}
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+Fixture
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Descripción
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+\texttt{db} & Sesión de BD para pruebas (con rollback automático) \\
+\texttt{client} & \texttt{TestClient} de FastAPI \\
+\texttt{superuser\_token\_headers} & Headers con token del superusuario \\
+\texttt{normal\_user\_token\_headers} & Headers con token de usuario normal \\
+\end{longtable}
+}
+
+\textbf{Ejecutar pruebas:}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\BuiltInTok{cd}\NormalTok{ backend}
+\ExtensionTok{uv}\NormalTok{ run bash scripts/test.sh           }\CommentTok{\# Todos los tests con cobertura}
+\ExtensionTok{uv}\NormalTok{ run pytest tests/api/routes/ }\AttributeTok{{-}v}    \CommentTok{\# Solo tests de API}
+\ExtensionTok{uv}\NormalTok{ run pytest }\AttributeTok{{-}k} \StringTok{"test\_create"} \AttributeTok{{-}v}     \CommentTok{\# Tests por patrón}
+\end{Highlighting}
+\end{Shaded}
+
+\subsection{Frontend (Playwright E2E)}\label{frontend-playwright-e2e}
+
+\begin{verbatim}
+frontend/tests/
+├── auth.setup.ts                   # Configuración de autenticación compartida
+├── config.ts                       # Variables de configuración de tests
+├── login.spec.ts                   # Flujo de inicio de sesión
+├── sign-up.spec.ts                 # Registro de usuario
+├── organization-signup.spec.ts     # Registro de organización
+├── reset-password.spec.ts          # Recuperación de contraseña
+├── inventory.spec.ts               # Módulo de inventario
+├── sales.spec.ts                   # Módulo de ventas
+├── customers.spec.ts               # Módulo de clientes
+├── admin.spec.ts                   # Gestión de usuarios
+├── user-settings.spec.ts           # Configuración de cuenta
+└── utils/                          # Helpers de pruebas E2E
+\end{verbatim}
+
+\section{Generación del Cliente API}\label{generaciuxf3n-del-cliente-api}
+
+El cliente TypeScript del frontend se genera automáticamente desde el esquema OpenAPI del backend:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# El backend debe estar corriendo en http://localhost:8000}
+\BuiltInTok{cd}\NormalTok{ frontend}
+\ExtensionTok{bun}\NormalTok{ run generate{-}client}
+\end{Highlighting}
+\end{Shaded}
+
+La configuración del generador está en \texttt{frontend/openapi-ts.config.ts}. Los archivos generados en \texttt{src/client/} no deben editarse manualmente; cualquier cambio se sobreescribirá en la próxima generación.
+
+\section{Multi-Tenancy}\label{multi-tenancy}
+
+OrbitEngine implementa multi-tenancy mediante \textbf{aislamiento por discriminador en tablas compartidas} (Shared Database, Separate Rows):
+
+\begin{itemize}
+\tightlist
+\item
+  Todas las tablas de negocio (\texttt{categories}, \texttt{products}, \texttt{customers}, \texttt{sales}, \texttt{sale\_items}, \texttt{inventory\_movements}) incluyen la columna \texttt{organization\_id}.
+\item
+  La \texttt{organization\_id} se indexa en cada tabla para garantizar rendimiento en consultas filtradas.
+\item
+  Toda consulta de datos de negocio filtra por \texttt{organization\_id\ =\ current\_user.organization\_id}.
+\item
+  El valor de \texttt{organization\_id} \textbf{nunca} se acepta como parámetro del request; siempre se extrae del token JWT del usuario autenticado.
+\item
+  Las restricciones de unicidad incluyen \texttt{organization\_id} como parte de la clave compuesta (ej. \texttt{UNIQUE(organization\_id,\ sku)}), permitiendo que el mismo SKU exista en organizaciones distintas.
+\end{itemize}
+
+Esta estrategia garantiza aislamiento completo de datos entre tenants sin necesidad de esquemas o bases de datos separadas, facilitando el mantenimiento y la escalabilidad horizontal.
+
+\emph{Documento generado como parte del proyecto de grado --- Universidad Sergio Arboleda, Semillero de Software como Innovación, Abril 2026.}

@@ -1,0 +1,113 @@
+% ============================================================================
+% pandoc-preamble.tex
+% Paquetes y macros que requiere el LaTeX generado por Pandoc a partir de los
+% archivos Markdown del informe (tablas booktabs/longtable, bloques de código
+% con resaltado de sintaxis, listas compactas, etc.).
+%
+% La clase MIA-USA.cls ya carga: graphicx, xcolor[table], longtable, array,
+% colortbl, tabularx, amsmath, tikz, fancyhdr, multirow, multicol, tcolorbox.
+% Aquí solo se añade lo que falta. Se usa pdfLaTeX (no se importan fuentes
+% Times New Roman/fontspec del metadata.yaml, que eran para XeLaTeX).
+% ============================================================================
+
+% --- Tablas generadas por Pandoc -------------------------------------------
+\usepackage{booktabs}        % \toprule \midrule \bottomrule
+\usepackage{calc}            % cálculos de ancho de columnas de Pandoc
+\providecommand{\real}[1]{#1}
+
+% Pandoc define columnas de tablas con tipos personalizados; estos comandos
+% reproducen su plantilla por defecto para que las tablas compilen.
+\newlength{\cslhangindent}
+\setlength{\cslhangindent}{1.5em}
+
+% Pandoc envuelve las tablas sin título en {\def\LTcaptype{none} ...}. Como la
+% plantilla carga el paquete caption (vía subcaption), este intenta usar un
+% contador 'none' que no existe. Lo definimos para evitar el error fatal.
+\makeatletter
+\@ifundefined{c@none}{\newcounter{none}}{}
+\makeatother
+
+% --- Tablas anchas: que quepan en la página --------------------------------
+\usepackage{etoolbox}
+\AtBeginEnvironment{longtable}{\footnotesize\setlength{\tabcolsep}{3pt}\renewcommand{\arraystretch}{0.95}}
+
+% Tablas en orientación horizontal cuando el ancho lo requiere
+\usepackage{pdflscape}
+
+% --- Bloques de código con resaltado (salida de Pandoc) --------------------
+\usepackage{fvextra}
+% Ajuste automático de línea para que el código no se desborde del margen
+\DefineVerbatimEnvironment{Highlighting}{Verbatim}{breaklines,breakanywhere,commandchars=\\\{\}}
+\newcommand{\VerbBar}{|}
+\newcommand{\VERB}{\Verb[commandchars=\\\{\}]}
+\newenvironment{Shaded}{}{}
+\newcommand{\AlertTok}[1]{\textcolor[rgb]{1.00,0.00,0.00}{\textbf{#1}}}
+\newcommand{\AnnotationTok}[1]{\textcolor[rgb]{0.38,0.63,0.69}{\textbf{\textit{#1}}}}
+\newcommand{\AttributeTok}[1]{\textcolor[rgb]{0.49,0.56,0.16}{#1}}
+\newcommand{\BaseNTok}[1]{\textcolor[rgb]{0.25,0.63,0.44}{#1}}
+\newcommand{\BuiltInTok}[1]{\textcolor[rgb]{0.00,0.50,0.00}{#1}}
+\newcommand{\CharTok}[1]{\textcolor[rgb]{0.25,0.44,0.63}{#1}}
+\newcommand{\CommentTok}[1]{\textcolor[rgb]{0.38,0.63,0.69}{\textit{#1}}}
+\newcommand{\CommentVarTok}[1]{\textcolor[rgb]{0.38,0.63,0.69}{\textbf{\textit{#1}}}}
+\newcommand{\ConstantTok}[1]{\textcolor[rgb]{0.53,0.00,0.00}{#1}}
+\newcommand{\ControlFlowTok}[1]{\textcolor[rgb]{0.00,0.44,0.13}{\textbf{#1}}}
+\newcommand{\DataTypeTok}[1]{\textcolor[rgb]{0.56,0.13,0.00}{#1}}
+\newcommand{\DecValTok}[1]{\textcolor[rgb]{0.25,0.63,0.44}{#1}}
+\newcommand{\DocumentationTok}[1]{\textcolor[rgb]{0.73,0.13,0.13}{\textit{#1}}}
+\newcommand{\ErrorTok}[1]{\textcolor[rgb]{1.00,0.00,0.00}{\textbf{#1}}}
+\newcommand{\ExtensionTok}[1]{#1}
+\newcommand{\FloatTok}[1]{\textcolor[rgb]{0.25,0.63,0.44}{#1}}
+\newcommand{\FunctionTok}[1]{\textcolor[rgb]{0.02,0.16,0.49}{#1}}
+\newcommand{\ImportTok}[1]{\textcolor[rgb]{0.00,0.50,0.00}{\textbf{#1}}}
+\newcommand{\InformationTok}[1]{\textcolor[rgb]{0.38,0.63,0.69}{\textbf{\textit{#1}}}}
+\newcommand{\KeywordTok}[1]{\textcolor[rgb]{0.00,0.44,0.13}{\textbf{#1}}}
+\newcommand{\NormalTok}[1]{#1}
+\newcommand{\OperatorTok}[1]{\textcolor[rgb]{0.40,0.40,0.40}{#1}}
+\newcommand{\OtherTok}[1]{\textcolor[rgb]{0.00,0.44,0.13}{#1}}
+\newcommand{\PreprocessorTok}[1]{\textcolor[rgb]{0.74,0.48,0.00}{#1}}
+\newcommand{\RegionMarkerTok}[1]{#1}
+\newcommand{\SpecialCharTok}[1]{\textcolor[rgb]{0.25,0.44,0.63}{#1}}
+\newcommand{\SpecialStringTok}[1]{\textcolor[rgb]{0.73,0.40,0.53}{#1}}
+\newcommand{\StringTok}[1]{\textcolor[rgb]{0.25,0.44,0.63}{#1}}
+\newcommand{\VariableTok}[1]{\textcolor[rgb]{0.10,0.09,0.49}{#1}}
+\newcommand{\VerbatimStringTok}[1]{\textcolor[rgb]{0.25,0.44,0.63}{#1}}
+\newcommand{\WarningTok}[1]{\textcolor[rgb]{0.38,0.63,0.69}{\textbf{\textit{#1}}}}
+
+% --- Listas compactas y varios de Pandoc -----------------------------------
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+\setlength{\emergencystretch}{3em} % evita líneas desbordadas
+
+% Caracteres de dibujo de cajas (─ │ └ ├ ┌ ┐ …) usados en los árboles de
+% directorios dentro de los bloques de código. pmboxdraw los define para
+% pdfLaTeX+inputenc.
+\usepackage{pmboxdraw}
+
+% Otros caracteres Unicode que la fuente base / inputenc no traen.
+\usepackage{newunicodechar}
+\newunicodechar{⋮}{\ensuremath{\vdots}}        % U+22EE elipsis vertical
+\newunicodechar{→}{\ensuremath{\rightarrow}}   % U+2192 flecha derecha
+\newunicodechar{←}{\ensuremath{\leftarrow}}    % U+2190
+\newunicodechar{↔}{\ensuremath{\leftrightarrow}}
+\newunicodechar{−}{\ensuremath{-}}             % U+2212 signo menos
+\newunicodechar{≤}{\ensuremath{\leq}}          % U+2264
+\newunicodechar{≥}{\ensuremath{\geq}}          % U+2265
+\newunicodechar{×}{\ensuremath{\times}}        % U+00D7 (por si acaso)
+\newunicodechar{►}{\ensuremath{\blacktriangleright}} % U+25BA
+\newunicodechar{✅}{\checkmark}                 % U+2705
+\newunicodechar{❌}{\ensuremath{\times}}        % U+274C
+\newunicodechar{⁴}{\textsuperscript{4}}        % U+2074 superíndices (notas)
+\newunicodechar{⁵}{\textsuperscript{5}}
+\newunicodechar{⁶}{\textsuperscript{6}}
+\newunicodechar{⁷}{\textsuperscript{7}}
+\newunicodechar{⁸}{\textsuperscript{8}}
+\newunicodechar{⁹}{\textsuperscript{9}}
+\usepackage{amssymb}                            % \checkmark, \blacktriangleright
+
+% Pandoc puede emitir \passthrough en código en línea
+\providecommand{\passthrough}[1]{#1}
+
+% Enlaces de imágenes/figuras de Pandoc dentro de \includegraphics
+\makeatletter
+\providecommand{\pandocbounded}[1]{#1}
+\makeatother

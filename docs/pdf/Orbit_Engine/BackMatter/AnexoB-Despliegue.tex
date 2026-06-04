@@ -1,0 +1,522 @@
+\chapter{Manual de Instalación y Despliegue}\label{manual-de-instalaciuxf3n-y-despliegue}
+
+\textbf{OrbitEngine} --- Plataforma SaaS para la Gestión de Procesos Internos en Pymes\\
+Versión: 1.0 \textbar{} Abril 2026\\
+Universidad Sergio Arboleda --- Semillero de Software como Innovación
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\section{Visión General}\label{visiuxf3n-general}
+
+OrbitEngine utiliza \textbf{Docker Compose} como orquestador de contenedores en todos los entornos. La arquitectura de despliegue se compone de los siguientes servicios:
+
+{\def\LTcaptype{none} % do not increment counter
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\linewidth - 4\tabcolsep) * \real{0.1529}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 4\tabcolsep) * \real{0.2824}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 4\tabcolsep) * \real{0.5647}}@{}}
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+Servicio
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Imagen
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Descripción
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+\texttt{db} & \texttt{postgres:18} & Base de datos relacional PostgreSQL \\
+\texttt{backend} & Custom (FastAPI) & API REST del sistema \\
+\texttt{frontend} & Custom (React/Nginx) & Interfaz de usuario compilada \\
+\texttt{prestart} & Custom (FastAPI) & Ejecuta migraciones y datos iniciales al iniciar \\
+\texttt{adminer} & \texttt{adminer} & Panel web de administración de BD \\
+\texttt{proxy} & \texttt{traefik:3.6} & Reverse proxy y gestor de rutas HTTP/HTTPS \\
+\texttt{mailcatcher} & \texttt{schickling/mailcatcher} & Servidor SMTP de prueba (solo dev) \\
+\end{longtable}
+}
+
+El enrutamiento externo se gestiona con \textbf{Traefik}, que expone los servicios bajo subdominios configurados y maneja la terminación TLS automática mediante Let's Encrypt en producción.
+
+\section{Prerrequisitos}\label{prerrequisitos}
+
+\subsection{Herramientas requeridas}\label{herramientas-requeridas}
+
+{\def\LTcaptype{none} % do not increment counter
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\linewidth - 4\tabcolsep) * \real{0.1489}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 4\tabcolsep) * \real{0.1489}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 4\tabcolsep) * \real{0.7021}}@{}}
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+Herramienta
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Versión mínima
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Propósito
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+Docker Engine & 24.x & Contenedores \\
+Docker Compose & v2.x & Orquestación de servicios \\
+Git & 2.x & Control de versiones \\
+\texttt{uv} & 0.4+ & Gestor de dependencias Python (para desarrollo local sin Docker) \\
+Bun & 1.x & Runtime JS / gestor de paquetes (para desarrollo local sin Docker) \\
+\end{longtable}
+}
+
+\subsection{Puertos utilizados}\label{puertos-utilizados}
+
+{\def\LTcaptype{none} % do not increment counter
+\begin{longtable}[]{@{}lll@{}}
+\toprule\noalign{}
+Puerto & Servicio & Entorno \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+80 & Traefik HTTP & Dev y Producción \\
+443 & Traefik HTTPS & Producción \\
+8000 & Backend FastAPI & Dev (expuesto directamente) \\
+5173 & Frontend (Vite) & Dev \\
+5432 & PostgreSQL & Dev \\
+8080 & Adminer & Dev \\
+8090 & Traefik Dashboard & Dev \\
+1025 & Mailcatcher SMTP & Dev \\
+1080 & Mailcatcher UI & Dev \\
+\end{longtable}
+}
+
+\section{Configuración de Variables de Entorno}\label{configuraciuxf3n-de-variables-de-entorno}
+
+Antes de ejecutar cualquier entorno, crear el archivo \texttt{.env} en la raíz del repositorio:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{cp}\NormalTok{ .env.example .env   }\CommentTok{\# si existe el archivo de ejemplo, de lo contrario crearlo manualmente}
+\end{Highlighting}
+\end{Shaded}
+
+Las variables requeridas son:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# ─── Proyecto ──────────────────────────────────────────────────────────────────}
+\DataTypeTok{PROJECT\_NAME}\OtherTok{=}\StringTok{OrbitEngine}
+\DataTypeTok{STACK\_NAME}\OtherTok{=}\StringTok{orbitengine{-}stack}
+\DataTypeTok{DOMAIN}\OtherTok{=}\StringTok{localhost                       \# En producción: tu{-}dominio.com}
+
+\CommentTok{\# ─── Backend ───────────────────────────────────────────────────────────────────}
+\DataTypeTok{SECRET\_KEY}\OtherTok{=}\StringTok{cambia{-}esto{-}en{-}produccion   \# Clave aleatoria, mínimo 32 chars}
+\DataTypeTok{BACKEND\_CORS\_ORIGINS}\OtherTok{=}\StringTok{["http://localhost:5173","http://localhost"]}
+\DataTypeTok{FRONTEND\_HOST}\OtherTok{=}\StringTok{http://localhost:5173    \# En producción: https://tu{-}dominio.com}
+
+\CommentTok{\# ─── Base de datos ─────────────────────────────────────────────────────────────}
+\DataTypeTok{POSTGRES\_SERVER}\OtherTok{=}\StringTok{db}
+\DataTypeTok{POSTGRES\_PORT}\OtherTok{=}\DecValTok{5432}
+\DataTypeTok{POSTGRES\_USER}\OtherTok{=}\StringTok{postgres}
+\DataTypeTok{POSTGRES\_PASSWORD}\OtherTok{=}\StringTok{cambia{-}esto}
+\DataTypeTok{POSTGRES\_DB}\OtherTok{=}\StringTok{app}
+
+\CommentTok{\# ─── Superusuario inicial ──────────────────────────────────────────────────────}
+\DataTypeTok{FIRST\_SUPERUSER}\OtherTok{=}\StringTok{admin@ejemplo.com}
+\DataTypeTok{FIRST\_SUPERUSER\_PASSWORD}\OtherTok{=}\StringTok{cambia{-}esto}
+
+\CommentTok{\# ─── Email ─────────────────────────────────────────────────────────────────────}
+\DataTypeTok{SMTP\_HOST}\OtherTok{=}\StringTok{mailcatcher                  \# En producción: smtp.tu{-}proveedor.com}
+\DataTypeTok{SMTP\_PORT}\OtherTok{=}\StringTok{1025                         \# En producción: 587}
+\DataTypeTok{SMTP\_TLS}\OtherTok{=}\StringTok{false                         \# En producción: true}
+\DataTypeTok{EMAILS\_FROM\_EMAIL}\OtherTok{=}\StringTok{noreply@tu{-}dominio.com}
+
+\CommentTok{\# ─── Imágenes Docker ──────────────────────────────────────────────────────────}
+\DataTypeTok{DOCKER\_IMAGE\_BACKEND}\OtherTok{=}\StringTok{backend}
+\DataTypeTok{DOCKER\_IMAGE\_FRONTEND}\OtherTok{=}\StringTok{frontend}
+\DataTypeTok{ENVIRONMENT}\OtherTok{=}\StringTok{local                      \# local | staging | production}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{quote}
+\textbf{Producción:} Cambiar todas las claves y contraseñas por valores aleatorios seguros. Se recomienda gestionar las variables de entorno directamente en el panel de Railway (backend) y en el panel de Vercel (frontend), evitando archivos \texttt{.env} en producción.
+\end{quote}
+
+\section{Entorno de Desarrollo Local}\label{entorno-de-desarrollo-local}
+
+El entorno de desarrollo combina \texttt{compose.yml} con \texttt{compose.override.yml}, que añade los servicios de desarrollo (Traefik local, Mailcatcher) y sobrescribe las configuraciones para recarga en caliente.
+
+\subsection{Iniciar el entorno}\label{iniciar-el-entorno}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# Desde la raíz del repositorio}
+\ExtensionTok{docker}\NormalTok{ compose watch}
+\end{Highlighting}
+\end{Shaded}
+
+Este comando:
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  Construye las imágenes de backend y frontend si no existen.
+\item
+  Levanta todos los servicios en orden de dependencias.
+\item
+  Activa la recarga automática del backend al detectar cambios en \texttt{./backend}.
+\item
+  El servicio \texttt{prestart} ejecuta las migraciones de Alembic y los datos iniciales antes de que el backend acepte peticiones.
+\end{enumerate}
+
+\subsection{URLs del entorno local}\label{urls-del-entorno-local}
+
+{\def\LTcaptype{none} % do not increment counter
+\begin{longtable}[]{@{}ll@{}}
+\toprule\noalign{}
+Servicio & URL \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+Frontend & http://localhost:5173 \\
+Backend API & http://localhost:8000 \\
+Documentación interactiva (Swagger) & http://localhost:8000/docs \\
+ReDoc & http://localhost:8000/redoc \\
+Adminer & http://localhost:8080 \\
+Traefik Dashboard & http://localhost:8090 \\
+Mailcatcher UI & http://localhost:1080 \\
+\end{longtable}
+}
+
+\subsection{Detener el entorno}\label{detener-el-entorno}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# Detener y eliminar contenedores (datos persisten en volumen)}
+\ExtensionTok{docker}\NormalTok{ compose down}
+
+\CommentTok{\# Detener y eliminar contenedores + volúmenes (elimina datos de BD)}
+\ExtensionTok{docker}\NormalTok{ compose down }\AttributeTok{{-}v}
+\end{Highlighting}
+\end{Shaded}
+
+\subsection{Ver logs}\label{ver-logs}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\ExtensionTok{docker}\NormalTok{ compose logs }\AttributeTok{{-}f}\NormalTok{ backend    }\CommentTok{\# Logs del backend en tiempo real}
+\ExtensionTok{docker}\NormalTok{ compose logs }\AttributeTok{{-}f}\NormalTok{ frontend   }\CommentTok{\# Logs del frontend}
+\ExtensionTok{docker}\NormalTok{ compose logs }\AttributeTok{{-}f}\NormalTok{ db         }\CommentTok{\# Logs de PostgreSQL}
+\end{Highlighting}
+\end{Shaded}
+
+\section{Migraciones de Base de Datos}\label{migraciones-de-base-de-datos}
+
+Las migraciones se gestionan con \textbf{Alembic} y se ejecutan automáticamente al iniciar el entorno (servicio \texttt{prestart}). Para operaciones manuales:
+
+\subsection{Aplicar migraciones pendientes}\label{aplicar-migraciones-pendientes}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\ExtensionTok{docker}\NormalTok{ compose exec backend alembic upgrade head}
+\end{Highlighting}
+\end{Shaded}
+
+\subsection{Crear una nueva migración}\label{crear-una-nueva-migraciuxf3n}
+
+Después de modificar los modelos en \texttt{backend/app/models.py}:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\ExtensionTok{docker}\NormalTok{ compose exec backend alembic revision }\AttributeTok{{-}{-}autogenerate} \AttributeTok{{-}m} \StringTok{"descripcion\_del\_cambio"}
+\end{Highlighting}
+\end{Shaded}
+
+Revisar el archivo generado en \texttt{backend/app/alembic/versions/} antes de aplicarlo.
+
+\subsection{Ver historial de migraciones}\label{ver-historial-de-migraciones}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\ExtensionTok{docker}\NormalTok{ compose exec backend alembic history }\AttributeTok{{-}{-}verbose}
+\end{Highlighting}
+\end{Shaded}
+
+\subsection{Revertir la última migración}\label{revertir-la-uxfaltima-migraciuxf3n}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\ExtensionTok{docker}\NormalTok{ compose exec backend alembic downgrade }\AttributeTok{{-}1}
+\end{Highlighting}
+\end{Shaded}
+
+\subsection{Migraciones del proyecto}\label{migraciones-del-proyecto}
+
+Las migraciones actuales del esquema son:
+
+{\def\LTcaptype{none} % do not increment counter
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\linewidth - 2\tabcolsep) * \real{0.3784}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 2\tabcolsep) * \real{0.6216}}@{}}
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+Archivo
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Descripción
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+\texttt{001\_initial\_schema.py} & Tablas base: \texttt{organizations}, \texttt{roles}, \texttt{users} \\
+\texttt{002\_categories.py} & Tabla \texttt{categories} con jerarquía padre-hijo \\
+\texttt{003\_products.py} & Tabla \texttt{products} \\
+\texttt{004\_customers.py} & Tabla \texttt{customers} \\
+\texttt{005\_inventory\_movements.py} & Tabla \texttt{inventory\_movements} \\
+\texttt{006\_sales.py} & Tablas \texttt{sales} y \texttt{sale\_items} \\
+\end{longtable}
+}
+
+\section{Pruebas}\label{pruebas}
+
+\subsection{Pruebas del backend (pytest)}\label{pruebas-del-backend-pytest}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# Ejecutar todas las pruebas con cobertura}
+\BuiltInTok{cd}\NormalTok{ backend}
+\ExtensionTok{uv}\NormalTok{ run bash scripts/test.sh}
+
+\CommentTok{\# Prueba de un archivo específico}
+\ExtensionTok{uv}\NormalTok{ run pytest tests/api/routes/test\_sales.py }\AttributeTok{{-}v}
+
+\CommentTok{\# Prueba de una función específica}
+\ExtensionTok{uv}\NormalTok{ run pytest tests/api/routes/test\_users.py::test\_get\_users\_superuser\_me }\AttributeTok{{-}v}
+
+\CommentTok{\# Pruebas por patrón}
+\ExtensionTok{uv}\NormalTok{ run pytest }\AttributeTok{{-}k} \StringTok{"test\_create"} \AttributeTok{{-}v}
+
+\CommentTok{\# Reporte de cobertura}
+\ExtensionTok{uv}\NormalTok{ run coverage run }\AttributeTok{{-}m}\NormalTok{ pytest }\KeywordTok{\&\&} \ExtensionTok{coverage}\NormalTok{ report}
+\end{Highlighting}
+\end{Shaded}
+
+La cobertura de pruebas abarca los principales módulos del sistema, tanto a nivel de API como de lógica CRUD. Se realizaron pruebas completas de API y CRUD para los módulos de usuarios, categorías, productos, clientes, ventas, movimientos de inventario y dashboard, lo que garantiza la validez funcional y la robustez de estos componentes. En el módulo de autenticación, la cobertura se concentra exclusivamente en pruebas de la API, debido a que la lógica principal reside en los flujos de autenticación y autorización más que en operaciones CRUD tradicionales. Esta cobertura integral asegura que los procesos críticos relacionados con la gestión de datos y la seguridad hayan sido evaluados mediante casos de prueba automatizados.
+
+\subsection{Pruebas del frontend (Playwright E2E)}\label{pruebas-del-frontend-playwright-e2e}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\BuiltInTok{cd}\NormalTok{ frontend}
+
+\CommentTok{\# Ejecutar todas las pruebas E2E}
+\ExtensionTok{bun}\NormalTok{ run test}
+
+\CommentTok{\# Prueba de un archivo específico}
+\ExtensionTok{bunx}\NormalTok{ playwright test tests/login.spec.ts}
+
+\CommentTok{\# Prueba por descripción}
+\ExtensionTok{bunx}\NormalTok{ playwright test }\AttributeTok{{-}{-}grep} \StringTok{"crear venta"}
+
+\CommentTok{\# Modo con interfaz visual}
+\ExtensionTok{bun}\NormalTok{ run test:ui}
+\end{Highlighting}
+\end{Shaded}
+
+Las pruebas E2E cubren los flujos: login, registro de organización, registro de usuario, restablecimiento de contraseña, inventario, ventas, clientes, administración de usuarios y configuración.
+
+\section{Generación del Cliente API}\label{generaciuxf3n-del-cliente-api}
+
+Cuando se modifican los endpoints del backend, el cliente TypeScript del frontend debe regenerarse:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# El backend debe estar corriendo en http://localhost:8000}
+\BuiltInTok{cd}\NormalTok{ frontend}
+\ExtensionTok{bun}\NormalTok{ run generate{-}client}
+\end{Highlighting}
+\end{Shaded}
+
+Esto actualiza los archivos en \texttt{src/client/} a partir del esquema OpenAPI del backend. \textbf{No editar manualmente} estos archivos.
+
+\section{Despliegue en Producción}\label{despliegue-en-producciuxf3n}
+
+El despliegue en producción usa el mismo \texttt{compose.yml} sin el \texttt{compose.override.yml}.
+
+\subsection{Prerrequisitos del servidor}\label{prerrequisitos-del-servidor}
+
+\begin{itemize}
+\tightlist
+\item
+  Servidor Linux con Docker Engine y Docker Compose instalados.
+\item
+  Dominio apuntando a la IP del servidor (registros A/CNAME en el DNS).
+\item
+  Puertos 80 y 443 abiertos en el firewall.
+\end{itemize}
+
+\subsection{Preparar la red de Traefik}\label{preparar-la-red-de-traefik}
+
+Traefik requiere una red Docker externa compartida entre todos los servicios:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\ExtensionTok{docker}\NormalTok{ network create traefik{-}public}
+\end{Highlighting}
+\end{Shaded}
+
+\subsection{Configurar Traefik con TLS}\label{configurar-traefik-con-tls}
+
+Crear el archivo de configuración de Traefik (\texttt{compose.traefik.yml} ya incluido en el repositorio) y levantarlo:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\ExtensionTok{docker}\NormalTok{ compose }\AttributeTok{{-}f}\NormalTok{ compose.traefik.yml up }\AttributeTok{{-}d}
+\end{Highlighting}
+\end{Shaded}
+
+Esto levanta Traefik en modo producción con:
+
+\begin{itemize}
+\tightlist
+\item
+  Redirección automática HTTP → HTTPS.
+\item
+  Certificados TLS gestionados por Let's Encrypt.
+\item
+  Panel de Traefik accesible solo internamente.
+\end{itemize}
+
+\subsection{Configurar variables de entorno para producción}\label{configurar-variables-de-entorno-para-producciuxf3n}
+
+Editar el \texttt{.env} con los valores de producción:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\DataTypeTok{DOMAIN}\OtherTok{=}\StringTok{tu{-}dominio.com}
+\DataTypeTok{ENVIRONMENT}\OtherTok{=}\StringTok{production}
+\DataTypeTok{SECRET\_KEY}\OtherTok{=}\StringTok{\textless{}clave{-}aleatoria{-}larga\textgreater{}}
+\DataTypeTok{POSTGRES\_PASSWORD}\OtherTok{=}\StringTok{\textless{}contraseña{-}segura\textgreater{}}
+\DataTypeTok{FIRST\_SUPERUSER\_PASSWORD}\OtherTok{=}\StringTok{\textless{}contraseña{-}segura\textgreater{}}
+\DataTypeTok{FRONTEND\_HOST}\OtherTok{=}\StringTok{https://tu{-}dominio.com}
+\DataTypeTok{BACKEND\_CORS\_ORIGINS}\OtherTok{=}\StringTok{["https://tu{-}dominio.com"]}
+\DataTypeTok{SMTP\_HOST}\OtherTok{=}\StringTok{smtp.tu{-}proveedor.com}
+\DataTypeTok{SMTP\_PORT}\OtherTok{=}\DecValTok{587}
+\DataTypeTok{SMTP\_TLS}\OtherTok{=}\KeywordTok{true}
+\DataTypeTok{EMAILS\_FROM\_EMAIL}\OtherTok{=}\StringTok{noreply@tu{-}dominio.com}
+\end{Highlighting}
+\end{Shaded}
+
+\subsection{Construir y desplegar}\label{construir-y-desplegar}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# Construir imágenes con la etiqueta de versión}
+\VariableTok{TAG}\OperatorTok{=}\NormalTok{v1.0.0 }\ExtensionTok{docker}\NormalTok{ compose build}
+
+\CommentTok{\# Iniciar todos los servicios}
+\VariableTok{TAG}\OperatorTok{=}\NormalTok{v1.0.0 }\ExtensionTok{docker}\NormalTok{ compose up }\AttributeTok{{-}d}
+
+\CommentTok{\# Verificar estado}
+\ExtensionTok{docker}\NormalTok{ compose ps}
+\ExtensionTok{docker}\NormalTok{ compose logs }\AttributeTok{{-}f}
+\end{Highlighting}
+\end{Shaded}
+
+Los servicios se levantan en este orden:
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  \texttt{db} --- espera estar healthy (hasta 30s).
+\item
+  \texttt{prestart} --- ejecuta migraciones y datos iniciales.
+\item
+  \texttt{backend} y \texttt{frontend} --- arrancan tras \texttt{prestart}.
+\item
+  \texttt{adminer} --- panel de administración de BD.
+\end{enumerate}
+
+\subsection{Actualización de la aplicación}\label{actualizaciuxf3n-de-la-aplicaciuxf3n}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# Obtener la nueva versión}
+\FunctionTok{git}\NormalTok{ pull origin main}
+
+\CommentTok{\# Reconstruir imágenes}
+\VariableTok{TAG}\OperatorTok{=}\NormalTok{v1.1.0 }\ExtensionTok{docker}\NormalTok{ compose build}
+
+\CommentTok{\# Reiniciar servicios (downtime mínimo: solo el backend se reinicia)}
+\VariableTok{TAG}\OperatorTok{=}\NormalTok{v1.1.0 }\ExtensionTok{docker}\NormalTok{ compose up }\AttributeTok{{-}d} \AttributeTok{{-}{-}no{-}deps}\NormalTok{ backend frontend}
+
+\CommentTok{\# Las migraciones se aplican automáticamente al iniciar prestart}
+\end{Highlighting}
+\end{Shaded}
+
+\section{Monitoreo y Mantenimiento}\label{monitoreo-y-mantenimiento}
+
+\subsection{Estado de los servicios}\label{estado-de-los-servicios}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\ExtensionTok{docker}\NormalTok{ compose ps                    }\CommentTok{\# Estado de todos los contenedores}
+\ExtensionTok{docker}\NormalTok{ stats                         }\CommentTok{\# Uso de CPU/RAM en tiempo real}
+\ExtensionTok{docker}\NormalTok{ compose exec db psql }\AttributeTok{{-}U}\NormalTok{ postgres }\AttributeTok{{-}c} \StringTok{"\textbackslash{}l"}   \CommentTok{\# Listar BDs en PostgreSQL}
+\end{Highlighting}
+\end{Shaded}
+
+\subsection{Backup de la base de datos}\label{backup-de-la-base-de-datos}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# Crear un backup}
+\ExtensionTok{docker}\NormalTok{ compose exec db pg\_dump }\AttributeTok{{-}U}\NormalTok{ postgres app }\OperatorTok{\textgreater{}}\NormalTok{ backup\_}\VariableTok{$(}\FunctionTok{date}\NormalTok{ +\%Y\%m\%d}\VariableTok{)}\NormalTok{.sql}
+
+\CommentTok{\# Restaurar un backup}
+\ExtensionTok{docker}\NormalTok{ compose exec }\AttributeTok{{-}T}\NormalTok{ db psql }\AttributeTok{{-}U}\NormalTok{ postgres app }\OperatorTok{\textless{}}\NormalTok{ backup\_20260401.sql}
+\end{Highlighting}
+\end{Shaded}
+
+\subsection{Limpiar recursos no usados}\label{limpiar-recursos-no-usados}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\ExtensionTok{docker}\NormalTok{ system prune }\AttributeTok{{-}f}              \CommentTok{\# Elimina imágenes, contenedores y redes sin usar}
+\ExtensionTok{docker}\NormalTok{ volume prune }\AttributeTok{{-}f}              \CommentTok{\# Elimina volúmenes sin usar (¡precaución en producción!)}
+\end{Highlighting}
+\end{Shaded}
+
+\section{Solución de Problemas}\label{soluciuxf3n-de-problemas}
+
+{\def\LTcaptype{none} % do not increment counter
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\linewidth - 4\tabcolsep) * \real{0.2044}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 4\tabcolsep) * \real{0.1989}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 4\tabcolsep) * \real{0.5967}}@{}}
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+Problema
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Causa probable
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Solución
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+El backend no inicia & BD no está disponible & Verificar que \texttt{db} esté \texttt{healthy} con \texttt{docker\ compose\ ps}. Revisar \texttt{POSTGRES\_*} en \texttt{.env}. \\
+Error de migraciones al iniciar & Migración incompatible & Ejecutar \texttt{docker\ compose\ exec\ backend\ alembic\ history} y \texttt{alembic\ current}. Corregir el script de migración. \\
+\texttt{502\ Bad\ Gateway} en el frontend & Backend no responde & Verificar logs del backend: \texttt{docker\ compose\ logs\ backend}. Comprobar el healthcheck. \\
+Emails no se envían (producción) & SMTP mal configurado & Verificar \texttt{SMTP\_HOST}, \texttt{SMTP\_PORT} y credenciales. Probar con \texttt{telnet\ \$SMTP\_HOST\ \$SMTP\_PORT}. \\
+\texttt{Secret\ key\ too\ short} al iniciar & \texttt{SECRET\_KEY} es demasiado corta & Generar una clave con \texttt{openssl\ rand\ -hex\ 32} y actualizar \texttt{.env}. \\
+Traefik no renueva el certificado TLS & Puerto 80 bloqueado o DNS incorrecto & Verificar que el dominio resuelva a la IP correcta y el puerto 80 esté abierto. \\
+Error \texttt{UNIQUE\ constraint} al insertar & Dato duplicado en BD & Verificar que el SKU, slug u otro campo único no esté repetido. \\
+\end{longtable}
+}
+
+\emph{Documento generado como parte del proyecto de grado --- Universidad Sergio Arboleda, Semillero de Software como Innovación, Abril 2026.}

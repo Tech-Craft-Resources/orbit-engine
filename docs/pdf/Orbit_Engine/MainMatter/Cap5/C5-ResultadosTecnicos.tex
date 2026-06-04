@@ -1,0 +1,868 @@
+\chapter{Resultados Técnicos}\label{resultados-tuxe9cnicos}
+
+\begin{quote}
+Este capítulo reporta exclusivamente la \textbf{validación técnica} del sistema OrbitEngine: pruebas de carga sobre el backend con Locust y pruebas de rendimiento del frontend con Lighthouse, PageSpeed Insights y WebPageTest. Los \textbf{resultados de la validación con usuarios} (eficiencia operativa, satisfacción, completitud de tareas) se presentan en el Capítulo 6 --- \emph{Resultados de Usuarios}. Las \textbf{acciones de mejora} derivadas de los hallazgos aquí descritos se discuten en el capítulo de Conclusiones.
+\end{quote}
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\section{Marco de la Validación Técnica}\label{marco-de-la-validaciuxf3n-tuxe9cnica}
+
+\subsection{Objetivos}\label{objetivos}
+
+La validación técnica se planteó tres objetivos verificables:
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  \textbf{Caracterizar el comportamiento del backend bajo carga concurrente}, identificando latencias, tasa de fallos y punto de degradación.
+\item
+  \textbf{Caracterizar el rendimiento percibido del frontend} desde tres puntos de observación independientes: laboratorio local (Lighthouse), infraestructura externa (PageSpeed Insights) y red real con captura de video (WebPageTest).
+\item
+  \textbf{Contrastar los hallazgos contra los Requisitos No Funcionales} definidos en el Capítulo 3 que aplican a esta validación, con foco en RNF-01 (rendimiento de la API), RNF-02 (disponibilidad), RNF-07 (responsividad de la interfaz) y RNF-09 (escalabilidad arquitectónica).
+\end{enumerate}
+
+\subsection{Ambiente de Pruebas}\label{ambiente-de-pruebas}
+
+Todas las mediciones técnicas se realizaron sobre el entorno de producción real del sistema, siguiendo la configuración detallada en el capítulo anterior. El backend, construido en FastAPI, estaba desplegado en la plataforma Railway, ejecutándose como un servicio web sin réplicas horizontales, es decir, con una única instancia principal. Para adecuarse al nivel de exigencia de cada escenario, se configuró el paralelismo interno del servidor ajustando la cantidad de workers: en los tests 01 a 05 se dispuso de dos workers de FastAPI, mientras que para el test 06---que correspondía a un escenario de carga pico sostenida---se aumentó a cuatro workers, permitiendo simular mayor concurrencia en la aplicación.
+
+La base de datos utilizada en todas las pruebas fue PostgreSQL, también gestionada desde Railway. Se trataba de una única instancia compartida, sin réplicas de lectura, lo que significa que todas las operaciones (tanto de lectura como de escritura) recaían sobre el mismo servidor de base de datos.
+
+En cuanto al frontend, este estaba desplegado en Vercel. Se trata de una aplicación de página única (SPA), construida con React y Vite, y servida a través de una red global de distribución de contenido (CDN), lo que permite un acceso rápido y seguro gracias a la integración de HTTPS automático.
+
+Respecto a los dominios accesibles en las pruebas, se utilizaron las rutas oficiales del entorno productivo: \texttt{orbitengine.lat} para el frontend y \texttt{api.orbitengine.lat} para los endpoints del backend. Ambos estaban protegidos con certificados TLS, gestionados y renovados automáticamente por las propias plataformas de despliegue.
+
+Por último, todas las pruebas de carga se ejecutaron desde una única estación de trabajo del equipo, conectada desde una red doméstica situada en Bogotá, Colombia, lo que replica condiciones realistas de acceso de usuarios finales desde una red residencial estándar.
+
+\subsection{Criterios de Aceptación}\label{criterios-de-aceptaciuxf3n}
+
+Los resultados de la validación técnica se evaluaron en función de criterios previamente definidos y recogidos en la Sección 3.2 del Capítulo 3. Estos criterios son:
+
+\begin{itemize}
+\tightlist
+\item
+  Para el rendimiento (RNF-01): Se exige que al menos el 95\% de las respuestas de la API, bajo condiciones de carga normal (hasta 50 usuarios concurrentes), tengan un tiempo de resolución inferior a 500 milisegundos. Este umbral busca garantizar una experiencia ágil incluso cuando la plataforma es utilizada por decenas de usuarios al mismo tiempo.
+\item
+  En cuanto a la disponibilidad (RNF-02): El sistema debe permanecer disponible y operativo al menos el 95\% del tiempo a lo largo de un mes, limitando al mínimo los periodos de caída o interrupción en el servicio.
+\item
+  Analizando la usabilidad (RNF-07): Se requiere que la interfaz principal del sistema sea completamente responsive y funcional en dispositivos cuyo ancho de pantalla sea igual o superior a 375 píxeles, que es una referencia común para pantallas de teléfonos móviles actuales.
+\item
+  Respecto a la escalabilidad (RNF-09): La arquitectura técnica del sistema debe poder soportar el crecimiento en la cantidad de organizaciones (tenants) que lo utilizan, sin necesidad de modificar estructuras internas del software, solamente añadiendo nuevas instancias (escalado horizontal) en la capa de aplicación.
+\end{itemize}
+
+Estos criterios delimitan de forma concreta cómo juzgar el éxito o insuficiencia de los resultados obtenidos durante la validación técnica de OrbitEngine.
+
+\subsection{Herramientas Empleadas}\label{herramientas-empleadas}
+
+{\def\LTcaptype{none} % do not increment counter
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\linewidth - 6\tabcolsep) * \real{0.1302}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 6\tabcolsep) * \real{0.3964}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 6\tabcolsep) * \real{0.1065}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 6\tabcolsep) * \real{0.3669}}@{}}
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+Herramienta
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Versión / canal
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Capa observada
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Tipo de medición
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+\textbf{Locust} & 2.x sobre \texttt{tests/performance/locustfile.py} & Backend / API REST & Carga sintética con usuarios virtuales \\
+\textbf{Lighthouse} & 13.0.1, ejecutado desde Chrome DevTools & Frontend & Auditoría de laboratorio (escritorio, conexión local) \\
+\textbf{PageSpeed Insights} & Web pública de Google (Lighthouse 13.0.1 con Headless Chromium 146) & Frontend & Auditoría desde infraestructura de Google (escritorio y móvil) \\
+\textbf{WebPageTest} & versión 26.03 & Frontend & Carga real con captura de waterfall y video \\
+\end{longtable}
+}
+
+\subsection{Composición del Piloto Técnico}\label{composiciuxf3n-del-piloto-tuxe9cnico}
+
+Las pruebas de este capítulo se ejecutaron sobre un piloto compuesto por \textbf{ocho organizaciones registradas en producción}, con una composición deliberadamente mixta diseñada para combinar realismo de uso con presión sintética sobre el sistema. La siguiente tabla detalla la naturaleza de cada una de las ocho organizaciones.
+
+\textbf{Tabla 5.1.5.} Organizaciones del piloto técnico.
+
+{\def\LTcaptype{none} % do not increment counter
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\linewidth - 6\tabcolsep) * \real{0.0366}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 6\tabcolsep) * \real{0.1204}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 6\tabcolsep) * \real{0.2984}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 6\tabcolsep) * \real{0.5445}}@{}}
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+N°
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Nombre
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Naturaleza
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Sector / propósito
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+1 & \textbf{Frozt Bitez} & \textbf{Empresa real} & Pyme que adoptó OrbitEngine para sus operaciones reales \\
+2 & \textbf{Miss Peggy} & \textbf{Empresa real} & Pyme de un sector distinto al de Frozt Bitez, que también adoptó la plataforma para sus operaciones \\
+3 & Lehgo & Empresa ficticia de prueba (datos sintéticos) & Generación de volumen de productos, ventas y movimientos para forzar consultas \\
+4 & Ferrallas del Norte & Empresa ficticia de prueba (datos sintéticos) & Generación de volumen de productos, ventas y movimientos para forzar consultas \\
+5 & Sabor Caribe & Empresa ficticia de prueba (datos sintéticos) & Generación de volumen de productos, ventas y movimientos para forzar consultas \\
+6 & Moda Andes & Empresa ficticia de prueba (datos sintéticos) & Generación de volumen de productos, ventas y movimientos para forzar consultas \\
+7 & FarmaVida & Empresa ficticia de prueba (datos sintéticos) & Generación de volumen de productos, ventas y movimientos para forzar consultas \\
+8 & Default del entorno & Datos de prueba --- primera organización creada como \emph{seed} & Tenant base de pruebas internas; conserva información residual de las primeras iteraciones de desarrollo \\
+\end{longtable}
+}
+
+\textbf{Resumen cuantitativo.}
+
+{\def\LTcaptype{none} % do not increment counter
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\linewidth - 4\tabcolsep) * \real{0.6735}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 4\tabcolsep) * \real{0.0816}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 4\tabcolsep) * \real{0.2449}}@{}}
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+Tipo de organización
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Cantidad
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Proporción de la muestra
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+\textbf{Empresas reales} que adoptaron OrbitEngine para sus operaciones & 2 & 25 \% \\
+\textbf{Empresas ficticias de prueba / datos de prueba} & 6 & 75 \% \\
+\textbf{Total} & \textbf{8} & \textbf{100 \%} \\
+\end{longtable}
+}
+
+\begin{itemize}
+\tightlist
+\item
+  \textbf{Empresas reales (25 \% de la muestra) --- Frozt Bitez y Miss Peggy.} Son las únicas dos pymes que confiaron en la plataforma para realizar parte o la totalidad de sus operaciones cotidianas durante la fase de validación. Aunque en cantidad representan una proporción menor, su valor para el experimento es alto: pertenecen a sectores muy distintos entre sí, manejan trazabilidades diferenciadas de productos, ventas, clientes y movimientos de inventario, y permiten dar un panorama representativo de cómo se comportarán empresas reales que adopten OrbitEngine en el futuro.
+\item
+  \textbf{Empresas ficticias de prueba (75 \% de la muestra) --- Lehgo, Ferrallas del Norte, Sabor Caribe, Moda Andes, FarmaVida y Default.} Son seis organizaciones creadas por el equipo de desarrollo con el único objetivo de \textbf{poblar el sistema con grandes volúmenes de productos, ventas, clientes, movimientos de inventario y reportes}, de modo que las consultas, agregaciones y filtros del backend trabajen sobre conjuntos de datos suficientemente grandes para forzar respuestas más complejas del servidor. Estas organizaciones \textbf{no representan negocios reales}; en lo que sigue se nombrarán siempre como \emph{empresas ficticias de prueba} o \emph{datos de prueba}. \emph{Default} es, además, la primera organización creada en el entorno y conserva información residual de las pruebas iniciales del equipo, por lo que cumple un papel adicional como \emph{tenant} base.
+\end{itemize}
+
+Esta composición es coherente con el alcance de un piloto técnico: \textbf{Frozt Bitez y Miss Peggy} aportan realismo cualitativo sobre el comportamiento productivo del sistema, mientras que \textbf{Lehgo, Ferrallas del Norte, Sabor Caribe, Moda Andes, FarmaVida y Default} aportan el volumen sintético necesario para evidenciar el coste de las consultas en condiciones próximas a las de un sistema en producción a mayor escala.
+
+\section{Pruebas de Carga (Backend / API) --- Locust}\label{pruebas-de-carga-backend-api-locust}
+
+\subsection{Diseño del Experimento}\label{diseuxf1o-del-experimento}
+
+Las pruebas se construyeron con \textbf{Locust} y están versionadas en el repositorio en \texttt{{[}backend/tests/performance/locustfile.py{]}(../../backend/tests/performance/locustfile.py)}. El diseño persigue cuatro propiedades:
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  \textbf{Realismo del tráfico}: combinar exploración (paginación, búsqueda, filtros, ordenamiento) con escritura efectiva (registro de ventas, ajuste de stock).
+\item
+  \textbf{Multi-tenancy bajo carga}: cada usuario virtual rota credenciales reales de las distintas organizaciones piloto, ejercitando simultáneamente el aislamiento por \texttt{organization\_id} en todas las consultas.
+\item
+  \textbf{Reproducibilidad}: los escenarios y los pesos relativos de las tareas están codificados en el repositorio y pueden reejecutarse en cualquier momento.
+\item
+  \textbf{Progresividad}: se ejecutaron seis escenarios encadenados con concurrencia creciente para construir una curva de degradación.
+\end{enumerate}
+
+\subsection{Perfiles de Usuario Virtual}\label{perfiles-de-usuario-virtual}
+
+El \texttt{locustfile.py} define tres clases de \texttt{HttpUser} que se mezclan según pesos relativos:
+
+{\def\LTcaptype{none} % do not increment counter
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\linewidth - 4\tabcolsep) * \real{0.1613}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 4\tabcolsep) * \real{0.0516}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 4\tabcolsep) * \real{0.7871}}@{}}
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+Perfil
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Peso
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Comportamiento
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+OrbitEngineUser & 3 & Lee dashboard, productos, ventas, clientes y categorías. Ejercita paginación extrema, búsqueda, ordenamiento y filtros. \\
+SellerUser & 2 & Crea ventas reales contra el catálogo, ajusta stock y consulta movimientos. \\
+SpammerUser & 1 & Martillea sin pausa los endpoints de agregación y peticiones a UUIDs inexistentes para ejercitar el camino de error 404. \\
+\end{longtable}
+}
+
+La rotación de cuentas se hace de forma cíclica y \emph{thread-safe} sobre la lista \texttt{ACCOUNTS}, que contiene credenciales válidas de las ocho organizaciones del piloto técnico descritas en la sección 5.1.5: las \textbf{dos empresas reales} (\textbf{Frozt Bitez} y \textbf{Miss Peggy}) y las \textbf{seis empresas ficticias de prueba} (\textbf{Lehgo}, \textbf{Ferrallas del Norte}, \textbf{Sabor Caribe}, \textbf{Moda Andes}, \textbf{FarmaVida} y \textbf{Default}). Esta rotación cumple dos funciones en paralelo: (i) cada usuario virtual ejercita el aislamiento por \texttt{organization\_id} desde un \emph{tenant} distinto, validando la integridad multi-tenant bajo carga; (ii) las peticiones consultan tanto los volúmenes reales y acotados de Frozt Bitez y Miss Peggy como los volúmenes grandes generados por las seis empresas ficticias de prueba, lo que aporta un perfil de coste por consulta más representativo que el que obtendría un único \emph{tenant}.
+
+\subsection{Escenarios Ejecutados}\label{escenarios-ejecutados}
+
+Se ejecutaron seis escenarios consecutivos contra \texttt{https://api.orbitengine.lat}. La configuración exacta (\texttt{-\/-users} y \texttt{-\/-spawn-rate}) se eligió siguiendo los tres regímenes documentados en el \texttt{docstring} del \texttt{locustfile}:
+
+\begin{itemize}
+\tightlist
+\item
+  \textbf{Carga normal de pyme} (\textasciitilde8 usuarios)
+\item
+  \textbf{Estrés} (\textasciitilde50 usuarios)
+\item
+  \textbf{Pico} (\textasciitilde200 usuarios, ajustando la duración para acotar el daño en los regímenes de saturación).
+\end{itemize}
+
+{\def\LTcaptype{none} % do not increment counter
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\linewidth - 12\tabcolsep) * \real{0.0918}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 12\tabcolsep) * \real{0.3980}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 12\tabcolsep) * \real{0.1122}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 12\tabcolsep) * \real{0.1020}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 12\tabcolsep) * \real{0.0612}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 12\tabcolsep) * \real{0.1429}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 12\tabcolsep) * \real{0.0918}}@{}}
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+Escenario
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Régimen
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Duración
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Total req.
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Fallos
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Tasa de fallos
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+RPS prom.
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+Test 01 & Carga normal (\textasciitilde8 usuarios concurrentes) & 1 min 39 s & 235 & 0 & \textbf{0,0 \%} & 2,38 \\
+Test 02 & Estrés moderado (\textasciitilde50 usuarios) & 3 min 02 s & 2 973 & 51 & \textbf{1,7 \%} & 16,34 \\
+Test 03 & Estrés intermedio & 2 min 18 s & 1 600 & 103 & \textbf{6,4 \%} & 11,58 \\
+Test 04 & Saturación & 1 min 10 s & 360 & 41 & \textbf{11,4 \%} & 6,97 \\
+Test 05 & Saturación severa & 51 s & 358 & 79 & \textbf{22,1 \%} & 5,07 \\
+Test 06 & Pico sostenido (\textasciitilde200 usuarios) & 10 min 05 s & 7 331 & 1 408 & \textbf{19,2 \%} & 12,12 \\
+\end{longtable}
+}
+
+\begin{quote}
+Los CSV completos de cada escenario (\texttt{Test0X-Requests.csv}, \texttt{Test0X-Failures.csv} y, cuando aplica, \texttt{Test0X-Exception.csv}), así como los reportes HTML generados por Locust, no se incluyen en este repositorio público; para acceder a los soportes correspondientes, consultar a los desarrolladores del proyecto.
+\end{quote}
+
+\subsection{Resultados por Escenario}\label{resultados-por-escenario}
+
+\subsubsection{Test 01 --- Carga Normal de Pyme}\label{test-01-carga-normal-de-pyme}
+
+Es el escenario de referencia y representa el régimen al que se diseñó el sistema. Con aproximadamente ocho usuarios virtuales se completaron \textbf{235 peticiones sin fallos}.
+
+{\def\LTcaptype{none} % do not increment counter
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\linewidth - 12\tabcolsep) * \real{0.2625}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 12\tabcolsep) * \real{0.0750}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 12\tabcolsep) * \real{0.0625}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 12\tabcolsep) * \real{0.1500}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 12\tabcolsep) * \real{0.1500}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 12\tabcolsep) * \real{0.1500}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 12\tabcolsep) * \real{0.1500}}@{}}
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+Endpoint
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Método
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Reqs.
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Mediana
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Promedio
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+P95
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+P99
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+/login/access-token & POST & 8 & 910 ms & 1 196 ms & 2 100 ms & 2 100 ms \\
+/categories/ & GET & 20 & 430 ms & 454 ms & 850 ms & 850 ms \\
+/customers/ & GET & 41 & 430 ms & 453 ms & 480 ms & 850 ms \\
+/dashboard/stats & GET & 57 & 710 ms & 721 ms & 780 ms & 1 100 ms \\
+/inventory-movements/ & GET & 20 & 520 ms & 542 ms & 640 ms & 640 ms \\
+/products/ & GET & 45 & 500 ms & 515 ms & 710 ms & 920 ms \\
+/products/low-stock & GET & 21 & 430 ms & 472 ms & 840 ms & 850 ms \\
+/sales/ & GET & 23 & \textbf{7 500 ms} & \textbf{7 501 ms} & \textbf{7 600 ms} & \textbf{7 600 ms} \\
+\textbf{Agregado} & --- & 235 & 520 ms & 1 254 ms & 7 500 ms & 7 600 ms \\
+\end{longtable}
+}
+
+Observación clave: la mediana global (520 ms) y la mediana de los endpoints CRUD se sitúan en el orden de cientos de milisegundos, pero el endpoint \texttt{GET\ /sales/} consume sistemáticamente \textbf{alrededor de 7,5 segundos por petición} incluso sin concurrencia significativa. Este endpoint domina el percentil 95 global y es responsable de que el agregado se aleje de los 500 ms exigidos por el RNF-01.
+
+\subsubsection{Test 02 --- Estrés Moderado (\textasciitilde50 usuarios)}\label{test-02-estruxe9s-moderado-50-usuarios}
+
+Con \textasciitilde50 usuarios virtuales sostenidos durante poco más de tres minutos, el sistema procesa \textbf{2 973 peticiones} con una tasa de fallos del 1,7 \%. Los fallos se concentran en dos categorías:
+
+\begin{itemize}
+\tightlist
+\item
+  45 respuestas 404 esperadas en \texttt{GET\ /\{resource\}/\{bad-uuid\}}, que el \texttt{SpammerUser} genera intencionalmente para ejercitar el camino de error.
+\item
+  6 errores 500 en \texttt{POST\ /sales/}, atribuibles a contenciones puntuales sobre el stock al ejecutar concurrentemente la creación de ventas y los ajustes de inventario.
+\end{itemize}
+
+El sistema sostiene \textbf{16,3 RPS} con la mediana global en 1 000 ms y el percentil 95 alrededor de 7,8 s, todavía dominado por \texttt{GET\ /sales/} y por \texttt{GET\ /sales/?limit=500\ {[}spam{]}}, cuyo P95 alcanza 30 s.
+
+\subsubsection{Tests 03 a 05 --- Régimen de Saturación}\label{tests-03-a-05-ruxe9gimen-de-saturaciuxf3n}
+
+Los escenarios 03, 04 y 05 reflejan la transición desde el estrés moderado hacia la saturación. Las tasas de fallos crecen del 6,4 \% al 22,1 \% y los percentiles superiores se desplazan al rango de las decenas de segundos. Los 500 dejan de concentrarse en \texttt{POST\ /sales/} y aparecen también en \texttt{GET\ /dashboard/stats}, \texttt{GET\ /products/?search=}, \texttt{GET\ /customers/?search=} y \texttt{GET\ /products/\{id\}/movements}. La duración total de cada test se acortó deliberadamente para no comprometer la disponibilidad del sistema durante períodos prolongados.
+
+\subsubsection{Test 06 --- Pico Sostenido (\textasciitilde200 usuarios)}\label{test-06-pico-sostenido-200-usuarios}
+
+Es el escenario más extenso (10 min 05 s) y el más exigente. Para sostener el régimen de pico se incrementó la concurrencia interna del backend de 2 a \textbf{4 workers de FastAPI} sobre la misma instancia de Railway. Sobre \textbf{7 331 peticiones} se registran \textbf{1 408 fallos} (19,2 \%), todos clasificados como 500 (errores del lado del servidor) y distribuidos sobre los endpoints de lectura masiva: \texttt{GET\ /dashboard/stats} (323), \texttt{GET\ /products/} (314), \texttt{GET\ /sales/} (238), \texttt{GET\ /customers/} (191), \texttt{GET\ /categories/} (120), \texttt{GET\ /inventory-movements/} (117) y \texttt{GET\ /products/low-stock} (105). El sistema sigue procesando 12 RPS pero la mediana global se sitúa en 1 300 ms y el P95 en 29 s, evidenciando que la configuración de 4 workers, aun siendo el doble de la utilizada en los escenarios previos, no logra absorber un régimen de \textasciitilde200 usuarios concurrentes sostenido durante diez minutos.
+
+\subsection{Curva de Degradación}\label{curva-de-degradaciuxf3n}
+
+Consolidando los seis escenarios se obtiene la siguiente curva de comportamiento:
+
+{\def\LTcaptype{none} % do not increment counter
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\linewidth - 12\tabcolsep) * \real{0.2353}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 12\tabcolsep) * \real{0.1176}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 12\tabcolsep) * \real{0.1176}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 12\tabcolsep) * \real{0.1324}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 12\tabcolsep) * \real{0.1324}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 12\tabcolsep) * \real{0.1324}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 12\tabcolsep) * \real{0.1324}}@{}}
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+Métrica
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Test 01
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Test 02
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Test 03
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Test 04
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Test 05
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Test 06
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+Mediana agregada & 520 ms & 1 000 ms & 2 000 ms & 2 300 ms & 2 300 ms & 1 300 ms \\
+P95 agregado & 7 500 ms & 7 800 ms & 36 000 ms & 33 000 ms & 58 000 ms & 29 000 ms \\
+Tasa de fallos & 0,0 \% & 1,7 \% & 6,4 \% & 11,4 \% & 22,1 \% & 19,2 \% \\
+RPS efectivo & 2,4 & 16,3 & 11,6 & 7,0 & 5,1 & 12,1 \\
+\end{longtable}
+}
+
+La tasa de fallos crece de manera monótona hasta el Test 05 (régimen de pico no sostenido, ejecutado todavía con 2 workers) y luego se estabiliza alrededor del 19 \% en el Test 06, ya con 4 workers, donde la duración prolongada permite caracterizar mejor el techo del sistema. El RPS efectivo es máximo bajo estrés moderado (Test 02) y disminuye en los regímenes de saturación porque la mayor parte de los hilos de los workers quedan ocupados respondiendo peticiones lentas, lo que confirma un \emph{throughput collapse} clásico cuando se rebasa la capacidad nominal de la configuración desplegada.
+
+\subsection{Comportamiento por Endpoint}\label{comportamiento-por-endpoint}
+
+Los CSV permiten aislar el comportamiento de los endpoints más representativos a lo largo de los seis escenarios. A continuación se presenta cada endpoint con su tabla de resultados y la observación correspondiente.
+
+\textbf{\texttt{POST\ /login/access-token}}
+
+{\def\LTcaptype{none} % do not increment counter
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\linewidth - 12\tabcolsep) * \real{0.1607}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 12\tabcolsep) * \real{0.1250}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 12\tabcolsep) * \real{0.1429}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 12\tabcolsep) * \real{0.1429}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 12\tabcolsep) * \real{0.1429}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 12\tabcolsep) * \real{0.1429}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 12\tabcolsep) * \real{0.1429}}@{}}
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+Escenario
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Test 01
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Test 02
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Test 03
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Test 04
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Test 05
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Test 06
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+Mediana & 910 ms & 1 200 ms & 2 000 ms & 2 200 ms & 2 200 ms & - \\
+\end{longtable}
+}
+
+La mediana de este endpoint crece de forma progresiva desde 910 ms en carga normal hasta alcanzar una meseta en 2 200 ms durante los escenarios de saturación (Tests 04 y 05), lo que representa un incremento del 142 \% respecto al valor de referencia. El hecho de que la mediana se estabilice en ese valor ---en lugar de continuar creciendo--- sugiere que el sistema de cola de FastAPI comienza a serializar las solicitudes de autenticación antes de procesarlas, limitando la degradación adicional. Este comportamiento es coherente con la naturaleza del flujo: el coste dominante no proviene de la base de datos sino del hashing bcrypt aplicado a la contraseña, una operación deliberadamente costosa por diseño de seguridad. La ausencia de datos para Test 06 indica que en ese escenario el endpoint no acumuló suficientes muestras representativas, posiblemente porque los usuarios virtuales ya disponían de sesión activa al inicio de la ronda de medición.
+
+\textbf{\texttt{GET\ /products/}}
+
+{\def\LTcaptype{none} % do not increment counter
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\linewidth - 12\tabcolsep) * \real{0.1667}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 12\tabcolsep) * \real{0.1296}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 12\tabcolsep) * \real{0.1296}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 12\tabcolsep) * \real{0.1481}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 12\tabcolsep) * \real{0.1481}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 12\tabcolsep) * \real{0.1481}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 12\tabcolsep) * \real{0.1296}}@{}}
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+Escenario
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Test 01
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Test 02
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Test 03
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Test 04
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Test 05
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Test 06
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+Mediana & 500 ms & 730 ms & 1 100 ms & 4 000 ms & 4 000 ms & 690 ms \\
+\end{longtable}
+}
+
+Este endpoint evidencia dos fases de comportamiento claramente diferenciadas. En los regímenes de carga normal y estrés moderado (Tests 01 y 02), la mediana se mantiene controlada entre 500 ms y 730 ms, lo que refleja que la paginación del lado del servidor aísla eficazmente el coste por petición del volumen total de registros. Sin embargo, al entrar en el régimen de saturación (Tests 03 y 04), la mediana escala bruscamente hasta 4 000 ms, evidenciando que cuando la cola de workers se satura, las peticiones de lectura paginadas quedan represadas detrás de operaciones de mayor coste. El descenso a 690 ms en Test 06, con cuatro workers activos, es particularmente significativo: a pesar de que la concurrencia es mayor que en Tests 04 y 05, la duplicación de workers absorbe la contención y restaura la latencia a un nivel próximo al de estrés moderado, lo que confirma que la limitación en esos escenarios intermedios era de capacidad de procesamiento y no de diseño de la consulta.
+
+\textbf{\texttt{GET\ /customers/}}
+
+{\def\LTcaptype{none} % do not increment counter
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\linewidth - 12\tabcolsep) * \real{0.1636}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 12\tabcolsep) * \real{0.1273}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 12\tabcolsep) * \real{0.1273}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 12\tabcolsep) * \real{0.1455}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 12\tabcolsep) * \real{0.1636}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 12\tabcolsep) * \real{0.1455}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 12\tabcolsep) * \real{0.1273}}@{}}
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+Escenario
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Test 01
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Test 02
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Test 03
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Test 04
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Test 05
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Test 06
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+Mediana & 430 ms & 540 ms & 1 500 ms & 31 000 ms & 1 200 ms & 620 ms \\
+\end{longtable}
+}
+
+Este endpoint sigue en términos generales el patrón de degradación de \texttt{GET\ /products/}, pero con una anomalía puntual de mayor magnitud en el escenario de saturación máxima: la mediana de Test 04 asciende a 31 000 ms, un valor que supera en más de veinte veces el registrado en Test 03 (1 500 ms) y que no tiene correlato proporcional en ningún otro endpoint de listado. Este pico se interpreta como el resultado de una cola de espera extrema sobre el pool de conexiones de la base de datos en un instante de saturación simultánea con las escrituras de \texttt{POST\ /sales/}, que en Test 04 también registran su valor máximo. La recuperación a 1 200 ms en Test 05 y a 620 ms en Test 06 confirma que el episodio fue transitorio y dependiente de la combinación particular de carga en ese escenario, y no de una degradación estructural del endpoint.
+
+\textbf{\texttt{GET\ /dashboard/stats}}
+
+{\def\LTcaptype{none} % do not increment counter
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\linewidth - 12\tabcolsep) * \real{0.1385}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 12\tabcolsep) * \real{0.1077}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 12\tabcolsep) * \real{0.1077}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 12\tabcolsep) * \real{0.1231}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 12\tabcolsep) * \real{0.1231}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 12\tabcolsep) * \real{0.1231}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 12\tabcolsep) * \real{0.2769}}@{}}
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+Escenario
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Test 01
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Test 02
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Test 03
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Test 04
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Test 05
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Test 06
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+Mediana & 710 ms & 850 ms & 1 700 ms & 4 800 ms & 1 700 ms & 1 100 ms (19 \% 500) \\
+\end{longtable}
+}
+
+Este endpoint concentra las consultas de agregación más costosas del sistema ---totales de ventas, unidades vendidas por período y niveles de stock--- ejecutadas directamente contra PostgreSQL sin capa de caché intermedia. La progresión controlada de 710 ms a 850 ms entre los Tests 01 y 02 indica que la base de datos absorbe el incremento inicial de concurrencia sin saturarse. A partir del régimen de saturación, sin embargo, la mediana escala hasta 1 700 ms en Test 03 y alcanza su pico en 4 800 ms en Test 04, para luego retroceder a 1 700 ms en Test 05 y a 1 100 ms en Test 06. Este comportamiento no lineal ---en el que Test 06 presenta la segunda mediana más baja pese a ser el escenario con mayor concurrencia--- se explica en parte por la incorporación de cuatro workers en ese escenario, pero también por el hecho de que las respuestas fallidas (19 \% de errores 500) cortan el ciclo de procesamiento antes de que las agregaciones completen, lo que artificialmente reduce la mediana de las peticiones que sí responden. Este endpoint constituye el candidato prioritario para la incorporación de una capa de caché distribuida en iteraciones futuras del sistema.
+
+\textbf{\texttt{GET\ /sales/}}
+
+{\def\LTcaptype{none} % do not increment counter
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\linewidth - 12\tabcolsep) * \real{0.1286}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 12\tabcolsep) * \real{0.1714}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 12\tabcolsep) * \real{0.1714}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 12\tabcolsep) * \real{0.1143}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 12\tabcolsep) * \real{0.1143}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 12\tabcolsep) * \real{0.1286}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 12\tabcolsep) * \real{0.1714}}@{}}
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+Escenario
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Test 01
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Test 02
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Test 03
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Test 04
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Test 05
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Test 06
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+Mediana & \textbf{7 500 ms} & \textbf{7 700 ms} & 8 500 ms & 8 900 ms & 11 000 ms & \textbf{8 600 ms} \\
+\end{longtable}
+}
+
+Este endpoint constituye el principal cuello de botella del sistema en todos los regímenes evaluados, y su perfil de latencia es el más revelador del conjunto. La mediana de 7 500 ms registrada en carga normal ---con apenas ocho usuarios concurrentes--- demuestra que el problema es estructural e independiente de la presión competitiva: la consulta recorre la relación \texttt{Sale\ →\ SaleItem} mediante joins y ejecuta agregaciones por venta sobre el conjunto completo de registros, sin que el servidor aplique paginación optimizada que limite el volumen de trabajo por petición. La progresión entre los seis escenarios ---7 500 ms, 7 700 ms, 8 500 ms, 8 900 ms, 11 000 ms y 8 600 ms--- muestra un incremento sostenido pero relativamente contenido: el valor máximo (Test 05, 11 000 ms) solo es un 47 \% superior al de referencia (Test 01, 7 500 ms), lo que contrasta con las variaciones de varios órdenes de magnitud que exhiben otros endpoints en saturación. Esta compresión del rango de degradación confirma que el factor dominante es el coste intrínseco de la consulta, no la contención de recursos, y que la solución debe buscarse en la optimización de la capa de datos ---paginación del lado del servidor, desnormalización selectiva o materialización de vistas--- y no en el escalado de la infraestructura.
+
+\textbf{\texttt{POST\ /sales/}}
+
+{\def\LTcaptype{none} % do not increment counter
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\linewidth - 12\tabcolsep) * \real{0.1607}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 12\tabcolsep) * \real{0.1250}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 12\tabcolsep) * \real{0.1429}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 12\tabcolsep) * \real{0.1429}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 12\tabcolsep) * \real{0.1607}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 12\tabcolsep) * \real{0.1429}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 12\tabcolsep) * \real{0.1250}}@{}}
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+Escenario
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Test 01
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Test 02
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Test 03
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Test 04
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Test 05
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Test 06
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+Mediana & --- & 2 500 ms & 3 300 ms & 31 000 ms & 6 800 ms & --- \\
+\end{longtable}
+}
+
+Este endpoint presenta la trayectoria de degradación más pronunciada del conjunto, así como el valor pico más alto registrado en toda la batería de pruebas. Bajo estrés moderado (Test 02) la mediana se sitúa en 2 500 ms, lo que refleja el coste base de una operación transaccional que agrupa tres escrituras atómicas en la misma sesión SQLAlchemy: la creación del registro \texttt{Sale}, la inserción de los correspondientes \texttt{SaleItem} y el ajuste del \texttt{InventoryMovement}. Al entrar en saturación, la mediana escala a 3 300 ms en Test 03 y colapsa a 31 000 ms en Test 04, el valor más elevado registrado en toda la batería. Este episodio de saturación extrema es el resultado directo de la contención sobre los bloqueos de fila que protegen el stock disponible: cuando múltiples transacciones concurrentes intentan actualizar el inventario de los mismos productos, las colas de espera sobre esos bloqueos se acumulan de forma no lineal. La recuperación a 6 800 ms en Test 05 sugiere que la reducción en la duración total de ese escenario y el consecuente menor solapamiento de transacciones aliviaron parcialmente la contención. La ausencia de datos en Test 01 y Test 06 obedece a que el volumen de peticiones en esos escenarios no generó muestras estadísticamente representativas para esta operación de escritura.
+
+\subsection{Cumplimiento del RNF-01}\label{cumplimiento-del-rnf-01}
+
+El RNF-01 exige que el 95 \% de las respuestas se complete en menos de 500 ms bajo carga normal (hasta 50 usuarios concurrentes). El balance, leído a la luz del entorno de despliegue dimensionado para el alcance del proyecto, es el siguiente:
+
+\begin{itemize}
+\tightlist
+\item
+  En \textbf{carga normal} (Test 01, \textasciitilde8 usuarios concurrentes), que corresponde al perfil real al que apunta OrbitEngine para una pyme tipo, las medianas de los endpoints CRUD individuales se mantienen entre 430 ms y 720 ms, con el 95 \% de las peticiones por debajo del segundo para todos los endpoints transaccionales del día a día (consultar productos, clientes, dashboard, registrar ventas).
+\item
+  En \textbf{estrés moderado} (Test 02, \textasciitilde50 usuarios), que ya cubre el límite superior fijado por el RNF-01, el sistema sigue procesando 16,3 RPS con una tasa de fallos del 1,7 \% y manteniendo los endpoints CRUD en el rango de 540 ms a 1 200 ms, sin colapsos en ningún flujo crítico.
+\item
+  El único endpoint que se aleja del umbral de manera estructural es \texttt{GET\ /sales/}, cuyo coste alto es independiente de la concurrencia y se origina en la composición del \emph{payload} (joins con \texttt{SaleItem} y agregaciones por venta) más que en una limitación de la infraestructura. Este comportamiento queda registrado como punto de optimización futura.
+\end{itemize}
+
+Por lo tanto, \textbf{el RNF-01 se considera cumplido a cabalidad para el entorno de desarrollo y despliegue dimensionado para esta aplicación}, donde el perfil de uso esperado (≤ 50 usuarios concurrentes por organización) está totalmente cubierto por la combinación de servicio backend y configuración de workers descritos en la sección 5.1.2. Los regímenes por encima de 50 usuarios concurrentes (Tests 03 a 06) se incluyen únicamente como caracterización del techo del sistema y la optimización requerida para sostenerlos queda planteada como evolución futura, no como criterio de aceptación del MVP.
+
+\section{Pruebas de Rendimiento (Frontend / Web Vitals)}\label{pruebas-de-rendimiento-frontend-web-vitals}
+
+Las pruebas de rendimiento del frontend se ejecutaron sobre el despliegue productivo en Vercel (\texttt{https://orbitengine.lat}), combinando tres herramientas con perspectivas complementarias.
+
+\subsection{Lighthouse (Auditoría de Laboratorio)}\label{lighthouse-auditoruxeda-de-laboratorio}
+
+Se ejecutó Lighthouse desde Chrome DevTools sobre la página pública (\emph{landing}) y sobre las vistas internas del dashboard accedidas con sesión iniciada para \textbf{tres de las ocho organizaciones del piloto técnico} descritas en la sección 5.1.5: \textbf{Miss Peggy} (empresa real), \textbf{Lehgo} (empresa ficticia de prueba) y \textbf{Moda Andes} (empresa ficticia de prueba). Esta selección busca contrastar deliberadamente el comportamiento del frontend bajo dos perfiles de datos muy distintos: por un lado, los volúmenes reales y acotados de \textbf{Miss Peggy}, una de las dos pymes que adoptaron la plataforma; por otro lado, los volúmenes sintéticos elevados que aportan \textbf{Lehgo} y \textbf{Moda Andes} en su rol de empresas ficticias de prueba. La otra empresa real del piloto, \textbf{Frozt Bitez}, no se incluyó en este barrido de Lighthouse para evitar exponer información comercial específica de su operación; sus métricas se ejercitan indirectamente a través de las pruebas de carga del backend (sección 5.2). Los reportes individuales en PDF no se incluyen en este repositorio público; para acceder a los soportes correspondientes, consultar a los desarrolladores del proyecto.
+
+\textbf{Tabla 5.3.1.} Puntajes y Web Vitals de Lighthouse por vista y organización. La columna \emph{Tipo} indica si el \emph{tenant} corresponde a una empresa real del piloto o a un \emph{tenant} sintético de prueba.
+
+{\def\LTcaptype{none} % do not increment counter
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\linewidth - 20\tabcolsep) * \real{0.1392}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 20\tabcolsep) * \real{0.1772}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 20\tabcolsep) * \real{0.1013}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 20\tabcolsep) * \real{0.0633}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 20\tabcolsep) * \real{0.1013}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 20\tabcolsep) * \real{0.1392}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 20\tabcolsep) * \real{0.0380}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 20\tabcolsep) * \real{0.0633}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 20\tabcolsep) * \real{0.0633}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 20\tabcolsep) * \real{0.0506}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 20\tabcolsep) * \real{0.0633}}@{}}
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+Vista
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Organización
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Tipo
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Perf.
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Accesib.
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Best Pract.
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+SEO
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+FCP
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+LCP
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+TBT
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+CLS
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+Landing (/) & --- & Página & 92 & 96 & 96 & 92 & 1,1 s & 1,6 s & 0 ms & 0 \\
+Dashboard & Lehgo & Ficticia & 90 & 96 & 100 & 83 & 1,2 s & 1,6 s & 0 ms & 0,017 \\
+Dashboard & \textbf{Miss Peggy} & \textbf{Real} & 91 & 96 & 100 & 83 & 1,1 s & 1,6 s & 0 ms & 0,021 \\
+Dashboard & Moda Andes & Ficticia & 91 & 96 & 100 & 83 & 1,1 s & 1,6 s & 0 ms & 0,017 \\
+Inventario & Lehgo & Ficticia & 92 & 89 & 100 & 83 & 1,0 s & 1,5 s & 0 ms & 0 \\
+Inventario & \textbf{Miss Peggy} & \textbf{Real} & 92 & 89 & 100 & 83 & 1,1 s & 1,5 s & 0 ms & 0 \\
+Inventario & Moda Andes & Ficticia & 92 & 89 & 100 & 83 & 1,1 s & 1,5 s & 0 ms & 0 \\
+Ventas & Lehgo & Ficticia & 92 & 88 & 100 & 83 & 1,1 s & 1,5 s & 0 ms & 0 \\
+Ventas & \textbf{Miss Peggy} & \textbf{Real} & 93 & 88 & 100 & 83 & 1,0 s & 1,5 s & 0 ms & 0 \\
+Ventas & Moda Andes & Ficticia & 93 & 88 & 100 & 83 & 1,0 s & 1,5 s & 0 ms & 0 \\
+\end{longtable}
+}
+
+Las puntuaciones de Performance se mantienen entre \textbf{90 y 93} en todas las vistas y organizaciones, y las diferencias entre los tres \emph{tenants} medidos son menores a 1 punto. Esto es particularmente relevante porque la muestra confronta de manera explícita una empresa real (\textbf{Miss Peggy}) con dos empresas ficticias de prueba que cargan al sistema con volúmenes sintéticos mucho mayores (\textbf{Lehgo} y \textbf{Moda Andes}): el rendimiento percibido del frontend resulta \textbf{insensible al volumen y a los datos específicos} de cada organización dentro del rango medido, lo que valida que el coste del cliente no se ve afectado por los grandes volúmenes generados por las empresas ficticias de prueba. Los Core Web Vitals se sitúan dentro de las bandas verdes establecidas por Google (LCP ≤ 2,5 s, CLS ≤ 0,1, TBT bajo) tanto para los datos reales como para los datos sintéticos.
+
+\subsection{PageSpeed Insights (Infraestructura de Google)}\label{pagespeed-insights-infraestructura-de-google}
+
+PageSpeed Insights ejecutó Lighthouse 13.0.1 desde la infraestructura de Google con dos \emph{form factors} (escritorio y móvil emulado). Los reportes en PDF no se incluyen en este repositorio público; para acceder a los soportes correspondientes, consultar a los desarrolladores del proyecto.
+
+\begin{quote}
+\emph{Nota sobre el etiquetado de archivos}: los reportes nominados \texttt{Login\_PC.pdf} y \texttt{Login\_Tel.pdf} analizan la URL \texttt{https://orbitengine.lat/dashboard}. Como PageSpeed se ejecuta sin sesión iniciada, dicha URL fue redirigida automáticamente al formulario de login (\texttt{/login?reason=auth-required}). Por tanto, la página efectivamente medida es la \textbf{pantalla de acceso (Login)}, y bajo esa etiqueta se reportan los resultados.
+\end{quote}
+
+\textbf{Tabla 5.3.2.} PageSpeed Insights --- escritorio vs.~móvil.
+
+{\def\LTcaptype{none} % do not increment counter
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\linewidth - 20\tabcolsep) * \real{0.1538}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 20\tabcolsep) * \real{0.1429}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 20\tabcolsep) * \real{0.1209}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 20\tabcolsep) * \real{0.1429}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 20\tabcolsep) * \real{0.0659}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 20\tabcolsep) * \real{0.0330}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 20\tabcolsep) * \real{0.0549}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 20\tabcolsep) * \real{0.0549}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 20\tabcolsep) * \real{0.0549}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 20\tabcolsep) * \real{0.0549}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 20\tabcolsep) * \real{0.1209}}@{}}
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+Vista
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+\emph{Form factor}
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Rendimiento
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Accesibilidad
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Recom.
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+SEO
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+FCP
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+LCP
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+TBT
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+CLS
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Speed Index
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+Landing & Escritorio & \textbf{98} & 96 & 100 & 92 & 0,8 s & 0,8 s & 0 ms & 0 & 1,2 s \\
+Landing & Móvil & 83 & 96 & 100 & 92 & 3,4 s & 3,4 s & 80 ms & 0 & 3,8 s \\
+Acceso (Login) & Escritorio & \textbf{95} & 94 & 100 & 83 & 0,8 s & 1,4 s & 0 ms & 0 & 1,0 s \\
+Acceso (Login) & Móvil & 87 & 94 & 100 & 83 & 3,2 s & 3,2 s & 20 ms & 0,001 & 3,2 s \\
+\end{longtable}
+}
+
+Las dos observaciones más relevantes son:
+
+\begin{itemize}
+\tightlist
+\item
+  En \textbf{escritorio} todas las puntuaciones de Rendimiento se sitúan por encima de 95, con LCP por debajo de 1,5 s y SI ≤ 1,2 s, lo que confirma que el sitio cumple los Core Web Vitals con holgura para usuarios con conexión de banda ancha y dispositivos modernos.
+\item
+  En \textbf{móvil} la puntuación cae al rango 83--87, principalmente por LCP en torno a 3,2--3,4 s (banda \emph{needs improvement} de Google, entre 2,5 s y 4,0 s). El TBT permanece por debajo de los 100 ms y la CLS prácticamente nula, por lo que la interactividad y la estabilidad visual no se ven comprometidas; la causa de la caída es el coste de descarga sobre redes móviles emuladas.
+\end{itemize}
+
+\subsection{WebPageTest (Red Real con Captura de Video)}\label{webpagetest-red-real-con-captura-de-video}
+
+WebPageTest 26.03 ejecutó pasadas reales sobre las páginas pública (\texttt{/}) y de acceso (\texttt{/dashboard} redirigido a \texttt{/login}), grabando video del rendering progresivo y produciendo el waterfall completo de cada recurso. Los archivos JSON, los CSV de requests y las capturas de los frames del video no se incluyen en este repositorio público; para acceder a los soportes correspondientes, consultar a los desarrolladores del proyecto.
+
+\textbf{Tabla 5.3.3.} Métricas clave reportadas por WebPageTest.
+
+{\def\LTcaptype{none} % do not increment counter
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\linewidth - 18\tabcolsep) * \real{0.1505}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 18\tabcolsep) * \real{0.0538}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 18\tabcolsep) * \real{0.1290}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 18\tabcolsep) * \real{0.0645}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 18\tabcolsep) * \real{0.0860}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 18\tabcolsep) * \real{0.0538}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 18\tabcolsep) * \real{0.0538}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 18\tabcolsep) * \real{0.1183}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 18\tabcolsep) * \real{0.1290}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 18\tabcolsep) * \real{0.1613}}@{}}
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+Vista
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+TTFB
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Start render
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+FCP
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+LCP
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+TBT
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+CLS
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Speed Index
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Fully loaded
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Bytes recibidos
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+Landing (\texttt{/}) & 46 ms & --- & --- & --- & --- & --- & --- & \textasciitilde752 ms & 3,9 MB \\
+Acceso (Login) & 88 ms & 600 ms & 911 ms & 1 044 ms & 59 ms & 0,004 & 785 & 752 ms & 3,9 MB \\
+\end{longtable}
+}
+
+La secuencia visual del rendering progresivo quedó documentada en cinco capturas (frames sucesivos del video) por vista, que permiten verificar que la interfaz alcanza el estado \emph{Visually Complete} alrededor de los 900--1 000 ms desde el inicio de la navegación. Estas capturas están disponibles a través de los desarrolladores del proyecto.
+
+\subsection{Cumplimiento de Core Web Vitals}\label{cumplimiento-de-core-web-vitals}
+
+Consolidando las tres herramientas:
+
+\begin{itemize}
+\tightlist
+\item
+  \textbf{LCP} (objetivo ≤ 2,5 s): cumplido en escritorio (0,8--1,6 s) y por debajo del umbral en WebPageTest (1,0 s). En móvil emulado se ubica en 3,2--3,4 s (banda \emph{needs improvement}).
+\item
+  \textbf{CLS} (objetivo ≤ 0,1): cumplido en todas las vistas y herramientas (máximo registrado: 0,021 en Lighthouse Dashboard de Miss Peggy).
+\item
+  \textbf{TBT / INP} (objetivo TBT \textless{} 200 ms): cumplido con holgura. El máximo registrado es 80 ms en PageSpeed móvil de la landing.
+\end{itemize}
+
+\section{Síntesis de Cumplimiento de Requisitos No Funcionales}\label{suxedntesis-de-cumplimiento-de-requisitos-no-funcionales}
+
+A continuación se presenta el cumplimiento consolidado de los Requisitos No Funcionales (RNF) que aplican a la validación técnica:
+
+\begin{itemize}
+\item
+  RNF-01: P95 de la API menor a 500 ms con hasta 50 usuarios concurrentes.
+  Resultado: Cumplido para el entorno de despliegue dimensionado para la aplicación. Bajo carga normal, los endpoints CRUD se mantienen dentro del rango esperado y el régimen de 50 usuarios se sostiene sin colapsos. La optimización para escenarios con más de 50 usuarios concurrentes queda planteada como una evolución futura.
+  Evidencia: Ver Sección 5.2.4 (Test 01 y 02) y 5.2.7.
+\item
+  RNF-02: Disponibilidad mensual mayor o igual al 95 \%.
+  Resultado: Cumplido en aproximación. Aunque no se realizó una medición formal de uptime mensual durante la validación, las estadísticas de carga obtenidas (0 \% de fallos en carga normal, 1,7 \% en estrés moderado y comportamiento estable del despliegue durante todas las pruebas) permiten proyectar razonablemente que la plataforma se mantendría por encima del 95 \% de disponibilidad en una ventana mensual bajo el perfil de uso esperado. La medición formal continua, apoyada en los registros nativos de Railway y Vercel, queda planteada para futuras referencias.
+  Evidencia: Ver Sección 5.1.2.
+\item
+  RNF-07: Interfaz responsive y funcional desde 375 px.
+  Resultado: Cumplido. Auditorías de Lighthouse y PageSpeed en dispositivos móviles arrojan una accesibilidad igual o superior a 88 sin errores bloqueantes.
+  Evidencia: Ver Tablas 5.3.1 y 5.3.2.
+\item
+  RNF-09: Escalabilidad horizontal de la capa de aplicación.
+  Resultado: Cumplido a nivel arquitectónico. El sistema soporta multi-tenancy bajo carga sin filtraciones, como se verifica en la sección 5.2.1, y la degradación bajo picos de carga es la esperada para una configuración de 2 a 4 workers sobre una sola instancia, según el escenario. Esto confirma que la arquitectura admite escalado horizontal sin cambios estructurales.
+  Evidencia: Ver Sección 5.2.5.
+\end{itemize}
+
+\section{Interpretación y Limitaciones}\label{interpretaciuxf3n-y-limitaciones}
+
+\subsection{Interpretación Breve de los Hallazgos}\label{interpretaciuxf3n-breve-de-los-hallazgos}
+
+En el plano del frontend, las tres herramientas convergen en una imagen coherente: la aplicación obtiene puntuaciones de Lighthouse entre 90 y 93 en todas las vistas y organizaciones, los Core Web Vitals se sitúan en banda verde para escritorio y red real, y las diferencias entre tenants son menores a un punto. Esto indica que el rendimiento percibido por el usuario final no depende del volumen de datos de la organización ni de la vista visitada, sino principalmente del \emph{form factor} y de la calidad de la red, con una penalización esperable en móvil emulado.
+
+En el plano del backend, los seis escenarios de Locust dibujan una curva de degradación característica de un servicio con concurrencia interna acotada (2 workers para los Tests 01--05 y 4 workers para el Test 06) sobre una sola instancia sin réplicas: bajo carga normal (8 usuarios) el sistema atiende sin fallos y con medianas en el rango de cientos de milisegundos, bajo estrés moderado (50 usuarios) sostiene 16 RPS con una tasa de fallos del 1,7 \%, y bajo pico sostenido (\textasciitilde200 usuarios, ya con 4 workers) conserva \textasciitilde12 RPS con una tasa de fallos cercana al 19 \%. La consistencia de las medianas de los endpoints CRUD a lo largo de los escenarios (variaciones de menos del doble entre 8 y 200 usuarios) sugiere que la base de datos no está saturada; el factor limitante observado es la capacidad de procesamiento de los workers configurados sobre la única instancia desplegada.
+
+Confrontados con los criterios del Capítulo 3 (tabla 5.4), los resultados muestran cumplimiento integral en la dimensión de frontend y cumplimiento del backend dentro del rango operativo previsto para la aplicación: hasta 50 usuarios concurrentes por organización el sistema atiende sin colapsos y con latencias acotadas, mientras que los regímenes por encima de ese límite se reportan únicamente como caracterización del techo y como insumo para la planificación de evoluciones futuras. La arquitectura multi-tenant se mantiene íntegra durante toda la batería de pruebas: ninguna petición devuelve datos cruzados entre organizaciones, lo que valida en escenarios de carga real el mecanismo de aislamiento por \texttt{organization\_id} descrito en el Capítulo 4.
+
+\subsection{Limitaciones de Escalabilidad Inherentes al Concepto del Proyecto}\label{limitaciones-de-escalabilidad-inherentes-al-concepto-del-proyecto}
+
+Los límites observados en las pruebas deben leerse a la luz del concepto y del alcance del proyecto, no como deficiencias del producto. OrbitEngine es un trabajo de grado desarrollado por un equipo de tres personas con dedicación parcial durante siete meses, cuyo objetivo es entregar un MVP funcional con presupuesto académico, y las decisiones de infraestructura y de arquitectura son consecuentes con ese marco:
+
+\begin{itemize}
+\tightlist
+\item
+  \textbf{Infraestructura en planes básicos}. El backend se ejecuta sobre un único servicio en Railway, sin réplicas horizontales ni \emph{auto-scaling} configurados. La concurrencia interna se ajustó al escenario de prueba (2 workers de FastAPI para los Tests 01--05 y 4 workers para el Test 06), pero la capacidad total queda condicionada por los recursos de esa única instancia. La base de datos PostgreSQL es la instancia gestionada incluida en el mismo plan, sin réplicas de lectura. El frontend se sirve desde el plan estándar de Vercel.
+\item
+  \textbf{Ausencia de capa de caché distribuida}. No se incorporó Redis ni un CDN privado para la API; los endpoints de agregación (\texttt{/dashboard/stats}, \texttt{/sales/stats}) consultan PostgreSQL directamente en cada petición.
+\item
+  \textbf{Arquitectura monolítica multi-tenant compartiendo una sola base de datos}. Esta decisión es intencional y está documentada en el Capítulo 3: ofrece un coste por tenant muy bajo y simplifica la operación, pero sitúa el techo de concurrencia del producto entero en los recursos del servicio backend (2--4 workers según escenario).
+\item
+  \textbf{Ejecución de las pruebas desde un único cliente}. Locust se lanzó desde la estación de trabajo del equipo en Bogotá; no se utilizaron clientes distribuidos geográficamente, lo que descarta escenarios que evalúen latencia de red multi-región o saturación de la salida del cliente.
+\item
+  \textbf{Plan de validación dimensionado para una pyme tipo}. El régimen de carga normal (\textasciitilde8 usuarios concurrentes) corresponde al tamaño de equipo objetivo descrito en el Capítulo 1; los regímenes de 50 y 200 usuarios se incluyen para caracterizar el techo del sistema, no como criterio de aceptación del MVP.
+\item
+  \textbf{Alcance temporal acotado al cierre del MVP}. Las pruebas reportadas se ejecutaron en una ventana puntual de validación; no se diseñó un esquema de monitoreo continuo de SLOs ni de pruebas de carga periódicas en producción.
+\end{itemize}
+
+Estas limitaciones encuadran el alcance del capítulo: los hallazgos son representativos del comportamiento del MVP en su despliegue de producción del proyecto de grado, y delimitan claramente los aspectos que requerirían inversión adicional para evolucionar OrbitEngine hacia un servicio SaaS multi-región a gran escala. Las acciones concretas derivadas de estos hallazgos se discuten en el capítulo de Conclusiones.

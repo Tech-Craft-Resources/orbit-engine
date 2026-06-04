@@ -1,0 +1,60 @@
+%        1         2         3         4         5         6         7         8         9         0         1         2
+%23456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890
+\documentclass[12pt]{MIA-USA}
+
+\usepackage{layout}
+\usepackage{subcaption}
+\usepackage{paralist}
+\usepackage{breakcites}
+
+% Paquetes y macros que requiere el contenido convertido desde Markdown (Pandoc)
+\input{pandoc-preamble}
+
+\usepackage[pagebackref=true,breaklinks=true]{hyperref}
+\hypersetup{
+	pdftitle={OrbitEngine: Anexos},
+	pdfauthor={MIA-D.Martinez},
+	pdfsubject={},
+	pdfcreator={DarMart with Latex},
+	colorlinks=true,
+	linkcolor=GrisUno,
+	citecolor=AzulInstitucional,
+	filecolor=AzulClaro,
+	urlcolor=AzulInstitucional,
+	linktoc=all
+}
+
+\graphicspath{{Images/}}
+
+
+\title{Orbit Engine: Plataforma SaaS para la Gesti\'on Integral de Procesos Internos en Peque\~nas y Medianas Empresas}
+\author{Rinc\'on Suarez Fabi\'an \\
+Rodr\'iguez Forero Nicol\'as \\
+Velasco Gonz\'alez Daniel}
+\documenttype{Anexos}
+
+\advisor{Juan Pablo Ospina}
+
+\coadvisor{Camilo Rodr\'iguez}
+
+
+% Aqui comienza el documento
+% - -- --- ----- ------- ------- ----- --- -- -
+\begin{document}
+
+	\maketitle
+
+    % Crea la tabla de contenidos a partir de la estructura del documento
+    \tableofcontents
+
+    % - -- --- ----- Anexos (A, B, C) ----- --- -- -
+    % Convertidos automáticamente desde docs/informe-final/anexo-*.md con Pandoc.
+    % \appendix hace que los capítulos se numeren A, B, C.
+
+    \appendix
+
+    \input{BackMatter/AnexoA-ManualUsuario}
+    \input{BackMatter/AnexoB-Despliegue}
+    \input{BackMatter/AnexoC-DocTecnica}
+
+\end{document}

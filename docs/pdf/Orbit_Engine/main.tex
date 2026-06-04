@@ -1,0 +1,75 @@
+%        1         2         3         4         5         6         7         8         9         0         1         2
+%23456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890
+\documentclass[12pt]{MIA-USA}
+
+\usepackage{layout}
+\usepackage{subcaption}
+\usepackage{paralist}
+\usepackage{breakcites}
+
+% Paquetes y macros que requiere el contenido convertido desde Markdown (Pandoc)
+\input{pandoc-preamble}
+
+\usepackage[pagebackref=true,breaklinks=true]{hyperref}
+\hypersetup{
+	pdftitle={Documento de trabajo Final}, 
+	pdfauthor={MIA-D.Martinez}, 
+	pdfsubject={}, 
+	pdfcreator={DarMart with Latex}, 
+	colorlinks=true,
+	linkcolor=GrisUno,
+	citecolor=AzulInstitucional,
+	filecolor=AzulClaro,
+	urlcolor=AzulInstitucional,
+	linktoc=all
+}
+
+\graphicspath{{Images/}}
+
+
+\title{Orbit Engine: Plataforma SaaS para la Gesti\'on Integral de Procesos Internos en Peque\~nas y Medianas Empresas}
+\author{Rinc\'on Suarez Fabi\'an \\
+Rodr\'iguez Forero Nicol\'as \\
+Velasco Gonz\'alez Daniel}
+\documenttype{Proyecto de Grado}
+
+\advisor{Juan Pablo Ospina}
+
+\coadvisor{Camilo Rodr\'iguez}
+
+% Si hay un coasesor 
+% \coadvisor{Nombres y apellidos Co-Asesor}
+
+
+% Aqui comienza el documento
+% - -- --- ----- ------- ------- ----- --- -- -
+\begin{document}
+    % \layout{}
+	
+	\maketitle
+	% Incluye la pagina de aceptación (Opcional)
+	\input{FrontMatter/F01-Approval}
+
+    % Resumen y Abstract
+    \input{FrontMatter/F04-Abstract}
+
+    % Crea la tabla de contenidos a partir de la estructura del documento
+    \tableofcontents
+
+    % - -- --- ----- Cuerpo del informe (Capítulos 1-7) ----- --- -- -
+    % Convertidos automáticamente desde docs/informe-final/*.md con Pandoc.
+    % Cada archivo comienza con su propio \chapter{...}; la numeración la
+    % gestiona automáticamente la clase MIA-USA.
+
+    \input{MainMatter/Cap1/C1-Introduccion}
+    \input{MainMatter/Cap2/C2-MarcoReferencia}
+    \input{MainMatter/Cap3/C3-AnalisisDiseno}
+    \input{MainMatter/Cap4/C4-Desarrollo}
+    \input{MainMatter/Cap5/C5-ResultadosTecnicos}
+    \input{MainMatter/Cap6/C6-ResultadosUsuarios}
+    \input{MainMatter/Cap7/C7-Conclusiones}
+
+    % Referencias (lista APA manual; las citas en el texto son texto plano)
+    \input{BackMatter/Referencias}
+
+\end{document}
