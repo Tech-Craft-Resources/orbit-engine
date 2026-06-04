@@ -1,4 +1,4 @@
-# Capítulo 4 — Desarrollo e Implementación
+# Capítulo 4. Desarrollo e Implementación
 
 ---
 
@@ -57,7 +57,7 @@ Se establecieron las siguientes prácticas de calidad desde el inicio del proyec
 
 El proyecto se estructuró en seis fases que cubrieron el período comprendido entre octubre de 2025 y mediados de mayo de 2026.
 
-### Fase 1 — Documentación e Investigación (octubre 2025, semanas 1–3)
+### Fase 1. Documentación e Investigación (octubre 2025, semanas 1–3)
 
 Esta fase se dedicó a la comprensión del dominio del problema, el levantamiento de requisitos y la selección del stack tecnológico. Las actividades principales incluyeron:
 
@@ -68,7 +68,7 @@ Esta fase se dedicó a la comprensión del dominio del problema, el levantamient
 
 **Entregables**: propuesta de proyecto aprobada, backlog priorizado, documento de requisitos.
 
-### Fase 2 — Diseño y Arquitectura (octubre–noviembre 2025, semanas 4–5)
+### Fase 2. Diseño y Arquitectura (octubre–noviembre 2025, semanas 4–5)
 
 Con el backlog definido, se realizó el diseño técnico del sistema:
 
@@ -79,7 +79,7 @@ Con el backlog definido, se realizó el diseño técnico del sistema:
 
 **Entregables**: diseño de base de datos completo, mockups aprobados, repositorio inicializado con CI básico y entorno local reproducible vía Docker Compose.
 
-### Fase 3 — Desarrollo Core (noviembre 2025 – segunda semana de abril 2026, sprints 1–8)
+### Fase 3. Desarrollo Core (noviembre 2025 a segunda semana de abril 2026, sprints 1–8)
 
 Esta es la fase de mayor volumen de desarrollo, donde se implementaron y consolidaron todos los módulos funcionales del sistema. Se extendió desde la primera semana de noviembre de 2025 hasta la segunda semana de abril de 2026 para permitir cerrar el alcance funcional completo antes de pasar a la fase de estabilización. Los ocho sprints se distribuyeron en duraciones de **dos o tres semanas** según el tamaño de cada bloque de funcionalidad y, entre los Sprints 3 y 4, se respetó un receso académico de dos semanas (22 de diciembre de 2025 – 4 de enero de 2026) en el que el equipo no ejecutó iteraciones formales.
 
@@ -89,7 +89,7 @@ Esta es la fase de mayor volumen de desarrollo, donde se implementaron y consoli
 - Frontend: setup de Vite + React + TypeScript, TanStack Router con rutas basadas en archivos, gestión del token de sesión vía un módulo propio (`lib/auth-session`) integrado con TanStack Query, pantallas de login y registro de organización.
 - Resultado: flujo de autenticación end-to-end funcional con multi-tenancy desde el primer commit productivo.
 
-#### Sprint 2: Inventario Core — CRUD de Productos (17 noviembre – 5 diciembre 2025 | 17 SP)
+#### Sprint 2: Inventario Core, CRUD de Productos (17 noviembre a 5 diciembre 2025 | 17 SP)
 
 - Backend: modelos `Product` y `Category`, CRUD completo con paginación, búsqueda y filtros, soft delete (`deleted_at`).
 - Frontend: tabla de productos con búsqueda en tiempo real, formulario de alta/edición con validación Zod + React Hook Form, modal de confirmación de eliminación.
@@ -131,7 +131,7 @@ Esta es la fase de mayor volumen de desarrollo, donde se implementaron y consoli
 - Frontend: pulido de UI (estados vacíos, loaders, toasts), responsive en vistas críticas, accesibilidad básica en formularios.
 - Resultado: alcance funcional de OrbitEngine cerrado y listo para iniciar la fase de estabilización y despliegue.
 
-### Fase 4 — Estabilización, Despliegue y Refinamiento (mediados de abril – última semana de abril 2026, sprints 9–10)
+### Fase 4. Estabilización, Despliegue y Refinamiento (mediados de abril a última semana de abril 2026, sprints 9–10)
 
 Con el alcance funcional cerrado al final de la Fase 3, esta fase se enfocó en llevar el sistema a producción y dejarlo listo para usuarios externos. Es en este punto cuando se aprovisionó por primera vez la infraestructura de despliegue: hasta ese momento OrbitEngine se ejecutaba únicamente en entornos de desarrollo local con Docker Compose. Por la duración total de la fase, los Sprints 9 y 10 se planificaron como iteraciones cortas de una semana cada una.
 
@@ -152,11 +152,11 @@ Con el alcance funcional cerrado al final de la Fase 3, esta fase se enfocó en 
 - Preparación del material de onboarding para las empresas piloto: guías de inicio rápido, plantillas de carga de datos y tutoriales.
 - Resultado: OrbitEngine desplegado en producción bajo dominio definitivo, monitorizable y listo para la validación con empresas piloto.
 
-### Fase 5 — Validación con Empresas Piloto (27 de abril – 4 de mayo de 2026)
+### Fase 5. Validación con Empresas Piloto (27 de abril a 4 de mayo de 2026)
 
 Del 27 de abril al 4 de mayo de 2026, el sistema en producción se puso a disposición de las empresas piloto seleccionadas para su uso real, con sesiones de capacitación, acompañamiento y recolección de retroalimentación. Esta fase se detalla en el Capítulo 6.
 
-### Fase 6 — Documentación Final y Entrega (5 de mayo – 15 de mayo de 2026)
+### Fase 6. Documentación Final y Entrega (5 de mayo a 15 de mayo de 2026)
 
 Consolidación del informe de grado, preparación de la presentación y defensa del proyecto del 5 al 15 de mayo de 2026.
 
@@ -233,7 +233,7 @@ El proyecto implementó cuatro niveles de pruebas automatizadas que en conjunto 
 **Pruebas de Integración (API):**
 
 - Herramienta: pytest + TestClient de FastAPI (basado en httpx).
-- Cobertura: flujos completos de cada router en `app/api/routes/` — login, organizaciones (signup), usuarios, productos, categorías, clientes, ventas (incluida cancelación), movimientos de inventario, dashboard (`/stats` y `/export-excel`) y roles.
+- Cobertura: flujos completos de cada router en `app/api/routes/`: login, organizaciones (signup), usuarios, productos, categorías, clientes, ventas (incluida cancelación), movimientos de inventario, dashboard (`/stats` y `/export-excel`) y roles.
 - Se utilizaron fixtures (`conftest.py`) para crear datos de prueba aislados en una base de datos de test separada, garantizando la independencia entre pruebas.
 
 **Pruebas de Seguridad y Multi-Tenancy (backend):**

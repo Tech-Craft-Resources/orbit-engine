@@ -1,4 +1,4 @@
-# Capítulo 2 — Marco de Referencia
+# Capítulo 2. Marco de Referencia
 
 ---
 
@@ -20,11 +20,11 @@ Para el contexto de este proyecto, el término "pyme" se utiliza con énfasis en
 
 ### 2.1.2 Sistema de Planificación de Recursos Empresariales (ERP)
 
-Un Enterprise Resource Planning (ERP) es un sistema de información integrado que unifica los procesos de negocio de una organización —finanzas, producción, inventario, ventas, recursos humanos— en una única plataforma con una base de datos compartida (Klaus et al., 2000). La integración elimina la duplicación de datos y proporciona una visión unificada del estado del negocio en tiempo real.
+Un Enterprise Resource Planning (ERP) es un sistema de información integrado que unifica los procesos de negocio de una organización (finanzas, producción, inventario, ventas, recursos humanos) en una única plataforma con una base de datos compartida (Klaus et al., 2000). La integración elimina la duplicación de datos y proporciona una visión unificada del estado del negocio en tiempo real.
 
 Los ERP surgen en los años noventa como evolución de los sistemas MRP (Material Requirements Planning). Empresas como SAP, Oracle y Microsoft Dynamics dominaron el mercado inicial con soluciones de altísimo costo y complejidad, orientadas a grandes corporaciones. La segunda generación de ERP, surgida en la década de 2000, introdujo soluciones para el mercado de pymes (SAP Business One, Microsoft Dynamics 365 Business Central), si bien con costos de implementación y operación aún inaccesibles para la mayoría de las pequeñas empresas latinoamericanas.
 
-OrbitEngine no se clasifica como un ERP en el sentido amplio del término —no incluye módulos de contabilidad, nómina ni producción—, sino como una plataforma de gestión operativa orientada a los procesos comerciales centrales de una pyme: inventario, ventas y clientes.
+OrbitEngine no se clasifica como un ERP en el sentido amplio del término (no incluye módulos de contabilidad, nómina ni producción), sino como una plataforma de gestión operativa orientada a los procesos comerciales centrales de una pyme: inventario, ventas y clientes.
 
 ### 2.1.3 Software como Servicio (SaaS)
 

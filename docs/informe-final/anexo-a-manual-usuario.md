@@ -1,8 +1,8 @@
-# Anexo A — Manual de Usuario
+# Anexo A. Manual de Usuario
 
-**OrbitEngine** — Plataforma SaaS para la Gestión de Procesos Internos en Pymes  
+**OrbitEngine**: Plataforma SaaS para la Gestión de Procesos Internos en Pymes  
 Versión: 1.0 | Abril 2026  
-Universidad Sergio Arboleda — Semillero de Software como Innovación
+Universidad Sergio Arboleda, Semillero de Software como Innovación
 
 ---
 
@@ -24,9 +24,9 @@ Para crear una nueva empresa en la plataforma:
 
 1. Hacer clic en **"Comenzar gratis"** o en el enlace de registro en la barra de navegación.
 2. En la pantalla `/signup-org`, completar el formulario con:
-   - **Nombre de la organización** — nombre visible de la empresa.
-   - **Slug** — identificador único en minúsculas (ej. `mi-empresa`). Solo letras, números y guiones; entre 3 y 50 caracteres.
-   - **Descripción** _(opcional)_ — breve descripción del negocio.
+   - **Nombre de la organización**: nombre visible de la empresa.
+   - **Slug**: identificador único en minúsculas (ej. `mi-empresa`). Solo letras, números y guiones; entre 3 y 50 caracteres.
+   - **Descripción** _(opcional)_: breve descripción del negocio.
    - **Nombre**, **apellido** y **correo electrónico** del administrador.
    - **Contraseña** de al menos 8 caracteres.
 3. Hacer clic en **"Crear organización"**.
@@ -61,9 +61,9 @@ Para cerrar sesión, hacer clic en el **ícono de usuario** en la barra lateral 
 
 Una vez dentro del sistema, la interfaz se divide en:
 
-- **Barra lateral izquierda** — menú principal de navegación con acceso a todos los módulos.
-- **Área de contenido principal** — donde se muestra y gestiona la información de cada módulo.
-- **Panel de usuario** (parte inferior de la barra lateral) — acceso a configuración personal y cierre de sesión.
+- **Barra lateral izquierda**: menú principal de navegación con acceso a todos los módulos.
+- **Área de contenido principal**: donde se muestra y gestiona la información de cada módulo.
+- **Panel de usuario** (parte inferior de la barra lateral): acceso a configuración personal y cierre de sesión.
 
 Los módulos disponibles son:
 
@@ -76,18 +76,18 @@ Los módulos disponibles son:
 | Administración | `/dashboard/admin`     | Solo Administradores |
 | Configuración  | `/dashboard/settings`  | Todos los usuarios   |
 
-## A.4 Dashboard — Panel de Indicadores
+## A.4 Dashboard. Panel de Indicadores
 
 El dashboard muestra un resumen del estado del negocio en tiempo real para la organización activa.
 
 **Indicadores disponibles:**
 
-- **Ventas del día** — total en dinero de las ventas registradas hoy.
-- **Ventas del mes** — total acumulado del mes en curso.
-- **Ticket promedio** — valor promedio por venta en el período.
-- **Productos con stock bajo** — conteo de productos que están por debajo del mínimo configurado.
-- **Top productos** — listado de los productos más vendidos.
-- **Ventas por día** — gráfica de barras con la evolución diaria de ventas.
+- **Ventas del día**: total en dinero de las ventas registradas hoy.
+- **Ventas del mes**: total acumulado del mes en curso.
+- **Ticket promedio**: valor promedio por venta en el período.
+- **Productos con stock bajo**: conteo de productos que están por debajo del mínimo configurado.
+- **Top productos**: listado de los productos más vendidos.
+- **Ventas por día**: gráfica de barras con la evolución diaria de ventas.
 
 El dashboard se actualiza automáticamente con cada consulta. No requiere acción adicional del usuario.
 
@@ -118,7 +118,7 @@ Las categorías permiten organizar el inventario en grupos lógicos. Admiten **j
 2. Hacer clic en **"Agregar producto"**.
 3. Completar el formulario:
    - **Nombre** _(requerido)_
-   - **SKU** — código único del producto _(requerido)_
+   - **SKU**: código único del producto _(requerido)_
    - **Categoría** _(opcional)_
    - **Precio de costo** y **precio de venta**
    - **Stock actual**, **stock mínimo** y **stock máximo** _(opcional)_
@@ -174,7 +174,7 @@ El módulo de ventas permite registrar transacciones comerciales, visualizar el 
 
 1. En el módulo Ventas, hacer clic en **"Nueva venta"**.
 2. Completar el formulario:
-   - **Cliente** _(opcional)_ — buscar por nombre o documento.
+   - **Cliente** _(opcional)_: buscar por nombre o documento.
    - **Método de pago**: Efectivo, Tarjeta, Transferencia u Otro.
    - **Descuento** y **IVA/impuesto** _(opcional, en valores monetarios)_.
    - **Notas** _(opcional)_.
@@ -262,9 +262,9 @@ La tabla muestra todos los usuarios de la organización con su nombre, correo, r
 1. Hacer clic en **"Agregar usuario"**.
 2. Completar el formulario:
    - **Nombre** y **apellido**.
-   - **Correo electrónico** — será el identificador de ingreso.
+   - **Correo electrónico**: será el identificador de ingreso.
    - **Contraseña** temporal.
-   - **Rol** — seleccionar entre los roles disponibles de la organización.
+   - **Rol**: seleccionar entre los roles disponibles de la organización.
 3. Guardar.
 
 El nuevo usuario puede ingresar inmediatamente con las credenciales proporcionadas y cambiar su contraseña desde la configuración.
@@ -347,4 +347,4 @@ Los listados de inventario, ventas y clientes pueden exportarse a Excel (.xlsx) 
 **¿Qué navegadores son compatibles?**  
 OrbitEngine es compatible con las versiones recientes de Chrome, Firefox, Edge y Safari. No se garantiza compatibilidad con Internet Explorer.
 
-_Documento generado como parte del proyecto de grado — Universidad Sergio Arboleda, Semillero de Software como Innovación, Abril 2026._
+_Documento generado como parte del proyecto de grado. Universidad Sergio Arboleda, Semillero de Software como Innovación, Abril 2026._

@@ -1,8 +1,8 @@
-# OrbitEngine — Informe de Proyecto de Grado
+# OrbitEngine: Informe de Proyecto de Grado
 
 > Plataforma SaaS para la Gestión Integral de Procesos Internos en Pequeñas y Medianas Empresas
 
-**Universidad:** Universidad Sergio Arboleda — Escuela de Ciencias Exactas e Ingeniería  
+**Universidad:** Universidad Sergio Arboleda, Escuela de Ciencias Exactas e Ingeniería  
 **Programa:** Pregrado en Ciencias de la Computación e Inteligencia Artificial  
 **Período:** Octubre 2025 – Abril 2026  
 **Autores:** Nicolás Rodríguez Forero, Daniel Velasco González, Fabián Rincón Suárez  
@@ -45,7 +45,7 @@ Tabla de contenidos                    → generada automáticamente por Pandoc
 Lista de figuras                       → generada automáticamente por Pandoc
 Lista de tablas                        → generada automáticamente por Pandoc
 
-Capítulo 1 — Introducción
+Capítulo 1. Introducción
   1.1 Planteamiento del Problema
   1.2 Justificación
   1.3 Objetivos
@@ -55,45 +55,45 @@ Capítulo 1 — Introducción
   1.5 Metodología
   1.6 Estructura del Documento
 
-Capítulo 2 — Marco de Referencia
+Capítulo 2. Marco de Referencia
   2.1 Marco Conceptual
   2.2 Estado del Arte
   2.3 Marco Tecnológico
 
-Capítulo 3 — Análisis y Diseño del Sistema
+Capítulo 3. Análisis y Diseño del Sistema
   3.1 Proceso de Levantamiento de Requisitos
   3.2 Requisitos del Sistema
   3.3 Arquitectura del Sistema
   3.4 Diseño del Modelo de Datos
   3.5 Diseño de la Interfaz de Usuario
 
-Capítulo 4 — Desarrollo e Implementación
+Capítulo 4. Desarrollo e Implementación
   4.1 Metodología de Desarrollo
   4.2 Fases y Sprints de Desarrollo
   4.3 Implementación de Módulos Clave
   4.4 Estrategia y Resultados de Pruebas
   4.5 Infraestructura de Despliegue
 
-Capítulo 5 — Resultados Técnicos
+Capítulo 5. Resultados Técnicos
   5.1 Marco de la Validación Técnica
-  5.2 Pruebas de Carga (Backend / API) — Locust
+  5.2 Pruebas de Carga (Backend / API) con Locust
   5.3 Pruebas de Rendimiento (Frontend / Web Vitals)
   5.4 Síntesis de Cumplimiento de Requisitos No Funcionales
   5.5 Interpretación y Limitaciones
 
-Capítulo 6 — Resultados de Usuarios
+Capítulo 6. Resultados de Usuarios
   6.1  Marco Metodológico de la Validación con Usuarios
   6.2  Caracterización de las Empresas Piloto
   6.3  Eficiencia Operativa (pre/post)
   6.4  Pruebas de Tareas Guiadas
-  6.5  Encuesta de Usabilidad — SUS
+  6.5  Encuesta de Usabilidad (SUS)
   6.6  Satisfacción Específica (NPS y CSAT por módulo)
   6.7  Telemetría de Uso en Producción
   6.8  Hallazgos Cualitativos de las Entrevistas
   6.9  Validación de Hipótesis
   6.10 Limitaciones de la Validación con Usuarios
 
-Capítulo 7 — Conclusiones y Trabajo Futuro
+Capítulo 7. Conclusiones y Trabajo Futuro
   7.1 Conclusiones por Objetivo
   7.2 Conclusión General
   7.3 Cumplimiento de Hipótesis
@@ -104,9 +104,9 @@ Capítulo 7 — Conclusiones y Trabajo Futuro
 
 Referencias Bibliográficas
 
-Anexo A — Manual de Usuario
-Anexo B — Manual de Instalación y Despliegue
-Anexo C — Documentación Técnica
+Anexo A. Manual de Usuario
+Anexo B. Manual de Instalación y Despliegue
+Anexo C. Documentación Técnica
 ```
 
 ---
@@ -115,14 +115,14 @@ Anexo C — Documentación Técnica
 
 Los siguientes elementos requieren información real que no puede generarse automáticamente:
 
-### Capítulo 5 (Resultados Técnicos) — Completo
+### Capítulo 5 (Resultados Técnicos): Completo
 
 - Resultados de carga con Locust (Test 01 a Test 06) y comportamiento por endpoint
 - Resultados de rendimiento del frontend (Lighthouse, PageSpeed Insights, WebPageTest) por vista y por organización
 - Síntesis de cumplimiento de RNF-01, RNF-02, RNF-07 y RNF-09
 - **Pendiente menor**: registrar los datos formales de uptime mensual (RNF-02) desde el panel de Railway / Vercel cuando se cierre el período de medición
 
-### Capítulo 6 (Resultados de Usuarios) — Borrador completo, datos pendientes
+### Capítulo 6 (Resultados de Usuarios): borrador completo, datos pendientes
 
 El borrador estructural está redactado con placeholders. Para completarlo se requieren los siguientes datos reales (ver `recomendaciones.md` para el protocolo de recolección):
 
@@ -136,17 +136,17 @@ El borrador estructural está redactado con placeholders. Para completarlo se re
 - Resúmenes o transcripciones de las entrevistas semiestructuradas de cierre
 - Nombre definitivo de Empresa Placeholder
 
-### Capítulo 7 (Conclusiones y Trabajo Futuro) — Borrador completo, dos puntos pendientes
+### Capítulo 7 (Conclusiones y Trabajo Futuro): borrador completo, dos puntos pendientes
 
 - Sección 7.1 Objetivo 5: completar con los valores reales del Cap. 6 (reducción de tiempos, tasa de error, score SUS)
 - Sección 7.5.4: completar con las sugerencias funcionales identificadas en las entrevistas del Cap. 6
 
 ### Portada y páginas iniciales
 
-- Nombres completos de los autores — incluidos en `00-preliminares.md`
-- Nombre de los directores — incluidos en `00-preliminares.md`
-- Nombre de la universidad y programa — incluidos en `00-preliminares.md`
-- Fecha de entrega — Abril 2026
+- Nombres completos de los autores (incluidos en `00-preliminares.md`)
+- Nombre de los directores (incluidos en `00-preliminares.md`)
+- Nombre de la universidad y programa (incluidos en `00-preliminares.md`)
+- Fecha de entrega: Abril 2026
 - Nombres de los jurados evaluadores (asignados por la universidad)
 - Número de páginas (tras consolidar en Word/PDF)
 
