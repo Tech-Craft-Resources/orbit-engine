@@ -1,0 +1,225 @@
+\chapter{Capítulo 7. Conclusiones y Trabajo Futuro}\label{capuxedtulo-7.-conclusiones-y-trabajo-futuro}
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\section{Conclusiones por Objetivo}\label{conclusiones-por-objetivo}
+
+Esta sección presenta las conclusiones del proyecto OrbitEngine organizadas por cada uno de los cinco objetivos específicos planteados en el Capítulo 1.
+
+\textbf{Objetivo 1}: \emph{Diseñar la arquitectura técnica de una plataforma SaaS multi-tenant que garantice el aislamiento de datos entre organizaciones, la escalabilidad horizontal y la seguridad de la información.}
+
+Se diseñó e implementó una arquitectura de N capas con multi-tenancy por campo discriminador (\texttt{organization\_id}), desplegada sobre infraestructura en la nube con soporte de escalado horizontal en la capa de aplicación (backend en Railway, base de datos PostgreSQL gestionada por Railway, y frontend estático en Vercel). La arquitectura adoptada demostró ser adecuada para el alcance del proyecto: el mecanismo de aislamiento de datos mediante el filtrado sistemático por \texttt{organization\_id} en todas las operaciones de base de datos, combinado con la inclusión del contexto de organización en el token JWT, garantizó que no se produjeran filtraciones de datos entre tenants durante las pruebas de integración ni durante el período de uso en producción.
+
+Las decisiones arquitectónicas documentadas (monolito modular sobre microservicios, tabla compartida sobre base de datos por tenant, REST sobre GraphQL) resultaron apropiadas para un equipo de tres personas en un plazo de siete meses, permitiendo entregar un sistema funcional sin comprometer la escalabilidad futura.
+
+\textbf{Objetivo 2}: \emph{Desarrollar los módulos de gestión operativa esenciales conforme a los requisitos levantados con usuarios reales de pymes.}
+
+Los cinco módulos de gestión operativa planteados en el alcance (autenticación con RBAC, inventario, ventas, clientes y reportes) fueron implementados completamente y validados con las empresas piloto. El proceso de levantamiento de requisitos, basado en entrevistas con usuarios reales y en la construcción de personas representativas, resultó clave para priorizar correctamente las funcionalidades del MVP.
+
+Un hallazgo del proceso de validación fue la importancia de las alertas de stock bajo como funcionalidad de alto impacto percibido por los usuarios: fue consistentemente señalada como una de las características más valiosas del sistema, confirmando la priorización realizada en la fase de diseño.
+
+\textbf{Objetivo 3}: \emph{Construir un sistema de reportes y analítica que proporcione KPIs en tiempo real en el dashboard y exportación a Excel de los listados operativos.}
+
+El dashboard implementado provee visualizaciones en tiempo real de los indicadores clave del negocio: ventas del día y del mes, productos con stock bajo, top productos por volumen de ventas y tendencia de ventas de los últimos 7 días. Complementariamente, el módulo de exportación permite descargar a Excel los listados filtrados de inventario, clientes y ventas; la exportación a PDF quedó fuera del alcance del MVP.
+
+Durante la validación con usuarios, la generación del reporte de ventas semanal fue la tarea con la mayor ganancia de eficiencia del piloto: pasó de tomar entre 35 y 75 minutos (compilación completamente manual desde cuadernos físicos o Excel) a realizarse en menos de dos minutos mediante el módulo de historial de ventas con filtro de fechas (Frozt Bitez: 35 min → 1.2 min, −97 \%; Miss Peggy: 60 min → 1.4 min, −98 \%; Luana Handmade: 75 min → 1.6 min, −98 \%). La reducción fue, en los tres casos, de un orden de magnitud.
+
+\textbf{Objetivo 4}: \emph{Desplegar la plataforma en infraestructura de nube con CI/CD, garantizando disponibilidad ≥ 95\% y tiempos de respuesta \textless{} 2 segundos.}
+
+El sistema fue desplegado en Railway (backend y base de datos PostgreSQL) y Vercel (frontend) con un pipeline de CI/CD completamente automatizado mediante GitHub Actions. Durante la Fase 5 de validación con usuarios reales (27 de abril -- 4 de mayo de 2026), la plataforma operó sin interrupciones reportadas: las tres empresas piloto registraron actividad continua durante los ocho días del período (Miss Peggy con los 8 días posibles activos, Frozt Bitez con 7 de 7 días de su período de uso), sin que ningún usuario reportara indisponibilidad del servicio. El monitoreo formal de uptime con herramientas externas no fue instrumentado durante el proyecto, limitación reconocida en la sección 7.4.1; la evidencia disponible consiste en la ausencia de incidencias reportadas y la continuidad ininterrumpida de los datos de telemetría. En cuanto a los tiempos de respuesta (RNF-01), las pruebas de carga del Capítulo 5 verificaron que los endpoints transaccionales del día a día (consulta de productos, clientes, inventario, dashboard y registro de ventas) se mantienen por debajo de 1 segundo de mediana bajo carga normal (≤ 8 usuarios concurrentes) y sin colapsos bajo estrés moderado (50 usuarios), cumpliendo el umbral de 2 segundos establecido en el requisito. El único endpoint con latencia estructuralmente alta en todos los regímenes es \texttt{GET\ /sales/}, identificado como el punto de optimización prioritario del backend.
+
+La adopción de CI/CD desde las primeras etapas del proyecto fue una decisión de alto valor: el pipeline automatizado detectó múltiples regresiones antes de que llegaran a producción, en particular errores de tipado en los esquemas de Pydantic que surgían al modificar los modelos de base de datos.
+
+\textbf{Objetivo 5}: \emph{Validar la solución mediante pruebas con al menos dos empresas piloto, midiendo el impacto en la eficiencia operativa a través de métricas cuantitativas y cualitativas.}
+
+La validación se llevó a cabo con \textbf{tres empresas piloto} durante un período de ocho días de uso productivo real (Fase 5, 27 de abril -- 4 de mayo de 2026), superando el umbral mínimo de dos empresas establecido en el objetivo. Los resultados detallados se presentan en el Capítulo 6; a modo de síntesis:
+
+\begin{itemize}
+\tightlist
+\item
+  La reducción promedio en el tiempo de tareas administrativas clave fue de \textbf{71 \%}, más del doble del umbral del 30 \% establecido en H1. Las cuatro tareas medidas (registro de venta, actualización de stock, reporte semanal e historial de cliente) superaron el umbral en las tres empresas, confirmando H1.
+\item
+  La tasa de discrepancias en inventario se redujo en \textbf{12 puntos porcentuales} en la única empresa con datos pre/post comparables (Miss Peggy: de 16.0 \% a 4.0 \%, −75 \% relativo). Esta reducción confirma la dirección del efecto pero no alcanza el umbral de 40 pp de H2, cuyo veredicto es \textbf{mixto}.
+\item
+  El score SUS medio global fue de \textbf{77.5 / 100}, superando el umbral de usabilidad aceptable de 68 puntos (Bangor et al., 2008) por 9.5 puntos y con todos los usuarios individuales por encima de 75.0, confirmando H3.
+\end{itemize}
+
+Estos resultados, en conjunto, respaldan la hipótesis general del proyecto: una plataforma SaaS multi-tenant bien diseñada es capaz de mejorar la eficiencia operativa y la gestión de procesos en pymes latinoamericanas, con evidencia cuantitativa de impacto real en las tres organizaciones participantes.
+
+\section{Conclusión General}\label{conclusiuxf3n-general}
+
+OrbitEngine demostró ser una solución técnicamente viable y funcionalmente completa para la gestión operativa de pymes del sector comercio y servicios. El proyecto logró construir, desplegar y validar con usuarios reales una plataforma SaaS multi-tenant que integra gestión de inventario, ventas, clientes y reportes operativos en un período de siete meses con un equipo de tres personas.
+
+La principal contribución del proyecto radica en demostrar que es posible desarrollar una herramienta de esta naturaleza (con capacidades que tradicionalmente han sido exclusivas de soluciones empresariales costosas) con tecnologías de código abierto modernas, infraestructura cloud accesible y un equipo reducido, y que esa herramienta produce impactos medibles y positivos en la operación de las empresas que la adoptan.
+
+Desde el punto de vista académico, el proyecto contribuye con evidencia empírica sobre el impacto de la digitalización en la eficiencia operativa de pymes latinoamericanas, un área con literatura creciente pero aún con escasez de estudios de caso con sistemas desarrollados específicamente para este contexto regional.
+
+\section{Cumplimiento de Hipótesis}\label{cumplimiento-de-hipuxf3tesis}
+
+La siguiente tabla sintetiza el veredicto de validación de cada hipótesis a partir de los datos del Capítulo 6. Para el detalle de la evidencia y el análisis por hipótesis, véase la sección 6.9.
+
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\linewidth - 8\tabcolsep) * \real{0.0366}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 8\tabcolsep) * \real{0.2276}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 8\tabcolsep) * \real{0.2317}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 8\tabcolsep) * \real{0.2805}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 8\tabcolsep) * \real{0.2236}}@{}}
+\caption[Cumplimiento de Hipótesis]{Cumplimiento de Hipótesis}\tabularnewline
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+Hipótesis
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Enunciado resumido
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Criterio
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Resultado
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Veredicto
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+\textbf{H1} & Reducción ≥ 30 \% en tiempo de tareas administrativas & Promedio global ≥ 30 \% en ≥ 3 de 4 tareas, las 3 empresas & \textbf{−71 \%} promedio global (rango: −38 \% a −98 \%) & \textbf{Confirmada} \\
+\textbf{H2} & Reducción ≥ 40 pp en tasa de discrepancias de inventario & ≥ 2 de 3 empresas con reducción ≥ 40 pp & \textbf{−12 pp} (Miss Peggy, única empresa con datos pre/post comparables) & \textbf{Mixta}: dirección confirmada, magnitud no alcanzada \\
+\textbf{H3} & Score SUS ≥ 68 (usabilidad aceptable) & Score SUS medio global ≥ 68 & \textbf{77.5 / 100} (DE = 2.9; mínimo individual: 75.0) & \textbf{Confirmada} \\
+\end{longtable}
+
+\section{Limitaciones del Proyecto}\label{limitaciones-del-proyecto}
+
+Las limitaciones del proyecto se agrupan en dos categorías: técnicas y de validación con usuarios.
+
+\subsection{Limitaciones Técnicas}\label{limitaciones-tuxe9cnicas}
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\item
+  \textbf{Ausencia de facturación electrónica con validez fiscal.} OrbitEngine no está integrado con las APIs de organismos tributarios (DIAN en Colombia, SAT en México, SII en Chile), lo que lo posiciona como una herramienta de gestión interna sin reemplazo del sistema de facturación oficial.
+\item
+  \textbf{Sin soporte para múltiples sucursales.} El MVP está diseñado para organizaciones de sede única. Empresas con varias ubicaciones requieren una extensión del modelo de datos que no está en el alcance actual.
+\item
+  \textbf{Escala de carga probada.} Las pruebas de carga del Capítulo 5 mostraron degradación del rendimiento a partir de los 40--50 usuarios concurrentes con la configuración de dos workers de FastAPI. Para escenarios de mayor carga, se requieren las mejoras de escalado descritas en la sección 7.5.3.
+\item
+  \textbf{Período de disponibilidad medida acotado.} La disponibilidad del sistema se midió durante el período del proyecto. Para certificar el cumplimiento de RNF-02 a largo plazo, se requiere monitoreo continuo con alertas automáticas en producción.
+\item
+  \textbf{Ausencia de capacidades predictivas.} El sistema provee reportes históricos y visualizaciones de tendencias, pero no incluye predicción de demanda automatizada. Esta capacidad queda propuesta como trabajo futuro (sección 7.6).
+\end{enumerate}
+
+\subsection{Limitaciones de la Validación con Usuarios}\label{limitaciones-de-la-validaciuxf3n-con-usuarios}
+
+Las limitaciones específicas de la validación con usuarios se detallan en la sección 6.10 del Capítulo 6. Las más relevantes para la interpretación global del proyecto son: el tamaño de muestra reducido (N = 3), la ventana de validación de dos semanas, el auto-reporte de datos pre-implementación y la coincidencia del equipo desarrollador con el equipo investigador.
+
+\section{Recomendaciones de Optimización Derivadas de los Hallazgos}\label{recomendaciones-de-optimizaciuxf3n-derivadas-de-los-hallazgos}
+
+Las recomendaciones de esta sección se derivan directamente de los hallazgos del Capítulo 5 (validación técnica) y del Capítulo 6 (validación con usuarios). No son compromisos del MVP actual, sino líneas de trabajo prioritario para versiones futuras.
+
+\subsection{Backend}\label{backend}
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\item
+  \textbf{Paginación del endpoint \texttt{/sales/}.} Las pruebas de carga del Capítulo 5 identificaron que el endpoint \texttt{GET\ /sales/} es el de mayor latencia bajo carga por la ausencia de paginación del lado del servidor cuando el volumen de registros es elevado. Implementar paginación con \texttt{limit} y \texttt{offset} o cursor-based pagination reduciría significativamente el tiempo de respuesta y la carga sobre la base de datos.
+\item
+  \textbf{Caché del endpoint \texttt{/dashboard/stats}.} El endpoint de estadísticas del dashboard se consulta con alta frecuencia y sus datos cambian relativamente poco en ventanas de tiempo cortas. Introducir un mecanismo de caché en memoria (Redis o incluso un caché en proceso con TTL de 30--60 segundos) reduciría la presión sobre PostgreSQL y mejoraría el tiempo de carga del dashboard.
+\item
+  \textbf{Índices adicionales en PostgreSQL.} El análisis de los planes de ejecución durante las pruebas de carga sugiere que los filtros por \texttt{organization\_id} combinados con \texttt{created\_at} en las tablas de ventas y movimientos de inventario se beneficiarían de índices compuestos. Se recomienda revisar el plan de ejecución con \texttt{EXPLAIN\ ANALYZE} sobre las consultas más frecuentes y añadir los índices que eliminen los escaneos secuenciales.
+\item
+  \textbf{Escalado horizontal para picos sostenidos (\textgreater{} 50 concurrentes).} El Test 06 del Capítulo 5 mostró que la configuración de cuatro workers de FastAPI maneja adecuadamente la carga de 50 usuarios concurrentes. Para escenarios de mayor escala, la arquitectura actual soporta el escalado horizontal en Railway mediante la adición de instancias del servicio web detrás del balanceador de carga integrado en la plataforma, sin cambios estructurales en el código.
+\end{enumerate}
+
+\subsection{Frontend}\label{frontend}
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\item
+  \textbf{Optimización del LCP en dispositivos móviles.} Las pruebas de WebPageTest del Capítulo 5 detectaron un \emph{Largest Contentful Paint} (LCP) superior al umbral de 2.5 segundos en la vista del Dashboard en dispositivos móviles de gama media. Se recomienda: (a) diferir la carga de los componentes de gráficas (Chart.js / Recharts) hasta que sean visibles en el viewport; (b) pre-cargar las fuentes web críticas con \texttt{\textless{}link\ rel="preload"\textgreater{}}; y (c) revisar el tamaño de los iconos SVG incrustados en el bundle principal.
+\item
+  \textbf{Optimización del tamaño de activos.} Se recomienda revisar el bundle de producción con \texttt{vite-bundle-visualizer} para identificar dependencias de gran tamaño que puedan ser importadas dinámicamente (\texttt{import()} lazy) o reemplazadas por alternativas más ligeras.
+\end{enumerate}
+
+\subsection{Infraestructura}\label{infraestructura}
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\item
+  \textbf{Introducción de Redis para caché y sesiones.} A medida que el número de organizaciones activas crezca, el uso de Redis como capa de caché distribuida (para los datos del dashboard y para la validación de tokens JWT revocados) reduciría la latencia de las consultas más frecuentes y permitiría implementar la invalidación de sesiones de forma eficiente.
+\item
+  \textbf{CDN privado para la API (Railway Private Networking).} Activar la red privada de Railway entre el servicio web y la base de datos eliminaría la latencia de red pública en las consultas internas, con una reducción estimada de 5--15 ms por consulta en el ambiente de producción actual.
+\item
+  \textbf{Réplicas de lectura de PostgreSQL.} Para escenarios con un alto volumen de consultas de reportes (exportaciones, dashboard), separar las lecturas analíticas en una réplica de lectura dedicada reduciría la contención sobre la instancia primaria de escritura.
+\item
+  \textbf{Monitoreo de SLOs y alertas automáticas.} Instrumentar el backend con métricas de latencia por endpoint (P50, P95, P99) y configurar alertas cuando los SLOs de RNF-01 (P95 \textless{} 500 ms) sean violados, utilizando las capacidades de observabilidad integradas en Railway o una herramienta externa como Datadog / Sentry.
+\end{enumerate}
+
+\subsection{Producto}\label{producto}
+
+Las entrevistas semiestructuradas del Capítulo 6 identificaron las siguientes mejoras funcionales como prioritarias desde la perspectiva de los usuarios piloto, ordenadas por urgencia y amplitud de impacto entre empresas:
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\item
+  \textbf{Lector de código de barras en inventario y ventas} (Miss Peggy). Para tiendas con catálogos superiores a 50 SKUs, la búsqueda manual del producto en el formulario de venta o de movimiento de inventario es el paso de mayor fricción operativa. Un módulo de captura por código de barras (mediante escáner USB o cámara del dispositivo móvil) reduciría el tiempo de registro por transacción y es, según Carolina Forero, condición necesaria para la adopción permanente del sistema en el sector naturista. Esta mejora impacta directamente los módulos de Ventas e Inventario.
+\item
+  \textbf{Control de fechas de vencimiento por lote} (Miss Peggy). La comercialización de suplementos, vitaminas y productos naturales exige el rastreo de la fecha de vencimiento de cada entrada de mercancía. El MVP actual gestiona stock en unidades pero no por lote ni fecha de vencimiento. Implementar un modelo de trazabilidad por lote (que permita registrar la fecha de vencimiento al ingresar una entrada de stock y emita alertas cuando un lote se aproxime al vencimiento) es el segundo requisito no negociable para Miss Peggy y constituye una funcionalidad vertical de alto valor para el segmento naturista y farmacéutico.
+\item
+  \textbf{Integración bidireccional con WooCommerce} (Frozt Bitez). El equipo de Frozt Bitez utiliza WooCommerce como tienda pública y OrbitEngine como back-office; el doble registro manual de pedidos es el principal cuello de botella remanente. Una integración via API de WooCommerce que importe automáticamente los pedidos como ventas en OrbitEngine (y actualice el stock de WooCommerce desde OrbitEngine) eliminaría ese paso y convertiría el sistema en la única fuente de verdad para la operación. Esta mejora es de alto impacto para cualquier empresa piloto con canal de venta online.
+\item
+  \textbf{Fotografías en el catálogo de productos} (Luana Handmade). Claudia González (Luana) señaló que la ausencia de imágenes en el módulo de inventario la obliga a seguir enviando fotos por WhatsApp cuando una clienta consulta por un producto. Incorporar un campo de imagen por SKU (con carga desde dispositivo o URL) permitiría mostrar el catálogo directamente desde el sistema y reforzaría su utilidad como herramienta de atención al cliente, especialmente en emprendimientos de producto artesanal donde la imagen es parte central de la oferta.
+\end{enumerate}
+
+\section{Trabajo Futuro}\label{trabajo-futuro}
+
+\subsection{Evolución del Producto}\label{evoluciuxf3n-del-producto}
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\item
+  \textbf{Módulo de proveedores y órdenes de compra.} Gestión de proveedores, órdenes de compra y recepción de mercancía, completando el ciclo de inventario (compra → stock → venta). Fue identificado como la funcionalidad ausente con mayor impacto en las entrevistas del Capítulo 6.
+\item
+  \textbf{Notificaciones por correo y mensajería.} Envío automático de alertas de stock bajo, recordatorios de reabastecimiento y resúmenes de ventas periódicos vía email (ya hay infraestructura con Resend) o WhatsApp Business API.
+\item
+  \textbf{Gestión de múltiples sucursales.} Soporte para organizaciones con más de una sede, con inventario y reportes por sucursal y consolidados. Requiere extender el modelo de datos con una entidad \texttt{Branch} y ajustar los filtros de todas las consultas.
+\item
+  \textbf{Importación masiva de datos.} Herramienta de carga de datos históricos (productos, clientes, ventas) desde Excel/CSV para facilitar la migración desde sistemas manuales. Identificada como barrera de adopción en el proceso de onboarding de la Fase 5.
+\item
+  \textbf{Facturación electrónica.} Integración con las APIs de organismos tributarios latinoamericanos (DIAN en Colombia, SAT en México, SII en Chile) para validar comprobantes con efecto fiscal.
+\item
+  \textbf{Aplicación móvil nativa.} App iOS/Android orientada a los roles de Vendedor y Administrador, con funcionalidad offline para registro de ventas sin conectividad, aprovechando la API RESTful existente.
+\end{enumerate}
+
+\subsection{Incorporación de Inteligencia Artificial}\label{incorporaciuxf3n-de-inteligencia-artificial}
+
+La integración de capacidades de aprendizaje automático en los flujos de decisión existentes constituye la extensión de mayor potencial académico y comercial de la plataforma:
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\item
+  \textbf{Predicción de demanda por producto.} Implementar un pipeline de forecasting de series de tiempo (Prophet, ARIMA o modelos de gradient boosting) que, utilizando el historial de ventas acumulado, genere predicciones para los próximos 30 días con recomendaciones automáticas de reabastecimiento. Esta capacidad está parcialmente diseñada en el documento de planteamiento (\texttt{docs/planteamiento/IA.md}) y representa la línea de investigación más directamente alineada con el nombre del proyecto.
+\item
+  \textbf{Alertas inteligentes de inventario.} Complementar las alertas de stock mínimo actuales con predicciones dinámicas de ruptura de stock basadas en la tendencia reciente de ventas de cada producto, reduciendo tanto las roturas de stock como el sobrestock.
+\item
+  \textbf{Análisis de segmentación de clientes (RFM).} Clustering de clientes por comportamiento de compra (Recency, Frequency, Monetary) para identificar clientes de alto valor y facilitar estrategias de fidelización.
+\item
+  \textbf{Detección de productos de baja rotación.} Identificación automática de productos que inmovilizan capital, facilitando decisiones de liquidación o descontinuación.
+\end{enumerate}
+
+\subsection{Investigación Académica}\label{investigaciuxf3n-acaduxe9mica}
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\item
+  \textbf{Estudio longitudinal de adopción a mayor escala.} Diseñar un estudio longitudinal con una muestra representativa de pymes latinoamericanas (N ≥ 30) para obtener evidencia estadísticamente robusta del impacto de la plataforma en la eficiencia operativa y la toma de decisiones basada en datos. El presente estudio de caso (N = 3) provee la base metodológica y los instrumentos de medición para ese estudio.
+\item
+  \textbf{Estudio comparativo entre sectores.} Las tres empresas del piloto actual operan en sectores distintos. Un estudio que compare sistemáticamente el impacto de la plataforma en empresas de comercio, servicios y manufactura ligera permitiría identificar qué módulos tienen mayor impacto según el sector.
+\item
+  \textbf{Evaluación de la curva de aprendizaje.} La validación actual midió la usabilidad al final de la Fase 5; un estudio con mediciones en el día 1, día 7 y día 30 permitiría caracterizar la curva de aprendizaje del sistema y el tiempo de adopción plena por rol de usuario.
+\end{enumerate}
+
+\section{Reflexión Final}\label{reflexiuxf3n-final}
+
+OrbitEngine nació de la observación de una brecha concreta: las pymes latinoamericanas carecen de herramientas de gestión operativa adaptadas a su contexto: asequibles, simples de adoptar y útiles desde el primer día de uso. A lo largo de siete meses de desarrollo, el proyecto validó que esa brecha puede cerrarse con tecnologías modernas, metodologías ágiles y un equipo comprometido, sin necesidad de la escala ni los recursos de una corporación tecnológica.
+
+Los resultados, aunque acotados a tres empresas piloto y a un período de dos semanas de uso productivo, indican que la dirección es correcta: los usuarios adoptaron el sistema con relativa facilidad, redujeron el tiempo que dedicaban a tareas repetitivas y valoraron positivamente la posibilidad de acceder a información consolidada de su negocio en tiempo real. Esas mejoras, por modestas que parezcan en términos absolutos, tienen impacto real en la vida cotidiana de los dueños y empleados de las empresas que las experimentan.
+
+El camino que queda por recorrer es más largo que el recorrido hasta aquí: hace falta más investigación, más empresas piloto, más funcionalidades y, sobre todo, más iteración con los usuarios reales. Pero el fundamento está construido, y eso es precisamente lo que un proyecto de grado debe lograr.

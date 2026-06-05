@@ -1,8 +1,8 @@
-# Anexo B — Manual de Instalación y Despliegue
+# Anexo B. Manual de Instalación y Despliegue
 
-**OrbitEngine** — Plataforma SaaS para la Gestión de Procesos Internos en Pymes  
+**OrbitEngine**: Plataforma SaaS para la Gestión de Procesos Internos en Pymes  
 Versión: 1.0 | Abril 2026  
-Universidad Sergio Arboleda — Semillero de Software como Innovación
+Universidad Sergio Arboleda, Semillero de Software como Innovación
 
 ---
 
@@ -309,10 +309,10 @@ docker compose logs -f
 
 Los servicios se levantan en este orden:
 
-1. `db` — espera estar healthy (hasta 30s).
-2. `prestart` — ejecuta migraciones y datos iniciales.
-3. `backend` y `frontend` — arrancan tras `prestart`.
-4. `adminer` — panel de administración de BD.
+1. `db`: espera estar healthy (hasta 30s).
+2. `prestart`: ejecuta migraciones y datos iniciales.
+3. `backend` y `frontend`: arrancan tras `prestart`.
+4. `adminer`: panel de administración de BD.
 
 ### B.8.6 Actualización de la aplicación
 
@@ -368,4 +368,4 @@ docker volume prune -f              # Elimina volúmenes sin usar (¡precaución
 | Traefik no renueva el certificado TLS | Puerto 80 bloqueado o DNS incorrecto | Verificar que el dominio resuelva a la IP correcta y el puerto 80 esté abierto.                              |
 | Error `UNIQUE constraint` al insertar | Dato duplicado en BD                 | Verificar que el SKU, slug u otro campo único no esté repetido.                                              |
 
-_Documento generado como parte del proyecto de grado — Universidad Sergio Arboleda, Semillero de Software como Innovación, Abril 2026._
+_Documento generado como parte del proyecto de grado. Universidad Sergio Arboleda, Semillero de Software como Innovación, Abril 2026._

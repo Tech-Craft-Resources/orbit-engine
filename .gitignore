@@ -14,3 +14,18 @@ Inventario Miss Peggy.xlsx
 
 # Resultados de las pruebas
 pruebas_rend&carg
+
+# LaTeX build artifacts (informe final)
+docs/pdf/_tmp/
+docs/pdf/Orbit_Engine/*.aux
+docs/pdf/Orbit_Engine/*.log
+docs/pdf/Orbit_Engine/*.out
+docs/pdf/Orbit_Engine/*.toc
+docs/pdf/Orbit_Engine/*.lof
+docs/pdf/Orbit_Engine/*.lot
+docs/pdf/Orbit_Engine/missfont.log
+docs/informe-final.pdf
+# Local Pi runtime state
+.atl/
+.pi/
+.pi-lens/

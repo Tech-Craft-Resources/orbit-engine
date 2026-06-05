@@ -69,7 +69,7 @@ Universidad Sergio Arboleda
 
 \vspace{2cm}
 
-Bogotá, Colombia — Abril de 2026
+Bogotá, Colombia. Abril de 2026
 
 \newpage
 

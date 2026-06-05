@@ -1,8 +1,8 @@
-# Anexo C — Documentación Técnica
+# Anexo C. Documentación Técnica
 
-**OrbitEngine** — Plataforma SaaS para la Gestión de Procesos Internos en Pymes  
+**OrbitEngine**: Plataforma SaaS para la Gestión de Procesos Internos en Pymes  
 Versión: 1.0 | Abril 2026  
-Universidad Sergio Arboleda — Semillero de Software como Innovación
+Universidad Sergio Arboleda, Semillero de Software como Innovación
 
 ---
 
@@ -25,7 +25,7 @@ Universidad Sergio Arboleda — Semillero de Software como Innovación
 | Linter/Formatter      | Ruff              | 0.6+    | Análisis estático y formato de código           |
 | Verificación de tipos | Mypy              | 1.x     | Chequeo de tipos estático en modo estricto      |
 | Testing               | Pytest + Coverage | 8.x     | Pruebas unitarias e integración                 |
-| Monitoring            | Sentry (opcional) | —       | Rastreo de errores en producción                |
+| Monitoring            | Sentry (opcional) | N/A     | Rastreo de errores en producción                |
 
 ### C.1.2 Frontend
 
@@ -39,10 +39,10 @@ Universidad Sergio Arboleda — Semillero de Software como Innovación
 | Tablas           | TanStack Table   | 8.x     | Tablas con sorting/filtering/paginación          |
 | Formularios      | React Hook Form  | 7.x     | Manejo de formularios con rendimiento optimizado |
 | Validación       | Zod              | 3.x     | Schemas de validación con inferencia de tipos    |
-| UI Components    | Shadcn/ui        | —       | Componentes base sobre Radix UI                  |
+| UI Components    | Shadcn/ui        | N/A     | Componentes base sobre Radix UI                  |
 | Estilos          | Tailwind CSS     | 4.x     | Utilidades CSS de bajo nivel                     |
 | Gráficos         | Recharts         | 2.x     | Gráficas para el dashboard                       |
-| HTTP Client      | Axios (generado) | —       | Cliente OpenAPI auto-generado                    |
+| HTTP Client      | Axios (generado) | N/A     | Cliente OpenAPI auto-generado                    |
 | Notificaciones   | Sonner           | 1.x     | Toasts y notificaciones                          |
 | Íconos           | Lucide React     | 0.4+    | Librería de íconos SVG                           |
 | Linter/Formatter | Biome            | 1.x     | Análisis estático y formato                      |
@@ -180,7 +180,7 @@ OrbitEngine usa **JWT Bearer Tokens** siguiendo el estándar OAuth2 Password Flo
 3. Si son válidas, retorna un `access_token` JWT.
 4. El cliente incluye el token en el header `Authorization: Bearer <token>` en cada request.
 5. El backend decodifica el token, extrae el `sub` (UUID del usuario) y carga el usuario de la BD.
-6. La organización del usuario se extrae de `user.organization_id` — no del token directamente.
+6. La organización del usuario se extrae de `user.organization_id`, no del token directamente.
 
 **Parámetros del token:**
 
@@ -218,7 +218,7 @@ def create_sale(...) -> Any: ...
 
 El modelo `User` incluye campos `failed_login_attempts` y `locked_until`. Tras N intentos fallidos consecutivos, la cuenta se bloquea temporalmente.
 
-## C.4 API REST — Referencia de Endpoints
+## C.4 API REST. Referencia de Endpoints
 
 Todos los endpoints están prefijados con `/api/v1`. La documentación interactiva se sirve en `/docs` (Swagger UI) y `/redoc`.
 
@@ -254,7 +254,7 @@ Todos los endpoints están prefijados con `/api/v1`. La documentación interacti
 +---------+---------------------------+-----+------------+--------------------------------------------+
 | PATCH | /organizations/me | Sí | admin | Actualizar nombre/slug/descripción |
 +---------+---------------------------+-----+------------+--------------------------------------------+
-| POST | /organizations/signup | No | — | Registro de nueva organización + admin |
+| POST | /organizations/signup | No | N/A | Registro de nueva organización + admin |
 +---------+---------------------------+-----+------------+--------------------------------------------+
 
 ### C.4.4 Roles (`/roles`)
@@ -668,10 +668,10 @@ def create_product(
 
 **Códigos HTTP usados:**
 
-- `400` — Solicitud inválida (datos incorrectos)
-- `403` — Sin permisos / credenciales inválidas
-- `404` — Recurso no encontrado
-- `409` — Conflicto (recurso duplicado)
+- `400`: Solicitud inválida (datos incorrectos)
+- `403`: Sin permisos / credenciales inválidas
+- `404`: Recurso no encontrado
+- `409`: Conflicto (recurso duplicado)
 
 **Multi-tenancy:** **todas** las consultas de negocio incluyen filtro `organization_id = current_organization`. El valor se extrae del usuario autenticado, nunca del cuerpo del request.
 
@@ -709,9 +709,9 @@ const mutation = useMutation({
 
 **No editar:**
 
-- `src/client/**` — auto-generado desde OpenAPI
-- `src/components/ui/**` — componentes Shadcn/ui
-- `src/routeTree.gen.ts` — auto-generado por TanStack Router
+- `src/client/**`: auto-generado desde OpenAPI
+- `src/components/ui/**`: componentes Shadcn/ui
+- `src/routeTree.gen.ts`: auto-generado por TanStack Router
 
 ## C.8 Pipeline de CI/CD
 
@@ -719,8 +719,8 @@ El repositorio incluye workflows de GitHub Actions:
 
 ### C.8.1 Workflow de pruebas (en cada PR y push a `main`)
 
-1. **Backend:** Ejecuta `uv run bash scripts/test.sh` — incluye Mypy, Ruff y Pytest con cobertura.
-2. **Frontend:** Ejecuta `bun run lint` — Biome linting y verificación de tipos TypeScript.
+1. **Backend:** Ejecuta `uv run bash scripts/test.sh`; incluye Mypy, Ruff y Pytest con cobertura.
+2. **Frontend:** Ejecuta `bun run lint`; Biome linting y verificación de tipos TypeScript.
 
 ### C.8.2 Workflow de despliegue
 
@@ -818,4 +818,4 @@ OrbitEngine implementa multi-tenancy mediante **aislamiento por discriminador en
 
 Esta estrategia garantiza aislamiento completo de datos entre tenants sin necesidad de esquemas o bases de datos separadas, facilitando el mantenimiento y la escalabilidad horizontal.
 
-_Documento generado como parte del proyecto de grado — Universidad Sergio Arboleda, Semillero de Software como Innovación, Abril 2026._
+_Documento generado como parte del proyecto de grado. Universidad Sergio Arboleda, Semillero de Software como Innovación, Abril 2026._

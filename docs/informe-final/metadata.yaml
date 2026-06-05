@@ -25,7 +25,7 @@ geometry:
 
 mainfont: "Times New Roman"
 sansfont: "Arial"
-monofont: "Consolas"
+monofont: "Menlo"
 
 # ─── TABLA DE CONTENIDOS ────────────────────────────────────────────────────
 toc: true
